@@ -9,3 +9,7 @@ Curago is being used as a name here since it was a abandoned project with a prem
 There's no massive dependancies, although you'll need to create a makefile to get this working unfortunately. :(
 
 It links against UIKit and Foundation, so nothing out of the ordinary.
+
+### Bugs ###
+
+arm64 is horribly broken, as it editing mode for all devices. It's a data type issue with arm64 within the code for determining where icons should go AFAIK.
