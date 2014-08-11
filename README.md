@@ -12,4 +12,4 @@ It links against UIKit and Foundation, so nothing out of the ordinary.
 
 ### Bugs ###
 
-arm64 is horribly broken, as it editing mode for all devices. It's a data type issue with arm64 within the code for determining where icons should go AFAIK.
+arm64 is horribly broken, as is editing mode for all devices. It's a data type issue with arm64 within the code for determining where icons should go AFAIK.
