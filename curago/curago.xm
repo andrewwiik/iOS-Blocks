@@ -39,8 +39,8 @@
 // Structs
 
 typedef struct SBIconCoordinate {
-    int row;
-    int col;
+    NSInteger row;
+    NSInteger col;
 } SBIconCoordinate;
 
 // Class additions
@@ -214,8 +214,8 @@ static BBServer* __weak IBKBBServer;
     if (path) {
         // Awesome, we've already calculated it.
         
-        orig.row = (int)path.row;
-        orig.col = (int)path.section;
+        orig.row = (NSInteger)path.row;
+        orig.col = (NSInteger)path.section;
         
         return orig;
     }

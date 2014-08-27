@@ -7,6 +7,7 @@
 //
 
 #import "IBKNotificationsTableCell.h"
+#import <BulletinBoard/BBAttachments.h>
 
 @implementation IBKNotificationsTableCell
 
@@ -139,19 +140,35 @@
     
     NSLog(@"Attachments");
     
-    if ([(NSArray*)[bulletin attachments] count] > 0)
-        self.content.text = [NSString stringWithFormat:@"%lu attachments; %@", (unsigned long)[(NSArray*)[bulletin attachments] count], bulletin.message];
-    else
-        self.content.text = bulletin.message;
+    self.content.text = bulletin.message;
     
-    if ([(NSArray*)[bulletin attachments] count] > 0) {
+    if ([bulletin attachments]) {
         // Deal with attachment image
         // TODO: Finish attachment image handling
         
+        NSLog(@"clientComposedImageInfos == %@", bulletin.attachments.clientSideComposedImageInfos);
+        NSLog(@"Additinoal attachments == %@", bulletin.attachments.additionalAttachments);
+        
+        NSLog(@"ComposedAttachmentImage == %@", bulletin.composedAttachmentImage);
+        
         if (!self.attachment) {
-            self.attachment = [[UIImageView alloc] init];
+            self.attachment = [[UIImageView alloc] initWithImage:bulletin.composedAttachmentImage];
             
+            // Recalculate image size based on height to sit it in.
+            CGFloat percentage = 26/bulletin.composedAttachmentImageSize.height;
+            CGFloat newWidth = bulletin.composedAttachmentImageSize.width/percentage;
+            
+            NSLog(@"Newwidth == %f", newWidth);
+            
+            self.attachment.frame = CGRectMake(4, 19, newWidth, 26);
+            
+            self.attachment.backgroundColor = [UIColor blueColor];
+            self.attachment.alpha = 0.5;
+            
+            [self addSubview:self.attachment];
         }
+        
+        
     }
     
     if (!self.separatorLine) {

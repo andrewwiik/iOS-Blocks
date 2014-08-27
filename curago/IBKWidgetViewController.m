@@ -316,10 +316,12 @@
     
     //[self.notificationsTableView reloadSections:0 withRowAnimation:UITableViewRowAnimationTop];
     
+    //[self.notificationsTableView reloadData];
+    
     NSMutableArray *indexPaths = [NSMutableArray array];
     [indexPaths addObject:[NSIndexPath indexPathForRow:[self.notificationsDataSource indexOfObject:arg2] inSection:0]];
-    [self.notificationsTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
-
+    [self.notificationsTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    
 }
 
 -(void)removeBulletin:(id)arg2 {
