@@ -11,19 +11,31 @@
 #import "IBKWidget.h"
 #import <BulletinBoard/BBObserver.h>
 #import <SpringBoard7.0/SBIconView.h>
+#import "IBKGameCenterTableView.h"
+#import "IBKWidgetTopBase.h"
 
-@interface IBKWidgetViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface IBKWidgetViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+    IBKWidgetTopBase *topBase;
+}
 
-@property (nonatomic, strong) id<IBKWidget> widget;
+@property (nonatomic, strong) NSObject<IBKWidget> *widget;
+@property (nonatomic, retain) NSBundle *bundle;
+@property (nonatomic, strong) UIView *viw;
+@property (nonatomic, strong) CAGradientLayer *gradientLayer;
 @property (nonatomic, copy) NSString *applicationIdentifer;
 @property (nonatomic, strong) UIView *iconImageView; // This may be set as a UIImageView or SBIconImageView
+@property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, weak) SBIconView *correspondingIconView;
 @property (nonatomic, strong) NSBundle *widgetBundle;
 @property (nonatomic, strong) BBObserver *notificationObserver;
 @property (nonatomic, strong) UITableView *notificationsTableView;
+@property (nonatomic, strong) IBKGameCenterTableView *gcTableView;
+@property (nonatomic, strong) UILabel *noNotifsLabel;
+@property (nonatomic, strong) UIView *shimIcon;
 @property (nonatomic, strong) NSMutableArray *notificationsDataSource; // This is full of BBBulletins.
 @property (readwrite) BOOL fallbackToNotificationList;
 @property (readwrite) BOOL isWidgetLoaded;
+@property (readwrite) BOOL scalingDown;
 
 -(void)setScaleForView:(CGFloat)scale withDuration:(CGFloat)duration;
 -(void)layoutViewForPreExpandedWidget;
@@ -35,5 +47,7 @@
 -(void)removeBulletin:(id)arg2;
 
 -(NSString*)getPathForMainBundle;
+
+-(UIView*)topBase;
 
 @end

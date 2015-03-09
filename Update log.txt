@@ -1,0 +1,12 @@
+0.1.2
+
+Added widgets for ALL games ever. Forever.
+Fixed up API for HTML widgets
+
+0.1.3
+
+Fixed icon labels
+Added ultra fancy settings panel
+Finished music block
+Improved app launching (need to still fix scaling animations)
+Finalised ObjC API

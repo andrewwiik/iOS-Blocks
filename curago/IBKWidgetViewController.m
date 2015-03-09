@@ -11,7 +11,6 @@
  
  - Add in listener to settings changes so we can adjust as necessary
  - Implement loading from binary and error handling.
- - Implement Hooke's Law if the scaling gesture wil have use go too large
  - Finish rotation handling
  
 */
@@ -21,18 +20,26 @@
 
 #import <SpringBoard7.0/SBIconController.h>
 #import <SpringBoard7.0/SBIconModel.h>
+#import <SpringBoard7.0/SBApplicationController.h>
+#import <SpringBoard7.0/SBApplication.h>
 #import <objc/runtime.h>
 #import "UIImageAverageColorAddition.h"
 #import "CKBlurView.h"
 #import "IBKNotificationsTableCell.h"
 #import <BulletinBoard/BBBulletin.h>
 #import <BulletinBoard/BBServer.h>
+#import <SpringBoard7.0/SBRootFolder.h>
 
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define is_IOS7_0 ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.10)
+#define orient [[UIApplication sharedApplication] statusBarOrientation]
 
 @interface IBKWidgetViewController ()
 
+@end
+
+@interface SBApplicationController (iOS8)
+-(id)applicationWithBundleIdentifier:(NSString*)arg1;
 @end
 
 @interface SBIconImageView (iOS7_1)
@@ -44,17 +51,47 @@
 - (id)_bulletinsForSectionID:(id)arg1 inFeeds:(unsigned int)arg2;
 @end
 
+@interface SBIconController (Additions)
+-(void)removeIdentifierFromWidgets:(NSString*)identifier;
+-(void)removeAllCachedIcons;
+@end
+
+@interface SBIconModel (iOS8)
+- (id)applicationIconForBundleIdentifier:(id)arg1;
+@end
+
 @implementation IBKWidgetViewController
+
+-(SBIconListView *)IBKListViewForIdentifierTwo:(NSString*)identifier {
+    SBIconController *viewcont = [objc_getClass("SBIconController") sharedInstance];
+    SBIconModel *model = [viewcont model];
+    SBIcon *icon = [model expectedIconForDisplayIdentifier:identifier];
+    
+    SBIconController *controller = [objc_getClass("SBIconController") sharedInstance];
+    SBRootFolder *rootFolder = [controller valueForKeyPath:@"rootFolder"];
+    NSIndexPath *indexPath = [rootFolder indexPathForIcon:icon];
+    SBIconListView *listView = nil;
+    [controller getListView:&listView folder:NULL relativePath:NULL forIndexPath:indexPath createIfNecessary:YES];
+    return listView;
+}
 
 -(void)loadView {
     // Begin building our base widget view
     
-    CGRect initialFrame = CGRectMake(0, 0, isPad ? 252 : 136, isPad ? 237 : 148);
+    CGRect initialFrame = CGRectMake(0, 0, [IBKResources widthForWidget], [IBKResources heightForWidget]);
+    
+    topBase = [IBKWidgetTopBase buttonWithType:UIButtonTypeCustom];
+    topBase.frame = initialFrame;
+    topBase.backgroundColor = [UIColor clearColor];
+    topBase.layer.cornerRadius = 12;
+    topBase.layer.masksToBounds = YES;
+    topBase.userInteractionEnabled = YES;
+    
+    [topBase addTarget:self action:@selector(didTapTopBase:) forControlEvents:UIControlEventTouchUpInside];
     
     UIView *baseView = [[UIView alloc] initWithFrame:initialFrame];
-    baseView.alpha = 0.0;
+    baseView.alpha = 1.0;
     baseView.userInteractionEnabled = YES;
-    baseView.transform = CGAffineTransformMakeScale(0.0, 0.0);
     baseView.layer.cornerRadius = 12;
     baseView.layer.masksToBounds = NO;
     baseView.layer.shadowOffset = CGSizeZero;
@@ -62,7 +99,40 @@
     baseView.hidden = YES;
     // Center is configured by IBKIconView
     
+    [baseView addSubview:topBase];
+    
     self.view = baseView;
+}
+
+-(void)didTapTopBase:(id)sender {} // This is just a stub to ensure the topbase view prevents touches as required.
+
+-(UIView*)topBase {
+    return topBase;
+}
+
+-(CGRect)frameForWidget {
+    SBIconListView *listView = [self IBKListViewForIdentifierTwo:self.applicationIdentifer];
+    
+    CGFloat spacingX, spacingY, width, height;
+    
+    int iconsInRow = [listView iconsInRowForSpacingCalculation];
+    
+    CGFloat wid = [UIScreen mainScreen].bounds.size.width;
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0 && [[[UIDevice currentDevice] systemVersion] floatValue] < 8.0 && isPad) {
+        if (orient == 3 || orient == 4)
+            wid = [UIScreen mainScreen].bounds.size.height;
+    }
+    
+    spacingX = wid - ((CGFloat)iconsInRow * (isPad ? 72 : 58));
+    spacingX /= (CGFloat)iconsInRow;
+    
+    NSLog(@"Spacings are %f x, %f y", spacingX, spacingY);
+    
+    width = (isPad ? 72 : 58);
+    height = (isPad ? 72 : 58);
+    
+    return CGRectMake(0, 0, spacingX + (2*width), spacingY + (2*height));
 }
 
 -(void)loadWidgetInterface {
@@ -70,100 +140,401 @@
         [self loadView];
     }
     
-    NSLog(@"Loading widget interface...");
-    
     self.view.hidden = NO;
     
     // We need our icon image view here - the widget may define it's own icon
-    self.iconImageView = [[objc_getClass("SBIconImageView") alloc] initWithFrame:CGRectMake(10, (isPad ? 237 : 148)-(isPad ? 60 : 40), (isPad ? 60 : 40), (isPad ? 60 : 40))];
+    [self setupIconImageView];
     
-    NSLog(@"version == %f", [[[UIDevice currentDevice] systemVersion] floatValue]);
+    // Fix up animations for the icon's badge.
+    NSString *path = [NSString stringWithFormat:@"%@/Info.plist", [self getPathForMainBundle]];
+    
+    NSDictionary *infoPlist = [NSDictionary dictionaryWithContentsOfFile:path];
+    
+    // Set our background colour to the average of the app's icon.
+    self.view.backgroundColor = [(UIImage*)[(SBIconImageView*)self.iconImageView squareContentsImage] mergedColor];
+    
+    // Double check for GameCenter
+    SBApplication* app;
+    if (![[objc_getClass("SBApplicationController") sharedInstance] respondsToSelector:@selector(applicationWithBundleIdentifier:)])
+        app = [[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:self.applicationIdentifer];
+    else
+        app = [[objc_getClass("SBApplicationController") sharedInstance] applicationWithBundleIdentifier:self.applicationIdentifer];
+    
+    if ([app hasGameCenterData] && ![[infoPlist objectForKey:@"customGameWidget"] boolValue]) {
+        [self loadForGameCenter:infoPlist];
+    } else if (!infoPlist || [[infoPlist objectForKey:@"wantsNotificationsTable"] boolValue]) {
+        [self loadForNotificationsTable:infoPlist];
+    } else {
+        // Load up widget UI from NSBundle.
+        if ([infoPlist[@"usesHTML"] boolValue]) {
+            self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, [IBKResources widthForWidget], ([infoPlist[@"hasButtons"] boolValue] ? [IBKResources heightForWidget] : self.iconImageView.frame.origin.y-9))];
+            [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[[self getPathForMainBundle] stringByAppendingString:@"/Widget.html"]]]];
+            self.webView.backgroundColor = [UIColor clearColor];
+            self.webView.opaque = NO;
+            self.webView.scrollView.scrollEnabled = NO;
+            self.webView.scrollView.scrollsToTop = NO;
+            self.webView.scrollView.showsHorizontalScrollIndicator = NO;
+            self.webView.scrollView.showsVerticalScrollIndicator = NO;
+            self.webView.scrollView.minimumZoomScale = 1.0;
+            self.webView.scrollView.maximumZoomScale = 1.0;
+            self.webView.scalesPageToFit = NO;
+            self.webView.suppressesIncrementalRendering = YES;
+            [self.webView stringByEvaluatingJavaScriptFromString:@"document.body.style.zoom = 1.0;"];
+            [self.webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitUserSelect='none';"];
+            [self.webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitTouchCallout='none';"];
+            [topBase addSubview:self.webView];
+        } else {
+            // obj-c, it is.
+            if (self.bundle) {
+                [self.bundle unload];
+                self.bundle = nil;
+            }
+            
+            self.bundle = [NSBundle bundleWithPath:[[self getPathForMainBundle] stringByAppendingString:@"/"]];
+            [self.bundle load];
+            
+            Class instance;
+            
+            if ((instance = [self.bundle principalClass])) {
+                self.widget = [[instance alloc] init];
+                [self setupForObjC];
+            }
+        }
+        
+        // Now that the view is sorted, load custom icon, set custom background.
+        [self setColorAndOrIcon:infoPlist];
+    }
+    
+    self.shimIcon = [[objc_getClass("SBIconImageView") alloc] initWithFrame:CGRectMake(0, 0, [IBKResources heightForWidget], [IBKResources heightForWidget])];
+    
+    if ([[self iconImageView] respondsToSelector:@selector(setIcon:animated:)])
+        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] animated:NO];
+    else if ([(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] respondsToSelector:@selector(applicationIconForDisplayIdentifier:)])
+        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] location:2 animated:NO];
+    else // iOS 8
+        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:self.applicationIdentifer] location:2 animated:NO];
+    
+    [self.view addSubview:self.shimIcon];
+    
+    self.shimIcon.frame = CGRectMake(0, 0, [IBKResources heightForWidget], [IBKResources heightForWidget]);
+    self.shimIcon.center = CGPointMake([IBKResources widthForWidget]/2, [IBKResources heightForWidget]/2);
+    self.shimIcon.backgroundColor = [UIColor clearColor];
+    
+    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
+    [self.view addGestureRecognizer:pinch];
+    
+    // Background color setup.
+    
+    CGFloat red, green, blue;
+    [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
+    self.gradientLayer.opacity = 0.0;
+    
+    self.isWidgetLoaded = YES;
+}
+
+-(UIColor*)colorFromString:(NSString*)arg1 {
+    NSString *cleanString = [arg1 stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    
+    if ([cleanString length] == 3) {
+        cleanString = [NSString stringWithFormat:@"%@%@%@%@%@%@",
+                       [cleanString substringWithRange:NSMakeRange(0, 1)],[cleanString substringWithRange:NSMakeRange(0, 1)],
+                       [cleanString substringWithRange:NSMakeRange(1, 1)],[cleanString substringWithRange:NSMakeRange(1, 1)],
+                       [cleanString substringWithRange:NSMakeRange(2, 1)],[cleanString substringWithRange:NSMakeRange(2, 1)]];
+    }
+    
+    if ([cleanString length] == 6) {
+        cleanString = [cleanString stringByAppendingString:@"ff"];
+    }
+    
+    unsigned int baseValue;
+    [[NSScanner scannerWithString:cleanString] scanHexInt:&baseValue];
+    
+    float red = ((baseValue >> 24) & 0xFF)/255.0f;
+    float green = ((baseValue >> 16) & 0xFF)/255.0f;
+    float blue = ((baseValue >> 8) & 0xFF)/255.0f;
+    float alpha = ((baseValue >> 0) & 0xFF)/255.0f;
+    
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];;
+}
+
+-(BOOL)objcWidgetHasGradient {
+    return [self.widget respondsToSelector:@selector(wantsGradientBackground)] && [self.widget wantsGradientBackground] && [self.widget respondsToSelector:@selector(gradientBackgroundColors)];
+}
+
+-(void)setColorAndOrIcon:(NSDictionary*)infoPlist {
+    if (infoPlist[@"customGradientColors"] || [self objcWidgetHasGradient]) {
+        
+        self.gradientLayer = [CAGradientLayer layer];
+        self.gradientLayer.anchorPoint = CGPointZero;
+        self.gradientLayer.startPoint = CGPointMake(0.5f, 1.0f);
+        self.gradientLayer.endPoint = CGPointMake(0.5f, 0.0f);
+        
+        NSMutableArray *colors = [NSMutableArray arrayWithObjects:nil];
+        
+        if ([self.widget respondsToSelector:@selector(gradientBackgroundColors)]) {
+            for (NSString *string in [self.widget gradientBackgroundColors]) {
+                [colors addObject:(id)[self colorFromString:string].CGColor];
+            }
+        } else {
+            for (NSString *string in infoPlist[@"customGradientColors"]) {
+                [colors addObject:(id)[self colorFromString:string].CGColor];
+            }
+        }
+        
+        //colors = [[colors reverseObjectEnumerator] allObjects];
+        
+        self.gradientLayer.colors = colors;
+        self.gradientLayer.bounds = CGRectMake(0, 0, self.viw.frame.size.width, self.viw.frame.size.height);
+        
+        [self.view.layer insertSublayer:self.gradientLayer atIndex:0];
+    } else if (infoPlist[@"customColor"] || [self.widget respondsToSelector:@selector(customHexColor)]) {
+        // Color is saved as a hex string; #FFFFFF.
+        
+        if ([self.widget respondsToSelector:@selector(customHexColor)]) {
+            self.view.backgroundColor = [self colorFromString:[self.widget customHexColor]];
+        } else {
+            self.view.backgroundColor = [self colorFromString:infoPlist[@"customColor"]];
+        }
+    }
+    
+    UIImage *iconfile = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Icon%@", [self getPathForMainBundle], [IBKResources suffix]]];
+    
+    if (iconfile || [self.widget respondsToSelector:@selector(alternativeIconViewWithFrame:)]) {
+        // Deal with loading up the custom icon.
+        
+        self.iconImageView.hidden = YES;
+        
+        if ([self.widget respondsToSelector:@selector(alternativeIconViewWithFrame:)] && [self.widget hasAlternativeIconView]) {
+            UIView *icon = [self.widget alternativeIconViewWithFrame:self.iconImageView.frame];
+            icon.backgroundColor = [UIColor clearColor];
+            [topBase addSubview:icon];
+        } else {
+            UIImageView *newIcon = [[UIImageView alloc] initWithImage:iconfile];
+            newIcon.frame = self.iconImageView.frame;
+            newIcon.backgroundColor = [UIColor clearColor];
+        
+            [topBase addSubview:newIcon];
+        }
+    } else {
+        // Bring icon back up to top view
+        [topBase addSubview:self.iconImageView];
+    }
+}
+
+-(void)setupIconImageView {
+    self.iconImageView = [[objc_getClass("SBIconImageView") alloc] initWithFrame:CGRectMake(10, [IBKResources heightForWidget]-(isPad ? 60 : 40), (isPad ? 60 : 40), (isPad ? 60 : 40))];
     
     if ([[self iconImageView] respondsToSelector:@selector(setIcon:animated:)])
         [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] animated:NO];
-    else
+    else if ([(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] respondsToSelector:@selector(applicationIconForDisplayIdentifier:)])
         [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] location:2 animated:NO];
-    self.iconImageView.frame = CGRectMake(7, (isPad ? 237 : 148)-(isPad ? 50 : 30)-7, (isPad ? 50 : 30), (isPad ? 50 : 30));
+    else // iOS 8
+        [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:self.applicationIdentifer] location:2 animated:NO];
+    
+    self.iconImageView.frame = CGRectMake(7, [IBKResources heightForWidget]-(isPad ? 50 : 30)-7, (isPad ? 50 : 30), (isPad ? 50 : 30));
     self.iconImageView.alpha = 0.0;
     self.iconImageView.layer.shadowOpacity = 0.15;
     self.iconImageView.layer.shadowOffset = CGSizeZero;
     self.iconImageView.layer.shadowRadius = 5.0;
     
-    [self.view addSubview:self.iconImageView];
+    [topBase addSubview:self.iconImageView];
+}
+
+-(void)setupForObjC {
+    // Setup content view
     
-    // Fix up animations for the icon's badge.
+    BOOL hasButtons = [self.widget hasButtonArea];
     
+    /*
+     * Having buttons means that we have a fade applied to the content view.
+     *
+     * Additionally, the content area does not mask to bounds, but the underlying widget does,
+     * therefore full widget backgrounds are possible if needs be.
+     */
     
+    self.viw = [self.widget viewWithFrame:CGRectMake(0, 0, [IBKResources widthForWidget], [IBKResources heightForWidget]) isIpad:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)];
+    self.viw.backgroundColor = [UIColor clearColor];
+    [topBase addSubview:self.viw];
     
-    NSDictionary *infoPlist = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@/Info.plist", [self getPathForMainBundle]]];
+    if (hasButtons) {
+        /*
+         * Here, we need to add the button view next to the icon, and then also ensure that
+         * the content view is faded appropriately.
+         */
+        
+        @try {
+            CGFloat originx = self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width + 4;
+            UIView *buttons = [self.widget buttonAreaViewWithFrame:CGRectMake(originx, self.iconImageView.frame.origin.y, [IBKResources widthForWidget] - originx - 8, self.iconImageView.frame.size.height)];
+            buttons.backgroundColor = [UIColor clearColor];
+            [topBase addSubview:buttons];
+        } @catch (NSException *e) {
+            NSLog(@"\n\n%@\n\nPlease ensure you have implemented -buttonAreaViewWithFrame: within your widget if -hasButtonArea is returning YES!", e);
+        }
+        
+        // Apply fade to content view.
+        
+        BOOL wantsNoFade = [self.widget respondsToSelector:@selector(wantsNoContentViewFadeWithButtons)];
+        
+        if (wantsNoFade) {
+            wantsNoFade = [self.widget wantsNoContentViewFadeWithButtons];
+        }
+        
+        if (!wantsNoFade) {
+            CAGradientLayer *grad = [CAGradientLayer layer];
+            grad.anchorPoint = CGPointZero;
+            grad.startPoint = CGPointMake(0.5f, 1.0f);
+            grad.endPoint = CGPointMake(0.5f, 0.25f);
+        
+            UIColor *innerColour = [UIColor colorWithWhite:1.0 alpha:1.0];
+        
+            NSArray *colors = [NSArray arrayWithObjects:
+                           (id)[innerColour CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.975f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.95f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.9f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.8f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.7f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.6f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.5f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.4f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.3f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.2f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.1f] CGColor],
+                           (id)[[UIColor clearColor] CGColor],
+                           nil];
+        
+            colors = [[colors reverseObjectEnumerator] allObjects];
+        
+            grad.colors = colors;
+            grad.bounds = CGRectMake(0, 0, self.viw.frame.size.width, self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
+        
+            self.viw.layer.mask = grad;
+        }
+    }
+}
+
+-(void)loadForNotificationsTable:(NSDictionary*)infoPlist {
+    // Create table view.
     
-    if (!infoPlist) {
-        // Fallback to showing notifications table.
-        
-        // Create table view.
-        
-        CGRect frame = self.view.frame;
-        frame.origin = CGPointZero;
-        
-        self.notificationsDataSource = [NSMutableArray array];
-        
-        // Fill the array with notifications
-        
-        BBServer *server = [objc_getClass("BBServer") sharedIBKBBServer];
-        NSLog(@"Server is %@", server);
-        NSLog(@"Could try %@", [server _bulletinsForSectionID:self.applicationIdentifer inFeeds:1]);
-        for (BBBulletin *bulletin in [server _allBulletinsForSectionID:self.applicationIdentifer])
-            [self.notificationsDataSource addObject:bulletin];
-        
-        NSLog(@"Bulletins array == %@", self.notificationsDataSource);
-        
-        CGRect initialFrame = CGRectMake(10, 7, (isPad ? 252 : 136)-14, self.iconImageView.frame.origin.y-9);
-        
-        self.notificationsTableView = [[UITableView alloc] initWithFrame:initialFrame style:UITableViewStylePlain];
-        
-        self.notificationsTableView.delegate = self;
-        self.notificationsTableView.dataSource = self;
-        self.notificationsTableView.backgroundColor = [UIColor clearColor];
-        self.notificationsTableView.showsVerticalScrollIndicator = YES;
-        self.notificationsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        
-        [self.notificationsTableView registerClass:[IBKNotificationsTableCell class] forCellReuseIdentifier:@"notificationTableCell"];
-        
-        [self.view addSubview:self.notificationsTableView];
-        
-        // What would be really cool is to have a CKBlurView under the icon view.
-        
-        /*CKBlurView *blurView = [[CKBlurView alloc] initWithFrame:CGRectMake(0, self.iconImageView.frame.origin.y-4, self.view.frame.size.width, (isPad ? 64 : 44))];
-        blurView.blurRadius = 7.5;
-        blurView.blurCroppingRect = CGRectMake(0, 0, blurView.frame.size.width, blurView.frame.size.height);
-        
-        [self.view addSubview:blurView];*/
-        
-        // Set our background colour to the average of the app's icon.
-        self.view.backgroundColor = [(UIImage*)[(SBIconImageView*)self.iconImageView squareContentsImage] mergedColor];
-        
+    CGRect frame = self.view.frame;
+    frame.origin = CGPointZero;
+    
+    self.notificationsDataSource = [NSMutableArray array];
+    
+    // Fill the array with notifications
+    
+    BBServer *server = [objc_getClass("BBServer") sharedIBKBBServer];
+    for (BBBulletin *bulletin in [server _allBulletinsForSectionID:self.applicationIdentifer])
+        [self.notificationsDataSource addObject:bulletin];
+    
+    NSLog(@"Bulletins array == %@", self.notificationsDataSource);
+    
+    CGRect initialFrame = CGRectMake(10, 7, [IBKResources widthForWidget]-14, self.iconImageView.frame.origin.y-9);
+    
+    self.notificationsTableView = [[UITableView alloc] initWithFrame:initialFrame style:UITableViewStylePlain];
+    
+    self.notificationsTableView.delegate = self;
+    self.notificationsTableView.dataSource = self;
+    self.notificationsTableView.backgroundColor = [UIColor clearColor];
+    self.notificationsTableView.showsVerticalScrollIndicator = YES;
+    self.notificationsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [self.notificationsTableView registerClass:[IBKNotificationsTableCell class] forCellReuseIdentifier:@"notificationTableCell"];
+    
+    [topBase addSubview:self.notificationsTableView];
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
         NSMutableArray *indexPaths = [NSMutableArray array];
         for (BBBulletin *bulletin in self.notificationsDataSource) {
             [indexPaths addObject:[NSIndexPath indexPathForRow:[self.notificationsDataSource indexOfObject:bulletin] inSection:0]];
         }
+        
         [self.notificationsTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-        
-        // Bring icon back up to top view
-        
-        [self.view addSubview:self.iconImageView];
-    } else {
-        // Load up widget UI from NSBundle.
     }
     
-    self.isWidgetLoaded = YES;
+    // If no notifications, say so
+    self.noNotifsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidget]-40, [IBKResources heightForWidget]-(isPad ? 50 : 30))];
+    self.noNotifsLabel.text = @"No notifications";
+    self.noNotifsLabel.textAlignment = NSTextAlignmentCenter;
+    self.noNotifsLabel.numberOfLines = 0;
+    self.noNotifsLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
+    self.noNotifsLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+    self.noNotifsLabel.backgroundColor = [UIColor clearColor];
+    if ([self.notificationsDataSource count] == 0)
+        self.noNotifsLabel.alpha = 1.0;
+    else
+        self.noNotifsLabel.alpha = 0.0;
+    
+    [topBase addSubview:self.noNotifsLabel];
+    
+    // Bring icon back up to top view
+    [topBase addSubview:self.iconImageView];
 }
 
--(void)unloadWidgetInterface {
-    // Unload the widget UI.
-    self.view.hidden = YES;
+-(void)loadForGameCenter:(NSDictionary*)plist {
+    // It will be much easier to have a subclass that handles all of this for us!
     
+    self.gcTableView = [[IBKGameCenterTableView alloc] initWithIdentifier:self.applicationIdentifer andFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.iconImageView.frame.origin.y-6) andColouration:self.view.backgroundColor];
     
-    // testing
+    [topBase addSubview:self.gcTableView];
+    
+    UILabel *achLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 100, self.iconImageView.frame.origin.y, 50, self.iconImageView.frame.size.height)];
+    achLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
+    achLabel.textAlignment = NSTextAlignmentCenter;
+    achLabel.text = @"Achievements";
+    achLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:13];
+    achLabel.backgroundColor = [UIColor clearColor];
+    achLabel.alpha = 0.5;
+    
+    [achLabel sizeToFit];
+    
+    achLabel.frame = CGRectMake(self.view.bounds.size.width - achLabel.frame.size.width - 20, self.iconImageView.frame.origin.y, achLabel.frame.size.width, self.iconImageView.frame.size.height);
+    
+    [topBase addSubview:achLabel];
+    
+    // Deal with background image!
+    
+    NSString *suffix = @"";
+    
+    if (isPad) {
+        suffix = @"~ipad";
+    }
+    
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    if (scale >= 2.0 && scale < 3.0) {
+        suffix = [suffix stringByAppendingString:@"@2x.png"];
+    } else if (scale >= 3.0) {
+        suffix = [suffix stringByAppendingString:@"@3x.png"];
+    } else if (scale < 2.0) {
+        suffix = [suffix stringByAppendingString:@".png"];
+    }
+    
+    UIImageView *fade = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.gcTableView.frame.size.height-10, self.view.bounds.size.width, 10)];
+    fade.backgroundColor = [UIColor clearColor];
+    fade.image = [[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"/Library/Application Support/Curago/Images/fade%@", suffix]] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 1, 10)];
+    fade.alpha = 0.2;
+    fade.opaque = NO;
+    
+    [topBase addSubview:fade];
+    
+    // Pull image if available.
+    
+    UIImage *img = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/LargeBackground%@", [self getPathForMainBundle], suffix]];
+    if (!img) {
+        // Pull iTunes artwork.
+    }
+    
+    UIImageView *bg = [[UIImageView alloc] initWithImage:img];
+    bg.backgroundColor = [UIColor clearColor];
+    bg.alpha = 0.1;
+    bg.contentMode = UIViewContentModeScaleAspectFill;
+    bg.frame = self.gcTableView.bounds;
+    
+    [topBase insertSubview:bg atIndex:0];
+    
+    [self setColorAndOrIcon:plist];
 }
 
 -(void)layoutViewForPreExpandedWidget {
@@ -173,18 +544,55 @@
     
     // Set scaling of baseView
     self.view.alpha = 1.0;
+    self.view.hidden = NO;
     self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
     self.view.layer.shadowOpacity = 0.0;
-    //self.view.userInteractionEnabled = YES; // This will be enabled once we can launch from the new icon view.
+    
+    CGFloat red, green, blue;
+    [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+    self.gradientLayer.opacity = 1.0;
     
     // Set alpha of icon image view
     self.iconImageView.alpha = 1.0;
+    self.shimIcon.alpha = 0.0;
+    self.shimIcon.hidden = YES;
 }
 
 -(void)setScaleForView:(CGFloat)scale withDuration:(CGFloat)duration {
     // This scale value should have Hooke's Law applied if it is greater than 1.0
     
+    BOOL fin = NO;
+    
+    if (scale >= 8.0) {
+        fin = YES;
+    }
+    
     scale -= 1.0;
+    
+    // Modify scaling to be based off icon sizing.
+    
+    // ShimIcon needs to be looking at scale 1.0
+    // (widgetWidth - self.shimIcon.bounds.size.width) = gap between widget and icon (may be negative)
+    
+    CGFloat modifier = self.shimIcon.frame.size.width - self.view.bounds.size.width;
+    
+    if (modifier < 0)
+        modifier = -modifier;
+    
+    CGFloat iconScale = (isPad ? 72 : 58) / (self.shimIcon.frame.size.width + modifier);
+    
+    iconScale = 0.41;
+    
+    if (!self.scalingDown)
+        scale = iconScale + scale;
+    
+    if (scale < iconScale)
+        scale = iconScale;
+    
+    if (fin)
+        scale = 1.0;
     
     if (scale > 1.0) {
         CGFloat force = log(scale)/(2.0*scale);
@@ -192,17 +600,38 @@
         scale = 1.0+force;
     }
     
-    NSLog(@"Scale is %f", scale);
+    // Icon scaling.
+    
+    CGFloat __block iconAlpha = 1.0;
+    
+    // We can assume that past 1.35 pinch scale, the icon shim will be alpha 0
+    
+    if (scale >= (0.15 + iconScale)) {
+        iconAlpha = ((0.45+iconScale)-scale)*5;
+    }
+    
+    CGFloat red, green, blue;
+    [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0-iconAlpha];
+    self.gradientLayer.opacity = 1.0-iconAlpha;
     
     [UIView animateWithDuration:duration animations:^{
-        self.view.transform = CGAffineTransformMakeScale(scale, scale);
-        self.view.alpha = scale;
-        
-        [(UIView*)[self.correspondingIconView _iconImageView] setAlpha:1.0-scale];
+        self.view.transform = CGAffineTransformMakeScale((fin ? 1.0 : scale), (fin ? 1.0 : scale));
+        self.shimIcon.alpha = iconAlpha;
+        self.viw.alpha = 1.0-iconAlpha;
+        self.notificationsTableView.alpha = 1.0-iconAlpha;
+        self.gcTableView.alpha = 1.0-iconAlpha;
     
         // Depending on how far we've scaled, adjust the icon image view at a much faster rate.
-        self.iconImageView.alpha = scale*1.5;
+        self.iconImageView.alpha = 1.0-iconAlpha;
+        
+        if (self.scalingDown)
+            [[self.correspondingIconView _iconImageView] setAlpha:0.0];
     }];
+    
+    NSLog(@"shimIcon.width = %f", self.shimIcon.frame.size.width);
+    NSLog(@"widget.width = %f", self.view.frame.size.width);
 }
 
 -(void)unloadFromPinchGesture {
@@ -215,10 +644,101 @@
     }];
 }
 
+float scale2 = 0.0;
+-(void)handlePinchGesture:(UIPinchGestureRecognizer*)pinch {
+    if (pinch.state == UIGestureRecognizerStateBegan) {
+        NSLog(@"XXX: Pinching began");
+        // Handle setting up the view.
+        self.scalingDown = YES;
+        self.shimIcon.hidden = NO;
+        
+        // Add widget view onto icon.
+        [self.correspondingIconView.superview addSubview:self.correspondingIconView]; // Move the view to be the top most subview
+    } else if (pinch.state == UIGestureRecognizerStateChanged) {
+       // NSLog(@"XXX: Pinching changed");
+        
+        // Set scale of our widget view, using scale/velocity as our time duration for animation
+        CGFloat duration = (pinch.scale/pinch.velocity);
+        if (duration < 0)
+            duration = -duration;
+        
+        scale2 = 1.0+pinch.scale;
+        
+        [self setScaleForView:scale2 withDuration:0.0];
+    } else if (pinch.state == UIGestureRecognizerStateEnded) {
+        NSLog(@"XXX: Pinching ended");
+        if ((scale2-1.0) > 0.8) { // Scale is 1.0 onwards, but we expect 0.0 onwards
+            [self setScaleForView:8.0 withDuration:0.3];
+            self.shimIcon.hidden = YES;
+            
+            // We remain in position.
+        } else {
+            // Animate shim icon to top corner.
+            
+            CGFloat widgetWidth = self.view.bounds.size.width;
+            CGFloat iconSize = (isPad ? 72 : 58);
+            CGFloat scale = (iconSize/widgetWidth);
+            
+            CGFloat red, green, blue;
+            [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
+            
+            if (self.applicationIdentifer) {
+                [IBKResources removeIdentifier:self.applicationIdentifer];
+            }
+            
+            SBIconListView *lst = [self IBKListViewForIdentifierTwo:self.applicationIdentifer];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                self.view.transform = CGAffineTransformMakeScale(scale, scale);
+                self.view.center = CGPointMake(([(UIView*)[self.correspondingIconView _iconImageView] frame].size.width/2)-1, ([(UIView*)[self.correspondingIconView _iconImageView] frame].size.height/2)-1);
+                self.shimIcon.alpha = 1.0;
+                /*for (UIView *subview in self.view.subviews) {
+                    if (![subview isEqual:self.shimIcon] && subview != self.shimIcon)
+                        subview.alpha = 0.0;
+                }*/
+                
+                self.iconImageView.alpha = 0.0;
+                
+                self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
+                self.gradientLayer.opacity = 0.0;
+                
+                // Reload everything.
+                [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] removeAllCachedIcons];
+                if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+                    //[(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+                    
+                    [lst setIconsNeedLayout];
+                    [lst layoutIconsIfNeeded:0.3 domino:NO];
+                } else
+                    [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+            } completion:^(BOOL finished) {
+                [[self.correspondingIconView _iconImageView] setAlpha:1.0];
+                self.view.hidden = YES;
+                [self unloadFromPinchGesture];
+                [[objc_getClass("SBIconController") sharedInstance] removeIdentifierFromWidgets:self.applicationIdentifer];
+                
+                // Reset icon frames.
+                [lst setIconsNeedLayout];
+                [lst layoutIconsIfNeeded:0.0 domino:NO];
+            }];
+        }
+        
+        self.scalingDown = NO;
+    } else if (pinch.state == UIGestureRecognizerStateCancelled) {
+        [self setScaleForView:8.0 withDuration:0.3];
+        self.shimIcon.hidden = NO;
+        
+        self.scalingDown = NO;
+    }
+}
+
 -(NSString*)getPathForMainBundle {
-    return @"zzzzz";
+    NSString *thing = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/%@", [IBKResources getRedirectedIdentifierIfNeeded:self.applicationIdentifer]];
     
-    // TODO: Implement finding the path for the widget on disk, and handle theme support.
+    // Wait! If we don't have a default widget, or the redirected is uninstalled, what happens then? We fallback!
+    // Fallback to default first.
+    
+    return thing;
 }
 
 #pragma mark Rotation handling
@@ -226,19 +746,21 @@
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
+    if (!isPad) return;
+    
     // Alright. Let's rotate.
     CGRect baseViewFrame;
     if (toInterfaceOrientation == UIInterfaceOrientationPortrait || toInterfaceOrientation == 0) {
         if (isPad) {
             baseViewFrame = CGRectMake(0, 0, 252, 237);
         } else {
-            baseViewFrame = CGRectMake(0, 0, 136, 148);
+            baseViewFrame = CGRectMake(0, 0, [IBKResources widthForWidget], [IBKResources heightForWidget]);
         }
     } else if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         if (isPad) {
             baseViewFrame = CGRectMake(0, 0, 272, 217);
         } else {
-            baseViewFrame = CGRectMake(0, 0, 148, 136);
+            baseViewFrame = CGRectMake(0, 0, [IBKResources widthForWidget], [IBKResources heightForWidget]);
         }
     }
     
@@ -257,6 +779,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Handle stuff like QR tweaks etc.
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    // Launch bulletin!
+    
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -290,7 +817,7 @@
     BBBulletin *bulletin = (self.notificationsDataSource)[indexPath.row];
     
     cell.superviewColouration = self.view.backgroundColor;
-    [cell initialiseForBulletin:bulletin andRowWidth:(isPad ? 252 : 136)-20];
+    [cell initialiseForBulletin:bulletin andRowWidth:[IBKResources widthForWidget]-20];
     
     NSLog(@"Finished creating new cell");
     
@@ -308,9 +835,13 @@
 -(void)addBulletin:(id)arg2 {
     NSLog(@"Recieved bulletin");
     
-    [self.notificationsDataSource insertObject:arg2 atIndex:0];
+    if ([self.notificationsDataSource count] == 0) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.noNotifsLabel.alpha = 0.0;
+        }];
+    }
     
-    NSLog(@"self.noticationsDataSource == %@", self.notificationsDataSource);
+    [self.notificationsDataSource insertObject:arg2 atIndex:0];
     
     //[self.notificationsTableView reloadData];
     
@@ -350,6 +881,57 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)unloadWidgetInterface {
+    // Unload the widget UI.
+    self.view.hidden = YES;
+    
+    // Well, shit. We need to tear all this UI down.
+    
+    if (self.notificationsTableView) {
+        [self.notificationsTableView removeFromSuperview];
+        self.notificationsTableView = nil;
+    }
+    
+    if (self.webView) {
+        [self.webView removeFromSuperview];
+        self.webView = nil;
+    }
+    
+    if (self.viw) {
+        [self.viw removeFromSuperview];
+        self.viw = nil;
+    }
+    
+    if (self.bundle) {
+        [self.bundle unload];
+        self.bundle = nil;
+    }
+    
+    if (self.iconImageView) {
+        [self.iconImageView removeFromSuperview];
+        self.iconImageView = nil;
+    }
+    
+    if (self.widget)
+        self.widget = nil;
+    
+    if (self.noNotifsLabel) {
+        [self.noNotifsLabel removeFromSuperview];
+        self.noNotifsLabel = nil;
+    }
+    
+    if (self.gcTableView) {
+        [self.gcTableView removeFromSuperview];
+        self.gcTableView = nil;
+    }
+}
+
+-(void)dealloc {
+    NSLog(@"*** [Curago] :: Tearing down a widget");
+    
+    [self unloadWidgetInterface];
 }
 
 @end

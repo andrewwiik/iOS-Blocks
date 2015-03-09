@@ -34,10 +34,10 @@
     return self;
 }
 
--(BOOL)isSuperviewColourationBright {
++(BOOL)isSuperviewColourationBright:(UIColor*)color {
     BOOL isLight = NO;
     
-    CGDataProviderRef provider = CGImageGetDataProvider([IBKNotificationsTableCell imageWithColor:self.superviewColouration].CGImage);
+    CGDataProviderRef provider = CGImageGetDataProvider([IBKNotificationsTableCell imageWithColor:color].CGImage);
     NSData* data = (id)CFBridgingRelease(CGDataProviderCopyData(provider));
     
     if ([data length] > 0) {
@@ -65,18 +65,26 @@
     NSLog(@"initing for bulletin");
     // Initialiation: title, date label and content
     // content may be the count of -(id)attachments
-    // date label: minutes (1m ago), hours (2h ago), days (up to 3d ago), actual date.
+    // date label: minutes (1m ago), hours (2h ago), days (up to 3d ago?), actual date.
     // attachment image - just take the first one
     
     // We have a height of 52.0 per cell.
+    
+    self.bulletin = bulletin;
+    
+    if (!self.translations) {
+        self.translations = [NSBundle bundleWithPath:@"/System/Library/CoreServices/SpringBoard.app"];
+    }
     
     if (!self.title) {
         self.title = [[UILabel alloc] initWithFrame:CGRectMake(4, 3, width-8, 14)];
         self.title.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:12.5];
         self.title.numberOfLines = 1;
         self.title.backgroundColor = [UIColor clearColor];
+        self.title.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+        self.title.shadowOffset = CGSizeMake(0, 1);
         
-        if ([self isSuperviewColourationBright])
+        if ([IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration])
             self.title.textColor = [UIColor darkTextColor];
         else
             self.title.textColor = [UIColor whiteColor];
@@ -103,7 +111,7 @@
         self.dateLabel.backgroundColor = [UIColor clearColor];
         self.dateLabel.textAlignment = NSTextAlignmentRight;
         
-        if ([self isSuperviewColourationBright])
+        if ([IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration])
             self.dateLabel.textColor = [UIColor darkTextColor];
         else
             self.dateLabel.textColor = [UIColor whiteColor];
@@ -113,14 +121,8 @@
         [self addSubview:self.dateLabel];
     }
     
-    if (!self.dateFormatter) {
-        self.dateFormatter = [[NSDateFormatter alloc] init];
-    }
-    
-    // TODO: Do we need to set the dateLabel's text here?
-    // TODO: Add NSTimer for date label refresh
-    
-    self.dateLabel.text = @"2m ago";
+    self.dateTimer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateDate:) userInfo:nil repeats:YES];
+    [self updateDate:nil];
     
     NSLog(@"Content");
     
@@ -129,8 +131,10 @@
         self.content.font = [UIFont fontWithName:@"HelveticaNeue" size:11];
         self.content.numberOfLines = 0;
         self.content.backgroundColor = [UIColor clearColor];
+        self.content.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+        self.content.shadowOffset = CGSizeMake(0, 1);
         
-        if ([self isSuperviewColourationBright])
+        if ([IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration])
             self.content.textColor = [UIColor darkTextColor];
         else
             self.content.textColor = [UIColor whiteColor];
@@ -167,8 +171,6 @@
             
             [self addSubview:self.attachment];
         }
-        
-        
     }
     
     if (!self.separatorLine) {
@@ -180,8 +182,45 @@
     }
 }
 
--(void)updateTime:(NSTimer*)timer {
+-(void)updateDate:(NSTimer*)timer {
+    //NSLog(@"I'm still getting called");
     
+    @try {
+        NSString *string;
+        // calculate exact secs and mins, then vague 1h, 2h, then simply the time
+        NSDate *now = [NSDate date];
+        int seconds = (int)fabs([self.bulletin.date timeIntervalSinceDate:now]);
+        seconds = floorf(seconds);
+        int minutes = seconds / 60.0f;
+        int hours = minutes / 60.0f;
+        int days = hours / 24.0f;
+        
+        if (seconds < 10) {
+            // Display "now"
+            string = [self.translations localizedStringForKey:@"RELATIVE_DATE_NOW" value:@"now" table:@"SpringBoard"];
+        } else if (seconds < 60) {
+            // Display "%@s ago"
+            string = [NSString stringWithFormat:[self.translations localizedStringForKey:@"RELATIVE_DATE_PAST_SEC" value:@"%@s ago" table:@"SpringBoard"], [NSString stringWithFormat:@"%d", seconds]];
+        } else if (minutes < 60) {
+            // Display "%@m ago"
+            string = [NSString stringWithFormat:[self.translations localizedStringForKey:@"RELATIVE_DATE_PAST_MIN" value:@"%@m ago" table:@"SpringBoard"], [NSString stringWithFormat:@"%d", minutes]];
+        } else if (hours < 24) {
+            // Display "%@h ago"
+            string = [NSString stringWithFormat:[self.translations localizedStringForKey:@"RELATIVE_DATE_PAST_HOUR" value:@"%@h ago" table:@"SpringBoard"], [NSString stringWithFormat:@"%d", hours]];
+        } else {
+            // Display "%@d ago"
+            string = [NSString stringWithFormat:[self.translations localizedStringForKey:@"RELATIVE_DATE_PAST_DAY" value:@"%@d ago" table:@"SpringBoard"], [NSString stringWithFormat:@"%d", days]];
+        }
+        
+        self.dateLabel.text = string;
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Bugger, I broke it again");
+        
+        // Kill that damn timer
+        [self.dateTimer invalidate];
+        self.dateTimer = nil;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

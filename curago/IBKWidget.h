@@ -11,14 +11,19 @@
 @protocol IBKWidget <NSObject>
 
 @required
--(UIView*)view;
+// These methods will be called in this order
+-(UIView*)viewWithFrame:(CGRect)frame isIpad:(BOOL)isIpad;
 -(BOOL)hasButtonArea;
 -(BOOL)hasAlternativeIconView;
 
 @optional
--(UIView*)buttonAreaView;
--(UIView*)alternativeIconView;
+-(UIView*)buttonAreaViewWithFrame:(CGRect)frame;
+-(UIView*)alternativeIconViewWithFrame:(CGRect)frame;
 -(void)willRotateToInterfaceOrientation:(int)arg1;
 -(void)didRotateToInterfaceOrientation:(int)arg1;
+-(NSString*)customHexColor;
+-(BOOL)wantsGradientBackground;
+-(NSArray*)gradientBackgroundColors;
+-(BOOL)wantsNoContentViewFadeWithButtons;
 
 @end

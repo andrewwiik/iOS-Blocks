@@ -11,8 +11,26 @@
 
 @interface IBKResources : NSObject
 
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SCREEN_MAX_LENGTH (MAX(SCREEN_WIDTH, SCREEN_HEIGHT))
+#define SCREEN_MIN_LENGTH (MIN(SCREEN_WIDTH, SCREEN_HEIGHT))
+
+#define IS_IPHONE_6 (SCREEN_MAX_LENGTH == 667)
+#define IS_IPHONE_6_PLUS (SCREEN_MAX_LENGTH == 736.0)
+
++(CGFloat)adjustedAnimationSpeed:(CGFloat)duration;
+
 +(NSSet*)widgetBundleIdentifiers;
 +(void)addNewIdentifier:(NSString*)arg1;
++(void)removeIdentifier:(NSString*)arg1;
 +(NSArray*)generateWidgetIndexesForListView:(SBIconListView*)view;
+
++(CGFloat)widthForWidget;
++(CGFloat)heightForWidget;
+
++(NSString*)getRedirectedIdentifierIfNeeded:(NSString*)identifier;
+
++(NSString*)suffix;
 
 @end
