@@ -9,7 +9,6 @@
 
 @protocol IBKWidgetDelegate <NSObject>
 
-@required
 -(UIView*)viewWithFrame:(CGRect)frame isIpad:(BOOL)isIpad;
 -(BOOL)hasButtonArea;
 -(BOOL)hasAlternativeIconView;
@@ -19,5 +18,9 @@
 -(UIView*)alternativeIconViewWithFrame:(CGRect)frame;
 -(void)willRotateToInterfaceOrientation:(int)arg1;
 -(void)didRotateToInterfaceOrientation:(int)arg1;
+-(NSString*)customHexColor;
+-(BOOL)wantsGradientBackground;
+-(NSArray*)gradientBackgroundColors;
+-(BOOL)wantsNoContentViewFadeWithButtons;
 
 @end

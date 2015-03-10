@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "IBKResources.h"
 
 @interface IBKAPI : NSObject
 
@@ -17,6 +18,6 @@
  * @return The average colour of a specified icon, taking into account changes made by WinterBoard themes.
  */
 +(UIColor*)averageColorForIconIdentifier:(NSString*)bundleId;
-
++(CGFloat)heightForContentView;
 
 @end

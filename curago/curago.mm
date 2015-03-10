@@ -55,7 +55,7 @@ typedef struct SBIconCoordinate {
 
 
 @interface SBIconListView (Additions)
--(SBIconCoordinate)coordinateForIconWithIndex:(unsigned int)index andOriginalCoordinate:(SBIconCoordinate)orig;
+-(SBIconCoordinate)coordinateForIconWithIndex:(unsigned int)index andOriginalCoordinate:(SBIconCoordinate)orig forOrientation:(int)arg3;
 -(SBIcon*)modifiedIconForIcon:(SBIcon*)icon;
 @end
 
@@ -66,12 +66,14 @@ typedef struct SBIconCoordinate {
 @interface IBKIconView : SBIconView
 
 +(IBKWidgetViewController*)getWidgetViewControllerForIcon:(SBIcon*)arg1 orBundleID:(NSString*)arg2;
+-(void)addPreExpandedWidgetIfNeeded:(id)arg1;
 
 @end
 
 
 
 NSMutableDictionary *cachedIndexes;
+NSMutableDictionary *cachedIndexesLandscape;
 NSMutableSet *movedIndexPaths;
 NSMutableDictionary *widgetViewControllers;
 
@@ -81,6 +83,8 @@ int currentOrientation = 1;
 BOOL animatingIn = NO;
 BOOL rearrangingIcons = NO;
 BOOL iWidgets = NO;
+BOOL dontKillIcons = NO;
+BOOL isRotating = NO;
 
 static BBServer* __weak IBKBBServer;
 
@@ -90,10 +94,10 @@ static BBServer* __weak IBKBBServer;
 
 #include <logos/logos.h>
 #include <substrate.h>
-@class SBIconView; @class SBAppSwitcherController; @class SBApplication; @class SBIconListView; @class SBIconScrollView; @class BBServer; @class SBIconController; @class MPUNowPlayingController; @class IBKIconView; @class SBAppSliderController; @class SBIconImageView; @class IWWidgetsView; @class SBMediaController; @class SBIconBadgeView; @class SBIconImageCrossfadeView; 
-static _Bool (*_logos_orig$_ungrouped$SBIconListView$isFull)(SBIconListView*, SEL); static _Bool _logos_method$_ungrouped$SBIconListView$isFull(SBIconListView*, SEL); static void (*_logos_orig$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$)(SBIconListView*, SEL, int); static void _logos_method$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$(SBIconListView*, SEL, int); static unsigned int (*_logos_orig$_ungrouped$SBIconListView$rowAtPoint$)(SBIconListView*, SEL, struct CGPoint); static unsigned int _logos_method$_ungrouped$SBIconListView$rowAtPoint$(SBIconListView*, SEL, struct CGPoint); static unsigned int (*_logos_orig$_ungrouped$SBIconListView$columnAtPoint$)(SBIconListView*, SEL, struct CGPoint); static unsigned int _logos_method$_ungrouped$SBIconListView$columnAtPoint$(SBIconListView*, SEL, struct CGPoint); static unsigned int (*_logos_orig$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$)(SBIconListView*, SEL, struct SBIconCoordinate, int); static unsigned int _logos_method$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$(SBIconListView*, SEL, struct SBIconCoordinate, int); static struct SBIconCoordinate (*_logos_orig$_ungrouped$SBIconListView$iconCoordinateForIndex$forOrientation$)(SBIconListView*, SEL, unsigned int, int); static struct SBIconCoordinate _logos_method$_ungrouped$SBIconListView$iconCoordinateForIndex$forOrientation$(SBIconListView*, SEL, unsigned int, int); static SBIconCoordinate _logos_method$_ungrouped$SBIconListView$coordinateForIconWithIndex$andOriginalCoordinate$(SBIconListView*, SEL, unsigned int, SBIconCoordinate); static SBIcon* _logos_method$_ungrouped$SBIconListView$modifiedIconForIcon$(SBIconListView*, SEL, SBIcon*); static void (*_logos_orig$_ungrouped$SBAppSliderController$switcherWasDismissed$)(SBAppSliderController*, SEL, BOOL); static void _logos_method$_ungrouped$SBAppSliderController$switcherWasDismissed$(SBAppSliderController*, SEL, BOOL); static void (*_logos_orig$_ungrouped$SBAppSliderController$animatePresentationFromDisplayIdentifier$withViews$fromSide$withCompletion$)(SBAppSliderController*, SEL, id, id, int, id); static void _logos_method$_ungrouped$SBAppSliderController$animatePresentationFromDisplayIdentifier$withViews$fromSide$withCompletion$(SBAppSliderController*, SEL, id, id, int, id); static void (*_logos_orig$_ungrouped$SBAppSwitcherController$switcherWasDismissed$)(SBAppSwitcherController*, SEL, BOOL); static void _logos_method$_ungrouped$SBAppSwitcherController$switcherWasDismissed$(SBAppSwitcherController*, SEL, BOOL); static void (*_logos_orig$_ungrouped$SBAppSwitcherController$animatePresentationFromDisplayLayout$withViews$withCompletion$)(SBAppSwitcherController*, SEL, id, id, id); static void _logos_method$_ungrouped$SBAppSwitcherController$animatePresentationFromDisplayLayout$withViews$withCompletion$(SBAppSwitcherController*, SEL, id, id, id); static void (*_logos_orig$_ungrouped$SBApplication$willAnimateDeactivation$)(SBApplication*, SEL, _Bool); static void _logos_method$_ungrouped$SBApplication$willAnimateDeactivation$(SBApplication*, SEL, _Bool); static void (*_logos_orig$_ungrouped$SBApplication$didAnimateDeactivation)(SBApplication*, SEL); static void _logos_method$_ungrouped$SBApplication$didAnimateDeactivation(SBApplication*, SEL); static void (*_logos_orig$_ungrouped$SBApplication$willActivateWithTransactionID$)(SBApplication*, SEL, unsigned long long); static void _logos_method$_ungrouped$SBApplication$willActivateWithTransactionID$(SBApplication*, SEL, unsigned long long); static id (*_logos_orig$_ungrouped$SBIconView$initWithDefaultSize)(SBIconView*, SEL); static id _logos_method$_ungrouped$SBIconView$initWithDefaultSize(SBIconView*, SEL); static id (*_logos_orig$_ungrouped$SBIconImageCrossfadeView$initWithImageView$crossfadeView$)(SBIconImageCrossfadeView*, SEL, id, id); static id _logos_method$_ungrouped$SBIconImageCrossfadeView$initWithImageView$crossfadeView$(SBIconImageCrossfadeView*, SEL, id, id); static CGRect (*_logos_orig$_ungrouped$SBIconImageView$visibleBounds)(SBIconImageView*, SEL); static CGRect _logos_method$_ungrouped$SBIconImageView$visibleBounds(SBIconImageView*, SEL); static CGPoint (*_logos_orig$_ungrouped$IBKIconView$iconImageCenter)(IBKIconView*, SEL); static CGPoint _logos_method$_ungrouped$IBKIconView$iconImageCenter(IBKIconView*, SEL); static CGRect (*_logos_orig$_ungrouped$IBKIconView$iconImageFrame)(IBKIconView*, SEL); static CGRect _logos_method$_ungrouped$IBKIconView$iconImageFrame(IBKIconView*, SEL); static void (*_logos_orig$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$)(IBKIconView*, SEL, id, _Bool, _Bool, struct CGPoint); static void _logos_method$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$(IBKIconView*, SEL, id, _Bool, _Bool, struct CGPoint); static id (*_logos_orig$_ungrouped$IBKIconView$iconImageSnapshot)(IBKIconView*, SEL); static id _logos_method$_ungrouped$IBKIconView$iconImageSnapshot(IBKIconView*, SEL); static CGRect (*_logos_orig$_ungrouped$IBKIconView$frame)(IBKIconView*, SEL); static CGRect _logos_method$_ungrouped$IBKIconView$frame(IBKIconView*, SEL); static void (*_logos_orig$_ungrouped$IBKIconView$_setIcon$animated$)(IBKIconView*, SEL, id, BOOL); static void _logos_method$_ungrouped$IBKIconView$_setIcon$animated$(IBKIconView*, SEL, id, BOOL); static struct CGRect (*_logos_orig$_ungrouped$IBKIconView$_frameForLabel)(IBKIconView*, SEL); static struct CGRect _logos_method$_ungrouped$IBKIconView$_frameForLabel(IBKIconView*, SEL); static void (*_logos_orig$_ungrouped$IBKIconView$prepareForRecycling)(IBKIconView*, SEL); static void _logos_method$_ungrouped$IBKIconView$prepareForRecycling(IBKIconView*, SEL); static BOOL (*_logos_orig$_ungrouped$IBKIconView$pointInside$withEvent$)(IBKIconView*, SEL, struct CGPoint, id); static BOOL _logos_method$_ungrouped$IBKIconView$pointInside$withEvent$(IBKIconView*, SEL, struct CGPoint, id); static IBKWidgetViewController* _logos_meta_method$_ungrouped$IBKIconView$getWidgetViewControllerForIcon$orBundleID$(Class, SEL, SBIcon*, NSString*); static void (*_logos_orig$_ungrouped$SBIconController$setIsEditing$)(SBIconController*, SEL, BOOL); static void _logos_method$_ungrouped$SBIconController$setIsEditing$(SBIconController*, SEL, BOOL); static BOOL _logos_method$_ungrouped$SBIconController$ibkIsInSwitcher(SBIconController*, SEL); static void _logos_method$_ungrouped$SBIconController$removeIdentifierFromWidgets$(SBIconController*, SEL, NSString*); static void _logos_method$_ungrouped$SBIconController$removeAllCachedIcons(SBIconController*, SEL); static UIScrollView* (*_logos_orig$_ungrouped$SBIconScrollView$initWithFrame$)(SBIconScrollView*, SEL, CGRect); static UIScrollView* _logos_method$_ungrouped$SBIconScrollView$initWithFrame$(SBIconScrollView*, SEL, CGRect); static void _logos_method$_ungrouped$SBIconScrollView$handlePinchGesture$(SBIconScrollView*, SEL, UIPinchGestureRecognizer*); static SBIconListView * _logos_method$_ungrouped$SBIconScrollView$IBKListViewForIdentifierTwo$(SBIconScrollView*, SEL, NSString*); static void (*_logos_orig$_ungrouped$SBIconBadgeView$configureForIcon$location$highlighted$)(SBIconBadgeView*, SEL, SBIcon*, int, BOOL); static void _logos_method$_ungrouped$SBIconBadgeView$configureForIcon$location$highlighted$(SBIconBadgeView*, SEL, SBIcon*, int, BOOL); static struct CGPoint (*_logos_orig$_ungrouped$SBIconBadgeView$accessoryOriginForIconBounds$)(SBIconBadgeView*, SEL, CGRect); static struct CGPoint _logos_method$_ungrouped$SBIconBadgeView$accessoryOriginForIconBounds$(SBIconBadgeView*, SEL, CGRect); static id (*_logos_orig$_ungrouped$BBServer$init)(BBServer*, SEL); static id _logos_method$_ungrouped$BBServer$init(BBServer*, SEL); static void (*_logos_orig$_ungrouped$BBServer$_addBulletin$)(BBServer*, SEL, BBBulletin*); static void _logos_method$_ungrouped$BBServer$_addBulletin$(BBServer*, SEL, BBBulletin*); static void (*_logos_orig$_ungrouped$BBServer$_removeBulletin$rescheduleTimerIfAffected$shouldSync$)(BBServer*, SEL, id, BOOL, BOOL); static void _logos_method$_ungrouped$BBServer$_removeBulletin$rescheduleTimerIfAffected$shouldSync$(BBServer*, SEL, id, BOOL, BOOL); static id _logos_meta_method$_ungrouped$BBServer$sharedIBKBBServer(Class, SEL); 
+@class SBLockScreenViewController; @class SBMediaController; @class SBIconImageCrossfadeView; @class IWWidgetsView; @class SBAppSliderController; @class SBIconController; @class SBAppSwitcherController; @class SBIconScrollView; @class SBIconListView; @class SBIconViewMap; @class SBIconImageView; @class SBApplication; @class SBIconView; @class SBIconBadgeView; @class IBKIconView; @class MPUNowPlayingController; @class BBServer; 
+static _Bool (*_logos_orig$_ungrouped$SBIconListView$isFull)(SBIconListView*, SEL); static _Bool _logos_method$_ungrouped$SBIconListView$isFull(SBIconListView*, SEL); static void (*_logos_orig$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$)(SBIconListView*, SEL, int); static void _logos_method$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$(SBIconListView*, SEL, int); static void (*_logos_orig$_ungrouped$SBIconListView$cleanupAfterRotation)(SBIconListView*, SEL); static void _logos_method$_ungrouped$SBIconListView$cleanupAfterRotation(SBIconListView*, SEL); static unsigned int (*_logos_orig$_ungrouped$SBIconListView$rowAtPoint$)(SBIconListView*, SEL, struct CGPoint); static unsigned int _logos_method$_ungrouped$SBIconListView$rowAtPoint$(SBIconListView*, SEL, struct CGPoint); static unsigned int (*_logos_orig$_ungrouped$SBIconListView$columnAtPoint$)(SBIconListView*, SEL, struct CGPoint); static unsigned int _logos_method$_ungrouped$SBIconListView$columnAtPoint$(SBIconListView*, SEL, struct CGPoint); static unsigned int (*_logos_orig$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$)(SBIconListView*, SEL, struct SBIconCoordinate, int); static unsigned int _logos_method$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$(SBIconListView*, SEL, struct SBIconCoordinate, int); static struct SBIconCoordinate (*_logos_orig$_ungrouped$SBIconListView$iconCoordinateForIndex$forOrientation$)(SBIconListView*, SEL, unsigned int, int); static struct SBIconCoordinate _logos_method$_ungrouped$SBIconListView$iconCoordinateForIndex$forOrientation$(SBIconListView*, SEL, unsigned int, int); static SBIconCoordinate _logos_method$_ungrouped$SBIconListView$coordinateForIconWithIndex$andOriginalCoordinate$forOrientation$(SBIconListView*, SEL, unsigned int, SBIconCoordinate, int); static SBIcon* _logos_method$_ungrouped$SBIconListView$modifiedIconForIcon$(SBIconListView*, SEL, SBIcon*); static void (*_logos_orig$_ungrouped$SBAppSliderController$switcherWasDismissed$)(SBAppSliderController*, SEL, BOOL); static void _logos_method$_ungrouped$SBAppSliderController$switcherWasDismissed$(SBAppSliderController*, SEL, BOOL); static void (*_logos_orig$_ungrouped$SBAppSliderController$animatePresentationFromDisplayIdentifier$withViews$fromSide$withCompletion$)(SBAppSliderController*, SEL, id, id, int, id); static void _logos_method$_ungrouped$SBAppSliderController$animatePresentationFromDisplayIdentifier$withViews$fromSide$withCompletion$(SBAppSliderController*, SEL, id, id, int, id); static void (*_logos_orig$_ungrouped$SBAppSwitcherController$switcherWasDismissed$)(SBAppSwitcherController*, SEL, BOOL); static void _logos_method$_ungrouped$SBAppSwitcherController$switcherWasDismissed$(SBAppSwitcherController*, SEL, BOOL); static void (*_logos_orig$_ungrouped$SBAppSwitcherController$animatePresentationFromDisplayLayout$withViews$withCompletion$)(SBAppSwitcherController*, SEL, id, id, id); static void _logos_method$_ungrouped$SBAppSwitcherController$animatePresentationFromDisplayLayout$withViews$withCompletion$(SBAppSwitcherController*, SEL, id, id, id); static void (*_logos_orig$_ungrouped$SBApplication$willAnimateDeactivation$)(SBApplication*, SEL, _Bool); static void _logos_method$_ungrouped$SBApplication$willAnimateDeactivation$(SBApplication*, SEL, _Bool); static void (*_logos_orig$_ungrouped$SBApplication$didAnimateDeactivation)(SBApplication*, SEL); static void _logos_method$_ungrouped$SBApplication$didAnimateDeactivation(SBApplication*, SEL); static void (*_logos_orig$_ungrouped$SBApplication$willActivateWithTransactionID$)(SBApplication*, SEL, unsigned long long); static void _logos_method$_ungrouped$SBApplication$willActivateWithTransactionID$(SBApplication*, SEL, unsigned long long); static void (*_logos_orig$_ungrouped$SBApplication$didActivateWithTransactionID$)(SBApplication*, SEL, unsigned long long); static void _logos_method$_ungrouped$SBApplication$didActivateWithTransactionID$(SBApplication*, SEL, unsigned long long); static id (*_logos_orig$_ungrouped$SBIconViewMap$mappedIconViewForIcon$)(SBIconViewMap*, SEL, id); static id _logos_method$_ungrouped$SBIconViewMap$mappedIconViewForIcon$(SBIconViewMap*, SEL, id); static id (*_logos_orig$_ungrouped$SBIconView$initWithDefaultSize)(SBIconView*, SEL); static id _logos_method$_ungrouped$SBIconView$initWithDefaultSize(SBIconView*, SEL); static CGRect (*_logos_orig$_ungrouped$SBIconImageView$visibleBounds)(SBIconImageView*, SEL); static CGRect _logos_method$_ungrouped$SBIconImageView$visibleBounds(SBIconImageView*, SEL); static CGRect (*_logos_orig$_ungrouped$SBIconImageView$frame)(SBIconImageView*, SEL); static CGRect _logos_method$_ungrouped$SBIconImageView$frame(SBIconImageView*, SEL); static CGRect (*_logos_orig$_ungrouped$SBIconImageView$bounds)(SBIconImageView*, SEL); static CGRect _logos_method$_ungrouped$SBIconImageView$bounds(SBIconImageView*, SEL); static CGPoint (*_logos_orig$_ungrouped$IBKIconView$iconImageCenter)(IBKIconView*, SEL); static CGPoint _logos_method$_ungrouped$IBKIconView$iconImageCenter(IBKIconView*, SEL); static CGRect (*_logos_orig$_ungrouped$IBKIconView$iconImageFrame)(IBKIconView*, SEL); static CGRect _logos_method$_ungrouped$IBKIconView$iconImageFrame(IBKIconView*, SEL); static void (*_logos_orig$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$)(IBKIconView*, SEL, id, _Bool, _Bool, struct CGPoint); static void _logos_method$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$(IBKIconView*, SEL, id, _Bool, _Bool, struct CGPoint); static id (*_logos_orig$_ungrouped$IBKIconView$iconImageSnapshot)(IBKIconView*, SEL); static id _logos_method$_ungrouped$IBKIconView$iconImageSnapshot(IBKIconView*, SEL); static CGRect (*_logos_orig$_ungrouped$IBKIconView$frame)(IBKIconView*, SEL); static CGRect _logos_method$_ungrouped$IBKIconView$frame(IBKIconView*, SEL); static void (*_logos_orig$_ungrouped$IBKIconView$_setIcon$animated$)(IBKIconView*, SEL, id, BOOL); static void _logos_method$_ungrouped$IBKIconView$_setIcon$animated$(IBKIconView*, SEL, id, BOOL); static struct CGRect (*_logos_orig$_ungrouped$IBKIconView$_frameForLabel)(IBKIconView*, SEL); static struct CGRect _logos_method$_ungrouped$IBKIconView$_frameForLabel(IBKIconView*, SEL); static void (*_logos_orig$_ungrouped$IBKIconView$prepareForRecycling)(IBKIconView*, SEL); static void _logos_method$_ungrouped$IBKIconView$prepareForRecycling(IBKIconView*, SEL); static BOOL (*_logos_orig$_ungrouped$IBKIconView$pointInside$withEvent$)(IBKIconView*, SEL, struct CGPoint, id); static BOOL _logos_method$_ungrouped$IBKIconView$pointInside$withEvent$(IBKIconView*, SEL, struct CGPoint, id); static IBKWidgetViewController* _logos_meta_method$_ungrouped$IBKIconView$getWidgetViewControllerForIcon$orBundleID$(Class, SEL, SBIcon*, NSString*); static void _logos_method$_ungrouped$IBKIconView$addPreExpandedWidgetIfNeeded$(IBKIconView*, SEL, id); static void (*_logos_orig$_ungrouped$SBIconController$setIsEditing$)(SBIconController*, SEL, BOOL); static void _logos_method$_ungrouped$SBIconController$setIsEditing$(SBIconController*, SEL, BOOL); static void (*_logos_orig$_ungrouped$SBIconController$_prepareToResetRootIconLists)(SBIconController*, SEL); static void _logos_method$_ungrouped$SBIconController$_prepareToResetRootIconLists(SBIconController*, SEL); static BOOL _logos_method$_ungrouped$SBIconController$ibkIsInSwitcher(SBIconController*, SEL); static void _logos_method$_ungrouped$SBIconController$removeIdentifierFromWidgets$(SBIconController*, SEL, NSString*); static void _logos_method$_ungrouped$SBIconController$removeAllCachedIcons(SBIconController*, SEL); static void (*_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff)(SBLockScreenViewController*, SEL); static void _logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff(SBLockScreenViewController*, SEL); static UIScrollView* (*_logos_orig$_ungrouped$SBIconScrollView$initWithFrame$)(SBIconScrollView*, SEL, CGRect); static UIScrollView* _logos_method$_ungrouped$SBIconScrollView$initWithFrame$(SBIconScrollView*, SEL, CGRect); static void _logos_method$_ungrouped$SBIconScrollView$handlePinchGesture$(SBIconScrollView*, SEL, UIPinchGestureRecognizer*); static SBIconListView * _logos_method$_ungrouped$SBIconScrollView$IBKListViewForIdentifierTwo$(SBIconScrollView*, SEL, NSString*); static void (*_logos_orig$_ungrouped$SBIconBadgeView$configureForIcon$location$highlighted$)(SBIconBadgeView*, SEL, SBIcon*, int, BOOL); static void _logos_method$_ungrouped$SBIconBadgeView$configureForIcon$location$highlighted$(SBIconBadgeView*, SEL, SBIcon*, int, BOOL); static struct CGPoint (*_logos_orig$_ungrouped$SBIconBadgeView$accessoryOriginForIconBounds$)(SBIconBadgeView*, SEL, CGRect); static struct CGPoint _logos_method$_ungrouped$SBIconBadgeView$accessoryOriginForIconBounds$(SBIconBadgeView*, SEL, CGRect); static id (*_logos_orig$_ungrouped$BBServer$init)(BBServer*, SEL); static id _logos_method$_ungrouped$BBServer$init(BBServer*, SEL); static void (*_logos_orig$_ungrouped$BBServer$_addBulletin$)(BBServer*, SEL, BBBulletin*); static void _logos_method$_ungrouped$BBServer$_addBulletin$(BBServer*, SEL, BBBulletin*); static void (*_logos_orig$_ungrouped$BBServer$_removeBulletin$rescheduleTimerIfAffected$shouldSync$)(BBServer*, SEL, id, BOOL, BOOL); static void _logos_method$_ungrouped$BBServer$_removeBulletin$rescheduleTimerIfAffected$shouldSync$(BBServer*, SEL, id, BOOL, BOOL); static id _logos_meta_method$_ungrouped$BBServer$sharedIBKBBServer(Class, SEL); 
 
-#line 90 "/Users/Matt/iOS/Projects/Curago/Git/curago/curago.xm"
+#line 94 "/Users/Matt/iOS/Projects/Curago/Git/curago/curago.xm"
 
 
 static _Bool _logos_method$_ungrouped$SBIconListView$isFull(SBIconListView* self, SEL _cmd) {
@@ -111,12 +115,26 @@ static _Bool _logos_method$_ungrouped$SBIconListView$isFull(SBIconListView* self
 }
 
 static void _logos_method$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$(SBIconListView* self, SEL _cmd, int arg1) {
-    
-    [cachedIndexes removeAllObjects];
     currentOrientation = arg1;
-    NSLog(@"******** Cached icons removed to prepare for orientation change, and current or == %d", currentOrientation);
+    isRotating = YES;
     
     _logos_orig$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$(self, _cmd, arg1);
+}
+
+static void _logos_method$_ungrouped$SBIconListView$cleanupAfterRotation(SBIconListView* self, SEL _cmd) {
+    _logos_orig$_ungrouped$SBIconListView$cleanupAfterRotation(self, _cmd);
+    
+    
+    
+    isRotating = NO;
+    
+    if (currentOrientation == 1 || currentOrientation == 2) {
+        [cachedIndexes removeAllObjects];
+    } else if (currentOrientation == 3 || currentOrientation == 4) {
+        [cachedIndexesLandscape removeAllObjects];
+    }
+    
+    [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.0 domino:NO forceRelayout:YES];
 }
 
 
@@ -139,7 +157,7 @@ static unsigned int _logos_method$_ungrouped$SBIconListView$indexForCoordinate$f
     unsigned int orig = _logos_orig$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$(self, _cmd, arg1, arg2);
     NSLog(@"Old index == %u", orig);
     
-    NSLog(@"arg1 == {col: %lu, row: %lu}", (unsigned long)arg1.col, (unsigned long)arg1.row);
+    
     
     
     
@@ -152,7 +170,7 @@ static unsigned int _logos_method$_ungrouped$SBIconListView$indexForCoordinate$f
             int a = (int)[[self model] indexForLeafIconWithIdentifier:bundleIdentifier];
             SBIconCoordinate widget = [self iconCoordinateForIndex:a forOrientation:arg2];
             
-            NSLog(@"Widget's co-ordinate == {col: %lu, row: %lu}", (unsigned long)widget.col, (unsigned long)widget.row);
+            
         
             
             if ((widget.col+1) == arg1.col && widget.row == arg1.row) {
@@ -193,7 +211,7 @@ static unsigned int _logos_method$_ungrouped$SBIconListView$indexForCoordinate$f
     orig -= i;
     
     
-    
+    NSLog(@"Final index == %u", orig);
     
     return orig;
 }
@@ -205,7 +223,7 @@ static struct SBIconCoordinate _logos_method$_ungrouped$SBIconListView$iconCoord
     
     if (![[self class] isEqual:[objc_getClass("SBDockIconListView") class]] && ![[self class] isEqual:[objc_getClass("SBFolderIconListView") class]]) {
         
-        orig = [self coordinateForIconWithIndex:arg1 andOriginalCoordinate:orig];
+        orig = [self coordinateForIconWithIndex:arg1 andOriginalCoordinate:orig forOrientation:arg2];
         
         
     }
@@ -215,7 +233,7 @@ static struct SBIconCoordinate _logos_method$_ungrouped$SBIconListView$iconCoord
 
 
 
-static SBIconCoordinate _logos_method$_ungrouped$SBIconListView$coordinateForIconWithIndex$andOriginalCoordinate$(SBIconListView* self, SEL _cmd, unsigned int index, SBIconCoordinate orig) {
+static SBIconCoordinate _logos_method$_ungrouped$SBIconListView$coordinateForIconWithIndex$andOriginalCoordinate$forOrientation$(SBIconListView* self, SEL _cmd, unsigned int index, SBIconCoordinate orig, int orientation) {
    
     
     
@@ -238,16 +256,24 @@ static SBIconCoordinate _logos_method$_ungrouped$SBIconListView$coordinateForIco
     
     if (!cachedIndexes)
         cachedIndexes = [NSMutableDictionary dictionary];
+    if (!cachedIndexesLandscape)
+        cachedIndexesLandscape = [NSMutableDictionary dictionary];
     
     SBApplicationIcon *icon = [[self model] iconAtIndex:index];
     NSString *bundleIdentifier = [icon leafIdentifier];
-        
+    
     if (!bundleIdentifier) {
         
         bundleIdentifier = [(SBFolderIcon*)icon nodeDescriptionWithPrefix:@"IBK"];
     }
         
-    NSIndexPath *path = [cachedIndexes objectForKey:bundleIdentifier];
+    NSIndexPath *path;
+    
+    if (orientation == 1 || orientation == 2)
+        path = [cachedIndexes objectForKey:bundleIdentifier];
+    else if (orientation == 3 || orientation == 4)
+        path = [cachedIndexesLandscape objectForKey:bundleIdentifier];
+        
     if (path && !rearrangingIcons) {
         
         
@@ -285,8 +311,6 @@ static SBIconCoordinate _logos_method$_ungrouped$SBIconListView$coordinateForIco
                 
                 orig.col += 1;
                 if (orig.col > [objc_getClass("SBIconListView") iconColumnsForInterfaceOrientation:currentOrientation]) {
-                    
-                    
                     orig.row += 1;
                     orig.col = 1;
                 }
@@ -296,7 +320,7 @@ static SBIconCoordinate _logos_method$_ungrouped$SBIconListView$coordinateForIco
         NSUInteger widgetRow = orig.row;
         NSUInteger widgetCol = orig.col;
         
-       
+        
         NSIndexPath *path2 = [NSIndexPath indexPathForRow:widgetRow inSection:widgetCol+1];
         NSIndexPath *path3 = [NSIndexPath indexPathForRow:widgetRow+1 inSection:widgetCol];
         NSIndexPath *path4 = [NSIndexPath indexPathForRow:widgetRow+1 inSection:widgetCol+1];
@@ -338,7 +362,10 @@ static SBIconCoordinate _logos_method$_ungrouped$SBIconListView$coordinateForIco
     
     if (![[objc_getClass("SBIconController") sharedInstance] isEditing]) {
        
-        [cachedIndexes setObject:pathz forKey:bundleIdentifier];
+        if (orientation == 1 || orientation == 2)
+            [cachedIndexes setObject:pathz forKey:bundleIdentifier];
+        else if (orientation == 3 || orientation == 4)
+            [cachedIndexesLandscape setObject:pathz forKey:bundleIdentifier];
     }
     
     
@@ -437,16 +464,19 @@ static void _logos_method$_ungrouped$SBAppSwitcherController$animatePresentation
 
 #import <SpringBoard7.0/SBApplication.h>
 
+BOOL sup;
+BOOL launchingWidget;
+
 
 
 static void _logos_method$_ungrouped$SBApplication$willAnimateDeactivation$(SBApplication* self, SEL _cmd, _Bool arg1) {
-    NSLog(@"*** WILL ANIMATE DEACTIVATION");
-    
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
     
     [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
         widgetController.view.alpha = 1.0;
     }];
+    
+    sup = YES;
     
     _logos_orig$_ungrouped$SBApplication$willAnimateDeactivation$(self, _cmd, arg1);
 }
@@ -456,18 +486,41 @@ static void _logos_method$_ungrouped$SBApplication$didAnimateDeactivation(SBAppl
     
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
     [(UIImageView*)[widgetController.correspondingIconView _iconImageView] setAlpha:0.0];
+    
+    sup = NO;
 }
 
 static void _logos_method$_ungrouped$SBApplication$willActivateWithTransactionID$(SBApplication* self, SEL _cmd, unsigned long long arg1) {
-    NSLog(@"*** WILL ACTIVATE WITH TRANSACTION ID");
-    
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
     
     [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
         widgetController.view.alpha = 0.0;
     }];
     
+    sup = YES;
+    
     _logos_orig$_ungrouped$SBApplication$willActivateWithTransactionID$(self, _cmd, arg1);
+}
+
+static void _logos_method$_ungrouped$SBApplication$didActivateWithTransactionID$(SBApplication* self, SEL _cmd, unsigned long long arg1) {
+    _logos_orig$_ungrouped$SBApplication$didActivateWithTransactionID$(self, _cmd, arg1);
+    
+    sup = NO;
+}
+
+
+
+
+
+static id _logos_method$_ungrouped$SBIconViewMap$mappedIconViewForIcon$(SBIconViewMap* self, SEL _cmd, id arg1) {
+    id orig = _logos_orig$_ungrouped$SBIconViewMap$mappedIconViewForIcon$(self, _cmd, arg1);
+    
+    if ([[orig class] isEqual:[objc_getClass("IBKIconView") class]]) {
+        if (!isRotating)
+            [(IBKIconView*)orig addPreExpandedWidgetIfNeeded:arg1];
+    }
+    
+    return orig;
 }
 
 
@@ -490,17 +543,9 @@ CGSize defaultIconSizing;
 
 #import <SpringBoard8.1/SBIconImageCrossfadeView.h>
 
-BOOL sup;
 
 
 
-static id _logos_method$_ungrouped$SBIconImageCrossfadeView$initWithImageView$crossfadeView$(SBIconImageCrossfadeView* self, SEL _cmd, id arg1, id arg2) {
-    SBIconImageCrossfadeView *view = _logos_orig$_ungrouped$SBIconImageCrossfadeView$initWithImageView$crossfadeView$(self, _cmd, arg1, arg2);
-    
-    NSLog(@"******* Subviews are %@", view.subviews);
-    
-    return view;
-}
 
 
 
@@ -516,6 +561,30 @@ static CGRect _logos_method$_ungrouped$SBIconImageView$visibleBounds(SBIconImage
     }
     
     return _logos_orig$_ungrouped$SBIconImageView$visibleBounds(self, _cmd);
+}
+
+static CGRect _logos_method$_ungrouped$SBIconImageView$frame(SBIconImageView* self, SEL _cmd) {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {
+        CGRect frame = _logos_orig$_ungrouped$SBIconImageView$frame(self, _cmd);
+        IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self.icon applicationBundleID]];
+        frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+        
+        return frame;
+    }
+    
+    return _logos_orig$_ungrouped$SBIconImageView$frame(self, _cmd);
+}
+
+static CGRect _logos_method$_ungrouped$SBIconImageView$bounds(SBIconImageView* self, SEL _cmd) {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {
+        CGRect frame = _logos_orig$_ungrouped$SBIconImageView$bounds(self, _cmd);
+        IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self.icon applicationBundleID]];
+        frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+        
+        return frame;
+    }
+    
+    return _logos_orig$_ungrouped$SBIconImageView$bounds(self, _cmd);
 }
 
 
@@ -547,11 +616,7 @@ static CGRect _logos_method$_ungrouped$IBKIconView$iconImageFrame(IBKIconView* s
 }
 
 static void _logos_method$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$(IBKIconView* self, SEL _cmd, id arg1, _Bool arg2, _Bool arg3, struct CGPoint arg4) {
-    sup = YES;
-    
     _logos_orig$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$(self, _cmd, arg1, arg2, arg3, arg4);
-    
-    sup = NO;
 }
 
 static id _logos_method$_ungrouped$IBKIconView$iconImageSnapshot(IBKIconView* self, SEL _cmd) {
@@ -588,49 +653,7 @@ static CGRect _logos_method$_ungrouped$IBKIconView$frame(IBKIconView* self, SEL 
 static void _logos_method$_ungrouped$IBKIconView$_setIcon$animated$(IBKIconView* self, SEL _cmd, id arg1, BOOL arg2) { 
     _logos_orig$_ungrouped$IBKIconView$_setIcon$animated$(self, _cmd, arg1, arg2);
     
-    SBApplicationIcon *icon = (SBApplicationIcon*)arg1;
-    
-    if (!icon) {
-        icon = (SBApplicationIcon*)self.icon;
-    }
-    
-    NSLog(@"It's an icon. %@", [icon applicationBundleID]);
-    
-    if (!inSwitcher) {
-        if ([[IBKResources widgetBundleIdentifiers] containsObject:[icon applicationBundleID]]) {
-            NSLog(@"It's a widget! Inserting our UI. %@", [icon applicationBundleID]);
-        
-            
-            IBKWidgetViewController *widgetController;
-            if (![widgetViewControllers objectForKey:[icon applicationBundleID]])
-                widgetController = [[IBKWidgetViewController alloc] init];
-            else
-                widgetController = [widgetViewControllers objectForKey:[icon applicationBundleID]];
-            widgetController.applicationIdentifer = [icon applicationBundleID];
-            
-            
-            [self addSubview:widgetController.view];
-            
-            [widgetController layoutViewForPreExpandedWidget]; 
-            
-            if (!widgetViewControllers)
-                widgetViewControllers = [NSMutableDictionary dictionary];
-                
-            if ([icon applicationBundleID])
-                [widgetViewControllers setObject:widgetController forKey:[icon applicationBundleID]]; 
-            
-            
-            [(UIImageView*)[self _iconImageView] setAlpha:0.0];
-            widgetController.correspondingIconView = self;
-            
-            widgetController.view.layer.shadowOpacity = 0.0;
-            widgetController.shimIcon.alpha = 0.0;
-            widgetController.shimIcon.hidden = YES;
-        }
-        
-        
-        
-    }
+    [self addPreExpandedWidgetIfNeeded:arg1];
 }
 
 static struct CGRect _logos_method$_ungrouped$IBKIconView$_frameForLabel(IBKIconView* self, SEL _cmd) {
@@ -682,6 +705,53 @@ static IBKWidgetViewController* _logos_meta_method$_ungrouped$IBKIconView$getWid
 
 
 
+static void _logos_method$_ungrouped$IBKIconView$addPreExpandedWidgetIfNeeded$(IBKIconView* self, SEL _cmd, id arg1) {
+    SBApplicationIcon *icon = (SBApplicationIcon*)arg1;
+    
+    if (!icon) {
+        icon = (SBApplicationIcon*)self.icon;
+    }
+    
+    if (!inSwitcher) {
+        if ([[IBKResources widgetBundleIdentifiers] containsObject:[icon applicationBundleID]]) {
+            NSLog(@"*** [Curago] :: It's a widget! Inserting our UI. %@", [icon applicationBundleID]);
+            
+            
+            IBKWidgetViewController *widgetController;
+            if (![widgetViewControllers objectForKey:[icon applicationBundleID]]) {
+                widgetController = [[IBKWidgetViewController alloc] init];
+                widgetController.applicationIdentifer = [icon applicationBundleID];
+                [widgetController layoutViewForPreExpandedWidget]; 
+            } else {
+                widgetController = [widgetViewControllers objectForKey:[icon applicationBundleID]];
+            }
+            
+            
+            [self addSubview:widgetController.view];
+            
+            if (!widgetViewControllers)
+                widgetViewControllers = [NSMutableDictionary dictionary];
+                
+                if ([icon applicationBundleID] && ![widgetViewControllers objectForKey:[icon applicationBundleID]])
+                    [widgetViewControllers setObject:widgetController forKey:[icon applicationBundleID]]; 
+            
+            
+            [(UIImageView*)[self _iconImageView] setAlpha:0.0];
+            widgetController.correspondingIconView = self;
+            
+            widgetController.view.layer.shadowOpacity = 0.0;
+            widgetController.shimIcon.alpha = 0.0;
+            widgetController.shimIcon.hidden = YES;
+        }
+        
+        
+        
+    }
+
+}
+
+
+
 
 
 #pragma mark Handle de-caching indexes when in editing mode, and switcher detection
@@ -691,10 +761,22 @@ static IBKWidgetViewController* _logos_meta_method$_ungrouped$IBKIconView$getWid
 static void _logos_method$_ungrouped$SBIconController$setIsEditing$(SBIconController* self, SEL _cmd, BOOL arg1) {
     _logos_orig$_ungrouped$SBIconController$setIsEditing$(self, _cmd, arg1);
     
-    if (arg1)
-        [cachedIndexes removeAllObjects];
+    if (arg1) {
+        
+            [cachedIndexes removeAllObjects];
+        
+            [cachedIndexesLandscape removeAllObjects];
+    }
     
     rearrangingIcons = arg1;
+}
+
+static void _logos_method$_ungrouped$SBIconController$_prepareToResetRootIconLists(SBIconController* self, SEL _cmd) {
+    if (dontKillIcons) {
+        dontKillIcons = NO;
+    } else {
+        _logos_orig$_ungrouped$SBIconController$_prepareToResetRootIconLists(self, _cmd);
+    }
 }
 
 
@@ -712,7 +794,10 @@ static void _logos_method$_ungrouped$SBIconController$removeIdentifierFromWidget
 
 
 static void _logos_method$_ungrouped$SBIconController$removeAllCachedIcons(SBIconController* self, SEL _cmd) {
-    [cachedIndexes removeAllObjects];
+    if (currentOrientation == 1 || currentOrientation == 2)
+        [cachedIndexes removeAllObjects];
+    else if (currentOrientation == 3 || currentOrientation == 4)
+        [cachedIndexesLandscape removeAllObjects];
 }
 
 
@@ -731,6 +816,16 @@ SBIcon *widgetIcon;
 @interface SBIconScrollView (Additions)
 -(SBIconListView *)IBKListViewForIdentifierTwo:(NSString*)identifier;
 @end
+
+
+
+static void _logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff(SBLockScreenViewController* self, SEL _cmd) {
+    dontKillIcons = YES;
+    
+    _logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff(self, _cmd);
+}
+
+
 
 
 
@@ -853,7 +948,10 @@ static void _logos_method$_ungrouped$SBIconScrollView$handlePinchGesture$(SBIcon
             [IBKResources addNewIdentifier:[widgetIcon applicationBundleID]];
             
             
-            [cachedIndexes removeAllObjects];
+            if (currentOrientation == 1 || currentOrientation == 2)
+                [cachedIndexes removeAllObjects];
+            else if (currentOrientation == 3 || currentOrientation == 4)
+                [cachedIndexesLandscape removeAllObjects];
             
             
             
@@ -1185,7 +1283,7 @@ static _Bool _logos_method$iWidgets$IWWidgetsView$pointInside$withEvent$(IWWidge
 -(void)addExtension:(NSString*)arg1;
 @end
 
-static __attribute__((constructor)) void _logosLocalCtor_3c95c07f() {
+static __attribute__((constructor)) void _logosLocalCtor_95f8fa51() {
     
     
     Class $IBKIconView = objc_allocateClassPair(objc_getClass("SBIconView"), "IBKIconView", 0);
@@ -1194,7 +1292,7 @@ static __attribute__((constructor)) void _logosLocalCtor_3c95c07f() {
     objc_registerClassPair($IBKIconView);
     
     
-    {Class _logos_class$_ungrouped$SBIconListView = objc_getClass("SBIconListView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(isFull), (IMP)&_logos_method$_ungrouped$SBIconListView$isFull, (IMP*)&_logos_orig$_ungrouped$SBIconListView$isFull);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(prepareToRotateToInterfaceOrientation:), (IMP)&_logos_method$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(rowAtPoint:), (IMP)&_logos_method$_ungrouped$SBIconListView$rowAtPoint$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$rowAtPoint$);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(columnAtPoint:), (IMP)&_logos_method$_ungrouped$SBIconListView$columnAtPoint$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$columnAtPoint$);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(indexForCoordinate:forOrientation:), (IMP)&_logos_method$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(iconCoordinateForIndex:forOrientation:), (IMP)&_logos_method$_ungrouped$SBIconListView$iconCoordinateForIndex$forOrientation$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$iconCoordinateForIndex$forOrientation$);{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(SBIconCoordinate), strlen(@encode(SBIconCoordinate))); i += strlen(@encode(SBIconCoordinate)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = 'I'; i += 1; memcpy(_typeEncoding + i, @encode(SBIconCoordinate), strlen(@encode(SBIconCoordinate))); i += strlen(@encode(SBIconCoordinate)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconListView, @selector(coordinateForIconWithIndex:andOriginalCoordinate:), (IMP)&_logos_method$_ungrouped$SBIconListView$coordinateForIconWithIndex$andOriginalCoordinate$, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(SBIcon*), strlen(@encode(SBIcon*))); i += strlen(@encode(SBIcon*)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(SBIcon*), strlen(@encode(SBIcon*))); i += strlen(@encode(SBIcon*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconListView, @selector(modifiedIconForIcon:), (IMP)&_logos_method$_ungrouped$SBIconListView$modifiedIconForIcon$, _typeEncoding); }Class _logos_class$_ungrouped$SBAppSliderController = objc_getClass("SBAppSliderController"); MSHookMessageEx(_logos_class$_ungrouped$SBAppSliderController, @selector(switcherWasDismissed:), (IMP)&_logos_method$_ungrouped$SBAppSliderController$switcherWasDismissed$, (IMP*)&_logos_orig$_ungrouped$SBAppSliderController$switcherWasDismissed$);MSHookMessageEx(_logos_class$_ungrouped$SBAppSliderController, @selector(animatePresentationFromDisplayIdentifier:withViews:fromSide:withCompletion:), (IMP)&_logos_method$_ungrouped$SBAppSliderController$animatePresentationFromDisplayIdentifier$withViews$fromSide$withCompletion$, (IMP*)&_logos_orig$_ungrouped$SBAppSliderController$animatePresentationFromDisplayIdentifier$withViews$fromSide$withCompletion$);Class _logos_class$_ungrouped$SBAppSwitcherController = objc_getClass("SBAppSwitcherController"); MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(switcherWasDismissed:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$switcherWasDismissed$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$switcherWasDismissed$);MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(animatePresentationFromDisplayLayout:withViews:withCompletion:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$animatePresentationFromDisplayLayout$withViews$withCompletion$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$animatePresentationFromDisplayLayout$withViews$withCompletion$);Class _logos_class$_ungrouped$SBApplication = objc_getClass("SBApplication"); MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(willAnimateDeactivation:), (IMP)&_logos_method$_ungrouped$SBApplication$willAnimateDeactivation$, (IMP*)&_logos_orig$_ungrouped$SBApplication$willAnimateDeactivation$);MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(didAnimateDeactivation), (IMP)&_logos_method$_ungrouped$SBApplication$didAnimateDeactivation, (IMP*)&_logos_orig$_ungrouped$SBApplication$didAnimateDeactivation);MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(willActivateWithTransactionID:), (IMP)&_logos_method$_ungrouped$SBApplication$willActivateWithTransactionID$, (IMP*)&_logos_orig$_ungrouped$SBApplication$willActivateWithTransactionID$);Class _logos_class$_ungrouped$SBIconView = objc_getClass("SBIconView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconView, @selector(initWithDefaultSize), (IMP)&_logos_method$_ungrouped$SBIconView$initWithDefaultSize, (IMP*)&_logos_orig$_ungrouped$SBIconView$initWithDefaultSize);Class _logos_class$_ungrouped$SBIconImageCrossfadeView = objc_getClass("SBIconImageCrossfadeView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconImageCrossfadeView, @selector(initWithImageView:crossfadeView:), (IMP)&_logos_method$_ungrouped$SBIconImageCrossfadeView$initWithImageView$crossfadeView$, (IMP*)&_logos_orig$_ungrouped$SBIconImageCrossfadeView$initWithImageView$crossfadeView$);Class _logos_class$_ungrouped$SBIconImageView = objc_getClass("SBIconImageView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconImageView, @selector(visibleBounds), (IMP)&_logos_method$_ungrouped$SBIconImageView$visibleBounds, (IMP*)&_logos_orig$_ungrouped$SBIconImageView$visibleBounds);Class _logos_class$_ungrouped$IBKIconView = objc_getClass("IBKIconView"); Class _logos_metaclass$_ungrouped$IBKIconView = object_getClass(_logos_class$_ungrouped$IBKIconView); MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(iconImageCenter), (IMP)&_logos_method$_ungrouped$IBKIconView$iconImageCenter, (IMP*)&_logos_orig$_ungrouped$IBKIconView$iconImageCenter);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(iconImageFrame), (IMP)&_logos_method$_ungrouped$IBKIconView$iconImageFrame, (IMP*)&_logos_orig$_ungrouped$IBKIconView$iconImageFrame);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(prepareToCrossfadeImageWithView:maskCorners:trueCrossfade:anchorPoint:), (IMP)&_logos_method$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$, (IMP*)&_logos_orig$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(iconImageSnapshot), (IMP)&_logos_method$_ungrouped$IBKIconView$iconImageSnapshot, (IMP*)&_logos_orig$_ungrouped$IBKIconView$iconImageSnapshot);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(frame), (IMP)&_logos_method$_ungrouped$IBKIconView$frame, (IMP*)&_logos_orig$_ungrouped$IBKIconView$frame);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(_setIcon:animated:), (IMP)&_logos_method$_ungrouped$IBKIconView$_setIcon$animated$, (IMP*)&_logos_orig$_ungrouped$IBKIconView$_setIcon$animated$);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(_frameForLabel), (IMP)&_logos_method$_ungrouped$IBKIconView$_frameForLabel, (IMP*)&_logos_orig$_ungrouped$IBKIconView$_frameForLabel);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(prepareForRecycling), (IMP)&_logos_method$_ungrouped$IBKIconView$prepareForRecycling, (IMP*)&_logos_orig$_ungrouped$IBKIconView$prepareForRecycling);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(pointInside:withEvent:), (IMP)&_logos_method$_ungrouped$IBKIconView$pointInside$withEvent$, (IMP*)&_logos_orig$_ungrouped$IBKIconView$pointInside$withEvent$);{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(IBKWidgetViewController*), strlen(@encode(IBKWidgetViewController*))); i += strlen(@encode(IBKWidgetViewController*)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(SBIcon*), strlen(@encode(SBIcon*))); i += strlen(@encode(SBIcon*)); memcpy(_typeEncoding + i, @encode(NSString*), strlen(@encode(NSString*))); i += strlen(@encode(NSString*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$IBKIconView, @selector(getWidgetViewControllerForIcon:orBundleID:), (IMP)&_logos_meta_method$_ungrouped$IBKIconView$getWidgetViewControllerForIcon$orBundleID$, _typeEncoding); }Class _logos_class$_ungrouped$SBIconController = objc_getClass("SBIconController"); MSHookMessageEx(_logos_class$_ungrouped$SBIconController, @selector(setIsEditing:), (IMP)&_logos_method$_ungrouped$SBIconController$setIsEditing$, (IMP*)&_logos_orig$_ungrouped$SBIconController$setIsEditing$);{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(BOOL), strlen(@encode(BOOL))); i += strlen(@encode(BOOL)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconController, @selector(ibkIsInSwitcher), (IMP)&_logos_method$_ungrouped$SBIconController$ibkIsInSwitcher, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(NSString*), strlen(@encode(NSString*))); i += strlen(@encode(NSString*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconController, @selector(removeIdentifierFromWidgets:), (IMP)&_logos_method$_ungrouped$SBIconController$removeIdentifierFromWidgets$, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconController, @selector(removeAllCachedIcons), (IMP)&_logos_method$_ungrouped$SBIconController$removeAllCachedIcons, _typeEncoding); }Class _logos_class$_ungrouped$SBIconScrollView = objc_getClass("SBIconScrollView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconScrollView, @selector(initWithFrame:), (IMP)&_logos_method$_ungrouped$SBIconScrollView$initWithFrame$, (IMP*)&_logos_orig$_ungrouped$SBIconScrollView$initWithFrame$);{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(UIPinchGestureRecognizer*), strlen(@encode(UIPinchGestureRecognizer*))); i += strlen(@encode(UIPinchGestureRecognizer*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconScrollView, @selector(handlePinchGesture:), (IMP)&_logos_method$_ungrouped$SBIconScrollView$handlePinchGesture$, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(SBIconListView *), strlen(@encode(SBIconListView *))); i += strlen(@encode(SBIconListView *)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(NSString*), strlen(@encode(NSString*))); i += strlen(@encode(NSString*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconScrollView, @selector(IBKListViewForIdentifierTwo:), (IMP)&_logos_method$_ungrouped$SBIconScrollView$IBKListViewForIdentifierTwo$, _typeEncoding); }Class _logos_class$_ungrouped$SBIconBadgeView = objc_getClass("SBIconBadgeView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconBadgeView, @selector(configureForIcon:location:highlighted:), (IMP)&_logos_method$_ungrouped$SBIconBadgeView$configureForIcon$location$highlighted$, (IMP*)&_logos_orig$_ungrouped$SBIconBadgeView$configureForIcon$location$highlighted$);MSHookMessageEx(_logos_class$_ungrouped$SBIconBadgeView, @selector(accessoryOriginForIconBounds:), (IMP)&_logos_method$_ungrouped$SBIconBadgeView$accessoryOriginForIconBounds$, (IMP*)&_logos_orig$_ungrouped$SBIconBadgeView$accessoryOriginForIconBounds$);Class _logos_class$_ungrouped$BBServer = objc_getClass("BBServer"); Class _logos_metaclass$_ungrouped$BBServer = object_getClass(_logos_class$_ungrouped$BBServer); MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(init), (IMP)&_logos_method$_ungrouped$BBServer$init, (IMP*)&_logos_orig$_ungrouped$BBServer$init);MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(_addBulletin:), (IMP)&_logos_method$_ungrouped$BBServer$_addBulletin$, (IMP*)&_logos_orig$_ungrouped$BBServer$_addBulletin$);MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(_removeBulletin:rescheduleTimerIfAffected:shouldSync:), (IMP)&_logos_method$_ungrouped$BBServer$_removeBulletin$rescheduleTimerIfAffected$shouldSync$, (IMP*)&_logos_orig$_ungrouped$BBServer$_removeBulletin$rescheduleTimerIfAffected$shouldSync$);{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$BBServer, @selector(sharedIBKBBServer), (IMP)&_logos_meta_method$_ungrouped$BBServer$sharedIBKBBServer, _typeEncoding); }}
+    {Class _logos_class$_ungrouped$SBIconListView = objc_getClass("SBIconListView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(isFull), (IMP)&_logos_method$_ungrouped$SBIconListView$isFull, (IMP*)&_logos_orig$_ungrouped$SBIconListView$isFull);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(prepareToRotateToInterfaceOrientation:), (IMP)&_logos_method$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$prepareToRotateToInterfaceOrientation$);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(cleanupAfterRotation), (IMP)&_logos_method$_ungrouped$SBIconListView$cleanupAfterRotation, (IMP*)&_logos_orig$_ungrouped$SBIconListView$cleanupAfterRotation);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(rowAtPoint:), (IMP)&_logos_method$_ungrouped$SBIconListView$rowAtPoint$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$rowAtPoint$);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(columnAtPoint:), (IMP)&_logos_method$_ungrouped$SBIconListView$columnAtPoint$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$columnAtPoint$);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(indexForCoordinate:forOrientation:), (IMP)&_logos_method$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$indexForCoordinate$forOrientation$);MSHookMessageEx(_logos_class$_ungrouped$SBIconListView, @selector(iconCoordinateForIndex:forOrientation:), (IMP)&_logos_method$_ungrouped$SBIconListView$iconCoordinateForIndex$forOrientation$, (IMP*)&_logos_orig$_ungrouped$SBIconListView$iconCoordinateForIndex$forOrientation$);{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(SBIconCoordinate), strlen(@encode(SBIconCoordinate))); i += strlen(@encode(SBIconCoordinate)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = 'I'; i += 1; memcpy(_typeEncoding + i, @encode(SBIconCoordinate), strlen(@encode(SBIconCoordinate))); i += strlen(@encode(SBIconCoordinate)); _typeEncoding[i] = 'i'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconListView, @selector(coordinateForIconWithIndex:andOriginalCoordinate:forOrientation:), (IMP)&_logos_method$_ungrouped$SBIconListView$coordinateForIconWithIndex$andOriginalCoordinate$forOrientation$, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(SBIcon*), strlen(@encode(SBIcon*))); i += strlen(@encode(SBIcon*)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(SBIcon*), strlen(@encode(SBIcon*))); i += strlen(@encode(SBIcon*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconListView, @selector(modifiedIconForIcon:), (IMP)&_logos_method$_ungrouped$SBIconListView$modifiedIconForIcon$, _typeEncoding); }Class _logos_class$_ungrouped$SBAppSliderController = objc_getClass("SBAppSliderController"); MSHookMessageEx(_logos_class$_ungrouped$SBAppSliderController, @selector(switcherWasDismissed:), (IMP)&_logos_method$_ungrouped$SBAppSliderController$switcherWasDismissed$, (IMP*)&_logos_orig$_ungrouped$SBAppSliderController$switcherWasDismissed$);MSHookMessageEx(_logos_class$_ungrouped$SBAppSliderController, @selector(animatePresentationFromDisplayIdentifier:withViews:fromSide:withCompletion:), (IMP)&_logos_method$_ungrouped$SBAppSliderController$animatePresentationFromDisplayIdentifier$withViews$fromSide$withCompletion$, (IMP*)&_logos_orig$_ungrouped$SBAppSliderController$animatePresentationFromDisplayIdentifier$withViews$fromSide$withCompletion$);Class _logos_class$_ungrouped$SBAppSwitcherController = objc_getClass("SBAppSwitcherController"); MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(switcherWasDismissed:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$switcherWasDismissed$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$switcherWasDismissed$);MSHookMessageEx(_logos_class$_ungrouped$SBAppSwitcherController, @selector(animatePresentationFromDisplayLayout:withViews:withCompletion:), (IMP)&_logos_method$_ungrouped$SBAppSwitcherController$animatePresentationFromDisplayLayout$withViews$withCompletion$, (IMP*)&_logos_orig$_ungrouped$SBAppSwitcherController$animatePresentationFromDisplayLayout$withViews$withCompletion$);Class _logos_class$_ungrouped$SBApplication = objc_getClass("SBApplication"); MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(willAnimateDeactivation:), (IMP)&_logos_method$_ungrouped$SBApplication$willAnimateDeactivation$, (IMP*)&_logos_orig$_ungrouped$SBApplication$willAnimateDeactivation$);MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(didAnimateDeactivation), (IMP)&_logos_method$_ungrouped$SBApplication$didAnimateDeactivation, (IMP*)&_logos_orig$_ungrouped$SBApplication$didAnimateDeactivation);MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(willActivateWithTransactionID:), (IMP)&_logos_method$_ungrouped$SBApplication$willActivateWithTransactionID$, (IMP*)&_logos_orig$_ungrouped$SBApplication$willActivateWithTransactionID$);MSHookMessageEx(_logos_class$_ungrouped$SBApplication, @selector(didActivateWithTransactionID:), (IMP)&_logos_method$_ungrouped$SBApplication$didActivateWithTransactionID$, (IMP*)&_logos_orig$_ungrouped$SBApplication$didActivateWithTransactionID$);Class _logos_class$_ungrouped$SBIconViewMap = objc_getClass("SBIconViewMap"); MSHookMessageEx(_logos_class$_ungrouped$SBIconViewMap, @selector(mappedIconViewForIcon:), (IMP)&_logos_method$_ungrouped$SBIconViewMap$mappedIconViewForIcon$, (IMP*)&_logos_orig$_ungrouped$SBIconViewMap$mappedIconViewForIcon$);Class _logos_class$_ungrouped$SBIconView = objc_getClass("SBIconView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconView, @selector(initWithDefaultSize), (IMP)&_logos_method$_ungrouped$SBIconView$initWithDefaultSize, (IMP*)&_logos_orig$_ungrouped$SBIconView$initWithDefaultSize);Class _logos_class$_ungrouped$SBIconImageView = objc_getClass("SBIconImageView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconImageView, @selector(visibleBounds), (IMP)&_logos_method$_ungrouped$SBIconImageView$visibleBounds, (IMP*)&_logos_orig$_ungrouped$SBIconImageView$visibleBounds);MSHookMessageEx(_logos_class$_ungrouped$SBIconImageView, @selector(frame), (IMP)&_logos_method$_ungrouped$SBIconImageView$frame, (IMP*)&_logos_orig$_ungrouped$SBIconImageView$frame);MSHookMessageEx(_logos_class$_ungrouped$SBIconImageView, @selector(bounds), (IMP)&_logos_method$_ungrouped$SBIconImageView$bounds, (IMP*)&_logos_orig$_ungrouped$SBIconImageView$bounds);Class _logos_class$_ungrouped$IBKIconView = objc_getClass("IBKIconView"); Class _logos_metaclass$_ungrouped$IBKIconView = object_getClass(_logos_class$_ungrouped$IBKIconView); MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(iconImageCenter), (IMP)&_logos_method$_ungrouped$IBKIconView$iconImageCenter, (IMP*)&_logos_orig$_ungrouped$IBKIconView$iconImageCenter);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(iconImageFrame), (IMP)&_logos_method$_ungrouped$IBKIconView$iconImageFrame, (IMP*)&_logos_orig$_ungrouped$IBKIconView$iconImageFrame);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(prepareToCrossfadeImageWithView:maskCorners:trueCrossfade:anchorPoint:), (IMP)&_logos_method$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$, (IMP*)&_logos_orig$_ungrouped$IBKIconView$prepareToCrossfadeImageWithView$maskCorners$trueCrossfade$anchorPoint$);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(iconImageSnapshot), (IMP)&_logos_method$_ungrouped$IBKIconView$iconImageSnapshot, (IMP*)&_logos_orig$_ungrouped$IBKIconView$iconImageSnapshot);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(frame), (IMP)&_logos_method$_ungrouped$IBKIconView$frame, (IMP*)&_logos_orig$_ungrouped$IBKIconView$frame);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(_setIcon:animated:), (IMP)&_logos_method$_ungrouped$IBKIconView$_setIcon$animated$, (IMP*)&_logos_orig$_ungrouped$IBKIconView$_setIcon$animated$);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(_frameForLabel), (IMP)&_logos_method$_ungrouped$IBKIconView$_frameForLabel, (IMP*)&_logos_orig$_ungrouped$IBKIconView$_frameForLabel);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(prepareForRecycling), (IMP)&_logos_method$_ungrouped$IBKIconView$prepareForRecycling, (IMP*)&_logos_orig$_ungrouped$IBKIconView$prepareForRecycling);MSHookMessageEx(_logos_class$_ungrouped$IBKIconView, @selector(pointInside:withEvent:), (IMP)&_logos_method$_ungrouped$IBKIconView$pointInside$withEvent$, (IMP*)&_logos_orig$_ungrouped$IBKIconView$pointInside$withEvent$);{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(IBKWidgetViewController*), strlen(@encode(IBKWidgetViewController*))); i += strlen(@encode(IBKWidgetViewController*)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(SBIcon*), strlen(@encode(SBIcon*))); i += strlen(@encode(SBIcon*)); memcpy(_typeEncoding + i, @encode(NSString*), strlen(@encode(NSString*))); i += strlen(@encode(NSString*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$IBKIconView, @selector(getWidgetViewControllerForIcon:orBundleID:), (IMP)&_logos_meta_method$_ungrouped$IBKIconView$getWidgetViewControllerForIcon$orBundleID$, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$IBKIconView, @selector(addPreExpandedWidgetIfNeeded:), (IMP)&_logos_method$_ungrouped$IBKIconView$addPreExpandedWidgetIfNeeded$, _typeEncoding); }Class _logos_class$_ungrouped$SBIconController = objc_getClass("SBIconController"); MSHookMessageEx(_logos_class$_ungrouped$SBIconController, @selector(setIsEditing:), (IMP)&_logos_method$_ungrouped$SBIconController$setIsEditing$, (IMP*)&_logos_orig$_ungrouped$SBIconController$setIsEditing$);MSHookMessageEx(_logos_class$_ungrouped$SBIconController, @selector(_prepareToResetRootIconLists), (IMP)&_logos_method$_ungrouped$SBIconController$_prepareToResetRootIconLists, (IMP*)&_logos_orig$_ungrouped$SBIconController$_prepareToResetRootIconLists);{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(BOOL), strlen(@encode(BOOL))); i += strlen(@encode(BOOL)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconController, @selector(ibkIsInSwitcher), (IMP)&_logos_method$_ungrouped$SBIconController$ibkIsInSwitcher, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(NSString*), strlen(@encode(NSString*))); i += strlen(@encode(NSString*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconController, @selector(removeIdentifierFromWidgets:), (IMP)&_logos_method$_ungrouped$SBIconController$removeIdentifierFromWidgets$, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconController, @selector(removeAllCachedIcons), (IMP)&_logos_method$_ungrouped$SBIconController$removeAllCachedIcons, _typeEncoding); }Class _logos_class$_ungrouped$SBLockScreenViewController = objc_getClass("SBLockScreenViewController"); MSHookMessageEx(_logos_class$_ungrouped$SBLockScreenViewController, @selector(_handleDisplayTurnedOff), (IMP)&_logos_method$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff, (IMP*)&_logos_orig$_ungrouped$SBLockScreenViewController$_handleDisplayTurnedOff);Class _logos_class$_ungrouped$SBIconScrollView = objc_getClass("SBIconScrollView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconScrollView, @selector(initWithFrame:), (IMP)&_logos_method$_ungrouped$SBIconScrollView$initWithFrame$, (IMP*)&_logos_orig$_ungrouped$SBIconScrollView$initWithFrame$);{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(UIPinchGestureRecognizer*), strlen(@encode(UIPinchGestureRecognizer*))); i += strlen(@encode(UIPinchGestureRecognizer*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconScrollView, @selector(handlePinchGesture:), (IMP)&_logos_method$_ungrouped$SBIconScrollView$handlePinchGesture$, _typeEncoding); }{ char _typeEncoding[1024]; unsigned int i = 0; memcpy(_typeEncoding + i, @encode(SBIconListView *), strlen(@encode(SBIconListView *))); i += strlen(@encode(SBIconListView *)); _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(NSString*), strlen(@encode(NSString*))); i += strlen(@encode(NSString*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$_ungrouped$SBIconScrollView, @selector(IBKListViewForIdentifierTwo:), (IMP)&_logos_method$_ungrouped$SBIconScrollView$IBKListViewForIdentifierTwo$, _typeEncoding); }Class _logos_class$_ungrouped$SBIconBadgeView = objc_getClass("SBIconBadgeView"); MSHookMessageEx(_logos_class$_ungrouped$SBIconBadgeView, @selector(configureForIcon:location:highlighted:), (IMP)&_logos_method$_ungrouped$SBIconBadgeView$configureForIcon$location$highlighted$, (IMP*)&_logos_orig$_ungrouped$SBIconBadgeView$configureForIcon$location$highlighted$);MSHookMessageEx(_logos_class$_ungrouped$SBIconBadgeView, @selector(accessoryOriginForIconBounds:), (IMP)&_logos_method$_ungrouped$SBIconBadgeView$accessoryOriginForIconBounds$, (IMP*)&_logos_orig$_ungrouped$SBIconBadgeView$accessoryOriginForIconBounds$);Class _logos_class$_ungrouped$BBServer = objc_getClass("BBServer"); Class _logos_metaclass$_ungrouped$BBServer = object_getClass(_logos_class$_ungrouped$BBServer); MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(init), (IMP)&_logos_method$_ungrouped$BBServer$init, (IMP*)&_logos_orig$_ungrouped$BBServer$init);MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(_addBulletin:), (IMP)&_logos_method$_ungrouped$BBServer$_addBulletin$, (IMP*)&_logos_orig$_ungrouped$BBServer$_addBulletin$);MSHookMessageEx(_logos_class$_ungrouped$BBServer, @selector(_removeBulletin:rescheduleTimerIfAffected:shouldSync:), (IMP)&_logos_method$_ungrouped$BBServer$_removeBulletin$rescheduleTimerIfAffected$shouldSync$, (IMP*)&_logos_orig$_ungrouped$BBServer$_removeBulletin$rescheduleTimerIfAffected$shouldSync$);{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; _typeEncoding[i] = '\0'; class_addMethod(_logos_metaclass$_ungrouped$BBServer, @selector(sharedIBKBBServer), (IMP)&_logos_meta_method$_ungrouped$BBServer$sharedIBKBBServer, _typeEncoding); }}
     
     dlopen("/Library/MobileSubstrate/DynamicLibraries/IconSupport.dylib", RTLD_NOW);
     dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);

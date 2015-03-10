@@ -54,7 +54,7 @@ typedef struct SBIconCoordinate {
 // Class additions
 
 @interface SBIconListView (Additions)
--(SBIconCoordinate)coordinateForIconWithIndex:(unsigned int)index andOriginalCoordinate:(SBIconCoordinate)orig;
+-(SBIconCoordinate)coordinateForIconWithIndex:(unsigned int)index andOriginalCoordinate:(SBIconCoordinate)orig forOrientation:(int)arg3;
 -(SBIcon*)modifiedIconForIcon:(SBIcon*)icon;
 @end
 
@@ -65,12 +65,14 @@ typedef struct SBIconCoordinate {
 @interface IBKIconView : SBIconView
 
 +(IBKWidgetViewController*)getWidgetViewControllerForIcon:(SBIcon*)arg1 orBundleID:(NSString*)arg2;
+-(void)addPreExpandedWidgetIfNeeded:(id)arg1;
 
 @end
 
 // Globals
 
 NSMutableDictionary *cachedIndexes;
+NSMutableDictionary *cachedIndexesLandscape;
 NSMutableSet *movedIndexPaths;
 NSMutableDictionary *widgetViewControllers;
 
@@ -80,6 +82,8 @@ int currentOrientation = 1;
 BOOL animatingIn = NO;
 BOOL rearrangingIcons = NO;
 BOOL iWidgets = NO;
+BOOL dontKillIcons = NO;
+BOOL isRotating = NO;
 
 static BBServer* __weak IBKBBServer;
 
@@ -104,12 +108,26 @@ static BBServer* __weak IBKBBServer;
 }
 
 - (void)prepareToRotateToInterfaceOrientation:(int)arg1 {
-    // Ensure that icons are uncached
-    [cachedIndexes removeAllObjects];
     currentOrientation = arg1;
-    NSLog(@"******** Cached icons removed to prepare for orientation change, and current or == %d", currentOrientation);
+    isRotating = YES;
     
     %orig;
+}
+
+- (void)cleanupAfterRotation {
+    %orig;
+    
+    // Fix weird icon layouts after rotating - this works for 6+ mode!
+    
+    isRotating = NO;
+    
+    if (currentOrientation == 1 || currentOrientation == 2) {
+        [cachedIndexes removeAllObjects];
+    } else if (currentOrientation == 3 || currentOrientation == 4) {
+        [cachedIndexesLandscape removeAllObjects];
+    }
+    
+    [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.0 domino:NO forceRelayout:YES];
 }
 
 // Deal with editing mode. The *AtPoint: methods are here for logging purposes only.
@@ -132,7 +150,7 @@ static BBServer* __weak IBKBBServer;
     unsigned int orig = %orig;
     NSLog(@"Old index == %u", orig);
     
-    NSLog(@"arg1 == {col: %lu, row: %lu}", (unsigned long)arg1.col, (unsigned long)arg1.row);
+    //NSLog(@"arg1 == {col: %lu, row: %lu}", (unsigned long)arg1.col, (unsigned long)arg1.row);
     
     // This motherfucker is always wrong when there's widgets!
     
@@ -145,7 +163,7 @@ static BBServer* __weak IBKBBServer;
             int a = (int)[[self model] indexForLeafIconWithIdentifier:bundleIdentifier];
             SBIconCoordinate widget = [self iconCoordinateForIndex:a forOrientation:arg2];
             
-            NSLog(@"Widget's co-ordinate == {col: %lu, row: %lu}", (unsigned long)widget.col, (unsigned long)widget.row);
+            //NSLog(@"Widget's co-ordinate == {col: %lu, row: %lu}", (unsigned long)widget.col, (unsigned long)widget.row);
         
             // Top right.
             if ((widget.col+1) == arg1.col && widget.row == arg1.row) {
@@ -186,7 +204,7 @@ static BBServer* __weak IBKBBServer;
     orig -= i;
     
     //NSLog(@"i ended up being == %u", i);
-    //NSLog(@"Final index == %u", orig);
+    NSLog(@"Final index == %u", orig);
     
     return orig;
 }
@@ -198,7 +216,7 @@ static BBServer* __weak IBKBBServer;
     
     if (![[self class] isEqual:[objc_getClass("SBDockIconListView") class]] && ![[self class] isEqual:[objc_getClass("SBFolderIconListView") class]]) {
         // Deal with row underneath widget
-        orig = [self coordinateForIconWithIndex:arg1 andOriginalCoordinate:orig];
+        orig = [self coordinateForIconWithIndex:arg1 andOriginalCoordinate:orig forOrientation:arg2];
         
         //NSLog(@"Resultant co-ordinates are row: %lu and column: %lu", (unsigned long)orig.row, (unsigned long)orig.col);
     }
@@ -208,7 +226,7 @@ static BBServer* __weak IBKBBServer;
 
 %new
 
--(SBIconCoordinate)coordinateForIconWithIndex:(unsigned int)index andOriginalCoordinate:(SBIconCoordinate)orig {
+-(SBIconCoordinate)coordinateForIconWithIndex:(unsigned int)index andOriginalCoordinate:(SBIconCoordinate)orig forOrientation:(int)orientation {
    // NSLog(@"*** [Curago] :: Creating new coordinate for icon %d", index);
     
     /*
@@ -231,16 +249,24 @@ static BBServer* __weak IBKBBServer;
     
     if (!cachedIndexes)
         cachedIndexes = [NSMutableDictionary dictionary];
+    if (!cachedIndexesLandscape)
+        cachedIndexesLandscape = [NSMutableDictionary dictionary];
     
     SBApplicationIcon *icon = [[self model] iconAtIndex:index];
     NSString *bundleIdentifier = [icon leafIdentifier];
-        
+    
     if (!bundleIdentifier) {
         // Using this will cause issues occasionally.
         bundleIdentifier = [(SBFolderIcon*)icon nodeDescriptionWithPrefix:@"IBK"];
     }
         
-    NSIndexPath *path = [cachedIndexes objectForKey:bundleIdentifier];
+    NSIndexPath *path;
+    
+    if (orientation == 1 || orientation == 2)
+        path = [cachedIndexes objectForKey:bundleIdentifier];
+    else if (orientation == 3 || orientation == 4)
+        path = [cachedIndexesLandscape objectForKey:bundleIdentifier];
+        
     if (path && !rearrangingIcons) {
         // Awesome, we've already calculated it.
         
@@ -278,8 +304,6 @@ static BBServer* __weak IBKBBServer;
                 
                 orig.col += 1;
                 if (orig.col > [objc_getClass("SBIconListView") iconColumnsForInterfaceOrientation:currentOrientation]) {
-                    // TODO: Double check it's not going to put the icon underneath the dock.
-                    
                     orig.row += 1;
                     orig.col = 1;
                 }
@@ -289,7 +313,7 @@ static BBServer* __weak IBKBBServer;
         NSUInteger widgetRow = orig.row;
         NSUInteger widgetCol = orig.col;
         
-       // NSIndexPath *path1 = [NSIndexPath indexPathForRow:widgetRow inSection:widgetCol]; -> This is calculated later on
+        // NSIndexPath *path1 = [NSIndexPath indexPathForRow:widgetRow inSection:widgetCol]; -> This is calculated later on
         NSIndexPath *path2 = [NSIndexPath indexPathForRow:widgetRow inSection:widgetCol+1];
         NSIndexPath *path3 = [NSIndexPath indexPathForRow:widgetRow+1 inSection:widgetCol];
         NSIndexPath *path4 = [NSIndexPath indexPathForRow:widgetRow+1 inSection:widgetCol+1];
@@ -331,7 +355,10 @@ static BBServer* __weak IBKBBServer;
     // Cache this index path - do this on another thread
     if (![[objc_getClass("SBIconController") sharedInstance] isEditing]) {
        // NSLog(@"Caching index path");
-        [cachedIndexes setObject:pathz forKey:bundleIdentifier];
+        if (orientation == 1 || orientation == 2)
+            [cachedIndexes setObject:pathz forKey:bundleIdentifier];
+        else if (orientation == 3 || orientation == 4)
+            [cachedIndexesLandscape setObject:pathz forKey:bundleIdentifier];
     }
     
     // Clear array if needed
@@ -430,16 +457,19 @@ BOOL inSwitcher = NO;
 
 #import <SpringBoard7.0/SBApplication.h>
 
+BOOL sup;
+BOOL launchingWidget;
+
 %hook SBApplication
 
 - (void)willAnimateDeactivation:(_Bool)arg1 {
-    NSLog(@"*** WILL ANIMATE DEACTIVATION");
-    
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
     
     [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
         widgetController.view.alpha = 1.0;
     }];
+    
+    sup = YES;
     
     %orig;
 }
@@ -449,18 +479,41 @@ BOOL inSwitcher = NO;
     
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
     [(UIImageView*)[widgetController.correspondingIconView _iconImageView] setAlpha:0.0];
+    
+    sup = NO;
 }
 
 - (void)willActivateWithTransactionID:(unsigned long long)arg1 {
-    NSLog(@"*** WILL ACTIVATE WITH TRANSACTION ID");
-    
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
     
     [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
         widgetController.view.alpha = 0.0;
     }];
     
+    sup = YES;
+    
     %orig;
+}
+
+- (void)didActivateWithTransactionID:(unsigned long long)arg1 {
+    %orig;
+    
+    sup = NO;
+}
+
+%end
+
+%hook SBIconViewMap
+
+- (id)mappedIconViewForIcon:(id)arg1 {
+    id orig = %orig;
+    
+    if ([[orig class] isEqual:[objc_getClass("IBKIconView") class]]) {
+        if (!isRotating)
+            [(IBKIconView*)orig addPreExpandedWidgetIfNeeded:arg1];
+    }
+    
+    return orig;
 }
 
 %end
@@ -483,23 +536,39 @@ CGSize defaultIconSizing;
 
 #import <SpringBoard8.1/SBIconImageCrossfadeView.h>
 
-BOOL sup;
-
 %hook SBIconImageCrossfadeView
 
-- (id)initWithImageView:(id)arg1 crossfadeView:(id)arg2 {
-    SBIconImageCrossfadeView *view = %orig;
-    
-    NSLog(@"******* Subviews are %@", view.subviews);
-    
-    return view;
-}
+
 
 %end
 
 %hook SBIconImageView
 
 - (CGRect)visibleBounds {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {
+        CGRect frame = %orig;
+        IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self.icon applicationBundleID]];
+        frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+        
+        return frame;
+    }
+    
+    return %orig;
+}
+
+-(CGRect)frame {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {
+        CGRect frame = %orig;
+        IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self.icon applicationBundleID]];
+        frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+        
+        return frame;
+    }
+    
+    return %orig;
+}
+
+-(CGRect)bounds {
     if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {
         CGRect frame = %orig;
         IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self.icon applicationBundleID]];
@@ -540,11 +609,7 @@ BOOL sup;
 }
 
 - (void)prepareToCrossfadeImageWithView:(id)arg1 maskCorners:(_Bool)arg2 trueCrossfade:(_Bool)arg3 anchorPoint:(struct CGPoint)arg4 {
-    sup = YES;
-    
     %orig;
-    
-    sup = NO;
 }
 
 - (id)iconImageSnapshot {
@@ -581,49 +646,7 @@ BOOL sup;
 - (void)_setIcon:(id)arg1 animated:(BOOL)arg2 { // Deal with adding a widget view onto those icons that are already expanded
     %orig;
     
-    SBApplicationIcon *icon = (SBApplicationIcon*)arg1;
-    
-    if (!icon) {
-        icon = (SBApplicationIcon*)self.icon;
-    }
-    
-    NSLog(@"It's an icon. %@", [icon applicationBundleID]);
-    
-    if (!inSwitcher) {
-        if ([[IBKResources widgetBundleIdentifiers] containsObject:[icon applicationBundleID]]) {
-            NSLog(@"It's a widget! Inserting our UI. %@", [icon applicationBundleID]);
-        
-            // Widget view controllers will be deallocated when the icon is recycled.
-            IBKWidgetViewController *widgetController;
-            if (![widgetViewControllers objectForKey:[icon applicationBundleID]])
-                widgetController = [[IBKWidgetViewController alloc] init];
-            else
-                widgetController = [widgetViewControllers objectForKey:[icon applicationBundleID]];
-            widgetController.applicationIdentifer = [icon applicationBundleID];
-            
-            // Add the small UI onto the icon - we can be sure this will not be a folder icon
-            [self addSubview:widgetController.view];
-            
-            [widgetController layoutViewForPreExpandedWidget]; // No need to set center position
-            
-            if (!widgetViewControllers)
-                widgetViewControllers = [NSMutableDictionary dictionary];
-                
-            if ([icon applicationBundleID])
-                [widgetViewControllers setObject:widgetController forKey:[icon applicationBundleID]]; // Ensure that a pointer remains to that widget controller.
-            
-            // Hide original icon
-            [(UIImageView*)[self _iconImageView] setAlpha:0.0];
-            widgetController.correspondingIconView = self;
-            
-            widgetController.view.layer.shadowOpacity = 0.0;
-            widgetController.shimIcon.alpha = 0.0;
-            widgetController.shimIcon.hidden = YES;
-        }
-        
-        // Testing
-        //NSLog(@"Resultant count == %lu", (unsigned long)[widgetViewControllers count]);
-    }
+    [self addPreExpandedWidgetIfNeeded:arg1];
 }
 
 - (struct CGRect)_frameForLabel {
@@ -673,6 +696,53 @@ BOOL sup;
     return [widgetViewControllers objectForKey:bundleIdentifier];
 }
 
+%new
+
+-(void)addPreExpandedWidgetIfNeeded:(id)arg1 {
+    SBApplicationIcon *icon = (SBApplicationIcon*)arg1;
+    
+    if (!icon) {
+        icon = (SBApplicationIcon*)self.icon;
+    }
+    
+    if (!inSwitcher) {
+        if ([[IBKResources widgetBundleIdentifiers] containsObject:[icon applicationBundleID]]) {
+            NSLog(@"*** [Curago] :: It's a widget! Inserting our UI. %@", [icon applicationBundleID]);
+            
+            // Widget view controllers will be deallocated when the icon is recycled.
+            IBKWidgetViewController *widgetController;
+            if (![widgetViewControllers objectForKey:[icon applicationBundleID]]) {
+                widgetController = [[IBKWidgetViewController alloc] init];
+                widgetController.applicationIdentifer = [icon applicationBundleID];
+                [widgetController layoutViewForPreExpandedWidget]; // No need to set center position
+            } else {
+                widgetController = [widgetViewControllers objectForKey:[icon applicationBundleID]];
+            }
+            
+            // Add the small UI onto the icon - we can be sure this will not be a folder icon
+            [self addSubview:widgetController.view];
+            
+            if (!widgetViewControllers)
+                widgetViewControllers = [NSMutableDictionary dictionary];
+                
+                if ([icon applicationBundleID] && ![widgetViewControllers objectForKey:[icon applicationBundleID]])
+                    [widgetViewControllers setObject:widgetController forKey:[icon applicationBundleID]]; // Ensure that a pointer remains to that widget controller.
+            
+            // Hide original icon
+            [(UIImageView*)[self _iconImageView] setAlpha:0.0];
+            widgetController.correspondingIconView = self;
+            
+            widgetController.view.layer.shadowOpacity = 0.0;
+            widgetController.shimIcon.alpha = 0.0;
+            widgetController.shimIcon.hidden = YES;
+        }
+        
+        // Testing
+        //NSLog(@"Resultant count == %lu", (unsigned long)[widgetViewControllers count]);
+    }
+
+}
+
 %end
 
 // Fix up fading to app on launch
@@ -684,10 +754,22 @@ BOOL sup;
 - (void)setIsEditing:(BOOL)arg1 {
     %orig;
     
-    if (arg1)
-        [cachedIndexes removeAllObjects];
+    if (arg1) {
+        //if (currentOrientation == 1 || currentOrientation == 2)
+            [cachedIndexes removeAllObjects];
+        //else if (currentOrientation == 3 || currentOrientation == 4)
+            [cachedIndexesLandscape removeAllObjects];
+    }
     
     rearrangingIcons = arg1;
+}
+
+- (void)_prepareToResetRootIconLists {
+    if (dontKillIcons) {
+        dontKillIcons = NO;
+    } else {
+        %orig;
+    }
 }
 
 %new
@@ -705,7 +787,10 @@ BOOL sup;
 %new
 
 -(void)removeAllCachedIcons {
-    [cachedIndexes removeAllObjects];
+    if (currentOrientation == 1 || currentOrientation == 2)
+        [cachedIndexes removeAllObjects];
+    else if (currentOrientation == 3 || currentOrientation == 4)
+        [cachedIndexesLandscape removeAllObjects];
 }
 
 %end
@@ -724,6 +809,16 @@ SBIcon *widgetIcon;
 @interface SBIconScrollView (Additions)
 -(SBIconListView *)IBKListViewForIdentifierTwo:(NSString*)identifier;
 @end
+
+%hook SBLockScreenViewController
+
+- (void)_handleDisplayTurnedOff {
+    dontKillIcons = YES;
+    
+    %orig;
+}
+
+%end
 
 %hook SBIconScrollView
 
@@ -846,7 +941,10 @@ NSInteger page = 0;
             [IBKResources addNewIdentifier:[widgetIcon applicationBundleID]];
             
             // Relayout icons.
-            [cachedIndexes removeAllObjects];
+            if (currentOrientation == 1 || currentOrientation == 2)
+                [cachedIndexes removeAllObjects];
+            else if (currentOrientation == 3 || currentOrientation == 4)
+                [cachedIndexesLandscape removeAllObjects];
             
             // Move icons to next page if needed.
             

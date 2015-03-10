@@ -13,6 +13,8 @@
 #import <SpringBoard7.0/SBIconController.h>
 #import <objc/runtime.h>
 
+#define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
 @interface SBIconImageView (iOS7_1)
 - (void)setIcon:(id)arg1 location:(int)arg2 animated:(BOOL)arg3;
 @end
@@ -34,6 +36,10 @@
         [iconImageView setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:bundleId] location:2 animated:NO];
     
     return [(UIImage*)[(SBIconImageView*)iconImageView squareContentsImage] mergedColor];
+}
+
++(CGFloat)heightForContentView {
+    return [IBKResources heightForWidget]-(isPad ? 50 : 30)-7;
 }
 
 @end

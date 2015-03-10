@@ -288,7 +288,7 @@
         self.gradientLayer.colors = colors;
         self.gradientLayer.bounds = CGRectMake(0, 0, self.viw.frame.size.width, self.viw.frame.size.height);
         
-        [self.view.layer insertSublayer:self.gradientLayer atIndex:0];
+        [self.topBase.layer insertSublayer:self.gradientLayer atIndex:0];
     } else if (infoPlist[@"customColor"] || [self.widget respondsToSelector:@selector(customHexColor)]) {
         // Color is saved as a hex string; #FFFFFF.
         
@@ -539,8 +539,8 @@
 
 -(void)layoutViewForPreExpandedWidget {
     // Layout view as this widget is already expanded.
-    if (!self.isWidgetLoaded)
-        [self loadWidgetInterface];
+    //if (!self.isWidgetLoaded)
+    [self loadWidgetInterface];
     
     // Set scaling of baseView
     self.view.alpha = 1.0;

@@ -10,3 +10,12 @@ Added ultra fancy settings panel
 Finished music block
 Improved app launching (need to still fix scaling animations)
 Finalised ObjC API
+
+0.1.4
+
+Fixed icons disappearing
+Fixed 6+ rotation
+
+0.1.5
+
+Fixed icon opening animations

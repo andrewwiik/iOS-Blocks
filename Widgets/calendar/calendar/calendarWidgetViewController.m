@@ -60,6 +60,8 @@ static void SignificantTimeChanged(CFNotificationCenterRef center, void *observe
     
     [view addSubview:self.day];
     
+    self.day.frame = CGRectMake(4, frame.size.height - self.day.frame.size.height - 7, self.day.frame.size.width, self.day.frame.size.height);
+    
     return view;
 }
 
@@ -96,6 +98,14 @@ static void SignificantTimeChanged(CFNotificationCenterRef center, void *observe
     [self.day setText:[dateFormat stringFromDate:today]];
     
     [self.day sizeToFit];
+}
+
+-(BOOL)wantsGradientBackground {
+    return YES;
+}
+
+-(NSArray*)gradientBackgroundColors {
+    return [NSArray arrayWithObjects:@"E6E6E6", @"FFFFFF", nil];
 }
 
 @end

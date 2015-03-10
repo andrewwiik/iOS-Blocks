@@ -19,6 +19,8 @@
 #define IS_IPHONE_6 (SCREEN_MAX_LENGTH == 667)
 #define IS_IPHONE_6_PLUS (SCREEN_MAX_LENGTH == 736.0)
 
+#define orient [[UIApplication sharedApplication] statusBarOrientation]
+
 +(CGFloat)adjustedAnimationSpeed:(CGFloat)duration;
 
 +(NSSet*)widgetBundleIdentifiers;
