@@ -132,6 +132,14 @@
     return NO;
 }
 
+-(BOOL)wantsGradientBackground {
+    return YES;
+}
+
+-(NSArray*)gradientBackgroundColors {
+    return [NSArray arrayWithObjects:@"FF2C58", @"FF5939", nil];
+}
+
 -(UIView*)buttonAreaViewWithFrame:(CGRect)frame {
     UIView *buttons = [[UIView alloc] initWithFrame:frame];
     buttons.backgroundColor = [UIColor clearColor];

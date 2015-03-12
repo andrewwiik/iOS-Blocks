@@ -24,6 +24,7 @@
 -(NSString*)customHexColor;
 -(BOOL)wantsGradientBackground;
 -(NSArray*)gradientBackgroundColors;
+-(NSArray*)gradientBackgroundColorsUIColor;
 -(BOOL)wantsNoContentViewFadeWithButtons;
 
 @end

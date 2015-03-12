@@ -465,7 +465,7 @@ BOOL launchingWidget;
 - (void)willAnimateDeactivation:(_Bool)arg1 {
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
     
-    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
+    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
         widgetController.view.alpha = 1.0;
     }];
     
@@ -486,7 +486,7 @@ BOOL launchingWidget;
 - (void)willActivateWithTransactionID:(unsigned long long)arg1 {
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
     
-    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
+    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
         widgetController.view.alpha = 0.0;
     }];
     
@@ -499,6 +499,26 @@ BOOL launchingWidget;
     %orig;
     
     sup = NO;
+}
+
+// iOS 7
+
+- (void)didAnimateActivation {
+    %orig;
+    
+    sup = NO;
+}
+
+- (void)willAnimateActivation {
+    IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
+    
+    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
+        widgetController.view.alpha = 0.0;
+    }];
+    
+    sup = YES;
+    
+    %orig;
 }
 
 %end
@@ -631,7 +651,7 @@ CGSize defaultIconSizing;
 }
 
 -(CGRect)frame {
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && !animatingIn && (iWidgets || sup)) {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && !animatingIn && iWidgets) {
         CGRect frame = %orig;
         defaultIconSizing = frame.size;
         IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self.icon applicationBundleID]];
@@ -671,9 +691,9 @@ CGSize defaultIconSizing;
         [widgetViewControllers removeObjectForKey:[self.icon applicationBundleID]];
 }
 
-// Hook hittest to allow for widget to recieve all touch.
+// Hook hitTest to allow for widget to recieve all touch.
 
-- (BOOL)pointInside:(struct CGPoint)arg1 withEvent:(id)arg2 {
+- (BOOL)pointInside:(struct CGPoint)arg1 withEvent:(UIEvent*)arg2 {
     BOOL orig = %orig;
     
     if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
@@ -681,7 +701,23 @@ CGSize defaultIconSizing;
         orig = [[[widgetViewControllers objectForKey:[self.icon applicationBundleID]] view] pointInside:arg1 withEvent:arg2];
     }
     
+    // AHA MOTHERFUCKERS!
+    
+    if ([arg2 allTouches].count > 1 && orig) {
+        return NO; // WE WANT TO KNOW WHEN THERE'S A TWO FINGER TOUCH BITCH.
+    }
+    
     return orig;
+}
+
+- (void)touchesBegan:(id)arg1 withEvent:(UIEvent*)arg2 {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
+        %orig;
+    } else {
+        if ([arg2 allTouches].count < 1) {
+            %orig;
+        }
+    }
 }
 
 %new

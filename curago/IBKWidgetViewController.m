@@ -277,13 +277,15 @@
             for (NSString *string in [self.widget gradientBackgroundColors]) {
                 [colors addObject:(id)[self colorFromString:string].CGColor];
             }
+        } else if ([self.widget respondsToSelector:@selector(gradientBackgroundColorsUIColor)]) {
+            for (UIColor *color in [self.widget gradientBackgroundColorsUIColor]) {
+                [colors addObject:(id)color.CGColor];
+            }
         } else {
             for (NSString *string in infoPlist[@"customGradientColors"]) {
                 [colors addObject:(id)[self colorFromString:string].CGColor];
             }
         }
-        
-        //colors = [[colors reverseObjectEnumerator] allObjects];
         
         self.gradientLayer.colors = colors;
         self.gradientLayer.bounds = CGRectMake(0, 0, self.viw.frame.size.width, self.viw.frame.size.height);
@@ -415,6 +417,23 @@
     }
 }
 
+-(NSMutableArray*)orderedArrayForNotifications:(NSMutableArray*)array {
+    for (int i = 1; i < [array count]; i++) {
+        for (int j = 0; j < [array count] - 1; j++) {
+            NSDate *firstDate = [(BBBulletin*)array[j] date];
+            NSDate *secondDate = [(BBBulletin*)array[j + 1] date];
+            
+            if ([secondDate timeIntervalSinceDate:firstDate] > 0) {
+                BBBulletin *temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+            }
+        }
+    }
+    
+    return array;
+}
+
 -(void)loadForNotificationsTable:(NSDictionary*)infoPlist {
     // Create table view.
     
@@ -429,6 +448,8 @@
     for (BBBulletin *bulletin in [server _allBulletinsForSectionID:self.applicationIdentifer])
         [self.notificationsDataSource addObject:bulletin];
     
+    self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
+    
     NSLog(@"Bulletins array == %@", self.notificationsDataSource);
     
     CGRect initialFrame = CGRectMake(10, 7, [IBKResources widthForWidget]-14, self.iconImageView.frame.origin.y-9);
@@ -440,10 +461,47 @@
     self.notificationsTableView.backgroundColor = [UIColor clearColor];
     self.notificationsTableView.showsVerticalScrollIndicator = YES;
     self.notificationsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.notificationsTableView.allowsSelection = NO;
+    self.notificationsTableView.layer.masksToBounds = NO;
     
     [self.notificationsTableView registerClass:[IBKNotificationsTableCell class] forCellReuseIdentifier:@"notificationTableCell"];
     
-    [topBase addSubview:self.notificationsTableView];
+    CAGradientLayer *grad = [CAGradientLayer layer];
+    grad.anchorPoint = CGPointZero;
+    grad.startPoint = CGPointMake(0.5f, 1.0f);
+    grad.endPoint = CGPointMake(0.5f, 0.5f);
+    
+    UIColor *innerColour = [UIColor colorWithWhite:1.0 alpha:1.0];
+    
+    NSArray *colors = [NSArray arrayWithObjects:
+                       (id)[innerColour CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.975f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.95f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.9f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.8f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.7f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.6f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.5f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.4f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.3f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.2f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.1f] CGColor],
+                       (id)[[UIColor clearColor] CGColor],
+                       nil];
+    
+    colors = [[colors reverseObjectEnumerator] allObjects];
+    
+    grad.colors = colors;
+    grad.bounds = CGRectMake(0, 0, self.view.frame.size.width, self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
+    
+    UIView *tableViewBase = [[UIView alloc] initWithFrame:topBase.frame];
+    tableViewBase.backgroundColor = [UIColor clearColor];
+    
+    tableViewBase.layer.mask = grad;
+    
+    [topBase addSubview:tableViewBase];
+    
+    [tableViewBase addSubview:self.notificationsTableView];
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
         NSMutableArray *indexPaths = [NSMutableArray array];
@@ -471,6 +529,8 @@
     
     // Bring icon back up to top view
     [topBase addSubview:self.iconImageView];
+    
+    [self setColorAndOrIcon:infoPlist];
 }
 
 -(void)loadForGameCenter:(NSDictionary*)plist {

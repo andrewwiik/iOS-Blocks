@@ -39,7 +39,8 @@
 }
 
 +(CGFloat)heightForContentView {
-    return [IBKResources heightForWidget]-(isPad ? 50 : 30)-7;
+    CGFloat bbb = [IBKResources heightForWidget]-(isPad ? 50.0 : 30.0)-7.0;
+    return bbb;
 }
 
 @end

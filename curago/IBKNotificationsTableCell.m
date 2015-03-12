@@ -62,7 +62,6 @@
 }
 
 -(void)initialiseForBulletin:(BBBulletin*)bulletin andRowWidth:(CGFloat)width {
-    NSLog(@"initing for bulletin");
     // Initialiation: title, date label and content
     // content may be the count of -(id)attachments
     // date label: minutes (1m ago), hours (2h ago), days (up to 3d ago?), actual date.
@@ -77,12 +76,12 @@
     }
     
     if (!self.title) {
-        self.title = [[UILabel alloc] initWithFrame:CGRectMake(4, 3, width-8, 14)];
+        self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, 3, width-8, 14)];
         self.title.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:12.5];
         self.title.numberOfLines = 1;
         self.title.backgroundColor = [UIColor clearColor];
-        self.title.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-        self.title.shadowOffset = CGSizeMake(0, 1);
+        //self.title.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+        //self.title.shadowOffset = CGSizeMake(0, 1);
         
         if ([IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration])
             self.title.textColor = [UIColor darkTextColor];
@@ -101,8 +100,6 @@
         titleFrameCleanUp.size = CGSizeMake(width-46, titleFrameCleanUp.size.height);
         self.title.frame = titleFrameCleanUp;
     }
-    
-    NSLog(@"dateLabel");
     
     if (!self.dateLabel) {
         self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, width-2, 12)];
@@ -124,15 +121,13 @@
     self.dateTimer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateDate:) userInfo:nil repeats:YES];
     [self updateDate:nil];
     
-    NSLog(@"Content");
-    
     if (!self.content) {
-        self.content = [[UILabel alloc] initWithFrame:CGRectMake(4, 19, width-8, 26)];
+        self.content = [[UILabel alloc] initWithFrame:CGRectMake(0, 19, width-4, 26)];
         self.content.font = [UIFont fontWithName:@"HelveticaNeue" size:11];
         self.content.numberOfLines = 0;
         self.content.backgroundColor = [UIColor clearColor];
-        self.content.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-        self.content.shadowOffset = CGSizeMake(0, 1);
+        //self.content.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+        //self.content.shadowOffset = CGSizeMake(0, 1);
         
         if ([IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration])
             self.content.textColor = [UIColor darkTextColor];
@@ -174,7 +169,7 @@
     }
     
     if (!self.separatorLine) {
-        self.separatorLine = [[UIView alloc] initWithFrame:CGRectMake(10, 50, width-20, 1)];
+        self.separatorLine = [[UIView alloc] initWithFrame:CGRectMake(6, 50, width-16, 1)];
         self.separatorLine.backgroundColor = [UIColor whiteColor];
         self.separatorLine.alpha = 0.25;
         
