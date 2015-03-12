@@ -6,7 +6,7 @@ Curago is being used as a name here since it was a abandoned project with a prem
 
 ### How do I get set up? ###
 
-There's no massive dependancies, although you'll need to create a makefile to get this working unfortunately. :(
+There's no massive dependancies, although you may need to grab the same set of headers I'm using if you hit annoying compiling stuff. If so, I'll send the .zip of them your way.
 
 It links against UIKit and Foundation, so nothing out of the ordinary.
 
