@@ -76,12 +76,12 @@
     }
     
     if (!self.title) {
-        self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, 3, width-8, 14)];
-        self.title.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:12.5];
+        self.title = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 3, width-8, (isIpadDevice ? 16 : 14))];
         self.title.numberOfLines = 1;
         self.title.backgroundColor = [UIColor clearColor];
-        //self.title.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-        //self.title.shadowOffset = CGSizeMake(0, 1);
+
+        [self.title setLabelSize:kIBKLabelSizingSmallBold];
+        self.title.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration];
         
         if ([IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration])
             self.title.textColor = [UIColor darkTextColor];
@@ -102,11 +102,13 @@
     }
     
     if (!self.dateLabel) {
-        self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 5, width-2, 12)];
-        self.dateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:10];
+        self.dateLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 5, width-2, (isIpadDevice ? 13 : 12))];
         self.dateLabel.numberOfLines = 1;
         self.dateLabel.backgroundColor = [UIColor clearColor];
         self.dateLabel.textAlignment = NSTextAlignmentRight;
+        
+        [self.dateLabel setLabelSize:kIBKLabelSizingTiny];
+        self.dateLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration];
         
         if ([IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration])
             self.dateLabel.textColor = [UIColor darkTextColor];
@@ -122,12 +124,13 @@
     [self updateDate:nil];
     
     if (!self.content) {
-        self.content = [[UILabel alloc] initWithFrame:CGRectMake(0, 19, width-4, 26)];
-        self.content.font = [UIFont fontWithName:@"HelveticaNeue" size:11];
+        self.content = [[IBKLabel alloc] initWithFrame:CGRectMake(0, (isIpadDevice ? 21 : 19), width-4, (isIpadDevice ? 40 : 26))];
+        //self.content.font = [UIFont fontWithName:@"HelveticaNeue" size:11];
         self.content.numberOfLines = 0;
         self.content.backgroundColor = [UIColor clearColor];
-        //self.content.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-        //self.content.shadowOffset = CGSizeMake(0, 1);
+        
+        [self.content setLabelSize:kIBKLabelSizingSmall];
+        self.content.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration];
         
         if ([IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration])
             self.content.textColor = [UIColor darkTextColor];
@@ -146,7 +149,7 @@
         // TODO: Finish attachment image handling
         
         NSLog(@"clientComposedImageInfos == %@", bulletin.attachments.clientSideComposedImageInfos);
-        NSLog(@"Additinoal attachments == %@", bulletin.attachments.additionalAttachments);
+        NSLog(@"Additional attachments == %@", bulletin.attachments.additionalAttachments);
         
         NSLog(@"ComposedAttachmentImage == %@", bulletin.composedAttachmentImage);
         
@@ -159,7 +162,7 @@
             
             NSLog(@"Newwidth == %f", newWidth);
             
-            self.attachment.frame = CGRectMake(4, 19, newWidth, 26);
+            self.attachment.frame = CGRectMake(4, (isIpadDevice ? 22 : 19), newWidth, (isIpadDevice ? 40 : 26));
             
             self.attachment.backgroundColor = [UIColor blueColor];
             self.attachment.alpha = 0.5;
@@ -169,7 +172,7 @@
     }
     
     if (!self.separatorLine) {
-        self.separatorLine = [[UIView alloc] initWithFrame:CGRectMake(6, 50, width-16, 1)];
+        self.separatorLine = [[UIView alloc] initWithFrame:CGRectMake(6, (isIpadDevice ? 65 : 50), width-16, 1)];
         self.separatorLine.backgroundColor = [UIColor whiteColor];
         self.separatorLine.alpha = 0.25;
         

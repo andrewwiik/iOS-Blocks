@@ -23,7 +23,11 @@ static NSDictionary *settings;
 @implementation IBKResources
 
 +(CGFloat)adjustedAnimationSpeed:(CGFloat)duration {
-    return [(SBFAnimationFactory*)[objc_getClass("SBFAnimationFactory") factoryWithDuration:duration] duration];
+    if ([objc_getClass("SBFAnimationFactory") respondsToSelector:@selector(factoryWithDuration:)]) {
+        return [(SBFAnimationFactory*)[objc_getClass("SBFAnimationFactory") factoryWithDuration:duration] duration];
+    } else {
+        return duration;
+    }
 }
 
 +(NSSet*)widgetBundleIdentifiers {

@@ -45,7 +45,11 @@
         self.noMediaPlaying.text = @"No media playing";
         self.noMediaPlaying.textAlignment = NSTextAlignmentCenter;
         self.noMediaPlaying.textColor = [UIColor whiteColor];
-        self.noMediaPlaying.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+        if (isIpad) {
+            self.noMediaPlaying.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+        } else {
+            self.noMediaPlaying.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+        }
         self.noMediaPlaying.backgroundColor = [UIColor clearColor];
         
         [self.view addSubview:self.noMediaPlaying];
@@ -88,7 +92,7 @@
         // Deal with that shit.
         [self performSelector:@selector(delayed8update) withObject:nil afterDelay:1.0];
     } else {
-        self.artwork.image = [(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] _nowPlayingInfo] [@"artworkData"];
+        self.artwork.image = [UIImage imageWithData:[(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] _nowPlayingInfo] [@"artworkData"]];
         self.songtitle.text = [(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] nowPlayingTitle];
         self.artist.text = [(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] nowPlayingArtist];
         

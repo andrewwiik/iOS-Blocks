@@ -26,6 +26,8 @@
 		C9674D0619897EED0094C597 /* IBKNotificationsTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C9674D0419897EED0094C597 /* IBKNotificationsTableCell.m */; };
 		C989B9451AA3C66C0093863B /* IBKWidgetTopBase.h in Headers */ = {isa = PBXBuildFile; fileRef = C989B9431AA3C66C0093863B /* IBKWidgetTopBase.h */; };
 		C989B9461AA3C66C0093863B /* IBKWidgetTopBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C989B9441AA3C66C0093863B /* IBKWidgetTopBase.m */; };
+		C9C45D871AB1FC8E0085DA7C /* IBKLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C45D851AB1FC8E0085DA7C /* IBKLabel.h */; };
+		C9C45D881AB1FC8E0085DA7C /* IBKLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C45D861AB1FC8E0085DA7C /* IBKLabel.m */; };
 		C9E77D4C1A8A4C2E003F9893 /* IBKGameCenterTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9E77D4A1A8A4C2E003F9893 /* IBKGameCenterTableView.h */; };
 		C9E77D4D1A8A4C2E003F9893 /* IBKGameCenterTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E77D4B1A8A4C2E003F9893 /* IBKGameCenterTableView.m */; };
 		C9E77D501A8A50DF003F9893 /* IBKGameCenterTableCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C9E77D4E1A8A50DF003F9893 /* IBKGameCenterTableCell.h */; };
@@ -65,6 +67,8 @@
 		C9674D0419897EED0094C597 /* IBKNotificationsTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKNotificationsTableCell.m; sourceTree = "<group>"; };
 		C989B9431AA3C66C0093863B /* IBKWidgetTopBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKWidgetTopBase.h; sourceTree = "<group>"; };
 		C989B9441AA3C66C0093863B /* IBKWidgetTopBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKWidgetTopBase.m; sourceTree = "<group>"; };
+		C9C45D851AB1FC8E0085DA7C /* IBKLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKLabel.h; sourceTree = "<group>"; };
+		C9C45D861AB1FC8E0085DA7C /* IBKLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKLabel.m; sourceTree = "<group>"; };
 		C9E77D4A1A8A4C2E003F9893 /* IBKGameCenterTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKGameCenterTableView.h; sourceTree = "<group>"; };
 		C9E77D4B1A8A4C2E003F9893 /* IBKGameCenterTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKGameCenterTableView.m; sourceTree = "<group>"; };
 		C9E77D4E1A8A50DF003F9893 /* IBKGameCenterTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKGameCenterTableCell.h; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 			children = (
 				C9674CFB198978100094C597 /* UIImageAverageColorAddition.h */,
 				C9674CFC198978100094C597 /* UIImageAverageColorAddition.m */,
+				C9C45D851AB1FC8E0085DA7C /* IBKLabel.h */,
+				C9C45D861AB1FC8E0085DA7C /* IBKLabel.m */,
 				C9E77D521A8A544E003F9893 /* MarqueeLabel.h */,
 				C9E77D531A8A544E003F9893 /* MarqueeLabel.m */,
 				C9674CFF19897B070094C597 /* CKBlurView.h */,
@@ -230,6 +236,7 @@
 				C9674D0519897EED0094C597 /* IBKNotificationsTableCell.h in Headers */,
 				C950B6B519FE6C5E0093B892 /* IBKAPI.h in Headers */,
 				C944009919467F5900483B32 /* IBKWidgetViewController.h in Headers */,
+				C9C45D871AB1FC8E0085DA7C /* IBKLabel.h in Headers */,
 				C93BEEC5193F64D900EACE71 /* IBKResources.h in Headers */,
 				C9674CFD198978100094C597 /* UIImageAverageColorAddition.h in Headers */,
 				C9E77D4C1A8A4C2E003F9893 /* IBKGameCenterTableView.h in Headers */,
@@ -322,6 +329,7 @@
 				C944009A19467F5900483B32 /* IBKWidgetViewController.m in Sources */,
 				C93BEEC6193F64D900EACE71 /* IBKResources.m in Sources */,
 				C9674D0619897EED0094C597 /* IBKNotificationsTableCell.m in Sources */,
+				C9C45D881AB1FC8E0085DA7C /* IBKLabel.m in Sources */,
 				C9E77D511A8A50DF003F9893 /* IBKGameCenterTableCell.m in Sources */,
 				C907C547193250650084825A /* curago.mm in Sources */,
 				C9E77D551A8A544E003F9893 /* MarqueeLabel.m in Sources */,

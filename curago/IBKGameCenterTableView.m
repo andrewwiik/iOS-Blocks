@@ -35,13 +35,16 @@
         
         self.allowsSelection = NO;
         
-        self.loading = [[UILabel alloc] initWithFrame:self.frame];
+        self.loading = [[IBKLabel alloc] initWithFrame:CGRectMake(20, 10, self.frame.size.width-40, self.frame.size.height-20)];
         self.loading.textAlignment = NSTextAlignmentCenter;
-        self.loading.text = @"Loading...";
+        self.loading.text = @"Loading";
+        self.loading.numberOfLines = 0;
         self.loading.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:color] ? [UIColor darkTextColor] : [UIColor whiteColor]);
-        self.loading.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+        //self.loading.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
         
-        [self.superview addSubview:self.loading];
+        [self.loading setLabelSize:kIBKLabelSizingMedium];
+        
+        [self addSubview:self.loading];
         
         [self registerClass:[IBKGameCenterTableCell class] forCellReuseIdentifier:@"gcTableCell"];
         
@@ -52,10 +55,9 @@
         [objc_getClass("GKGame") loadGamesWithBundleIDs:[NSArray arrayWithObject:self.identifier] withCompletionHandler:^(NSArray *games, NSError *error) {
             game = [games objectAtIndex:0];
             
-            [self.loading removeFromSuperview];
-            self.loading = nil;
-            
             [self initialiseProper:game];
+            
+            NSLog(@"ERRROOOORRRRR: %@", error);
         }];
     }
     
@@ -64,14 +66,27 @@
 
 -(void)initialiseProper:(GKGame*)game {
     [objc_getClass("GKAchievementDescription") loadAchievementDescriptionsForGame:game withCompletionHandler:^(NSArray *arr, NSError *error) {
-        if (!error) {
+        if (!error || arr) {
             self.data = [self bubbleSort:[arr mutableCopy]];
             
             // We now need to sort our achievements by percentage done.
+            self.loading.alpha = 0.0;
+            [self.loading removeFromSuperview];
+            self.loading = nil;
         } else {
             // Oh dog's bollocks. We have to display no connection possible, and retry when we have connection...!
             self.data = [NSMutableArray array];
+            
+            if (error.code == 15) {
+                self.loading.text = @"Please ensure you have logged into Game Center to load achievements";
+            } else if (error.code == -1009) {
+                self.loading.text = @"Please connect to WiFi or cellular data to download achievements";
+            } else {
+                self.loading.text = @"An unknown error occurred whilst downloading achievements";
+            }
         }
+        
+        NSLog(@"ERRROOOORRRRR: %@", error.userInfo);
         
         [self reloadData];
     }];

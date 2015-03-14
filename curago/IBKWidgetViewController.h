@@ -13,6 +13,7 @@
 #import <SpringBoard7.0/SBIconView.h>
 #import "IBKGameCenterTableView.h"
 #import "IBKWidgetTopBase.h"
+#import "IBKLabel.h"
 
 @interface IBKWidgetViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
     IBKWidgetTopBase *topBase;
@@ -30,7 +31,7 @@
 @property (nonatomic, strong) BBObserver *notificationObserver;
 @property (nonatomic, strong) UITableView *notificationsTableView;
 @property (nonatomic, strong) IBKGameCenterTableView *gcTableView;
-@property (nonatomic, strong) UILabel *noNotifsLabel;
+@property (nonatomic, strong) IBKLabel *noNotifsLabel;
 @property (nonatomic, strong) UIView *shimIcon;
 @property (nonatomic, strong) NSMutableArray *notificationsDataSource; // This is full of BBBulletins.
 @property (readwrite) BOOL fallbackToNotificationList;

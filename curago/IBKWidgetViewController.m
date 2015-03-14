@@ -513,12 +513,15 @@
     }
     
     // If no notifications, say so
-    self.noNotifsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidget]-40, [IBKResources heightForWidget]-(isPad ? 50 : 30))];
+    self.noNotifsLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidget]-40, [IBKResources heightForWidget]-(isPad ? 50 : 30))];
     self.noNotifsLabel.text = @"No notifications";
     self.noNotifsLabel.textAlignment = NSTextAlignmentCenter;
     self.noNotifsLabel.numberOfLines = 0;
     self.noNotifsLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
-    self.noNotifsLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+    
+    [self.noNotifsLabel setLabelSize:kIBKLabelSizingLarge];
+    self.noNotifsLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor];
+    
     self.noNotifsLabel.backgroundColor = [UIColor clearColor];
     if ([self.notificationsDataSource count] == 0)
         self.noNotifsLabel.alpha = 1.0;
@@ -540,13 +543,14 @@
     
     [topBase addSubview:self.gcTableView];
     
-    UILabel *achLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 100, self.iconImageView.frame.origin.y, 50, self.iconImageView.frame.size.height)];
+    IBKLabel *achLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 100, self.iconImageView.frame.origin.y, 50, self.iconImageView.frame.size.height)];
     achLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
     achLabel.textAlignment = NSTextAlignmentCenter;
     achLabel.text = @"Achievements";
-    achLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:13];
     achLabel.backgroundColor = [UIColor clearColor];
     achLabel.alpha = 0.5;
+    
+    [achLabel setLabelSize:kIBKLabelSizingButtonView];
     
     [achLabel sizeToFit];
     
@@ -848,8 +852,10 @@ float scale2 = 0.0;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     // Each has it's own height I think. Two visible at all times for iPhone
-    
-    return 52.0;
+    if (isPad)
+        return 70;
+    else
+        return 52.0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -903,15 +909,17 @@ float scale2 = 0.0;
     
     [self.notificationsDataSource insertObject:arg2 atIndex:0];
     
-    //[self.notificationsTableView reloadData];
+    self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
+    
+    [self.notificationsTableView reloadData];
     
     //[self.notificationsTableView reloadSections:0 withRowAnimation:UITableViewRowAnimationTop];
     
     //[self.notificationsTableView reloadData];
     
-    NSMutableArray *indexPaths = [NSMutableArray array];
+    /*NSMutableArray *indexPaths = [NSMutableArray array];
     [indexPaths addObject:[NSIndexPath indexPathForRow:[self.notificationsDataSource indexOfObject:arg2] inSection:0]];
-    [self.notificationsTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+    [self.notificationsTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];*/
     
 }
 
@@ -919,7 +927,15 @@ float scale2 = 0.0;
     // TODO: Check whether we need to use the bulletin ID for removal
     [self.notificationsDataSource removeObject:arg2];
     
+    self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
+    
     [self.notificationsTableView reloadData];
+    
+    if ([self.notificationsDataSource count] == 0) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.noNotifsLabel.alpha = 1.0;
+        }];
+    }
 }
 
 - (void)observer:(id)observer modifyBulletin:(id)bulletin {

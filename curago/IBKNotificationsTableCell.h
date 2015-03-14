@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import <BulletinBoard/BBBulletin.h>
+#import "IBKLabel.h"
+
+#define isIpadDevice (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
 @interface IBKNotificationsTableCell : UITableViewCell
 
 @property (nonatomic, strong) NSTimer *dateTimer;
 @property (nonatomic, strong) UIColor *superviewColouration;
-@property (nonatomic, strong) UILabel *title;
-@property (nonatomic, strong) UILabel *content;
-@property (nonatomic, strong) UILabel *dateLabel;
+@property (nonatomic, strong) IBKLabel *title;
+@property (nonatomic, strong) IBKLabel *content;
+@property (nonatomic, strong) IBKLabel *dateLabel;
 @property (nonatomic, strong) UIImageView *attachment;
 @property (nonatomic, strong) UIView *separatorLine;
 @property (nonatomic, strong) BBBulletin *bulletin;

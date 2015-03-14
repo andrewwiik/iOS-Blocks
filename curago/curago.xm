@@ -464,6 +464,7 @@ BOOL launchingWidget;
 
 - (void)willAnimateDeactivation:(_Bool)arg1 {
     IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
+    widgetController.view.alpha = 0.0;
     
     [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
         widgetController.view.alpha = 1.0;
@@ -499,6 +500,8 @@ BOOL launchingWidget;
     %orig;
     
     sup = NO;
+    
+    [self performSelector:@selector(finishedAnimatingActivationFully) withObject:nil afterDelay:1.0];
 }
 
 // iOS 7
@@ -507,6 +510,8 @@ BOOL launchingWidget;
     %orig;
     
     sup = NO;
+    
+    [self performSelector:@selector(finishedAnimatingActivationFully) withObject:nil afterDelay:1.0];
 }
 
 - (void)willAnimateActivation {
@@ -519,6 +524,13 @@ BOOL launchingWidget;
     sup = YES;
     
     %orig;
+}
+
+%new
+
+-(void)finishedAnimatingActivationFully {
+    IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
+    widgetController.view.alpha = 1.0;
 }
 
 %end
@@ -701,23 +713,10 @@ CGSize defaultIconSizing;
         orig = [[[widgetViewControllers objectForKey:[self.icon applicationBundleID]] view] pointInside:arg1 withEvent:arg2];
     }
     
-    // AHA MOTHERFUCKERS!
-    
-    if ([arg2 allTouches].count > 1 && orig) {
-        return NO; // WE WANT TO KNOW WHEN THERE'S A TWO FINGER TOUCH BITCH.
-    }
+    // We need to check that if there are two or more touches, and only one is on the icon, then we MUST return NO.
+    // Else, pinching will fail.
     
     return orig;
-}
-
-- (void)touchesBegan:(id)arg1 withEvent:(UIEvent*)arg2 {
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
-        %orig;
-    } else {
-        if ([arg2 allTouches].count < 1) {
-            %orig;
-        }
-    }
 }
 
 %new
@@ -743,7 +742,6 @@ CGSize defaultIconSizing;
     
     if (!inSwitcher) {
         if ([[IBKResources widgetBundleIdentifiers] containsObject:[icon applicationBundleID]]) {
-            NSLog(@"*** [Curago] :: It's a widget! Inserting our UI. %@", [icon applicationBundleID]);
             
             // Widget view controllers will be deallocated when the icon is recycled.
             IBKWidgetViewController *widgetController;
@@ -856,6 +854,8 @@ SBIcon *widgetIcon;
 
 %end
 
+UIPinchGestureRecognizer *pinch;
+
 %hook SBIconScrollView
 
 -(UIScrollView*)initWithFrame:(CGRect)frame {
@@ -863,16 +863,26 @@ SBIcon *widgetIcon;
     
     NSLog(@"*** [Curago] :: Adding pinch gesture onto SBIconScrollView");
 
-    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
+    pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
     [(UIView*)orig addGestureRecognizer:pinch];
     
     for (UIGestureRecognizer *arg in [self gestureRecognizers]) {
-        if ([[arg class] isEqual:[objc_getClass("UIScrollViewDelayedTouchesBeganGestureRecognizer") class]]) {
-            [self removeGestureRecognizer:arg];
+        if ([[arg class] isEqual:[objc_getClass("UIScrollViewPanGestureRecognizer") class]]) {
+            arg.delegate = self;
         }
     }
     
     return orig;
+}
+
+%new
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer*)recTwo {
+    if ([recTwo isEqual:pinch] && gestureRecognizer.numberOfTouches > 1) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 %new
@@ -1200,6 +1210,24 @@ static SBIcon *temp;
 
 MPUNowPlayingController *sharedMPU;
 
+%hook SBMediaController
+
+-(void)_nowPlayingInfoChanged {
+    %orig;
+    
+    // Give it a sec.
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"IBK-UpdateMusic" object:nil];
+}
+
+- (void)setNowPlayingInfo:(id)arg1 {
+    %orig;
+    
+    // Give it a sec.
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"IBK-UpdateMusic" object:nil];
+}
+
+%end
+
 %group iOS8
 
 %hook SBIconImageView
@@ -1228,13 +1256,6 @@ MPUNowPlayingController *sharedMPU;
 %end
 
 %hook SBMediaController
-
--(void)_nowPlayingInfoChanged {
-    %orig;
-    
-    // Give it a sec.
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"IBK-UpdateMusic" object:nil];
-}
 
 -(BOOL)isPlaying {
     return [sharedMPU isPlaying];
