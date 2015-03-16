@@ -638,16 +638,9 @@
     // Modify scaling to be based off icon sizing.
     
     // ShimIcon needs to be looking at scale 1.0
-    // (widgetWidth - self.shimIcon.bounds.size.width) = gap between widget and icon (may be negative)
+    // (widgetWidth - self.shimIcxon.bounds.size.width) = gap between widget and icon (may be negative)
     
-    CGFloat modifier = self.shimIcon.frame.size.width - self.view.bounds.size.width;
-    
-    if (modifier < 0)
-        modifier = -modifier;
-    
-    CGFloat iconScale = (isPad ? 72 : 58) / (self.shimIcon.frame.size.width + modifier);
-    
-    iconScale = 0.41;
+    CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidget];
     
     if (!self.scalingDown)
         scale = iconScale + scale;
@@ -674,6 +667,8 @@
         iconAlpha = ((0.45+iconScale)-scale)*5;
     }
     
+    NSLog(@"WE'LL BE SETTING TO SCALE %f", scale);
+    
     CGFloat red, green, blue;
     [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
     
@@ -693,9 +688,6 @@
         if (self.scalingDown)
             [[self.correspondingIconView _iconImageView] setAlpha:0.0];
     }];
-    
-    NSLog(@"shimIcon.width = %f", self.shimIcon.frame.size.width);
-    NSLog(@"widget.width = %f", self.view.frame.size.width);
 }
 
 -(void)unloadFromPinchGesture {
@@ -738,10 +730,7 @@ float scale2 = 0.0;
             // We remain in position.
         } else {
             // Animate shim icon to top corner.
-            
-            CGFloat widgetWidth = self.view.bounds.size.width;
-            CGFloat iconSize = (isPad ? 72 : 58);
-            CGFloat scale = (iconSize/widgetWidth);
+            CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidget];
             
             CGFloat red, green, blue;
             [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
@@ -753,7 +742,7 @@ float scale2 = 0.0;
             SBIconListView *lst = [self IBKListViewForIdentifierTwo:self.applicationIdentifer];
             
             [UIView animateWithDuration:0.3 animations:^{
-                self.view.transform = CGAffineTransformMakeScale(scale, scale);
+                self.view.transform = CGAffineTransformMakeScale(iconScale, iconScale);
                 self.view.center = CGPointMake(([(UIView*)[self.correspondingIconView _iconImageView] frame].size.width/2)-1, ([(UIView*)[self.correspondingIconView _iconImageView] frame].size.height/2)-1);
                 self.shimIcon.alpha = 1.0;
                 /*for (UIView *subview in self.view.subviews) {

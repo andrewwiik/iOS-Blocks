@@ -128,6 +128,10 @@ static NSDictionary *settings;
 +(NSString*)suffix {
     NSString *suffix = @"";
     
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        suffix = @"~ipad";
+    }
+    
     CGFloat scale = [[UIScreen mainScreen] scale];
     if (scale >= 2.0 && scale < 3.0) {
         suffix = [suffix stringByAppendingString:@"@2x.png"];

@@ -685,7 +685,7 @@ CGSize defaultIconSizing;
     CGRect orig = %orig;
     
     if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
-        orig.origin = CGPointMake(8, [IBKResources heightForWidget] + 2);
+        orig.origin = CGPointMake(8, [IBKResources heightForWidget] + (isPad ? 7 : 2));
     }
     
     return orig;
@@ -951,11 +951,11 @@ NSInteger page = 0;
         
         widget.view.center = CGPointMake(([(UIView*)[view _iconImageView] frame].size.width/2)-1, ([(UIView*)[view _iconImageView] frame].size.height/2)-1);
         
-        CGFloat widgetWidth = widget.view.bounds.size.width;
-        CGFloat iconSize = (isPad ? 72 : 58);
-        CGFloat scale = (iconSize/widgetWidth);
+        CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidget];
         
-        widget.view.transform = CGAffineTransformMakeScale(scale, scale);
+        NSLog(@"BEGININNNG SCALE IS %f", iconScale);
+        
+        widget.view.transform = CGAffineTransformMakeScale(iconScale, iconScale);
     } else if (pinch.state == UIGestureRecognizerStateChanged && widget) {
          NSLog(@"Pinching changed");
         if ([[widgetIcon class] isEqual:[objc_getClass("SBFolderIcon") class]]) return;
@@ -1073,9 +1073,7 @@ NSInteger page = 0;
                 // Icon's label?
             }];
         } else {
-            CGFloat iconScale = ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 72 : 58) / widget.shimIcon.frame.size.width;
-            
-            iconScale = 0.41;
+            CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidget];
             
             CGFloat red, green, blue;
             [widget.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
@@ -1092,9 +1090,9 @@ NSInteger page = 0;
             }];
         }
     } else if (pinch.state == UIGestureRecognizerStateCancelled) {
-        CGFloat widgetWidth = widget.view.bounds.size.width;
-        CGFloat iconSize = (isPad ? 72 : 58);
-        CGFloat scale = (iconSize/widgetWidth);
+        NSLog(@"PINCHING WAS CANCELLED");
+        
+        CGFloat scale = (isPad ? 72 : 60) / [IBKResources heightForWidget];
         
         [UIView animateWithDuration:0.3 animations:^{
             widget.view.transform = CGAffineTransformMakeScale(scale, scale);
