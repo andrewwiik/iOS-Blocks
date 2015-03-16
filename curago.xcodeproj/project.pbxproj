@@ -39,7 +39,6 @@
 /* Begin PBXFileReference section */
 		C907C532193250650084825A /* curago.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = curago.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C907C535193250650084825A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		C907C53A193250650084825A /* control.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = control.txt; path = Package/DEBIAN/control.txt; sourceTree = "<group>"; };
 		C907C53B193250650084825A /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };
 		C907C53D193250650084825A /* PackageVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PackageVersion.plist; sourceTree = "<group>"; };
 		C907C541193250650084825A /* curago.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = curago.plist; path = Package/Library/PreferenceLoader/Preferences/curago.plist; sourceTree = "<group>"; };
@@ -166,7 +165,6 @@
 		C907C539193250650084825A /* DEBIAN */ = {
 			isa = PBXGroup;
 			children = (
-				C907C53A193250650084825A /* control.txt */,
 				C907C53B193250650084825A /* control */,
 			);
 			name = DEBIAN;

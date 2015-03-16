@@ -1,17 +1,17 @@
 Package: com.matchstic.curago
-Name: curago
-Version: 0.1.4-1
-Description: 
+Name: iOS Blocks
+Version: 0.1.4-2
+Description: An integrated widget system, built for perfomance, and the reaction from people when they see it and be like "that's awesome bro, ETA???!!!!". And we reply, "Ayyyy lmao, nope", and they say "Fuck man, y u so cruel? Can i beta test?". And we reply, "Nah bro", and they say "But I'll pay?!!". And we don't reply, because ain't nobody got time fo' that.
 Section: System
-Depends: firmware (>= 5.0), mobilesubstrate, com.chpwn.iconsupport
+Depends: firmware (>= 7.0), mobilesubstrate, com.chpwn.iconsupport
 Conflicts: 
 Replaces: 
 Priority: optional
 Architecture: iphoneos-arm
-Author: Matt Clarke
+Author: iOS Blocks Team
 dev: 
 Homepage: 
 Depiction: 
 Maintainer: 
-Icon: 
+Icon: file:///Library/PreferenceBundles/curago.bundle/curagoIcon@3x.png
 
