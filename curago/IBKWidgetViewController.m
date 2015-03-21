@@ -541,7 +541,44 @@
     
     self.gcTableView = [[IBKGameCenterTableView alloc] initWithIdentifier:self.applicationIdentifer andFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.iconImageView.frame.origin.y-6) andColouration:self.view.backgroundColor];
     
-    [topBase addSubview:self.gcTableView];
+    CAGradientLayer *grad = [CAGradientLayer layer];
+    grad.anchorPoint = CGPointZero;
+    grad.startPoint = CGPointMake(0.5f, 1.0f);
+    grad.endPoint = CGPointMake(0.5f, 0.5f);
+    
+    UIColor *innerColour = [UIColor colorWithWhite:1.0 alpha:1.0];
+    
+    NSArray *colors = [NSArray arrayWithObjects:
+                       (id)[innerColour CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.975f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.95f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.9f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.8f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.7f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.6f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.5f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.4f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.3f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.2f] CGColor],
+                       (id)[[innerColour colorWithAlphaComponent:0.1f] CGColor],
+                       (id)[[UIColor clearColor] CGColor],
+                       nil];
+    
+    colors = [[colors reverseObjectEnumerator] allObjects];
+    
+    grad.colors = colors;
+    grad.bounds = CGRectMake(0, 0, self.view.frame.size.width, self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
+    
+    UIView *tableViewBase = [[UIView alloc] initWithFrame:topBase.frame];
+    tableViewBase.backgroundColor = [UIColor clearColor];
+    
+    tableViewBase.layer.mask = grad;
+    
+    [topBase addSubview:tableViewBase];
+
+    self.gcTableView.layer.masksToBounds = NO;
+    
+    [tableViewBase addSubview:self.gcTableView];
     
     IBKLabel *achLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 100, self.iconImageView.frame.origin.y, 50, self.iconImageView.frame.size.height)];
     achLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
@@ -575,14 +612,6 @@
         suffix = [suffix stringByAppendingString:@".png"];
     }
     
-    UIImageView *fade = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.gcTableView.frame.size.height-10, self.view.bounds.size.width, 10)];
-    fade.backgroundColor = [UIColor clearColor];
-    fade.image = [[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"/Library/Application Support/Curago/Images/fade%@", suffix]] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 1, 10)];
-    fade.alpha = 0.2;
-    fade.opaque = NO;
-    
-    [topBase addSubview:fade];
-    
     // Pull image if available.
     
     UIImage *img = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/LargeBackground%@", [self getPathForMainBundle], suffix]];
@@ -594,9 +623,9 @@
     bg.backgroundColor = [UIColor clearColor];
     bg.alpha = 0.1;
     bg.contentMode = UIViewContentModeScaleAspectFill;
-    bg.frame = self.gcTableView.bounds;
+    bg.frame = tableViewBase.bounds;
     
-    [topBase insertSubview:bg atIndex:0];
+    [tableViewBase insertSubview:bg atIndex:0];
     
     [self setColorAndOrIcon:plist];
 }
