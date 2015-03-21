@@ -2,65 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+     <key>title</key>
+	<string>iOS Blocks</string>
 	<key>items</key>
 	<array>
-     	<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.curago</string>
-			<key>key</key>
-			<string>enabled</string>
-			<key>label</key>
-			<string>Enabled</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Theming</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.curago</string>
-			<key>key</key>
-			<string>isUsingLightFonts</string>
-			<key>label</key>
-			<string>Thin Fonts</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Interface</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.curago</string>
-			<key>key</key>
-			<string>lsShowBatteryPercent</string>
-			<key>label</key>
-			<string>Battery Percent</string>
-		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Convergance © Matchstic, 2013</string>
+			<string>Pushing iOS beyond its limits
+			
+iOS Blocks © 2015</string>
+			<key>footerAlignment</key>
+			<integer>1</integer>
 		</dict>
 	</array>
 </dict>

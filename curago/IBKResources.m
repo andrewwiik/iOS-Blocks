@@ -144,6 +144,23 @@ static NSDictionary *settings;
     return suffix;
 }
 
+//// BEGIN ACTUAL SETTINGS CHECKS.
+
++(BOOL)shouldHideBadgeWhenWidgetExpanded {
+    id temp = settings[@"shouldHideBadge"];
+    return (temp ? [temp boolValue] : NO);
+}
+
++(BOOL)shouldReturnIconsIfNotMoved {
+    id temp = settings[@"returnIcons"];
+    return (temp ? [temp boolValue] : NO);
+}
+
++(BOOL)debugLoggingEnabled {
+    id temp = settings[@"debug"];
+    return (temp ? [temp boolValue] : NO);
+}
+
 +(void)reloadSettings {
     settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
 }

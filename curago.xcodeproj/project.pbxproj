@@ -16,6 +16,10 @@
 		C93BEEC6193F64D900EACE71 /* IBKResources.m in Sources */ = {isa = PBXBuildFile; fileRef = C93BEEC4193F64D900EACE71 /* IBKResources.m */; };
 		C944009919467F5900483B32 /* IBKWidgetViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C944009719467F5900483B32 /* IBKWidgetViewController.h */; };
 		C944009A19467F5900483B32 /* IBKWidgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C944009819467F5900483B32 /* IBKWidgetViewController.m */; };
+		C94890DC1ABDD3680041F86F /* IBKHelpPageViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C94890DA1ABDD3680041F86F /* IBKHelpPageViewController.h */; };
+		C94890DD1ABDD3680041F86F /* IBKHelpPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C94890DB1ABDD3680041F86F /* IBKHelpPageViewController.m */; };
+		C94890FC1ABDDD090041F86F /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C94890E01ABDD9C10041F86F /* M13ProgressView.m */; };
+		C94890FD1ABDDD090041F86F /* M13ProgressViewRing.m in Sources */ = {isa = PBXBuildFile; fileRef = C94890F41ABDD9C10041F86F /* M13ProgressViewRing.m */; };
 		C950B6B519FE6C5E0093B892 /* IBKAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = C950B6B319FE6C5E0093B892 /* IBKAPI.h */; };
 		C950B6B619FE6C5E0093B892 /* IBKAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = C950B6B419FE6C5E0093B892 /* IBKAPI.m */; };
 		C9674CFD198978100094C597 /* UIImageAverageColorAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = C9674CFB198978100094C597 /* UIImageAverageColorAddition.h */; };
@@ -56,6 +60,37 @@
 		C944009719467F5900483B32 /* IBKWidgetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKWidgetViewController.h; sourceTree = "<group>"; };
 		C944009819467F5900483B32 /* IBKWidgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKWidgetViewController.m; sourceTree = "<group>"; };
 		C944009B19467F7F00483B32 /* IBKWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IBKWidget.h; sourceTree = "<group>"; };
+		C94890DA1ABDD3680041F86F /* IBKHelpPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKHelpPageViewController.h; sourceTree = "<group>"; };
+		C94890DB1ABDD3680041F86F /* IBKHelpPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKHelpPageViewController.m; sourceTree = "<group>"; };
+		C94890DF1ABDD9C10041F86F /* M13ProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressView.h; sourceTree = "<group>"; };
+		C94890E01ABDD9C10041F86F /* M13ProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressView.m; sourceTree = "<group>"; };
+		C94890E11ABDD9C10041F86F /* M13ProgressViewBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewBar.h; sourceTree = "<group>"; };
+		C94890E21ABDD9C10041F86F /* M13ProgressViewBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewBar.m; sourceTree = "<group>"; };
+		C94890E31ABDD9C10041F86F /* M13ProgressViewBorderedBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewBorderedBar.h; sourceTree = "<group>"; };
+		C94890E41ABDD9C10041F86F /* M13ProgressViewBorderedBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewBorderedBar.m; sourceTree = "<group>"; };
+		C94890E51ABDD9C10041F86F /* M13ProgressViewFilteredImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewFilteredImage.h; sourceTree = "<group>"; };
+		C94890E61ABDD9C10041F86F /* M13ProgressViewFilteredImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewFilteredImage.m; sourceTree = "<group>"; };
+		C94890E71ABDD9C10041F86F /* M13ProgressViewImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewImage.h; sourceTree = "<group>"; };
+		C94890E81ABDD9C10041F86F /* M13ProgressViewImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewImage.m; sourceTree = "<group>"; };
+		C94890E91ABDD9C10041F86F /* M13ProgressViewLetterpress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewLetterpress.h; sourceTree = "<group>"; };
+		C94890EA1ABDD9C10041F86F /* M13ProgressViewLetterpress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewLetterpress.m; sourceTree = "<group>"; };
+		C94890EB1ABDD9C10041F86F /* M13ProgressViewMetro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewMetro.h; sourceTree = "<group>"; };
+		C94890EC1ABDD9C10041F86F /* M13ProgressViewMetro.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewMetro.m; sourceTree = "<group>"; };
+		C94890ED1ABDD9C10041F86F /* M13ProgressViewMetroDotPolygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewMetroDotPolygon.h; sourceTree = "<group>"; };
+		C94890EE1ABDD9C10041F86F /* M13ProgressViewMetroDotPolygon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewMetroDotPolygon.m; sourceTree = "<group>"; };
+		C94890EF1ABDD9C10041F86F /* M13ProgressViewPie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewPie.h; sourceTree = "<group>"; };
+		C94890F01ABDD9C10041F86F /* M13ProgressViewPie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewPie.m; sourceTree = "<group>"; };
+		C94890F11ABDD9C10041F86F /* M13ProgressViewRadiative.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewRadiative.h; sourceTree = "<group>"; };
+		C94890F21ABDD9C10041F86F /* M13ProgressViewRadiative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewRadiative.m; sourceTree = "<group>"; };
+		C94890F31ABDD9C10041F86F /* M13ProgressViewRing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewRing.h; sourceTree = "<group>"; };
+		C94890F41ABDD9C10041F86F /* M13ProgressViewRing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewRing.m; sourceTree = "<group>"; };
+		C94890F51ABDD9C10041F86F /* M13ProgressViewSegmentedBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewSegmentedBar.h; sourceTree = "<group>"; };
+		C94890F61ABDD9C10041F86F /* M13ProgressViewSegmentedBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewSegmentedBar.m; sourceTree = "<group>"; };
+		C94890F71ABDD9C10041F86F /* M13ProgressViewSegmentedRing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewSegmentedRing.h; sourceTree = "<group>"; };
+		C94890F81ABDD9C10041F86F /* M13ProgressViewSegmentedRing.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewSegmentedRing.m; sourceTree = "<group>"; };
+		C94890F91ABDD9C10041F86F /* M13ProgressViewStripedBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = M13ProgressViewStripedBar.h; sourceTree = "<group>"; };
+		C94890FA1ABDD9C10041F86F /* M13ProgressViewStripedBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewStripedBar.m; sourceTree = "<group>"; };
+		C94890FB1ABDD9C10041F86F /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		C950B6B319FE6C5E0093B892 /* IBKAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKAPI.h; sourceTree = "<group>"; };
 		C950B6B419FE6C5E0093B892 /* IBKAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKAPI.m; sourceTree = "<group>"; };
 		C9674CFB198978100094C597 /* UIImageAverageColorAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageAverageColorAddition.h; sourceTree = "<group>"; };
@@ -122,6 +157,7 @@
 		C907C537193250650084825A /* curago */ = {
 			isa = PBXGroup;
 			children = (
+				C94890DE1ABDD9C10041F86F /* Progress */,
 				C9674CFB198978100094C597 /* UIImageAverageColorAddition.h */,
 				C9674CFC198978100094C597 /* UIImageAverageColorAddition.m */,
 				C9C45D851AB1FC8E0085DA7C /* IBKLabel.h */,
@@ -144,6 +180,8 @@
 				C9E77D4F1A8A50DF003F9893 /* IBKGameCenterTableCell.m */,
 				C9674D0319897EED0094C597 /* IBKNotificationsTableCell.h */,
 				C9674D0419897EED0094C597 /* IBKNotificationsTableCell.m */,
+				C94890DA1ABDD3680041F86F /* IBKHelpPageViewController.h */,
+				C94890DB1ABDD3680041F86F /* IBKHelpPageViewController.m */,
 				C950B6B319FE6C5E0093B892 /* IBKAPI.h */,
 				C950B6B419FE6C5E0093B892 /* IBKAPI.m */,
 				C944009B19467F7F00483B32 /* IBKWidget.h */,
@@ -222,6 +260,42 @@
 			name = DynamicLibraries;
 			sourceTree = "<group>";
 		};
+		C94890DE1ABDD9C10041F86F /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				C94890DF1ABDD9C10041F86F /* M13ProgressView.h */,
+				C94890E01ABDD9C10041F86F /* M13ProgressView.m */,
+				C94890E11ABDD9C10041F86F /* M13ProgressViewBar.h */,
+				C94890E21ABDD9C10041F86F /* M13ProgressViewBar.m */,
+				C94890E31ABDD9C10041F86F /* M13ProgressViewBorderedBar.h */,
+				C94890E41ABDD9C10041F86F /* M13ProgressViewBorderedBar.m */,
+				C94890E51ABDD9C10041F86F /* M13ProgressViewFilteredImage.h */,
+				C94890E61ABDD9C10041F86F /* M13ProgressViewFilteredImage.m */,
+				C94890E71ABDD9C10041F86F /* M13ProgressViewImage.h */,
+				C94890E81ABDD9C10041F86F /* M13ProgressViewImage.m */,
+				C94890E91ABDD9C10041F86F /* M13ProgressViewLetterpress.h */,
+				C94890EA1ABDD9C10041F86F /* M13ProgressViewLetterpress.m */,
+				C94890EB1ABDD9C10041F86F /* M13ProgressViewMetro.h */,
+				C94890EC1ABDD9C10041F86F /* M13ProgressViewMetro.m */,
+				C94890ED1ABDD9C10041F86F /* M13ProgressViewMetroDotPolygon.h */,
+				C94890EE1ABDD9C10041F86F /* M13ProgressViewMetroDotPolygon.m */,
+				C94890EF1ABDD9C10041F86F /* M13ProgressViewPie.h */,
+				C94890F01ABDD9C10041F86F /* M13ProgressViewPie.m */,
+				C94890F11ABDD9C10041F86F /* M13ProgressViewRadiative.h */,
+				C94890F21ABDD9C10041F86F /* M13ProgressViewRadiative.m */,
+				C94890F31ABDD9C10041F86F /* M13ProgressViewRing.h */,
+				C94890F41ABDD9C10041F86F /* M13ProgressViewRing.m */,
+				C94890F51ABDD9C10041F86F /* M13ProgressViewSegmentedBar.h */,
+				C94890F61ABDD9C10041F86F /* M13ProgressViewSegmentedBar.m */,
+				C94890F71ABDD9C10041F86F /* M13ProgressViewSegmentedRing.h */,
+				C94890F81ABDD9C10041F86F /* M13ProgressViewSegmentedRing.m */,
+				C94890F91ABDD9C10041F86F /* M13ProgressViewStripedBar.h */,
+				C94890FA1ABDD9C10041F86F /* M13ProgressViewStripedBar.m */,
+				C94890FB1ABDD9C10041F86F /* README.txt */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -229,6 +303,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C94890DC1ABDD3680041F86F /* IBKHelpPageViewController.h in Headers */,
 				C989B9451AA3C66C0093863B /* IBKWidgetTopBase.h in Headers */,
 				C9674D0119897B070094C597 /* CKBlurView.h in Headers */,
 				C9674D0519897EED0094C597 /* IBKNotificationsTableCell.h in Headers */,
@@ -324,6 +399,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C94890FC1ABDDD090041F86F /* M13ProgressView.m in Sources */,
+				C94890FD1ABDDD090041F86F /* M13ProgressViewRing.m in Sources */,
 				C944009A19467F5900483B32 /* IBKWidgetViewController.m in Sources */,
 				C93BEEC6193F64D900EACE71 /* IBKResources.m in Sources */,
 				C9674D0619897EED0094C597 /* IBKNotificationsTableCell.m in Sources */,
@@ -335,6 +412,7 @@
 				C9674D0219897B070094C597 /* CKBlurView.m in Sources */,
 				C950B6B619FE6C5E0093B892 /* IBKAPI.m in Sources */,
 				C9674CFE198978100094C597 /* UIImageAverageColorAddition.m in Sources */,
+				C94890DD1ABDD3680041F86F /* IBKHelpPageViewController.m in Sources */,
 				C9E77D4D1A8A4C2E003F9893 /* IBKGameCenterTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

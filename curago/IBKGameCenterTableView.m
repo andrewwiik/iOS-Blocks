@@ -40,11 +40,23 @@
         self.loading.text = @"Loading";
         self.loading.numberOfLines = 0;
         self.loading.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:color] ? [UIColor darkTextColor] : [UIColor whiteColor]);
+        self.loading.alpha = 0.0;
         //self.loading.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
         
         [self.loading setLabelSize:kIBKLabelSizingMedium];
         
         [self addSubview:self.loading];
+        
+        self.ring = [[M13ProgressViewRing alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        
+        self.ring.showPercentage = NO; // Do you want to show the percentage in the middle?
+        self.ring.primaryColor = ([IBKNotificationsTableCell isSuperviewColourationBright:color] ? [UIColor darkTextColor] : [UIColor whiteColor]); //The outher color of the ring
+        self.ring.secondaryColor = [UIColor colorWithWhite:1.0 alpha:0.6]; //The inner color of the ring
+        self.ring.indeterminate = YES;// Means that the ring will go in loop
+        
+        self.ring.center = self.center;
+        
+        [self addSubview:self.ring];
         
         [self registerClass:[IBKGameCenterTableCell class] forCellReuseIdentifier:@"gcTableCell"];
         
@@ -70,6 +82,13 @@
             self.data = [self bubbleSort:[arr mutableCopy]];
             
             // We now need to sort our achievements by percentage done.
+            [UIView animateWithDuration:0.3 animations:^{
+                self.ring.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                [self.ring removeFromSuperview];
+                self.ring = nil;
+            }];
+            
             self.loading.alpha = 0.0;
             [self.loading removeFromSuperview];
             self.loading = nil;
@@ -84,6 +103,11 @@
             } else {
                 self.loading.text = @"An unknown error occurred whilst downloading achievements";
             }
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                self.loading.alpha = 1.0;
+                self.ring.alpha = 0.0;
+            }];
         }
         
         NSLog(@"ERRROOOORRRRR: %@", error.userInfo);

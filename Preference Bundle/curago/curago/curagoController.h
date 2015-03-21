@@ -10,8 +10,9 @@
 #import <UIKit/UIKit.h>
 #import <Preferences/Preferences.h>
 #import "IBKHeaderView.h"
+#import <MessageUI/MessageUI.h>
 
-@interface curagoController : PSListController <UITableViewDelegate, UITableViewDataSource>
+@interface curagoController : PSListController <UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) IBKHeaderView *headerview;
 

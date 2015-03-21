@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C94890D81ABDBB050041F86F /* CVLaunchpadModalController.h in Headers */ = {isa = PBXBuildFile; fileRef = C94890D61ABDBB050041F86F /* CVLaunchpadModalController.h */; };
+		C94890D91ABDBB050041F86F /* CVLaunchpadModalController.m in Sources */ = {isa = PBXBuildFile; fileRef = C94890D71ABDBB050041F86F /* CVLaunchpadModalController.m */; };
 		C96194801A98D988001E7914 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C961947F1A98D988001E7914 /* Foundation.framework */; };
 		C96194821A98D988001E7914 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96194811A98D988001E7914 /* UIKit.framework */; };
 		C96194841A98D988001E7914 /* Preferences.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96194831A98D988001E7914 /* Preferences.framework */; };
@@ -19,15 +21,28 @@
 		C96194B31A98DF35001E7914 /* FBShimmeringView.m in Sources */ = {isa = PBXBuildFile; fileRef = C96194AD1A98DF35001E7914 /* FBShimmeringView.m */; };
 		C96194B61A98DF4C001E7914 /* CKBlurView.h in Headers */ = {isa = PBXBuildFile; fileRef = C96194B41A98DF4C001E7914 /* CKBlurView.h */; };
 		C96194B71A98DF4C001E7914 /* CKBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = C96194B51A98DF4C001E7914 /* CKBlurView.m */; };
+		C972E7281AB8906D006DE26B /* OrderedDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = C972E7261AB8906D006DE26B /* OrderedDictionary.h */; };
+		C972E7291AB8906D006DE26B /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = C972E7271AB8906D006DE26B /* OrderedDictionary.m */; };
+		C972E72B1AB89275006DE26B /* libapplist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C972E72A1AB89275006DE26B /* libapplist.dylib */; };
+		C997D1DB1ABB113B00DB4294 /* IBKWidgetSettingsController.h in Headers */ = {isa = PBXBuildFile; fileRef = C997D1D91ABB113B00DB4294 /* IBKWidgetSettingsController.h */; };
+		C997D1DC1ABB113B00DB4294 /* IBKWidgetSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = C997D1DA1ABB113B00DB4294 /* IBKWidgetSettingsController.m */; };
+		C9A94E4D1ABA169E00ED4C69 /* IBKCreatorController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A94E4B1ABA169E00ED4C69 /* IBKCreatorController.h */; };
+		C9A94E4E1ABA169E00ED4C69 /* IBKCreatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */; };
+		C9A94E511ABA1E7600ED4C69 /* IBKCreatorCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */; };
+		C9A94E521ABA1E7600ED4C69 /* IBKCreatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A94E501ABA1E7600ED4C69 /* IBKCreatorCell.m */; };
 		C9CCCBC11A9E5DA800480738 /* iCarousel.h in Headers */ = {isa = PBXBuildFile; fileRef = C9CCCBBF1A9E5DA800480738 /* iCarousel.h */; };
 		C9CCCBC21A9E5DA800480738 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = C9CCCBC01A9E5DA800480738 /* iCarousel.m */; };
 		C9CCCBC51A9E5E5F00480738 /* IBKCarouselController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9CCCBC31A9E5E5F00480738 /* IBKCarouselController.h */; };
 		C9CCCBC61A9E5E5F00480738 /* IBKCarouselController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9CCCBC41A9E5E5F00480738 /* IBKCarouselController.m */; };
 		C9D1ECD01A9F8B9700FC5EF4 /* IBKHeaderView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D1ECCE1A9F8B9700FC5EF4 /* IBKHeaderView.h */; };
 		C9D1ECD11A9F8B9700FC5EF4 /* IBKHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D1ECCF1A9F8B9700FC5EF4 /* IBKHeaderView.m */; };
+		C9DBBE2C1ABC7E330074C42D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9DBBE251ABC7E330074C42D /* CoreGraphics.framework */; };
+		C9DBBE2F1ABC7E330074C42D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9DBBE281ABC7E330074C42D /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C94890D61ABDBB050041F86F /* CVLaunchpadModalController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CVLaunchpadModalController.h; sourceTree = "<group>"; };
+		C94890D71ABDBB050041F86F /* CVLaunchpadModalController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CVLaunchpadModalController.m; sourceTree = "<group>"; };
 		C961947C1A98D988001E7914 /* curago.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = curago.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		C961947F1A98D988001E7914 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C96194811A98D988001E7914 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -52,12 +67,28 @@
 		C96194AD1A98DF35001E7914 /* FBShimmeringView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBShimmeringView.m; sourceTree = "<group>"; };
 		C96194B41A98DF4C001E7914 /* CKBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKBlurView.h; sourceTree = "<group>"; };
 		C96194B51A98DF4C001E7914 /* CKBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKBlurView.m; sourceTree = "<group>"; };
+		C972E7261AB8906D006DE26B /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
+		C972E7271AB8906D006DE26B /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
+		C972E72A1AB89275006DE26B /* libapplist.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libapplist.dylib; path = ../../../../../../../../opt/iOSOpenDev/lib/libapplist.dylib; sourceTree = "<group>"; };
+		C997D1D91ABB113B00DB4294 /* IBKWidgetSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKWidgetSettingsController.h; sourceTree = "<group>"; };
+		C997D1DA1ABB113B00DB4294 /* IBKWidgetSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKWidgetSettingsController.m; sourceTree = "<group>"; };
+		C9A94E4B1ABA169E00ED4C69 /* IBKCreatorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKCreatorController.h; sourceTree = "<group>"; };
+		C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKCreatorController.m; sourceTree = "<group>"; };
+		C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKCreatorCell.h; sourceTree = "<group>"; };
+		C9A94E501ABA1E7600ED4C69 /* IBKCreatorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKCreatorCell.m; sourceTree = "<group>"; };
 		C9CCCBBF1A9E5DA800480738 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		C9CCCBC01A9E5DA800480738 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		C9CCCBC31A9E5E5F00480738 /* IBKCarouselController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKCarouselController.h; sourceTree = "<group>"; };
 		C9CCCBC41A9E5E5F00480738 /* IBKCarouselController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKCarouselController.m; sourceTree = "<group>"; };
 		C9D1ECCE1A9F8B9700FC5EF4 /* IBKHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKHeaderView.h; sourceTree = "<group>"; };
 		C9D1ECCF1A9F8B9700FC5EF4 /* IBKHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKHeaderView.m; sourceTree = "<group>"; };
+		C9DBBE241ABC7E330074C42D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		C9DBBE251ABC7E330074C42D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C9DBBE261ABC7E330074C42D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		C9DBBE271ABC7E330074C42D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		C9DBBE281ABC7E330074C42D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C9DBBE291ABC7E330074C42D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		C9DBBE2A1ABC7E330074C42D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +96,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9DBBE2C1ABC7E330074C42D /* CoreGraphics.framework in Frameworks */,
+				C9DBBE2F1ABC7E330074C42D /* QuartzCore.framework in Frameworks */,
+				C972E72B1AB89275006DE26B /* libapplist.dylib in Frameworks */,
 				C96194801A98D988001E7914 /* Foundation.framework in Frameworks */,
 				C96194841A98D988001E7914 /* Preferences.framework in Frameworks */,
 				C96194821A98D988001E7914 /* UIKit.framework in Frameworks */,
@@ -94,6 +128,14 @@
 		C961947E1A98D988001E7914 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9DBBE241ABC7E330074C42D /* CoreData.framework */,
+				C9DBBE251ABC7E330074C42D /* CoreGraphics.framework */,
+				C9DBBE261ABC7E330074C42D /* CoreTelephony.framework */,
+				C9DBBE271ABC7E330074C42D /* MobileCoreServices.framework */,
+				C9DBBE281ABC7E330074C42D /* QuartzCore.framework */,
+				C9DBBE291ABC7E330074C42D /* Security.framework */,
+				C9DBBE2A1ABC7E330074C42D /* SystemConfiguration.framework */,
+				C972E72A1AB89275006DE26B /* libapplist.dylib */,
 				C961947F1A98D988001E7914 /* Foundation.framework */,
 				C96194811A98D988001E7914 /* UIKit.framework */,
 				C96194831A98D988001E7914 /* Preferences.framework */,
@@ -104,8 +146,18 @@
 		C96194851A98D988001E7914 /* curago */ = {
 			isa = PBXGroup;
 			children = (
+				C972E7261AB8906D006DE26B /* OrderedDictionary.h */,
+				C972E7271AB8906D006DE26B /* OrderedDictionary.m */,
 				C961948D1A98D988001E7914 /* curagoController.h */,
 				C961948E1A98D988001E7914 /* curagoController.m */,
+				C94890D61ABDBB050041F86F /* CVLaunchpadModalController.h */,
+				C94890D71ABDBB050041F86F /* CVLaunchpadModalController.m */,
+				C997D1D91ABB113B00DB4294 /* IBKWidgetSettingsController.h */,
+				C997D1DA1ABB113B00DB4294 /* IBKWidgetSettingsController.m */,
+				C9A94E4B1ABA169E00ED4C69 /* IBKCreatorController.h */,
+				C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */,
+				C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */,
+				C9A94E501ABA1E7600ED4C69 /* IBKCreatorCell.m */,
 				C9D1ECCE1A9F8B9700FC5EF4 /* IBKHeaderView.h */,
 				C9D1ECCF1A9F8B9700FC5EF4 /* IBKHeaderView.m */,
 				C9CCCBC31A9E5E5F00480738 /* IBKCarouselController.h */,
@@ -237,11 +289,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9A94E511ABA1E7600ED4C69 /* IBKCreatorCell.h in Headers */,
 				C96194AF1A98DF35001E7914 /* FBShimmering.h in Headers */,
+				C997D1DB1ABB113B00DB4294 /* IBKWidgetSettingsController.h in Headers */,
 				C9CCCBC51A9E5E5F00480738 /* IBKCarouselController.h in Headers */,
+				C94890D81ABDBB050041F86F /* CVLaunchpadModalController.h in Headers */,
 				C96194B01A98DF35001E7914 /* FBShimmeringLayer.h in Headers */,
+				C972E7281AB8906D006DE26B /* OrderedDictionary.h in Headers */,
 				C96194AE1A98DF35001E7914 /* FBShimmering-Prefix.pch in Headers */,
 				C96194B21A98DF35001E7914 /* FBShimmeringView.h in Headers */,
+				C9A94E4D1ABA169E00ED4C69 /* IBKCreatorController.h in Headers */,
 				C9D1ECD01A9F8B9700FC5EF4 /* IBKHeaderView.h in Headers */,
 				C9CCCBC11A9E5DA800480738 /* iCarousel.h in Headers */,
 				C96194B61A98DF4C001E7914 /* CKBlurView.h in Headers */,
@@ -283,6 +340,37 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ca,
+				cs,
+				da,
+				de,
+				el,
+				"en-GB",
+				es,
+				fi,
+				fr,
+				hr,
+				hu,
+				id,
+				it,
+				ja,
+				ko,
+				ms,
+				nb,
+				nl,
+				pl,
+				"pt-PT",
+				pt,
+				ro,
+				ru,
+				sk,
+				sv,
+				th,
+				tr,
+				uk,
+				vi,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = C96194721A98D988001E7914;
 			productRefGroup = C961947D1A98D988001E7914 /* Products */;
@@ -316,10 +404,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9CCCBC61A9E5E5F00480738 /* IBKCarouselController.m in Sources */,
+				C9A94E4E1ABA169E00ED4C69 /* IBKCreatorController.m in Sources */,
+				C972E7291AB8906D006DE26B /* OrderedDictionary.m in Sources */,
 				C96194B11A98DF35001E7914 /* FBShimmeringLayer.m in Sources */,
 				C961948F1A98D988001E7914 /* curagoController.m in Sources */,
 				C9CCCBC21A9E5DA800480738 /* iCarousel.m in Sources */,
 				C96194B71A98DF4C001E7914 /* CKBlurView.m in Sources */,
+				C997D1DC1ABB113B00DB4294 /* IBKWidgetSettingsController.m in Sources */,
+				C9A94E521ABA1E7600ED4C69 /* IBKCreatorCell.m in Sources */,
+				C94890D91ABDBB050041F86F /* CVLaunchpadModalController.m in Sources */,
 				C9D1ECD11A9F8B9700FC5EF4 /* IBKHeaderView.m in Sources */,
 				C96194B31A98DF35001E7914 /* FBShimmeringView.m in Sources */,
 			);
@@ -387,17 +480,28 @@
 		C96194A21A98D988001E7914 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"armv7,",
+					arm64,
+				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(PROJECT_DIR)/curago",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "curago/curago-Prefix.pch";
 				INFOPLIST_FILE = "curago/curago-Info.plist";
 				INSTALL_PATH = /Library/PreferenceBundles;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+					"/Users/Matt/iOS/Projects/Convergance/Convergance/Convergance/PreferenceBundle/Convergance-Prefs/uservoice-ios-sdk/dist/dist/UserVoiceSDK-3.0.3",
+					"$(PROJECT_DIR)/curago",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = bundle;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
@@ -413,17 +517,28 @@
 		C96194A31A98D988001E7914 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					"armv7,",
+					arm64,
+				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(PROJECT_DIR)/curago",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "curago/curago-Prefix.pch";
 				INFOPLIST_FILE = "curago/curago-Info.plist";
 				INSTALL_PATH = /Library/PreferenceBundles;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+					"/Users/Matt/iOS/Projects/Convergance/Convergance/Convergance/PreferenceBundle/Convergance-Prefs/uservoice-ios-sdk/dist/dist/UserVoiceSDK-3.0.3",
+					"$(PROJECT_DIR)/curago",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = bundle;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;

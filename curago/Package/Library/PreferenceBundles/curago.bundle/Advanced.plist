@@ -2,505 +2,61 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>title</key>
+	<string>iOS Blocks</string>
 	<key>items</key>
 	<array>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Text</string>
+			<string>Icons:</string>
 			<key>footerText</key>
-			<string>Override Convergance's brightness detection of your wallpaper.</string>
+			<string>If a widget pushes icons onto the next SpringBoard page, this will attempt to move them back after closing a widget.</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>transparentText</string>
-			<key>label</key>
-			<string>Translucency</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>textDropShadow</string>
-			<key>label</key>
-			<string>Drop shadows</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>alternateColors</key>
-			<false/>
+			<string>com.matchstic.curago/settingschanged</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
+			<string>com.matchstic.curago</string>
 			<key>key</key>
-			<string>lockTextOverrideEnabled</string>
+			<string>shouldHideBadge</string>
 			<key>label</key>
-			<string>Override colour</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkListCell</string>
-			<key>default</key>
-			<string>Light</string>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>detail</key>
-			<string>PSListItemsController</string>
-			<key>isController</key>
-			<true/>
-			<key>key</key>
-			<string>lockTextOverride</string>
-			<key>label</key>
-			<string>Colour</string>
-			<key>validTitles</key>
-			<array>
-				<string>Light</string>
-				<string>Dark</string>
-			</array>
-			<key>validValues</key>
-			<array>
-				<string>Light</string>
-				<string>Dark</string>
-			</array>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Notifications</string>
-			<key>footerText</key>
-			<string>Increase the contrast of notification 'bubbles' in the new notifications UI.</string>
+			<string>Hide badge on widgets</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>dismissButton</string>
-			<key>label</key>
-			<string>Show dismiss button</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>iOS8QR</string>
-			<key>label</key>
-			<string>Use iOS 8's Quick Reply</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
+			<string>com.matchstic.curago/settingschanged</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
+			<string>com.matchstic.curago</string>
 			<key>key</key>
-			<string>autoOpenFirstNotification</string>
+			<string>returnIcons</string>
 			<key>label</key>
-			<string>Auto expand first notification</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>modernNotificationUI</string>
-			<key>label</key>
-			<string>v1.0 notifications UI</string>
-			<key>enabled</key>
-			<true/>
-			<key>negate</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>increaseModernContrast</string>
-			<key>label</key>
-			<string>Increase contrast</string>
+			<string>Move icons back after closing</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Use the custom notification icons provided by the current Convergance theme.</string>
+			<string>If you are experiencing issues, please enable this, and then reproduce the issue. More data will be in the logs from Crashreporter, which will help for fixing bugs.</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>alternateColors</key>
-			<false/>
+			<string>com.matchstic.curago/settingschanged</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>negate</key>
-			<false/>
-			<key>key</key>
-			<string>squareIcons</string>
-			<key>label</key>
-			<string>Square icons</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>alternateColors</key>
-			<false/>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>negate</key>
-			<true/>
-			<key>key</key>
-			<string>dontUseCustomNotifIcons</string>
-			<key>label</key>
-			<string>Custom icons</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string>Adjust the placement of notifications in the y-axis.</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>default</key>
-			<integer>0</integer>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>notificationAdjustment</string>
-			<key>min</key>
-			<integer>-170</integer>
-			<key>max</key>
-			<integer>300</integer>
-			<key>leftImage</key>
-			<string>UpArrow.png</string>
-			<key>rightImage</key>
-			<string>DownArrow.png</string>
-		</dict>
-		<dict>
-      		<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-              <key>label</key>
-              <string>Reset placement</string>
-              <key>action</key>
-              <string>resetNotifPlacement:</string>
-		</dict>
-		<dict>
-      		<key>cell</key>
-      		<string>PSGroupCell</string>
-      		<key>label</key>
-      		<string>Slide up indicator</string>
-      		<key>footerText</key>
-      		<string>Adjust the effect used to indicate that you must slide up to unlock.</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>useFirstUnlockNotifiy</string>
-			<key>label</key>
-			<string>Enable</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkListCell</string>
-			<key>staticTextMessage</key>
-			<string>The animation to play for the slide up indicator.</string>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>default</key>
-			<string>bounce</string>
-			<key>detail</key>
-			<string>PSListItemsController</string>
-			<key>key</key>
-			<string>firstUnlockNotifyAnimation</string>
-			<key>label</key>
-			<string>Animation</string>
-			<key>validTitles</key>
-			<array>
-				<string>Bounce</string>
-				<string>Pulse</string>
-			</array>
-			<key>validValues</key>
-			<array>
-				<string>bounce</string>
-				<string>pulse</string>
-			</array>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Visibility</string>
-			<key>footerText</key>
-			<string>Adjust various elements of Convergance.</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>hideSideGrabbers</string>
-			<key>label</key>
-			<string>Hide slide indicators</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>hideNotifSeparator</string>
-			<key>label</key>
-			<string>Hide notification lines</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>hideBrightnessSlider</string>
-			<key>label</key>
-			<string>Hide brightness slider</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>disableBatteryUI</string>
-			<key>label</key>
-			<string>Disable charging bar</string>
-		</dict>
-		<dict>
-      		<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSTitleValueCell</string>
-              <key>label</key>
-              <string>Fullscreen music opacity:</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSliderCell</string>
-			<key>default</key>
-			<integer>2</integer>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>fullscreenmusictrans</string>
-			<key>min</key>
-			<integer>0</integer>
-			<key>max</key>
-			<integer>10</integer>
-			<key>leftImage</key>
-			<string>DownArrow.png</string>
-			<key>rightImage</key>
-			<string>UpArrow.png</string>
-		</dict>
-		<dict>
-      		<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-              <key>label</key>
-              <string>Reset opacity</string>
-              <key>action</key>
-              <string>resetMusic:</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Miscellaneous</string>
-			<key>footerText</key>
-			<string>This option only takes effect if blur is set to 0 in Background settings.</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkListCell</string>
-			<key>default</key>
-			<integer>10</integer>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>detail</key>
-			<string>PSListItemsController</string>
-			<key>isController</key>
-			<true/>
-			<key>key</key>
-			<string>lockscreenIdleTime</string>
-			<key>label</key>
-			<string>Lockscreen dim delay</string>
-			<key>validTitles</key>
-			<array>
-				<string>10 seconds</string>
-				<string>15 seconds</string>
-				<string>20 seconds</string>
-				<string>30 seconds</string>
-				<string>40 seconds</string>
-				<string>50 seconds</string>
-				<string>1 minute</string>
-			</array>
-			<key>validValues</key>
-			<array>
-				<integer>10</integer>
-				<integer>15</integer>
-				<integer>20</integer>
-				<string>30</string>
-				<string>40</string>
-				<string>50</string>
-				<string>60</string>
-			</array>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>romanPasscode</string>
-			<key>label</key>
-			<string>Roman numerals on passcode</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>noBlurAtAll</string>
-			<key>label</key>
-			<string>Disable all lockscreen blur</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string>Some devices may have issues with animations. This option disables CPU intensive effects for a smoother experience.</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>alternateColors</key>
-			<false/>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
-			<key>key</key>
-			<string>disableIntensiveEffects</string>
-			<key>label</key>
-			<string>Disable intensive effects</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>PostNotification</key>
-			<string>com.matchstic.Convergance/settingschanged</string>
-			<key>alternateColors</key>
-			<false/>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>com.matchstic.Convergance</string>
+			<string>com.matchstic.curago</string>
 			<key>key</key>
 			<string>debug</string>
 			<key>label</key>

@@ -691,8 +691,10 @@
 }
 
 -(void)unloadFromPinchGesture {
+    CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidget];
+    
     [UIView animateWithDuration:0.3 animations:^{
-        self.view.transform = CGAffineTransformMakeScale(0.0, 0.0);
+        self.view.transform = CGAffineTransformMakeScale(iconScale, iconScale);
         self.view.alpha = 0.0;
         self.iconImageView.alpha = 0.0;
     } completion:^(BOOL finished) {
@@ -969,6 +971,9 @@ float scale2 = 0.0;
         self.viw = nil;
     }
     
+    if (self.widget)
+        self.widget = nil;
+    
     if (self.bundle) {
         [self.bundle unload];
         self.bundle = nil;
@@ -978,9 +983,6 @@ float scale2 = 0.0;
         [self.iconImageView removeFromSuperview];
         self.iconImageView = nil;
     }
-    
-    if (self.widget)
-        self.widget = nil;
     
     if (self.noNotifsLabel) {
         [self.noNotifsLabel removeFromSuperview];

@@ -568,12 +568,6 @@ CGSize defaultIconSizing;
 
 #import <SpringBoard8.1/SBIconImageCrossfadeView.h>
 
-%hook SBIconImageCrossfadeView
-
-
-
-%end
-
 %hook SBIconImageView
 
 - (CGRect)visibleBounds {
