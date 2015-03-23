@@ -9,6 +9,7 @@
 #import "MusicWidgetViewController.h"
 #import <SpringBoard7.0/SBMediaController.h>
 #import "IBKMusicButton.h"
+#import <MediaPlayer/MediaPlayer.h>
 #import <objc/runtime.h>
 
 @interface SBMediaController (iOS8)
@@ -26,10 +27,56 @@
 
 @end
 
+static UIImage *cachedMosaic;
+
 #define IOS8_or_higher ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 #define path @"/var/mobile/Library/Curago/Widgets/com.apple.Music/"
 
 @implementation MusicWidgetViewController
+
+-(UIImage*)mosaicImageOfAlbumArtwork {
+    MPMediaQuery *query = [MPMediaQuery albumsQuery];
+    NSMutableArray *allAlbums = [[query collections] mutableCopy];
+    
+    if (allAlbums.count < 16) {
+        return nil;
+    }
+    
+    // Begin rendering. 4x4 for self.view's frame.
+    
+    CGFloat widthHeight = self.view.frame.size.width/4;
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(self.view.frame.size.width, self.view.frame.size.width), YES, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    UIGraphicsPushContext(context);
+    
+    int column = 0;
+    
+    for (int row = 0; row < 4; row++) {
+        while (column < 4) {
+            int index = arc4random() % (int)allAlbums.count;
+            
+            MPMediaItem *item = [allAlbums[index] representativeItem];
+            MPMediaItemArtwork *image = [item valueForProperty:MPMediaItemPropertyArtwork];
+            UIImage *img = [image imageWithSize:CGSizeMake(widthHeight, widthHeight)];
+            
+            [img drawInRect:CGRectMake(column*widthHeight, row*widthHeight, widthHeight, widthHeight)];
+            
+            [allAlbums removeObjectAtIndex:index]; // No duplicates
+            
+            column++;
+        }
+        
+        column = 0;
+    }
+    
+    // pop context
+    UIGraphicsPopContext();
+    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return outputImage;
+}
 
 -(UIView *)viewWithFrame:(CGRect)frame isIpad:(BOOL)isIpad {
 	if (self.view == nil) {
@@ -40,25 +87,34 @@
 
 		// Alright! If we're iPad, then render text too, else, just artwork.
         
-        self.noMediaPlaying = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, [objc_getClass("IBKResources") widthForWidget]-40, (isIpad ? 207 : 118)-(isIpad ? 50 : 30))];
-        self.noMediaPlaying.numberOfLines = 0;
-        self.noMediaPlaying.text = @"No media playing";
-        self.noMediaPlaying.textAlignment = NSTextAlignmentCenter;
-        self.noMediaPlaying.textColor = [UIColor whiteColor];
-        if (isIpad) {
-            self.noMediaPlaying.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
-        } else {
-            self.noMediaPlaying.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
-        }
-        self.noMediaPlaying.backgroundColor = [UIColor clearColor];
+        UIImage *mosaic = [self mosaicImageOfAlbumArtwork];
+        cachedMosaic = mosaic;
         
-        [self.view addSubview:self.noMediaPlaying];
+        if (!mosaic) {
+            self.noMediaPlaying = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, [objc_getClass("IBKResources") widthForWidget]-40, (isIpad ? 207 : 118)-(isIpad ? 50 : 30))];
+            self.noMediaPlaying.numberOfLines = 0;
+            self.noMediaPlaying.text = @"No media playing";
+            self.noMediaPlaying.textAlignment = NSTextAlignmentCenter;
+            self.noMediaPlaying.textColor = [UIColor whiteColor];
+            if (isIpad) {
+                self.noMediaPlaying.font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+            } else {
+                self.noMediaPlaying.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+            }
+            self.noMediaPlaying.backgroundColor = [UIColor clearColor];
+        
+            [self.view addSubview:self.noMediaPlaying];
+        }
+        
+        // generate mosaic image for self.artwork
         
         // Artwork.
         
         self.artwork = [[UIImageView alloc] initWithFrame:frame];
         self.artwork.backgroundColor = [UIColor clearColor];
         self.artwork.contentMode = UIViewContentModeScaleAspectFill;
+        self.artwork.image = mosaic;
+        self.artwork.alpha = 0.5;
         
         [self.view addSubview:self.artwork];
         
@@ -77,6 +133,7 @@
         if ([(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying]) {
             [self didReceiveUpdateToMusicData:nil];
             
+            self.artwork.alpha = 1.0;
             self.noMediaPlaying.alpha = 0.0;
         }
 	}
@@ -99,10 +156,17 @@
         // Update control buttons state.
         [self setPlayButtonState:[(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying]];
         
-        if (![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying] && ![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] _nowPlayingInfo] [@"artworkData"])
+        if (![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying] && ![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] _nowPlayingInfo] [@"artworkData"]) {
             self.noMediaPlaying.alpha = 1.0;
-        else
+            
+            if (cachedMosaic) {
+                self.artwork.image = cachedMosaic;
+                self.artwork.alpha = 0.5;
+            }
+        } else {
             self.noMediaPlaying.alpha = 0.0;
+            self.artwork.alpha = 1.0;
+        }
     }
 }
 
@@ -114,10 +178,17 @@
     // Update control buttons state.
     [self setPlayButtonState:[(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying]];
     
-    if (![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying] && ![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] ibkArtwork])
+    if (![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying] && ![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] ibkArtwork]) {
         self.noMediaPlaying.alpha = 1.0;
-    else
+    
+        if (cachedMosaic) {
+            self.artwork.image = cachedMosaic;
+            self.artwork.alpha = 0.5;
+        }
+    } else {
         self.noMediaPlaying.alpha = 0.0;
+        self.artwork.alpha = 1.0;
+    }
 }
 
 -(void)setPlayButtonState:(BOOL)state {
