@@ -11,6 +11,7 @@
 @interface BBCNewsSettings : NSObject
 
 +(int)numberOfNewsStoriesToPull;
++(int)updateInterval;
 +(NSString*)currentFeed;
 
 +(void)reloadSettings;

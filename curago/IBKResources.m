@@ -146,6 +146,11 @@ static NSDictionary *settings;
 
 //// BEGIN ACTUAL SETTINGS CHECKS.
 
++(BOOL)bundleIdentiferWantsToBeLocked:(NSString*)bundleIdentifier {
+    NSArray *lockedBundleIdentifiers = settings[@"lockedBundleIdentifiers"];
+    return [lockedBundleIdentifiers containsObject:bundleIdentifier];
+}
+
 +(BOOL)shouldHideBadgeWhenWidgetExpanded {
     id temp = settings[@"shouldHideBadge"];
     return (temp ? [temp boolValue] : NO);

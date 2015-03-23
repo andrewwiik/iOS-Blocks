@@ -78,6 +78,7 @@ NSMutableDictionary *widgetViewControllers;
 
 int icons = 0;
 int currentOrientation = 1;
+int touchesInAppWindowCount = 0;
 
 BOOL animatingIn = NO;
 BOOL rearrangingIcons = NO;
@@ -697,15 +698,14 @@ CGSize defaultIconSizing;
         [widgetViewControllers removeObjectForKey:[self.icon applicationBundleID]];
 }
 
-// Hook hitTest to allow for widget to recieve all touch.
-
 - (BOOL)pointInside:(struct CGPoint)arg1 withEvent:(UIEvent*)arg2 {
-    BOOL orig = %orig;
     
     if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
         // Check if point will be inside our thing.
-        orig = [[[widgetViewControllers objectForKey:[self.icon applicationBundleID]] view] pointInside:arg1 withEvent:arg2];
+        return [[[widgetViewControllers objectForKey:[self.icon applicationBundleID]] view] pointInside:arg1 withEvent:arg2];
     }
+    
+    BOOL orig = %orig;
     
     // We need to check that if there are two or more touches, and only one is on the icon, then we MUST return NO.
     // Else, pinching will fail.
@@ -849,6 +849,7 @@ SBIcon *widgetIcon;
 %end
 
 UIPinchGestureRecognizer *pinch;
+NSObject *panGesture;
 
 %hook SBIconScrollView
 
@@ -863,10 +864,40 @@ UIPinchGestureRecognizer *pinch;
     for (UIGestureRecognizer *arg in [self gestureRecognizers]) {
         if ([[arg class] isEqual:[objc_getClass("UIScrollViewPanGestureRecognizer") class]]) {
             arg.delegate = self;
+            panGesture = arg;
+        } else if ([[arg class] isEqual:[objc_getClass("UIScrollViewPinchGestureRecognizer") class]]) {
+            [orig removeGestureRecognizer:arg];
         }
     }
     
     return orig;
+}
+
+- (void)_updatePagingGesture {
+    %orig;
+    
+    for (UIGestureRecognizer *arg in [self gestureRecognizers]) {
+        if ([[arg class] isEqual:[objc_getClass("UIScrollViewPanGestureRecognizer") class]]) {
+            arg.delegate = self;
+            panGesture = arg;
+        } else if ([[arg class] isEqual:[objc_getClass("UIScrollViewPinchGestureRecognizer") class]]) {
+            [self removeGestureRecognizer:arg];
+        } else if ([[arg class] isEqual:[objc_getClass("UIScrollViewPagingSwipeGestureRecognizer") class]]) {
+            [arg requireGestureRecognizerToFail:pinch];
+        }
+    }
+}
+
+%new
+
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    BOOL isPan = [gestureRecognizer isEqual:panGesture];
+    
+    if (isPan && gestureRecognizer.numberOfTouches > 1) {
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 %new

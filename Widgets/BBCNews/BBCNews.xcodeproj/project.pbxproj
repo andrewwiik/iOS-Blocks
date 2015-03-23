@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C905C8201AC03072006F16A7 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C905C81E1AC03072006F16A7 /* Reachability.h */; };
+		C905C8211AC03072006F16A7 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C905C81F1AC03072006F16A7 /* Reachability.m */; };
+		C905C8231AC030C6006F16A7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C905C8221AC030C6006F16A7 /* SystemConfiguration.framework */; };
 		C96F5E631AB3771800FF783B /* BBCNewsFeedItem.h in Headers */ = {isa = PBXBuildFile; fileRef = C96F5E611AB3771800FF783B /* BBCNewsFeedItem.h */; };
 		C96F5E641AB3771800FF783B /* BBCNewsFeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C96F5E621AB3771800FF783B /* BBCNewsFeedItem.m */; };
 		C96F5E671AB377AA00FF783B /* BBCNewsFeedParser.h in Headers */ = {isa = PBXBuildFile; fileRef = C96F5E651AB377AA00FF783B /* BBCNewsFeedParser.h */; };
@@ -24,6 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C905C81E1AC03072006F16A7 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		C905C81F1AC03072006F16A7 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		C905C8221AC030C6006F16A7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C96F5E611AB3771800FF783B /* BBCNewsFeedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBCNewsFeedItem.h; sourceTree = "<group>"; };
 		C96F5E621AB3771800FF783B /* BBCNewsFeedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBCNewsFeedItem.m; sourceTree = "<group>"; };
 		C96F5E651AB377AA00FF783B /* BBCNewsFeedParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBCNewsFeedParser.h; sourceTree = "<group>"; };
@@ -57,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C905C8231AC030C6006F16A7 /* SystemConfiguration.framework in Frameworks */,
 				C98D8BA61AB21FF500E533E9 /* Foundation.framework in Frameworks */,
 				C98D8BA81AB21FF500E533E9 /* UIKit.framework in Frameworks */,
 			);
@@ -85,6 +92,7 @@
 		C98D8BA41AB21FF500E533E9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C905C8221AC030C6006F16A7 /* SystemConfiguration.framework */,
 				C98D8BA51AB21FF500E533E9 /* Foundation.framework */,
 				C98D8BA71AB21FF500E533E9 /* UIKit.framework */,
 			);
@@ -94,6 +102,8 @@
 		C98D8BA91AB21FF500E533E9 /* BBCNews */ = {
 			isa = PBXGroup;
 			children = (
+				C905C81E1AC03072006F16A7 /* Reachability.h */,
+				C905C81F1AC03072006F16A7 /* Reachability.m */,
 				C98D8BDB1AB2237A00E533E9 /* IBKLabel.h */,
 				C98D8BDC1AB2237A00E533E9 /* IBKLabel.m */,
 				C98D8BB11AB21FF500E533E9 /* BBCNewsContentView.h */,
@@ -203,6 +213,7 @@
 				C98D8BDD1AB2237A00E533E9 /* IBKLabel.h in Headers */,
 				C96F5E6B1AB382E600FF783B /* BBCNewsSettings.h in Headers */,
 				C98D8BC91AB2202100E533E9 /* iCarousel.h in Headers */,
+				C905C8201AC03072006F16A7 /* Reachability.h in Headers */,
 				C96F5E671AB377AA00FF783B /* BBCNewsFeedParser.h in Headers */,
 				C96F5E631AB3771800FF783B /* BBCNewsFeedItem.h in Headers */,
 			);
@@ -277,6 +288,7 @@
 			files = (
 				C96F5E6C1AB382E600FF783B /* BBCNewsSettings.m in Sources */,
 				C98D8BCA1AB2202100E533E9 /* iCarousel.m in Sources */,
+				C905C8211AC03072006F16A7 /* Reachability.m in Sources */,
 				C96F5E681AB377AA00FF783B /* BBCNewsFeedParser.m in Sources */,
 				C98D8BB31AB21FF500E533E9 /* BBCNewsContentView.m in Sources */,
 				C98D8BB61AB21FF500E533E9 /* BBCNewsWidgetViewController.m in Sources */,

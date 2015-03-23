@@ -12,6 +12,9 @@
 #import "IBKLabel.h"
 #import "BBCNewsFeedParser.h"
 #import <objc/runtime.h>
+#import "BBCNewsSettings.h"
+
+static BOOL isUpdating;
 
 @interface IBKAPI : NSObject
 +(CGFloat)heightForContentView;
@@ -81,7 +84,7 @@
         text.backgroundColor = [UIColor clearColor];
         text.tag = 2;
         text.numberOfLines = 2;
-        text.text = @"Loading...";
+        text.text = @"Updating...";
         
         [text setLabelSize:kIBKLabelSizingSmallBold];
         
@@ -97,8 +100,7 @@
         self.feedParser.delegate = self;
         [self.feedParser beginParsing];
         
-        updateTimer = [NSTimer timerWithTimeInterval:3600 target:self selector:@selector(reloadForSettingsChangeOrNewUpdate) userInfo:nil repeats:YES];
-        
+        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:[BBCNewsSettings updateInterval] target:self selector:@selector(reloadForSettingsChangeOrNewUpdate:) userInfo:nil repeats:YES];
     }
     
     return self;
@@ -208,12 +210,13 @@
     UIImageView *imageView = (UIImageView*)[view viewWithTag:1];
     imageView.image = [self.preloadedImages objectForKey:item.identifier];
     
-    if (!imageView.image) {
+    if (![self.preloadedImages objectForKey:item.identifier]) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:item.imageUrl]]];
+            NSError *error;
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:item.imageUrl] options:kNilOptions error:&error]];
             dispatch_async(dispatch_get_main_queue(), ^(void){
                 imageView.image = image;
-                if (image)
+                if (image && !error)
                     [self.preloadedImages setObject:image forKey:item.identifier];
             });
         });
@@ -247,13 +250,14 @@
 
 -(void)feedParserDidStart:(BBCNewsFeedParser*)parser {
     // Began downloading
-    
     _carousel.alpha = 0.0;
     self.loadingView.alpha = 1.0;
 }
 
 -(void)feedParserDidFinish:(BBCNewsFeedParser*)parser {
     // Let iCarousel know that we've loaded this thing.
+    isUpdating = NO;
+    
     @try {
         [_carousel reloadData];
         
@@ -264,22 +268,46 @@
     }
     
     // begin preloading images.
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+    /*dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         for (BBCNewsFeedItem *item in self.items) {
-            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:item.imageUrl]]];
-            if (image)
+            NSError *error;
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:item.imageUrl] options:kNilOptions error:&error]];
+            if (image && !error) {
+                if ([self.preloadedImages count] > 0) {
+                    self.preloadedImages = [NSMutableDictionary dictionary];
+                }
                 [self.preloadedImages setObject:image forKey:item.identifier];
+            }
         }
-    });
+    });*/
 }
 
 -(void)feedParser:(BBCNewsFeedParser *)parser didFailWithError:(NSError *)error {
     // Oh no. Probably no connection or something!
+    
+    // Wait until connection then retry.
+    Reachability *reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    reach.reachableBlock = ^(Reachability *reach) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (reach.isReachable) {
+                [self reloadForSettingsChangeOrNewUpdate:nil];
+            }
+        });
+        
+        [reach stopNotifier];
+    };
+    
+    [reach startNotifier];
 }
 
--(void)reloadForSettingsChangeOrNewUpdate {
-    self.items = [NSMutableArray array];
-    [self.feedParser beginParsing];
+-(void)reloadForSettingsChangeOrNewUpdate:(id)sender {
+    if (!isUpdating) {
+        isUpdating = YES;
+    
+        self.items = [NSMutableArray array];
+        [self.feedParser beginParsing];
+    }
 }
 
 -(void)moveToNewNewsItem:(id)sender {
@@ -300,7 +328,8 @@
 }
 
 -(void)dealloc {
-    [updateTimer invalidate];
+    [self.updateTimer invalidate];
+    self.updateTimer = nil;
     
     self.items = nil;
     self.preloadedImages = nil;

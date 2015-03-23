@@ -35,4 +35,12 @@
 
 +(NSString*)suffix;
 
+// Settings.
+
++(BOOL)bundleIdentiferWantsToBeLocked:(NSString*)bundleIdentifier;
++(BOOL)shouldHideBadgeWhenWidgetExpanded;
++(BOOL)shouldReturnIconsIfNotMoved;
++(BOOL)debugLoggingEnabled;
++(void)reloadSettings;
+
 @end

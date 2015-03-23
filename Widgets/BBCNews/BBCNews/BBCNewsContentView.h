@@ -10,18 +10,19 @@
 #import <UIKit/UIKit.h>
 #import "iCarousel.h"
 #import "BBCNewsFeedParser.h"
+#import "Reachability.h"
 
 @interface BBCNewsContentView : UIView <iCarouselDataSource, iCarouselDelegate, BBCNewsFeedParserDelegate> {
-    NSTimer *updateTimer;
     NSTimer *switcherTimer;
 }
 
 @property (nonatomic, strong) iCarousel *carousel;
+@property (nonatomic, strong) NSTimer *updateTimer;
 @property (nonatomic, strong) BBCNewsFeedParser *feedParser;
 @property (nonatomic, strong) NSMutableArray *items;
 @property (nonatomic, strong) NSMutableDictionary *preloadedImages;
 @property (nonatomic, strong) UIView *loadingView;
 
--(void)reloadForSettingsChangeOrNewUpdate;
+-(void)reloadForSettingsChangeOrNewUpdate:(id)sender;
 
 @end
