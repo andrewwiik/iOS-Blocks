@@ -79,11 +79,13 @@ NSMutableDictionary *widgetViewControllers;
 int icons = 0;
 int currentOrientation = 1;
 int touchesInAppWindowCount = 0;
+int indexOfGrabbedIcon = -1;
+
+id grabbedIcon;
 
 BOOL animatingIn = NO;
 BOOL rearrangingIcons = NO;
 BOOL iWidgets = NO;
-BOOL dontKillIcons = NO;
 BOOL isRotating = NO;
 
 static BBServer* __weak IBKBBServer;
@@ -145,6 +147,36 @@ static BBServer* __weak IBKBBServer;
     NSLog(@"*** [Curago] :: designating column %d for point %@", column, NSStringFromCGPoint(arg1));
     
     return column;
+}
+
+- (id)iconAtPoint:(struct CGPoint)arg1 index:(unsigned long long *)arg2 proposedOrder:(int *)arg3 grabbedIcon:(id)arg4 {
+    id orig = %orig;
+    
+    /* Proposed orderings:
+     * 0 = don't move
+     * 1 = move and shunt icons
+     * 2 = create folder
+     * 3 = move into folder
+     * 4 = drop onto end of page
+     */
+    
+    // Index is grabbed from indexForCoordinate, using the column/row atPoint methods with the passed in CGPoint
+    
+    NSLog(@"ICON AT POINT WITH INDEX: %llu", *arg2);
+    
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[arg4 leafIdentifier]]) {
+        grabbedIcon = arg4;
+        indexOfGrabbedIcon = (int)*arg2;
+        
+        if (*arg3 == 3 || *arg3 == 2) {
+            *arg3 = 1;
+        }
+    } else {
+        grabbedIcon = nil;
+        indexOfGrabbedIcon = -1;
+    }
+    
+    return orig;
 }
 
 - (unsigned int)indexForCoordinate:(struct SBIconCoordinate)arg1 forOrientation:(int)arg2 {
@@ -248,6 +280,11 @@ static BBServer* __weak IBKBBServer;
      //
     */
     
+    /*
+     * Whilst editing, we can assume that the grabbed icon will be at a given index, BEFORE this is called.
+     * Therefore, when we see that index here, it is definitely a widget.
+     */
+    
     if (!cachedIndexes)
         cachedIndexes = [NSMutableDictionary dictionary];
     if (!cachedIndexesLandscape)
@@ -260,7 +297,7 @@ static BBServer* __weak IBKBBServer;
         // Using this will cause issues occasionally.
         bundleIdentifier = [(SBFolderIcon*)icon nodeDescriptionWithPrefix:@"IBK"];
     }
-        
+    
     NSIndexPath *path;
     
     if (orientation == 1 || orientation == 2)
@@ -277,7 +314,7 @@ static BBServer* __weak IBKBBServer;
         return orig;
     }
     
-    NSLog(@"Getting icon co-ordinates");
+    NSLog(@"Getting icon co-ordinates for index %d", index);
     
     if (!movedIndexPaths) {
         //NSLog(@"Creating an NSSet for temporary index holding");
@@ -287,7 +324,7 @@ static BBServer* __weak IBKBBServer;
     BOOL invalid = YES;
     
     // Here, we check whether our icon is in the enabled array, and if so, we add it's coordinates to the indexPath array.
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:bundleIdentifier]) {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:bundleIdentifier] || ([self containsIcon:grabbedIcon] && indexOfGrabbedIcon == index)) {
         // Awesome! Now, we calculate the new coordinates, and add to the array
         //NSLog(@"That one is a widget");
         
@@ -354,7 +391,7 @@ static BBServer* __weak IBKBBServer;
     [movedIndexPaths addObject:pathz];
     
     // Cache this index path - do this on another thread
-    if (![[objc_getClass("SBIconController") sharedInstance] isEditing]) {
+    if (!rearrangingIcons) {
        // NSLog(@"Caching index path");
         if (orientation == 1 || orientation == 2)
             [cachedIndexes setObject:pathz forKey:bundleIdentifier];
@@ -442,6 +479,8 @@ BOOL inSwitcher = NO;
 
 // iOS 8
 
+NSString *lastOpenedWidgetId;
+
 %hook SBAppSwitcherController
 
 - (void)switcherWasDismissed:(BOOL)arg1 {
@@ -451,6 +490,11 @@ BOOL inSwitcher = NO;
 
 - (void)animatePresentationFromDisplayLayout:(id)arg1 withViews:(id)arg2 withCompletion:(id)arg3 {
     inSwitcher = YES;
+    
+    // Oh bollocks. We need to ensure that the last opened widget is reset to showing again.
+    IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:lastOpenedWidgetId];
+    widgetController.view.alpha = 1.0;
+    
     %orig;
 }
 
@@ -498,11 +542,11 @@ BOOL launchingWidget;
 }
 
 - (void)didActivateWithTransactionID:(unsigned long long)arg1 {
+    lastOpenedWidgetId = [self bundleIdentifier];
+    
     %orig;
     
     sup = NO;
-    
-    [self performSelector:@selector(finishedAnimatingActivationFully) withObject:nil afterDelay:1.0];
 }
 
 // iOS 7
@@ -511,8 +555,6 @@ BOOL launchingWidget;
     %orig;
     
     sup = NO;
-    
-    [self performSelector:@selector(finishedAnimatingActivationFully) withObject:nil afterDelay:1.0];
 }
 
 - (void)willAnimateActivation {
@@ -525,13 +567,6 @@ BOOL launchingWidget;
     sup = YES;
     
     %orig;
-}
-
-%new
-
--(void)finishedAnimatingActivationFully {
-    IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
-    widgetController.view.alpha = 1.0;
 }
 
 %end
@@ -780,6 +815,8 @@ CGSize defaultIconSizing;
 %hook SBIconController
 
 - (void)setIsEditing:(BOOL)arg1 {
+    rearrangingIcons = arg1;
+    
     %orig;
     
     if (arg1) {
@@ -787,16 +824,6 @@ CGSize defaultIconSizing;
             [cachedIndexes removeAllObjects];
         //else if (currentOrientation == 3 || currentOrientation == 4)
             [cachedIndexesLandscape removeAllObjects];
-    }
-    
-    rearrangingIcons = arg1;
-}
-
-- (void)_prepareToResetRootIconLists {
-    if (dontKillIcons) {
-        dontKillIcons = NO;
-    } else {
-        %orig;
     }
 }
 
@@ -837,16 +864,6 @@ SBIcon *widgetIcon;
 @interface SBIconScrollView (Additions)
 -(SBIconListView *)IBKListViewForIdentifierTwo:(NSString*)identifier;
 @end
-
-%hook SBLockScreenViewController
-
-- (void)_handleDisplayTurnedOff {
-    dontKillIcons = YES;
-    
-    %orig;
-}
-
-%end
 
 UIPinchGestureRecognizer *pinch;
 NSObject *panGesture;
@@ -1253,6 +1270,10 @@ MPUNowPlayingController *sharedMPU;
 
 %group iOS8
 
+// CoreLocation fixes
+
+
+
 %hook SBIconImageView
 
 %new
@@ -1346,8 +1367,6 @@ MPUNowPlayingController *sharedMPU;
 %end
 
 %end
-
-
 
 #pragma mark Constructor and anti-piracy code
 
