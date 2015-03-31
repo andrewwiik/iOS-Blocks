@@ -825,6 +825,13 @@ float scale2 = 0.0;
     return thing;
 }
 
+-(void)reloadWidgetForSettingsChange {
+    NSLog(@"RELAYING OUT WIDGET FOR SETTINGS CHANGE");
+    
+    [self unloadWidgetInterface];
+    [self layoutViewForPreExpandedWidget];
+}
+
 #pragma mark Rotation handling
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -1022,6 +1029,12 @@ float scale2 = 0.0;
         [self.gcTableView removeFromSuperview];
         self.gcTableView = nil;
     }
+    
+    [topBase removeFromSuperview];
+    topBase = nil;
+    
+    [self.view removeFromSuperview];
+    self.view = nil;
 }
 
 -(void)dealloc {

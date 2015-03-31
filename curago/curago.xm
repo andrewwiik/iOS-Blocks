@@ -1375,6 +1375,17 @@ MPUNowPlayingController *sharedMPU;
 -(void)addExtension:(NSString*)arg1;
 @end
 
+
+static void settingsChangedForWidget(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    
+    NSLog(@"NOTIFICATION RECIEVED: %@", [dict objectForKey:@"changedBundleIdFromSettings"]);
+    
+    // Reload widget for this bundle identifier.
+    IBKWidgetViewController *controller = [widgetViewControllers objectForKey:[dict objectForKey:@"changedBundleIdFromSettings"]];
+    [controller reloadWidgetForSettingsChange];
+}
+
 %ctor {
     
     // Subclass SBIconView at runtime.
@@ -1396,5 +1407,8 @@ MPUNowPlayingController *sharedMPU;
         %init(iOS8);
         
     %init(iWidgets);
+        
+    // Handlers for widget settings.
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, settingsChangedForWidget, CFSTR("com.matchstic.ibk/settingschangeforwidget"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 }
 

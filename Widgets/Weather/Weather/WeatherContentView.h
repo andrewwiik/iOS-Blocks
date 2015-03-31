@@ -11,7 +11,7 @@
 #import <Weather/Weather.h>
 #import "IBKLabel.h"
 
-@interface WeatherContentView : UIView {
+@interface WeatherContentView : UIView <UIScrollViewDelegate> {
     IBKLabel *degreeSymbol;
 }
 
@@ -22,6 +22,10 @@
 @property (nonatomic, strong) IBKLabel *weatherDetail;
 @property (nonatomic, strong) IBKLabel *temperature;
 @property (nonatomic, strong) UIImageView *conditionImage;
+
+@property (nonatomic, strong) UIView *currentWeatherView;
+@property (nonatomic, strong) UIView *fiveDayView;
+@property (nonatomic, strong) UIScrollView *scroll;
 
 -(void)updateForCity:(City*)city;
 

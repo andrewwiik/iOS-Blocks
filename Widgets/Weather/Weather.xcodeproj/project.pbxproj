@@ -11,6 +11,10 @@
 		C916D2AC1AC4B05600462E2D /* IBKLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C916D2AA1AC4B05600462E2D /* IBKLabel.m */; };
 		C97FEEB91AC9E24A0006AB9C /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C97FEEB71AC9E24A0006AB9C /* Reachability.h */; };
 		C97FEEBA1AC9E24A0006AB9C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C97FEEB81AC9E24A0006AB9C /* Reachability.m */; };
+		C988C63E1ACAF25800A6392C /* IBKWeatherFiveView.h in Headers */ = {isa = PBXBuildFile; fileRef = C988C63C1ACAF25800A6392C /* IBKWeatherFiveView.h */; };
+		C988C63F1ACAF25800A6392C /* IBKWeatherFiveView.m in Sources */ = {isa = PBXBuildFile; fileRef = C988C63D1ACAF25800A6392C /* IBKWeatherFiveView.m */; };
+		C988C6421ACAFB3300A6392C /* IBKWeatherResources.h in Headers */ = {isa = PBXBuildFile; fileRef = C988C6401ACAFB3300A6392C /* IBKWeatherResources.h */; };
+		C988C6431ACAFB3300A6392C /* IBKWeatherResources.m in Sources */ = {isa = PBXBuildFile; fileRef = C988C6411ACAFB3300A6392C /* IBKWeatherResources.m */; };
 		C9F3B4EC1AC1B8F50046DD2B /* IBKWeatherLayerFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = C9F3B4EA1AC1B8F50046DD2B /* IBKWeatherLayerFactory.h */; };
 		C9F3B4ED1AC1B8F50046DD2B /* IBKWeatherLayerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F3B4EB1AC1B8F50046DD2B /* IBKWeatherLayerFactory.m */; };
 		C9FFF8EA1AC0620E00488688 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FFF8E91AC0620E00488688 /* Foundation.framework */; };
@@ -26,6 +30,10 @@
 		C916D2AA1AC4B05600462E2D /* IBKLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKLabel.m; sourceTree = "<group>"; };
 		C97FEEB71AC9E24A0006AB9C /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		C97FEEB81AC9E24A0006AB9C /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		C988C63C1ACAF25800A6392C /* IBKWeatherFiveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKWeatherFiveView.h; sourceTree = "<group>"; };
+		C988C63D1ACAF25800A6392C /* IBKWeatherFiveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKWeatherFiveView.m; sourceTree = "<group>"; };
+		C988C6401ACAFB3300A6392C /* IBKWeatherResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKWeatherResources.h; sourceTree = "<group>"; };
+		C988C6411ACAFB3300A6392C /* IBKWeatherResources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKWeatherResources.m; sourceTree = "<group>"; };
 		C9F3B4EA1AC1B8F50046DD2B /* IBKWeatherLayerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKWeatherLayerFactory.h; sourceTree = "<group>"; };
 		C9F3B4EB1AC1B8F50046DD2B /* IBKWeatherLayerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKWeatherLayerFactory.m; sourceTree = "<group>"; };
 		C9FFF8E61AC0620E00488688 /* Weather */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = Weather; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +108,10 @@
 				C916D2AA1AC4B05600462E2D /* IBKLabel.m */,
 				C9FFF8F51AC0620E00488688 /* WeatherContentView.h */,
 				C9FFF8F61AC0620E00488688 /* WeatherContentView.m */,
+				C988C6401ACAFB3300A6392C /* IBKWeatherResources.h */,
+				C988C6411ACAFB3300A6392C /* IBKWeatherResources.m */,
+				C988C63C1ACAF25800A6392C /* IBKWeatherFiveView.h */,
+				C988C63D1ACAF25800A6392C /* IBKWeatherFiveView.m */,
 				C9F3B4EA1AC1B8F50046DD2B /* IBKWeatherLayerFactory.h */,
 				C9F3B4EB1AC1B8F50046DD2B /* IBKWeatherLayerFactory.m */,
 				C9FFF8F81AC0620E00488688 /* WeatherWidgetViewController.h */,
@@ -197,8 +209,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C97FEEB91AC9E24A0006AB9C /* Reachability.h in Headers */,
+				C988C63E1ACAF25800A6392C /* IBKWeatherFiveView.h in Headers */,
 				C916D2AB1AC4B05600462E2D /* IBKLabel.h in Headers */,
 				C9F3B4EC1AC1B8F50046DD2B /* IBKWeatherLayerFactory.h in Headers */,
+				C988C6421ACAFB3300A6392C /* IBKWeatherResources.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,8 +285,10 @@
 			files = (
 				C9F3B4ED1AC1B8F50046DD2B /* IBKWeatherLayerFactory.m in Sources */,
 				C9FFF8F71AC0620E00488688 /* WeatherContentView.m in Sources */,
+				C988C63F1ACAF25800A6392C /* IBKWeatherFiveView.m in Sources */,
 				C9FFF8FA1AC0620E00488688 /* WeatherWidgetViewController.m in Sources */,
 				C916D2AC1AC4B05600462E2D /* IBKLabel.m in Sources */,
+				C988C6431ACAFB3300A6392C /* IBKWeatherResources.m in Sources */,
 				C97FEEBA1AC9E24A0006AB9C /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

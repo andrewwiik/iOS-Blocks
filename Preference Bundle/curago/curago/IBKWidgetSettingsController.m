@@ -67,6 +67,7 @@ NSBundle *strings;
     NSBundle *widgetBundle = [NSBundle bundleWithPath:path];
     
     array = [self loadSpecifiersFromPlistName:@"Root" target:self bundle:widgetBundle];
+    array = [[self localizedSpecifiersForSpecifiers:array andBundle:widgetBundle] mutableCopy];
     
     if ([self respondsToSelector:@selector(navigationItem)]) {
         [[self navigationItem] setTitle:self.displayName];
@@ -98,6 +99,24 @@ NSBundle *strings;
     return array;
 }
 
+-(NSArray *)localizedSpecifiersForSpecifiers:(NSArray *)s andBundle:(NSBundle*)bundle {
+	int i;
+	for (i=0; i<[s count]; i++) {
+		if ([[s objectAtIndex: i] name]) {
+			[[s objectAtIndex: i] setName:[bundle localizedStringForKey:[[s objectAtIndex: i] name] value:[[s objectAtIndex: i] name] table:nil]];
+		}
+		if ([[s objectAtIndex: i] titleDictionary]) {
+			NSMutableDictionary *newTitles = [[NSMutableDictionary alloc] init];
+			for(NSString *key in [[s objectAtIndex: i] titleDictionary]) {
+				[newTitles setObject: [bundle localizedStringForKey:[[[s objectAtIndex: i] titleDictionary] objectForKey:key] value:[[[s objectAtIndex: i] titleDictionary] objectForKey:key] table:nil] forKey: key];
+			}
+			[[s objectAtIndex: i] setTitleDictionary: newTitles];
+		}
+	}
+	
+	return s;
+}
+
 -(NSArray*)notificationWidgetSettings {
     NSMutableArray *array = [NSMutableArray array];
     
@@ -125,6 +144,23 @@ NSBundle *strings;
         return [dict objectForKey:identifier];
     else
         return identifier;
+}
+
+-(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+    NSString *fileString = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", [specifier propertyForKey:@"defaults"]];
+    
+	NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
+	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:fileString]];
+	[defaults setObject:value forKey:specifier.properties[@"key"]];
+	[defaults writeToFile:fileString atomically:YES];
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+	[dict addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"]];
+	[dict setObject:self.bundleIdentifier forKey:@"changedBundleIdFromSettings"];
+	[dict writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
+    
+	CFStringRef toPost = (__bridge CFStringRef)@"com.matchstic.ibk/settingschangeforwidget";
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);
 }
 
 @end

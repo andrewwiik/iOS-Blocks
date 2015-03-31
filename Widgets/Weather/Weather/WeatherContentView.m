@@ -11,6 +11,9 @@
 #import <CoreLocation/CLLocationManager.h>
 #import "IBKWeatherLayerFactory.h"
 #import "WeatherContentView.h"
+#import "IBKWeatherFiveView.h"
+#import "IBKWeatherResources.h"
+#import <objc/runtime.h>
 
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
@@ -23,6 +26,10 @@
 +(id)descriptionForWeatherUpdateDetail:(unsigned)arg1;
 - (id)naturalLanguageDescription;
 
+@end
+
+@interface IBKAPI
++(CGFloat)heightForContentView;
 @end
 
 @implementation WeatherContentView
@@ -53,6 +60,27 @@
         
         [self addSubview:self.animatedView];
         
+        self.scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        if ([IBKWeatherResources showFiveDayForecast])
+            self.scroll.contentSize = CGSizeMake(frame.size.width*2, frame.size.height);
+        self.scroll.backgroundColor = [UIColor clearColor];
+        self.scroll.contentOffset = CGPointZero;
+        self.scroll.delaysContentTouches = NO;
+        self.scroll.showsHorizontalScrollIndicator = NO;
+        self.scroll.showsVerticalScrollIndicator = NO;
+        self.scroll.pagingEnabled = YES;
+        self.scroll.alwaysBounceHorizontal = YES;
+        self.scroll.clipsToBounds = NO;
+        self.scroll.scrollsToTop = NO;
+        self.scroll.delegate = self;
+        self.scroll.canCancelContentTouches = YES;
+        
+        [self addSubview:self.scroll];
+        
+        self.currentWeatherView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+        self.currentWeatherView.backgroundColor = [UIColor clearColor];
+        [self.scroll addSubview:self.currentWeatherView];
+        
         // Data display
         
         self.cityName = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 40, 20)];
@@ -64,7 +92,7 @@
         
         [self.cityName setLabelSize:kIBKLabelSizingLarge];
         
-        [self addSubview:self.cityName];
+        [self.currentWeatherView addSubview:self.cityName];
         
         self.weatherDetail = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-40, 16)];
         self.weatherDetail.text = @"Condition";
@@ -74,7 +102,7 @@
         
         [self.weatherDetail setLabelSize:kIBKLabelSizingSmall];
         
-        [self addSubview:self.weatherDetail];
+        [self.currentWeatherView addSubview:self.weatherDetail];
         
         self.temperature = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-40, 30)];
         self.temperature.text = @"--";
@@ -84,7 +112,7 @@
         
         [self.temperature setLabelSize:kIBKLabelSizingGiant];
         
-        [self addSubview:self.temperature];
+        [self.currentWeatherView addSubview:self.temperature];
         
         degreeSymbol = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 0, 11, 11)];
         degreeSymbol.text = @"°";
@@ -93,7 +121,14 @@
         degreeSymbol.backgroundColor = [UIColor clearColor];
         [degreeSymbol setLabelSize:kIBKLabelSizingLarge];
         
-        [self addSubview:degreeSymbol];
+        [self.currentWeatherView addSubview:degreeSymbol];
+        
+        // Five day forecast
+        
+        self.fiveDayView = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width, 0, frame.size.width, frame.size.height)];
+        self.fiveDayView.backgroundColor = [UIColor clearColor];
+        
+        [self.scroll addSubview:self.fiveDayView];
     }
     
     return self;
@@ -111,24 +146,131 @@
     // Relayout colour area.
     self.gradientLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     self.gradientLayer.bounds = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    [self.layer addSublayer:self.gradientLayer];
-    [self addSubview:self.animatedView];
+    [self.layer insertSublayer:self.gradientLayer below:self.animatedView.layer];
+    
+    [self addSubview:self.scroll];
+    
+    /*[self addSubview:self.animatedView];
     [self addSubview:self.cityName];
     [self addSubview:self.weatherDetail];
     [self addSubview:self.temperature];
-    [self addSubview:degreeSymbol];
+    [self addSubview:degreeSymbol];*/
+    
+    self.scroll.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    if ([IBKWeatherResources showFiveDayForecast])
+        self.scroll.contentSize = CGSizeMake(self.frame.size.width*2, self.frame.size.height);
+    
+    if (self.scroll.contentOffset.x != 0) {
+        self.scroll.contentOffset = CGPointMake(self.frame.size.width, 0);
+    }
+    
+    self.currentWeatherView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     
     [self.cityName sizeToFit];
-    self.cityName.frame = CGRectMake(10, self.frame.size.height*0.125, self.cityName.frame.size.width, self.cityName.frame.size.height);
+    if ([IBKWeatherResources centeredMainUI]) {
+        self.cityName.frame = CGRectMake((self.frame.size.width/2) - (self.cityName.frame.size.width/2), self.frame.size.height*0.125, self.cityName.frame.size.width, self.cityName.frame.size.height);
+    } else {
+        self.cityName.frame = CGRectMake(10, self.frame.size.height*0.125, self.cityName.frame.size.width, self.cityName.frame.size.height);
+    }
     
     [self.weatherDetail sizeToFit];
-    self.weatherDetail.frame = CGRectMake(10, self.cityName.frame.origin.y + self.cityName.frame.size.height + 2, self.weatherDetail.frame.size.width, self.weatherDetail.frame.size.height);
-    
-    [self.temperature sizeToFit];
-    self.temperature.frame = CGRectMake(10, self.weatherDetail.frame.origin.y + self.weatherDetail.frame.size.height + 3, self.temperature.frame.size.width, self.temperature.frame.size.height);
+    if ([IBKWeatherResources centeredMainUI]) {
+        self.weatherDetail.frame = CGRectMake((self.frame.size.width/2) - (self.weatherDetail.frame.size.width/2), self.cityName.frame.origin.y + self.cityName.frame.size.height + 2, self.weatherDetail.frame.size.width, self.weatherDetail.frame.size.height);
+    } else {
+        self.weatherDetail.frame = CGRectMake(10, self.cityName.frame.origin.y + self.cityName.frame.size.height + 2, self.weatherDetail.frame.size.width, self.weatherDetail.frame.size.height);
+    }
     
     [degreeSymbol sizeToFit];
+    [self.temperature sizeToFit];
+    if ([IBKWeatherResources centeredMainUI]) {
+        CGFloat widthPlusDegree = self.temperature.frame.size.width + 2 + degreeSymbol.frame.size.width;
+        self.temperature.frame = CGRectMake((self.frame.size.width/2) - (widthPlusDegree/2), self.weatherDetail.frame.origin.y + self.weatherDetail.frame.size.height + 3, self.temperature.frame.size.width, self.temperature.frame.size.height);
+    } else {
+        self.temperature.frame = CGRectMake(10, self.weatherDetail.frame.origin.y + self.weatherDetail.frame.size.height + 3, self.temperature.frame.size.width, self.temperature.frame.size.height);
+    }
+    
     degreeSymbol.frame = CGRectMake(self.temperature.frame.origin.x + self.temperature.frame.size.width + 2, self.temperature.frame.origin.y + 5, degreeSymbol.frame.size.width, degreeSymbol.frame.size.height);
+    
+    // Forecasts.
+    
+    self.fiveDayView.frame = CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
+    
+    int current = 0;
+    CGFloat height = [objc_getClass("IBKAPI") heightForContentView] / 5;
+    
+    for (UIView *subview in self.fiveDayView.subviews) {
+        subview.frame = CGRectMake(0, (current * height) + 5, self.frame.size.width, height);
+        current++;
+    }
+}
+
+-(void)generateNewFiveDayForecast:(City*)city {
+    NSArray *forecasts = [city dayForecasts];
+    
+    int current = 0;
+    CGFloat height = [objc_getClass("IBKAPI") heightForContentView] / 5;
+    
+    if (forecasts.count == 0) {
+        // No forecasts! :(
+        return;
+    }
+    
+    for (UIView *subview in self.fiveDayView.subviews) {
+        [subview removeFromSuperview];
+    }
+    
+    for (DayForecast *forecast in forecasts) {
+        if (current >= 5) {
+            break;
+        }
+        
+        // Get day name, condition, high and low.
+        int hightemp;
+        if ([[WeatherPreferences sharedPreferences] isCelsius])
+            hightemp = [forecast.high intValue];
+        else
+            hightemp = (([forecast.high intValue]*9)/5) + 32;
+        
+        int lowtemp;
+        if ([[WeatherPreferences sharedPreferences] isCelsius])
+            lowtemp = [forecast.low intValue];
+        else
+            lowtemp = (([forecast.low intValue]*9)/5) + 32;
+        
+        NSBundle *strings = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/Weather.framework"];
+        NSString *dayString;
+        switch (forecast.dayOfWeek) {
+            case 1:
+                dayString = [strings localizedStringForKey:@"SUN" value:@"Sun" table:@"WeatherFrameworkLocalizableStrings"];
+                break;
+            case 2:
+                dayString = [strings localizedStringForKey:@"MON" value:@"Mon" table:@"WeatherFrameworkLocalizableStrings"];
+                break;
+            case 3:
+                dayString = [strings localizedStringForKey:@"TUE" value:@"Tue" table:@"WeatherFrameworkLocalizableStrings"];
+                break;
+            case 4:
+                dayString = [strings localizedStringForKey:@"WED" value:@"Wed" table:@"WeatherFrameworkLocalizableStrings"];
+                break;
+            case 5:
+                dayString = [strings localizedStringForKey:@"THU" value:@"Thu" table:@"WeatherFrameworkLocalizableStrings"];
+                break;
+            case 6:
+                dayString = [strings localizedStringForKey:@"FRI" value:@"Fri" table:@"WeatherFrameworkLocalizableStrings"];
+                break;
+            case 7:
+                dayString = [strings localizedStringForKey:@"SAT" value:@"Sat" table:@"WeatherFrameworkLocalizableStrings"];
+                break;
+            default:
+                dayString = [strings localizedStringForKey:@"SUN" value:@"Sun" table:@"WeatherFrameworkLocalizableStrings"];
+                break;
+        }
+        
+        IBKWeatherFiveView *view = [[IBKWeatherFiveView alloc] initWithFrame:CGRectMake(0, (current * height) + 5, self.frame.size.width, height) day:dayString condition:forecast.icon high:[NSString stringWithFormat:@"%d", hightemp] low:[NSString stringWithFormat:@"%d", lowtemp]];
+        [self.fiveDayView addSubview:view];
+        
+        current++;
+    }
 }
 
 -(void)updateForCity:(City *)city {
@@ -142,7 +284,7 @@
     self.gradientLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     self.gradientLayer.bounds = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     
-    [self.layer addSublayer:self.gradientLayer];
+    [self.layer insertSublayer:self.gradientLayer below:self.animatedView.layer];
     
     self.conditionLayer = [[IBKWeatherLayerFactory sharedInstance] layerForCondition:(int)city.conditionCode isDay:city.isDay];
     self.conditionLayer.opacity = 1.0;
@@ -156,22 +298,33 @@
     self.animatedView.transform = CGAffineTransformMakeScale(0.5, 0.5);
     self.animatedView.frame = CGRectMake(0, 0, self.animatedView.frame.size.width, self.animatedView.frame.size.height);
     
-    [self addSubview:self.animatedView];
+    /*[self addSubview:self.animatedView];
     [self addSubview:self.cityName];
     [self addSubview:self.weatherDetail];
     [self addSubview:self.temperature];
-    [self addSubview:degreeSymbol];
+    [self addSubview:degreeSymbol];*/
+    
+    [self addSubview:self.scroll];
     
     // Now handle displayed data.
     self.cityName.text = city.name;
     self.weatherDetail.text = [[IBKWeatherLayerFactory sharedInstance] nameForCondition:(int)city.conditionCode];
     self.temperature.text = city.temperature;
+    
+    [self generateNewFiveDayForecast:city];
 }
 
 -(UIImage*)iconForCondition:(int)condition isDay:(BOOL)isDay {
     
     
     return nil;
+}
+
+// UIScrollView delegate.
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat alpha = 1.0 - (scrollView.contentOffset.x / scrollView.contentSize.width);
+    self.animatedView.alpha = alpha;
 }
 
 -(void)dealloc {
@@ -195,6 +348,12 @@
     
     [degreeSymbol removeFromSuperview];
     degreeSymbol = nil;
+    
+    [self.currentWeatherView removeFromSuperview];
+    self.currentWeatherView = nil;
+    
+    [self.scroll removeFromSuperview];
+    self.scroll = nil;
 }
 
 @end

@@ -48,6 +48,7 @@
 -(void)removeBulletin:(id)arg2;
 
 -(NSString*)getPathForMainBundle;
+-(void)reloadWidgetForSettingsChange;
 
 -(UIView*)topBase;
 

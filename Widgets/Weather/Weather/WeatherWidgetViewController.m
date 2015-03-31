@@ -11,6 +11,7 @@
 #import <Weather/TWCCityUpdater.h>
 #import <objc/runtime.h>
 #import "Reachability.h"
+#import "IBKWeatherResources.h"
 
 @interface WeatherPreferences (iOS7)
 - (id)loadSavedCityAtIndex:(int)arg1;
@@ -43,6 +44,8 @@
 
 -(UIView *)viewWithFrame:(CGRect)frame isIpad:(BOOL)isIpad {
 	if (!self.contentView) {
+        [IBKWeatherResources reloadSettings];
+        
 		self.contentView = [[WeatherContentView alloc] initWithFrame:frame];
         
         [City initialize];

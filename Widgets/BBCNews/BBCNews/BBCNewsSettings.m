@@ -35,7 +35,6 @@ static __weak BBCNewsContentView *contentView;
 
 +(void)reloadSettings {
     settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.bbcNews.ibkwidget.plist"];
-    [contentView reloadForSettingsChangeOrNewUpdate:nil];
 }
 
 @end
