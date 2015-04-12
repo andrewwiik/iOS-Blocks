@@ -60,7 +60,7 @@
             _shadowAlpha = 0.3;
             break;
         case kIBKLabelSizingGiant:
-            self.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:(isIpadDevice ? 44 : 42)];
+            self.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:(isIpadDevice ? 75 : 42)];
             _blurRadius = 6.5;
             _shadowAlpha = 0.3;
             break;

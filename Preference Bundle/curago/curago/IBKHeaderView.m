@@ -7,21 +7,65 @@
 //
 
 #import "IBKHeaderView.h"
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#include <mach/machine.h>
+
+int getCPUType(void);
 
 #define bundlePath @"/Library/PreferenceBundles/curago.bundle/"
 
 @implementation IBKHeaderView
 
+int getCPUType(void) {
+    NSMutableString *cpu = [[NSMutableString alloc] init];
+    size_t size;
+    cpu_type_t type;
+    cpu_subtype_t subtype;
+    size = sizeof(type);
+    sysctlbyname("hw.cputype", &type, &size, NULL, 0);
+    
+    size = sizeof(subtype);
+    sysctlbyname("hw.cpusubtype", &subtype, &size, NULL, 0);
+    
+    // values for cputype and cpusubtype defined in mach/machine.h
+    if (type == CPU_TYPE_ARM) {
+        switch (subtype) {
+            case CPU_SUBTYPE_ARM_V7:
+            case CPU_SUBTYPE_ARM_V7EM:
+            case CPU_SUBTYPE_ARM_V7F:
+            case CPU_SUBTYPE_ARM_V7K:
+            case CPU_SUBTYPE_ARM_V7M:
+                return 0;
+            default:
+                return 1;
+        }
+    }
+    
+    return cpu;
+}
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        
+        if (self.backmostWidget) {
+            [self.backmostWidget removeFromSuperview];
+            self.backmostWidget = nil;
+        }
+        
         self.backmostWidget = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@HeaderImages/Blue.png", bundlePath]]];
         self.backmostWidget.frame = CGRectMake(0, 0, 100, 100);
         self.backmostWidget.backgroundColor = [UIColor clearColor];
         self.backmostWidget.alpha = 0.0;
         
         [self addSubview:self.backmostWidget];
+        
+        if (self.middleWidget) {
+            [self.middleWidget removeFromSuperview];
+            self.middleWidget = nil;
+        }
         
         self.middleWidget = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@HeaderImages/Green.png", bundlePath]]];
         self.middleWidget.frame = CGRectMake(0, 0, 100, 100);
@@ -30,6 +74,11 @@
         
         [self addSubview:self.middleWidget];
         
+        if (self.foremostWidget) {
+            [self.foremostWidget removeFromSuperview];
+            self.foremostWidget = nil;
+        }
+        
         self.foremostWidget = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@HeaderImages/Red.png", bundlePath]]];
         self.foremostWidget.frame = CGRectMake(0, 0, 100, 100);
         self.foremostWidget.backgroundColor = [UIColor clearColor];
@@ -37,11 +86,26 @@
         
         [self addSubview:self.foremostWidget];
         
-        self.blur = [[CKBlurView alloc] initWithFrame:self.bounds];
-        self.blur.blurCroppingRect = self.bounds;
-        self.blur.alpha = 0.0;
+        //if (getCPUType() == 1) {
+            if (self.blur) {
+                [self.blur removeFromSuperview];
+                self.blur = nil;
+            }
+            
+            self.blur = [[CKBlurView alloc] initWithFrame:self.bounds];
+            self.blur.blurCroppingRect = self.bounds;
+            self.blur.alpha = 0.0;
         
-        [self addSubview:self.blur];
+            [self addSubview:self.blur];
+        //}
+        
+        if (self.shimmer) {
+            [blocksLabel removeFromSuperview];
+            blocksLabel = nil;
+            
+            [self.shimmer removeFromSuperview];
+            self.shimmer = nil;
+        }
         
         self.shimmer = [[FBShimmeringView alloc] initWithFrame:self.bounds];
         self.shimmer.alpha = 0.0;
@@ -62,6 +126,11 @@
         self.shimmer.contentView = blocksLabel;
         
         self.backgroundColor = [UIColor clearColor];
+        
+        if (self.contr) {
+            [self.contr.view removeFromSuperview];
+            self.contr = nil;
+        }
         
         self.contr = [[IBKCarouselController alloc] initWithNibName:nil bundle:nil];
         [self addSubview:self.contr.view];
@@ -93,7 +162,8 @@
     } completion:nil];
     
     [UIView animateWithDuration:0.45 delay:0.55 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.blur.alpha = 1.0;
+        //if (getCPUType() == 1)
+            self.blur.alpha = 1.0;
         self.shimmer.alpha = 1.0;
     } completion:nil];
 }
@@ -115,7 +185,8 @@
     
     self.shimmer.center = self.foremostWidget.center;
     
-    self.shimmer.shimmering = YES;
+    if (getCPUType() == 1)
+        self.shimmer.shimmering = YES;
     
     UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, -[UIScreen mainScreen].bounds.size.height, self.bounds.size.width, 130 + 40 + [UIScreen mainScreen].bounds.size.height)];
     bg.backgroundColor = [UIColor whiteColor];

@@ -20,6 +20,7 @@
 @interface CLLocationManager (iOS8)
 + (void)setAuthorizationStatus:(bool)arg1 forBundleIdentifier:(id)arg2;
 - (id)initWithEffectiveBundleIdentifier:(id)arg1;
+-(void)requestAlwaysAuthorization;
 @end
 
 @interface WeatherLocationManager (iOS7)
@@ -40,7 +41,13 @@
 - (void)updateWeatherForLocation:(id)arg1 city:(id)arg2 withCompletionHandler:(id)arg3;
 @end
 
+static __weak WeatherWidgetViewController *cont;
+
 @implementation WeatherWidgetViewController
+
+static void significantTimeChange(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    [cont updateCurrentCity:nil];
+}
 
 -(UIView *)viewWithFrame:(CGRect)frame isIpad:(BOOL)isIpad {
 	if (!self.contentView) {
@@ -60,6 +67,9 @@
         [self fullUpdate];
         
         [self.contentView updateForCity:self.currentCity];
+    
+        cont = self;
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, significantTimeChange, CFSTR("SignificantTimeChangeNotification"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 	}
 
 	return self.contentView;
@@ -116,12 +126,21 @@
 }
 
 -(void)fullUpdate {
+    if (!locationManager) {
+        //locationManager = [[CLLocationManager alloc] init];
+        
+        //locationManager.delegate = self;
+    }
+    
     if ([CLLocationManager locationServicesEnabled]) {
+        //[CLLocationManager setAuthorizationStatus:3 forBundleIdentifier:@"com.apple.springboard"];
+        
         self.currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
         [self.currentCity associateWithDelegate:self];
         
-        [[WeatherLocationManager sharedWeatherLocationManager] setDelegate:[[CLLocationManager alloc] init]];
-        [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:YES activelyTracking:NO];
+        //[[WeatherLocationManager sharedWeatherLocationManager] setDelegate:locationManager];
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:YES activelyTracking:NO];
         [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingActive:YES];
         [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
         
@@ -151,6 +170,28 @@
         NSLog(@"*** [iOS Blocks :: Weather] Avoided crash: %@", e);
     }
 }
+
+#pragma mark CLLocationManager delegate
+
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(int)status {
+    [self updateCurrentCity:nil];
+}
+
+/*-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    //CLLocation *cur = locations[0];
+    //[locationManager stopUpdatingLocation];
+    
+    // iOS 8
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+        [[objc_getClass("TWCLocationUpdater") sharedLocationUpdater] updateWeatherForLocation:cur city:self.currentCity];
+        NSLog(@"Updating weather...");
+        [[objc_getClass("TWCLocationUpdater") sharedLocationUpdater] handleCompletionForCity:self.currentCity withUpdateDetail:0];
+        NSLog(@"Handled completion.");
+    } else {
+        [[LocationUpdater sharedLocationUpdater] updateWeatherForLocation:cur city:self.currentCity];
+        [[LocationUpdater sharedLocationUpdater] handleCompletionForCity:self.currentCity withUpdateDetail:0];
+    }
+}*/
 
 -(void)dealloc {
     [self.contentView removeFromSuperview];

@@ -30,6 +30,8 @@
 		C9A94E4E1ABA169E00ED4C69 /* IBKCreatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */; };
 		C9A94E511ABA1E7600ED4C69 /* IBKCreatorCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */; };
 		C9A94E521ABA1E7600ED4C69 /* IBKCreatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A94E501ABA1E7600ED4C69 /* IBKCreatorCell.m */; };
+		C9B5A6601AD8546700F0F93D /* IBKWidgetSelectorController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9B5A65E1AD8546700F0F93D /* IBKWidgetSelectorController.h */; };
+		C9B5A6611AD8546700F0F93D /* IBKWidgetSelectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B5A65F1AD8546700F0F93D /* IBKWidgetSelectorController.m */; };
 		C9CCCBC11A9E5DA800480738 /* iCarousel.h in Headers */ = {isa = PBXBuildFile; fileRef = C9CCCBBF1A9E5DA800480738 /* iCarousel.h */; };
 		C9CCCBC21A9E5DA800480738 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = C9CCCBC01A9E5DA800480738 /* iCarousel.m */; };
 		C9CCCBC51A9E5E5F00480738 /* IBKCarouselController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9CCCBC31A9E5E5F00480738 /* IBKCarouselController.h */; };
@@ -76,6 +78,8 @@
 		C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKCreatorController.m; sourceTree = "<group>"; };
 		C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKCreatorCell.h; sourceTree = "<group>"; };
 		C9A94E501ABA1E7600ED4C69 /* IBKCreatorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKCreatorCell.m; sourceTree = "<group>"; };
+		C9B5A65E1AD8546700F0F93D /* IBKWidgetSelectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKWidgetSelectorController.h; sourceTree = "<group>"; };
+		C9B5A65F1AD8546700F0F93D /* IBKWidgetSelectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKWidgetSelectorController.m; sourceTree = "<group>"; };
 		C9CCCBBF1A9E5DA800480738 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		C9CCCBC01A9E5DA800480738 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		C9CCCBC31A9E5E5F00480738 /* IBKCarouselController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKCarouselController.h; sourceTree = "<group>"; };
@@ -154,6 +158,8 @@
 				C94890D71ABDBB050041F86F /* CVLaunchpadModalController.m */,
 				C997D1D91ABB113B00DB4294 /* IBKWidgetSettingsController.h */,
 				C997D1DA1ABB113B00DB4294 /* IBKWidgetSettingsController.m */,
+				C9B5A65E1AD8546700F0F93D /* IBKWidgetSelectorController.h */,
+				C9B5A65F1AD8546700F0F93D /* IBKWidgetSelectorController.m */,
 				C9A94E4B1ABA169E00ED4C69 /* IBKCreatorController.h */,
 				C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */,
 				C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */,
@@ -293,6 +299,7 @@
 				C96194AF1A98DF35001E7914 /* FBShimmering.h in Headers */,
 				C997D1DB1ABB113B00DB4294 /* IBKWidgetSettingsController.h in Headers */,
 				C9CCCBC51A9E5E5F00480738 /* IBKCarouselController.h in Headers */,
+				C9B5A6601AD8546700F0F93D /* IBKWidgetSelectorController.h in Headers */,
 				C94890D81ABDBB050041F86F /* CVLaunchpadModalController.h in Headers */,
 				C96194B01A98DF35001E7914 /* FBShimmeringLayer.h in Headers */,
 				C972E7281AB8906D006DE26B /* OrderedDictionary.h in Headers */,
@@ -412,6 +419,7 @@
 				C96194B71A98DF4C001E7914 /* CKBlurView.m in Sources */,
 				C997D1DC1ABB113B00DB4294 /* IBKWidgetSettingsController.m in Sources */,
 				C9A94E521ABA1E7600ED4C69 /* IBKCreatorCell.m in Sources */,
+				C9B5A6611AD8546700F0F93D /* IBKWidgetSelectorController.m in Sources */,
 				C94890D91ABDBB050041F86F /* CVLaunchpadModalController.m in Sources */,
 				C9D1ECD11A9F8B9700FC5EF4 /* IBKHeaderView.m in Sources */,
 				C96194B31A98DF35001E7914 /* FBShimmeringView.m in Sources */,
@@ -443,7 +451,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -468,7 +476,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -480,10 +488,7 @@
 		C96194A21A98D988001E7914 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"armv7,",
-					arm64,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -517,10 +522,7 @@
 		C96194A31A98D988001E7914 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					"armv7,",
-					arm64,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				FRAMEWORK_SEARCH_PATHS = (

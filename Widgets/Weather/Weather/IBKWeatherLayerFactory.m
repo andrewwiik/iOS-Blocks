@@ -15,7 +15,6 @@
 @property(readonly) id result;
 @property(retain) NSURL * baseURL;
 @property(readonly) NSError * error;
-
 + (id)parser;
 + (id)parseContentsOfURL:(id)arg1;
 - (bool)parseContentsOfURL:(id)arg1;
@@ -41,19 +40,18 @@ static IBKWeatherLayerFactory *shared;
     self = [super init];
     
     if (self) {
-        // Initialise variables.
         self.weatherFrameworkBundle = [NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/Weather.framework"];
     }
     
     return self;
 }
 
-- (id)layerForCondition:(int)arg1 isDay:(_Bool)arg2 {
+- (id)layerForCondition:(int)arg1 isDay:(_Bool)arg2 withLargestSizePossible:(BOOL)largest {
     CAMLParser *parser = [CAMLParser parser];
     parser.delegate = self;
     parser.baseURL = [NSURL URLWithString:@"file:///System/Library/PrivateFrameworks/Weather.framework/"];
     
-    [parser parseContentsOfURL:[self filenameForCondition:arg1 isDay:arg2]];
+    [parser parseContentsOfURL:[self filenameForCondition:arg1 isDay:arg2 largest:largest]];
     
     if (parser.error) {
         NSLog(@"ERROR: %@", parser.error);
@@ -61,6 +59,159 @@ static IBKWeatherLayerFactory *shared;
     } else {
         return parser.result;
     }
+}
+
+-(NSString*)dayNightStringForCurrentVersion:(BOOL)isDay {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
+        return (isDay ? @"_day" : @"_night");
+    } else {
+        return (isDay ? @"-day" : @"-night");
+    }
+}
+
+-(UIImage*)iconForCondition:(int)condition isDay:(BOOL)isDay wantsLargerIcons:(BOOL)larger {
+    // Larger ("centered-")icons are only available on iOS 8+
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0 && larger) {
+        larger = NO;
+    }
+    
+    NSString *filename = @"";
+    
+    switch (condition) {
+        case 0:
+            filename = @"tornado";
+            break;
+        case 1:
+            filename = @"tropical-storm";
+            break;
+        case 2:
+            filename = @"hurricane";
+            break;
+        case 3:
+            filename = [@"severe-thunderstorm" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 4:
+        case 45:
+            filename = [@"mix-rainfall" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 5:
+        case 6:
+        case 8:
+        case 10:
+        case 18:
+            filename = [@"sleet" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 7:
+            filename = @"flurry";
+            break;
+        case 9:
+            filename = [@"drizzle" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 11:
+        case 12:
+            filename = [@"rain" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 13:
+        case 14:
+        case 16:
+        case 42:
+        case 46:
+            filename = @"flurry-snow-snow-shower";
+            break;
+        case 15:
+            filename = @"blowingsnow";
+            break;
+        case 17:
+        case 35:
+            filename = [@"hail" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 19:
+            filename = @"dust";
+            break;
+        case 20:
+            filename = [@"fog" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 21:
+        case 22:
+            filename = @"smoke";
+            break;
+        case 23:
+        case 25:
+            filename = @"ice";
+            break;
+        case 24:
+            filename = @"breezy";
+            break;
+        case 26:
+        case 27:
+        case 28:
+            filename = [@"mostly-cloudy" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 29:
+            filename = [@"partly-cloudy" stringByAppendingString:[self dayNightStringForCurrentVersion:NO]];
+            break;
+        case 30:
+            filename = [@"partly-cloudy" stringByAppendingString:[self dayNightStringForCurrentVersion:YES]];
+            break;
+        case 31:
+        case 33:
+            filename = @"clear-night";
+            break;
+        case 32:
+        case 34:
+            filename = @"mostly-sunny";
+            break;
+        case 36:
+            filename = @"hot";
+            break;
+        case 37:
+        case 38:
+        case 39:
+        case 47:
+            filename = [@"scattered-thunderstorm" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 40:
+            filename = [@"scattered-showers" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 41:
+        case 43:
+            filename = [@"blizzard" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        case 44:
+            filename = [@"partly-cloudy" stringByAppendingString:[self dayNightStringForCurrentVersion:isDay]];
+            break;
+        default:
+            filename = @"no-report";
+            break;
+    }
+    
+    // We now have the filename for that condition.
+    
+    if (larger) {
+        filename = [NSString stringWithFormat:@"centered-%@", filename];
+    }
+    
+    filename = [NSString stringWithFormat:@"/System/Library/PrivateFrameworks/Weather.framework/%@", filename];
+    
+    // Apply iPad ending if needed.
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        filename = [filename stringByAppendingString:@"~ipad"];
+    }
+    
+    NSString *suffix = @"";
+    
+    if ([UIScreen mainScreen].scale > 2.0) {
+        suffix = @"@3x.png";
+    } else if ([UIScreen mainScreen].scale > 1.0) {
+        suffix = @"@2x.png";
+    } else {
+        suffix = @".png";
+    }
+    
+    filename = [filename stringByAppendingString:suffix];
+    
+    return [UIImage imageWithContentsOfFile:filename];
 }
 
 -(NSString*)nameForCondition:(int)condition {
@@ -172,7 +323,7 @@ static IBKWeatherLayerFactory *shared;
     UIColor *color1;
     UIColor *color2;
     
-    // Yes, this is huge. Oh well. It makes sense.
+    // Yes, this is huge. Oh well. It makes sense. ;P
     
     if (isDay) {
         switch (condition) {
@@ -572,7 +723,7 @@ static IBKWeatherLayerFactory *shared;
     return layer;
 }
 
-- (NSURL*)filenameForCondition:(int)arg1 isDay:(_Bool)arg2 {
+- (NSURL*)filenameForCondition:(int)arg1 isDay:(_Bool)arg2 largest:(BOOL)takeLargest {
     // Return NSURL
     
     NSString *predicateString = [NSString stringWithFormat:@"%02d_%@", arg1, (arg2 ? @"day" : @"night")];
@@ -582,9 +733,17 @@ static IBKWeatherLayerFactory *shared;
     NSString *resultPath;
     
     for (NSString *path in filenames) {
-        if ([path rangeOfString:predicateString].location != NSNotFound) {
+        if (takeLargest) {
+            if ([path rangeOfString:predicateString].location == NSNotFound) {
+                break;
+            }
+            
             resultPath = path;
-            break;
+        } else {
+            if ([path rangeOfString:predicateString].location != NSNotFound) {
+                resultPath = path;
+                break;
+            }
         }
     }
     

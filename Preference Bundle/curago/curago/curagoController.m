@@ -104,6 +104,18 @@ static OrderedDictionary *dataSourceUser;
             break;
         case 1:
             specifiers = [self loadSpecifiersFromPlistName:@"Advanced" target:self];
+            
+            // Setup stuff!
+            for (PSSpecifier *specifier in specifiers) {
+                if ([[specifier propertyForKey:@"id"] isEqualToString:@"borderedWidgets"]) {
+                    // This is the right one.
+                    
+                    // Check settings whether this setting should be enabled or not.
+                    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+                    BOOL isEnabled = (settings[@"transparentWidgets"] ? [settings[@"transparentWidgets"] boolValue] : NO);
+                    [specifier setProperty:[NSNumber numberWithBool:isEnabled] forKey:@"enabled"];
+                }
+            }
             break;
         case 2:
             specifiers = [self loadSpecifiersFromPlistName:@"Support" target:self];
@@ -113,6 +125,12 @@ static OrderedDictionary *dataSourceUser;
     specifiers = (NSMutableArray*)[self localizedSpecifiersForSpecifiers:specifiers];
     
     return specifiers;
+}
+
+-(void)setTransparentBackground:(id)value specifier:(id)specifier {
+    [self setPreferenceValue:value specifier:specifier];
+    
+    [self reloadSpecifiers];
 }
 
 - (UITableViewCell*)tableView:(UITableView*)arg1 cellForRowAtIndexPath:(NSIndexPath*)arg2 {
@@ -200,11 +218,11 @@ static OrderedDictionary *dataSourceUser;
     
     NSString *path = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/%@", [self getRedirectedIdentifierIfNeeded:bundleIdentifier]];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+    //if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         return @"";
-    } else {
-        return @"Set widget";
-    }
+    //} else {
+    //    return @"Set widget";
+    //}
 }
 
 -(NSString*)getRedirectedIdentifierIfNeeded:(NSString*)identifier {
@@ -339,7 +357,7 @@ static OrderedDictionary *dataSourceUser;
 }
 
 -(void)openHelpCenter:(id)sender {
-
+    
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {

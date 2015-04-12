@@ -1,0 +1,15 @@
+BUGS:
+
+- Editing mode
+- Close button not touchable on widgets
+- Corner clipping isn’t perfect
+
+OTHER WORK:
+
+- Handle edge case icons when generating icon co-ordinates
+? Handle edge cases when pinching to open
+- Make rotation look nicer
+- Allow user to have widgets “hover” (allows compatibility with stuff like GridLock)
+- Finish up on Help UI
+- Add “Setting up…” UI
+- Rewrite pinch handling to use a UIWindow over icons; kills all pinch issues

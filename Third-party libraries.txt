@@ -1,2 +1,5 @@
 https://github.com/tonymillion/Reachability
 iCarousel
+MarqueeLabel
+ShadowLabel
+BEMAnalogClockView

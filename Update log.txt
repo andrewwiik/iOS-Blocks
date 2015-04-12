@@ -19,3 +19,5 @@ Fixed 6+ rotation
 0.1.5
 
 Fixed icon opening animations
+Added ability to switch which widget to use for an app
+Added option for transparent widget backgrounds

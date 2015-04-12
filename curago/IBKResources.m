@@ -84,7 +84,7 @@ static NSDictionary *settings;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         return 252;
     else if (IS_IPHONE_6)
-        return 146;
+        return 147;
     else if (IS_IPHONE_6_PLUS)
         return 158;
     else
@@ -159,6 +159,16 @@ static NSDictionary *settings;
 +(BOOL)shouldReturnIconsIfNotMoved {
     id temp = settings[@"returnIcons"];
     return (temp ? [temp boolValue] : NO);
+}
+
++(BOOL)transparentBackgroundForWidgets {
+    id temp = settings[@"transparentWidgets"];
+    return (temp ? [temp boolValue] : NO);
+}
+
++(BOOL)showBorderWhenTransparent {
+    id temp = settings[@"borderedWidgets"];
+    return (temp ? [temp boolValue] : YES);
 }
 
 +(BOOL)debugLoggingEnabled {

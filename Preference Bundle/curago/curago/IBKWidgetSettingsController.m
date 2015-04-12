@@ -7,6 +7,7 @@
 //
 
 #import "IBKWidgetSettingsController.h"
+#import "IBKWidgetSelectorController.h"
 
 NSBundle *strings;
 
@@ -26,6 +27,12 @@ NSBundle *strings;
         // Custom initialization
     }
     return self;
+}
+
+-(void)viewWillAppear:(BOOL)view {
+    [super viewWillAppear:view];
+    
+    [self reloadSpecifiers];
 }
 
 -(id)specifiers {
@@ -49,10 +56,12 @@ NSBundle *strings;
     PSSpecifier* groupSpecifier1 = [PSSpecifier groupSpecifierWithName:[strings localizedStringForKey:@"Configuration:" value:@"Configuration:" table:@"Root"]];
     [array addObject:groupSpecifier1];
     
-    PSSpecifier *spe = [PSSpecifier preferenceSpecifierNamed:[strings localizedStringForKey:@"Set widget" value:@"Set widget" table:@"Root"] target:self set:nil get:@selector(getIsWidgetSetForSpecifier:) detail:/*[curagoController class]*/nil cell:PSLinkListCell edit:nil];
+    PSSpecifier *spe = [PSSpecifier preferenceSpecifierNamed:[strings localizedStringForKey:@"Set widget" value:@"Set widget" table:@"Root"] target:self set:nil get:@selector(getIsWidgetSetForSpecifier:) detail:[IBKWidgetSelectorController class] cell:PSLinkListCell edit:nil];
     [spe setProperty:@"IBKWidgetSelectorController" forKey:@"detail"];
     [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"isController"];
     [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"enabled"];
+    [spe setProperty:_bundleIdentifier forKey:@"bundleIdentifier"];
+    [spe setProperty:self.displayName forKey:@"displayName"];
     
     [array addObject:spe];
     
@@ -144,6 +153,17 @@ NSBundle *strings;
         return [dict objectForKey:identifier];
     else
         return identifier;
+}
+
+-(id)readPreferenceValue:(PSSpecifier*)specifier {
+    NSString *fileString = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", [specifier propertyForKey:@"defaults"]];
+    
+	NSDictionary *exampleTweakSettings = [NSDictionary dictionaryWithContentsOfFile:fileString];
+	if (!exampleTweakSettings[specifier.properties[@"key"]]) {
+		return specifier.properties[@"default"];
+	}
+    
+	return exampleTweakSettings[specifier.properties[@"key"]];
 }
 
 -(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {

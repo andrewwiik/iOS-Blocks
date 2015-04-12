@@ -16,7 +16,7 @@
 		</dict>
 		<dict>
 			<key>PostNotification</key>
-			<string>com.matchstic.curago/settingschanged</string>
+			<string>com.matchstic.ibk/settingschanged</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
@@ -30,7 +30,7 @@
 		</dict>
 		<dict>
 			<key>PostNotification</key>
-			<string>com.matchstic.curago/settingschanged</string>
+			<string>com.matchstic.ibk/settingschanged</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
@@ -45,8 +45,46 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Widgets:</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.matchstic.ibk/reloadallwidgets</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.matchstic.curago</string>
+			<key>key</key>
+			<string>transparentWidgets</string>
+			<key>label</key>
+			<string>Transparent background</string>
+			<key>set</key>
+			<string>setTransparentBackground:specifier:</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.matchstic.ibk/reloadallwidgets</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.matchstic.curago</string>
+			<key>key</key>
+			<string>borderedWidgets</string>
+			<key>label</key>
+			<string>Show border</string>
+			<key>id</key>
+			<string>borderedWidgets</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>If you are experiencing issues, please enable this, and then reproduce the issue. More data will be in the logs from Crashreporter, which will help for fixing bugs.</string>
+			<string>If you are experiencing issues, please enable this, and then reproduce the issue. More data will be in the logs from CrashReporter, which will help for fixing bugs.</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>

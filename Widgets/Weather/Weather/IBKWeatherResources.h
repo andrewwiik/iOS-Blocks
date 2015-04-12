@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface IBKWeatherResources : NSObject
 
 +(BOOL)centeredMainUI;
 +(BOOL)showFiveDayForecast;
+
++(UIImage*)iconForCondition:(int)condition isDay:(BOOL)isDay;
 
 +(void)reloadSettings;
 

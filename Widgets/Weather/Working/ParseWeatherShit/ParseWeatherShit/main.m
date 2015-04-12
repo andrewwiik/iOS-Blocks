@@ -14,7 +14,7 @@ int main(int argc, const char * argv[])
     @autoreleasepool {
         
         NSArray *sortedKeys = [[NSString stringWithContentsOfFile:@"/Users/Matt/iOS/Projects/Curago/Git/Widgets/Weather/Working/Names.txt" encoding:NSUTF8StringEncoding error:nil] componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]];
-        
+        printf("NSString *filename = @""\n");
         printf("switch (condition) {\n");
         
         int count = 0;
@@ -23,9 +23,9 @@ int main(int argc, const char * argv[])
             
             printf("\tcase %d:\n", count);
             
-            NSString *color1 = [NSString stringWithFormat:@"\t\treturn [self.weatherFrameworkBundle localizedStringForKey:@\"%@\" value:@\"\" table:@\"WeatherFrameworkLocalizableStrings\"];", key];
+            NSString *color1 = [NSString stringWithFormat:@"\t\tfilename = @\"%@\";", key];
                 
-            printf("%s\n", [color1 cStringUsingEncoding:NSUTF8StringEncoding]);
+            printf("%s\n\t\tbreak;\n", [color1 cStringUsingEncoding:NSUTF8StringEncoding]);
             
             count++;
         }

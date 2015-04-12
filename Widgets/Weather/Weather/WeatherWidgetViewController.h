@@ -12,7 +12,7 @@
 #import "WeatherContentView.h"
 #import <Weather/Weather.h>
 
-@interface WeatherWidgetViewController : NSObject <IBKWidgetDelegate, CityUpdaterDelegate> {
+@interface WeatherWidgetViewController : NSObject <IBKWidgetDelegate, CityUpdaterDelegate, CLLocationManagerDelegate> {
     CLLocationManager *locationManager;
     NSTimer *updater;
 }

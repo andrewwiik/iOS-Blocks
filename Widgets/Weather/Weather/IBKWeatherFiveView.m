@@ -7,6 +7,7 @@
 //
 
 #import "IBKWeatherFiveView.h"
+#import "IBKWeatherLayerFactory.h"
 
 @implementation IBKWeatherFiveView
 
@@ -27,28 +28,30 @@
         [self addSubview:self.dayName];
         
         // Icon.
+        self.icon = [[UIImageView alloc] initWithImage:[[IBKWeatherLayerFactory sharedInstance] iconForCondition:condition isDay:YES wantsLargerIcons:NO]];
+        self.icon.clipsToBounds = NO;
+        self.icon.backgroundColor = [UIColor clearColor];
+        [self addSubview:self.icon];
         
         // High
         
-        self.high = [[IBKLabel alloc] initWithFrame:CGRectZero];
+        self.high = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 0, 20, 21)];
         self.high.text = high;
-        self.high.textAlignment = NSTextAlignmentLeft;
+        self.high.textAlignment = NSTextAlignmentRight;
         self.high.textColor = [UIColor whiteColor];
         self.high.backgroundColor = [UIColor clearColor];
-        [self.high sizeToFit];
         [self.high setLabelSize:kIBKLabelSizingSmall];
         
         [self addSubview:self.high];
         
         // Low
         
-        self.low = [[IBKLabel alloc] initWithFrame:CGRectZero];
+        self.low = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 0, 20, 21)];
         self.low.text = low;
-        self.low.textAlignment = NSTextAlignmentLeft;
+        self.low.textAlignment = NSTextAlignmentRight;
         self.low.textColor = [UIColor whiteColor];
         self.low.backgroundColor = [UIColor clearColor];
         self.low.alpha = 0.5;
-        [self.low sizeToFit];
         [self.low setLabelSize:kIBKLabelSizingSmall];
         
         [self addSubview:self.low];
@@ -62,9 +65,11 @@
     
     self.dayName.frame = CGRectMake(10, (self.frame.size.height/2) - (self.dayName.frame.size.height/2), self.dayName.frame.size.width, self.dayName.frame.size.height);
     
-    self.icon.center = self.center;
+    CGFloat iconWidth = self.icon.frame.size.width*0.8;
+    CGFloat iconHeight = self.icon.frame.size.height*0.8;
+    self.icon.frame = CGRectMake((self.frame.size.width/2) - (iconWidth/2), (self.frame.size.height/2) - (iconHeight/2), iconWidth, iconHeight);
     
-    self.low.frame = CGRectMake(self.frame.size.width - 5 - self.low.frame.size.width, (self.frame.size.height/2) - (self.low.frame.size.height/2), self.low.frame.size.width, self.low.frame.size.height);
+    self.low.frame = CGRectMake(self.frame.size.width - 10 - self.low.frame.size.width, (self.frame.size.height/2) - (self.low.frame.size.height/2), self.low.frame.size.width, self.low.frame.size.height);
     self.high.frame = CGRectMake(self.low.frame.origin.x - self.high.frame.size.width, (self.frame.size.height/2) - (self.high.frame.size.height/2), self.high.frame.size.width, self.high.frame.size.height);
 }
 

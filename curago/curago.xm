@@ -470,8 +470,16 @@ BOOL inSwitcher = NO;
     %orig;
     inSwitcher = NO;
 }
+
 - (void)animatePresentationFromDisplayIdentifier:(id)arg1 withViews:(id)arg2 fromSide:(int)arg3 withCompletion:(id)arg4 {
     inSwitcher = YES;
+    
+    // Oh bollocks. We need to ensure that all widgets are reset to showing again.
+    for (NSString *key in [widgetViewControllers allKeys]) {
+        IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:key];
+        widgetController.view.alpha = 1.0;
+    }
+    
     %orig;
 }
 
@@ -491,9 +499,11 @@ NSString *lastOpenedWidgetId;
 - (void)animatePresentationFromDisplayLayout:(id)arg1 withViews:(id)arg2 withCompletion:(id)arg3 {
     inSwitcher = YES;
     
-    // Oh bollocks. We need to ensure that the last opened widget is reset to showing again.
-    IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:lastOpenedWidgetId];
-    widgetController.view.alpha = 1.0;
+    // Oh bollocks. We need to ensure that all widgets are reset to showing again.
+    for (NSString *key in [widgetViewControllers allKeys]) {
+        IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:key];
+        widgetController.view.alpha = 1.0;
+    }
     
     %orig;
 }
@@ -501,6 +511,8 @@ NSString *lastOpenedWidgetId;
 %end
 
 #import <SpringBoard7.0/SBApplication.h>
+
+#pragma mark Opening/closing app animations
 
 BOOL sup;
 BOOL launchingWidget;
@@ -571,6 +583,8 @@ BOOL launchingWidget;
 
 %end
 
+#pragma mark Injection into icon views
+
 %hook SBIconViewMap
 
 - (id)mappedIconViewForIcon:(id)arg1 {
@@ -585,8 +599,6 @@ BOOL launchingWidget;
 }
 
 %end
-
-#pragma mark Injection into icon views
 
 %hook SBIconView
 
@@ -810,7 +822,7 @@ CGSize defaultIconSizing;
 
 // Fix up fading to app on launch
 
-#pragma mark Handle de-caching indexes when in editing mode, and switcher detection
+#pragma mark Handle de-caching indexes when in editing mode
 
 %hook SBIconController
 
@@ -1170,6 +1182,8 @@ NSInteger page = 0;
 
 %end
 
+#pragma mark Icon badge handling
+
 %hook SBIconBadgeView
 
 static SBIcon *temp;
@@ -1196,6 +1210,51 @@ static SBIcon *temp;
     }
     
     return %orig(arg1);
+}
+
+-(void)layoutSubviews {
+    %orig;
+    
+    [[self superview] addSubview:self]; // Bring to front.
+}
+
+%end
+
+#pragma mark Close button handling
+
+@interface SBCloseBoxView : UIView
+@end
+
+%hook SBCloseBoxView
+
+-(void)layoutSubviews {
+    %orig;
+    
+    [[self superview] addSubview:self]; // Bring to front.
+}
+
+%end
+
+#pragma mark Handle uninstallation of apps
+
+%hook SBApplication
+
+- (void)prepareForUninstallation {
+    %orig;
+    
+    NSString *bundleId;
+    if ([self respondsToSelector:@selector(bundleIdentifier)]) {
+        bundleId = [self bundleIdentifier];
+    } else {
+        bundleId = [self displayIdentifier];
+    }
+    
+    IBKWidgetViewController *contr = [widgetViewControllers objectForKey:bundleId];
+    [widgetViewControllers removeObjectForKey:bundleId];
+    [contr unloadWidgetInterface];
+    contr = nil;
+    
+    [IBKResources removeIdentifier:bundleId];
 }
 
 %end
@@ -1235,6 +1294,8 @@ static SBIcon *temp;
 
 %end
 
+#pragma mark Media data handling
+
 // iOS 8 shit.
 
 #include <MediaRemote/MediaRemote.h>
@@ -1270,15 +1331,11 @@ MPUNowPlayingController *sharedMPU;
 
 %group iOS8
 
-// CoreLocation fixes
-
-
-
 %hook SBIconImageView
 
 %new
 -(id)alternateIconView {
-    return nil; // Small fix for Auxo of all things (?!)
+    return nil; // Small fix for Auxo 3 of all things?!
 }
 
 %end
@@ -1352,6 +1409,8 @@ MPUNowPlayingController *sharedMPU;
 
 %end
 
+#pragma mark iWidgets fixes
+
 %group iWidgets
 
 %hook IWWidgetsView
@@ -1368,23 +1427,38 @@ MPUNowPlayingController *sharedMPU;
 
 %end
 
+#pragma mark Settings callbacks
+
+static void settingsChangedForWidget(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    [IBKResources reloadSettings];
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    
+    // Reload widget for this bundle identifier.
+    IBKWidgetViewController *controller = [widgetViewControllers objectForKey:[dict objectForKey:@"changedBundleIdFromSettings"]];
+    [controller reloadWidgetForSettingsChange];
+}
+
+static void reloadAllWidgets(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    // Reload widget for this bundle identifier.
+    [IBKResources reloadSettings];
+    
+    for (NSString *key in [widgetViewControllers allKeys]) {
+        IBKWidgetViewController *controller = [widgetViewControllers objectForKey:key];
+        [controller reloadWidgetForSettingsChange];
+    }
+}
+
+static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    [IBKResources reloadSettings];
+}
+
 #pragma mark Constructor and anti-piracy code
 
 @interface ISIconSupport : NSObject
 +(instancetype)sharedInstance;
 -(void)addExtension:(NSString*)arg1;
 @end
-
-
-static void settingsChangedForWidget(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
-    
-    NSLog(@"NOTIFICATION RECIEVED: %@", [dict objectForKey:@"changedBundleIdFromSettings"]);
-    
-    // Reload widget for this bundle identifier.
-    IBKWidgetViewController *controller = [widgetViewControllers objectForKey:[dict objectForKey:@"changedBundleIdFromSettings"]];
-    [controller reloadWidgetForSettingsChange];
-}
 
 %ctor {
     
@@ -1408,7 +1482,11 @@ static void settingsChangedForWidget(CFNotificationCenterRef center, void *obser
         
     %init(iWidgets);
         
+    [IBKResources reloadSettings];
+        
     // Handlers for widget settings.
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, settingsChangedForWidget, CFSTR("com.matchstic.ibk/settingschangeforwidget"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, reloadAllWidgets, CFSTR("com.matchstic.ibk/reloadallwidgets"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, reloadSettings, CFSTR("com.matchstic.ibk/reloadsettings"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 }
 

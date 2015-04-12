@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <Weather/Weather.h>
 #import "IBKLabel.h"
+#import "IBKMarqueeLabel.h"
 
 @interface WeatherContentView : UIView <UIScrollViewDelegate> {
     IBKLabel *degreeSymbol;
@@ -18,8 +19,8 @@
 @property (nonatomic, strong) UIView *animatedView;
 @property (nonatomic, strong) CALayer *conditionLayer;
 @property (nonatomic, strong) CALayer *gradientLayer;
-@property (nonatomic, strong) IBKLabel *cityName;
-@property (nonatomic, strong) IBKLabel *weatherDetail;
+@property (nonatomic, strong) IBKMarqueeLabel *cityName;
+@property (nonatomic, strong) IBKMarqueeLabel *weatherDetail;
 @property (nonatomic, strong) IBKLabel *temperature;
 @property (nonatomic, strong) UIImageView *conditionImage;
 

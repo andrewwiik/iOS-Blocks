@@ -40,6 +40,8 @@
 +(BOOL)bundleIdentiferWantsToBeLocked:(NSString*)bundleIdentifier;
 +(BOOL)shouldHideBadgeWhenWidgetExpanded;
 +(BOOL)shouldReturnIconsIfNotMoved;
++(BOOL)transparentBackgroundForWidgets;
++(BOOL)showBorderWhenTransparent;
 +(BOOL)debugLoggingEnabled;
 +(void)reloadSettings;
 

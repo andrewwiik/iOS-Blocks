@@ -231,6 +231,8 @@
     self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
     self.gradientLayer.opacity = 0.0;
     
+    [self setupTransparentWidgetIfNeeded:infoPlist];
+    
     self.isWidgetLoaded = YES;
 }
 
@@ -256,11 +258,54 @@
     float blue = ((baseValue >> 8) & 0xFF)/255.0f;
     float alpha = ((baseValue >> 0) & 0xFF)/255.0f;
     
-    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];;
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 -(BOOL)objcWidgetHasGradient {
     return [self.widget respondsToSelector:@selector(wantsGradientBackground)] && [self.widget wantsGradientBackground] && [self.widget respondsToSelector:@selector(gradientBackgroundColors)];
+}
+
+-(void)setupTransparentWidgetIfNeeded:(NSDictionary*)infoPlist {
+    if ([IBKResources transparentBackgroundForWidgets] && [IBKResources showBorderWhenTransparent]) {
+        // We have a transparent background with border.
+        
+        NSString *colorHex;
+        UIColor *final;
+        
+        if (infoPlist[@"customGradientColors"] || [self objcWidgetHasGradient]) {
+            if ([self.widget respondsToSelector:@selector(gradientBackgroundColors)]) {
+                colorHex = [self.widget gradientBackgroundColors][0];
+            } else if ([self.widget respondsToSelector:@selector(gradientBackgroundColorsUIColor)]) {
+                final = [self.widget gradientBackgroundColorsUIColor][0];
+            } else {
+                colorHex = infoPlist[@"customGradientColors"][0];
+            }
+        } else if (infoPlist[@"customColor"] || [self.widget respondsToSelector:@selector(customHexColor)]) {
+            // Color is saved as a hex string; #FFFFFF.
+            
+            if ([self.widget respondsToSelector:@selector(customHexColor)]) {
+                colorHex = [self.widget customHexColor];
+            } else {
+                colorHex = infoPlist[@"customColor"];
+            }
+        } else {
+            CGFloat red, green, blue;
+            [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
+            final = [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+        }
+        
+        if (!final && colorHex) {
+            final = [self colorFromString:colorHex];
+        }
+        
+        CGFloat red, green, blue;
+        [final getRed:&red green:&green blue:&blue alpha:nil];
+        
+        final = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
+        
+        self.view.layer.borderColor = final.CGColor;
+        self.view.layer.borderWidth = 1.5;
+    }
 }
 
 -(void)setColorAndOrIcon:(NSDictionary*)infoPlist {
@@ -641,11 +686,18 @@
     self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
     self.view.layer.shadowOpacity = 0.0;
     
-    CGFloat red, green, blue;
-    [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
+    if ([IBKResources transparentBackgroundForWidgets]) {
+        if ([IBKResources showBorderWhenTransparent]) {
+            const CGFloat *components = CGColorGetComponents(self.view.layer.borderColor);
+            self.view.layer.borderColor = [UIColor colorWithRed:components[0] green:components[1] blue:components[2] alpha:1.0].CGColor;
+        }
+    } else {
+        CGFloat red, green, blue;
+        [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
     
-    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
-    self.gradientLayer.opacity = 1.0;
+        self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+        self.gradientLayer.opacity = 1.0;
+    }
     
     // Set alpha of icon image view
     self.iconImageView.alpha = 1.0;
@@ -698,11 +750,18 @@
     
     NSLog(@"WE'LL BE SETTING TO SCALE %f", scale);
     
-    CGFloat red, green, blue;
-    [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
-    
-    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0-iconAlpha];
-    self.gradientLayer.opacity = 1.0-iconAlpha;
+    if ([IBKResources transparentBackgroundForWidgets]) {
+        if ([IBKResources showBorderWhenTransparent]) {
+            const CGFloat *components = CGColorGetComponents(self.view.layer.borderColor);
+            self.view.layer.borderColor = [UIColor colorWithRed:components[0] green:components[1] blue:components[2] alpha:1.0-iconAlpha].CGColor;
+        }
+    } else {
+        CGFloat red, green, blue;
+        [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
+        
+        self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1.0-iconAlpha];
+        self.gradientLayer.opacity = 1.0-iconAlpha;
+    }
     
     [UIView animateWithDuration:duration animations:^{
         self.view.transform = CGAffineTransformMakeScale((fin ? 1.0 : scale), (fin ? 1.0 : scale));
@@ -763,6 +822,14 @@ float scale2 = 0.0;
             // Animate shim icon to top corner.
             CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidget];
             
+            const CGFloat *components;
+            
+            if ([IBKResources transparentBackgroundForWidgets]) {
+                if ([IBKResources showBorderWhenTransparent]) {
+                    components = CGColorGetComponents(self.view.layer.borderColor);
+                }
+            }
+            
             CGFloat red, green, blue;
             [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
             
@@ -783,8 +850,14 @@ float scale2 = 0.0;
                 
                 self.iconImageView.alpha = 0.0;
                 
-                self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
-                self.gradientLayer.opacity = 0.0;
+                if ([IBKResources transparentBackgroundForWidgets]) {
+                    if ([IBKResources showBorderWhenTransparent]) {
+                        self.view.layer.borderColor = [UIColor colorWithRed:components[0] green:components[1] blue:components[2] alpha:0.0].CGColor;
+                    }
+                } else {
+                    self.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
+                    self.gradientLayer.opacity = 0.0;
+                }
                 
                 // Reload everything.
                 [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] removeAllCachedIcons];
