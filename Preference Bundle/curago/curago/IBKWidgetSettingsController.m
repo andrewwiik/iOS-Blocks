@@ -53,10 +53,10 @@ NSBundle *strings;
     if (!strings)
         strings = [[NSBundle alloc] initWithPath:@"/Library/PreferenceBundles/Convergance-Prefs.bundle"];
     
-    PSSpecifier* groupSpecifier1 = [PSSpecifier groupSpecifierWithName:[strings localizedStringForKey:@"Configuration:" value:@"Configuration:" table:@"Root"]];
+    PSSpecifier* groupSpecifier1 = [PSSpecifier groupSpecifierWithName:[strings localizedStringForKey:@"General:" value:@"General:" table:@"Root"]];
     [array addObject:groupSpecifier1];
     
-    PSSpecifier *spe = [PSSpecifier preferenceSpecifierNamed:[strings localizedStringForKey:@"Set widget" value:@"Set widget" table:@"Root"] target:self set:nil get:@selector(getIsWidgetSetForSpecifier:) detail:[IBKWidgetSelectorController class] cell:PSLinkListCell edit:nil];
+    PSSpecifier *spe = [PSSpecifier preferenceSpecifierNamed:[strings localizedStringForKey:@"Set Widget" value:@"Set Widget" table:@"Root"] target:self set:nil get:@selector(getIsWidgetSetForSpecifier:) detail:[IBKWidgetSelectorController class] cell:PSLinkListCell edit:nil];
     [spe setProperty:@"IBKWidgetSelectorController" forKey:@"detail"];
     [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"isController"];
     [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"enabled"];
@@ -65,7 +65,49 @@ NSBundle *strings;
     
     [array addObject:spe];
     
+    // Also check if we can lock this widget.
+    
+    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    if ([[currentSettings objectForKey:@"passcodeHash"] isEqualToString:@""] || ![currentSettings objectForKey:@"passcodeHash"]) {
+        // Don't do anything.
+    } else {
+        
+        PSSpecifier *spe2 = [PSSpecifier preferenceSpecifierNamed:[strings localizedStringForKey:@"Lock Widget" value:@"Lock Widget" table:@"Root"] target:self set:@selector(setCurrentWidgetLocked:specifier:) get:@selector(getCurrentWidgetLocked) detail:nil cell:PSSwitchCell edit:nil];
+        [spe2 setProperty:[NSNumber numberWithBool:NO] forKey:@"default"];
+        [spe2 setProperty:[NSNumber numberWithBool:YES] forKey:@"enabled"];
+        
+        [array addObject:spe2];
+    }
+    
     return array;
+}
+
+-(id)getCurrentWidgetLocked {
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSArray *lockedBundleIdentifiers = settings[@"lockedBundleIdentifiers"];
+    return [NSNumber numberWithBool:[lockedBundleIdentifiers containsObject:self.bundleIdentifier]];
+}
+
+-(void)setCurrentWidgetLocked:(id)value specifier:(id)specifier {
+    NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSMutableArray *array = settings[@"lockedBundleIdentifiers"];
+    
+    if ((__bridge CFBooleanRef)value == kCFBooleanTrue) {
+        if (![array containsObject:self.bundleIdentifier]) {
+            [array addObject:self.bundleIdentifier];
+        }
+    } else {
+        if ([array containsObject:self.bundleIdentifier]) {
+            [array removeObject:self.bundleIdentifier];
+        }
+    }
+    
+    [settings setObject:array forKey:@"lockedBundleIdentifiers"];
+    [settings setObject:self.bundleIdentifier forKey:@"changedBundleIdFromSettings"];
+    [settings writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
+    
+    CFStringRef toPost = (__bridge CFStringRef)@"com.matchstic.ibk/settingschangeforwidget";
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);
 }
 
 -(NSArray*)widgetSpecificSpecifiers {
@@ -128,6 +170,17 @@ NSBundle *strings;
 
 -(NSArray*)notificationWidgetSettings {
     NSMutableArray *array = [NSMutableArray array];
+    
+    PSSpecifier *spe = [PSSpecifier preferenceSpecifierNamed:[strings localizedStringForKey:@"No settings available for this widget" value:@"No settings available for this widget" table:@"Root"] target:self set:nil get:nil detail:nil cell:PSStaticTextCell edit:nil];
+    [spe setProperty:[NSNumber numberWithBool:NO] forKey:@"enabled"];
+    
+    [array addObject:spe];
+    
+    PSSpecifier *first = [array firstObject];
+    if (first.cellType != PSGroupCell) {
+        PSSpecifier* groupSpecifier2 = [PSSpecifier groupSpecifierWithName:@""];
+        [array insertObject:groupSpecifier2 atIndex:0];
+    }
     
     return array;
 }
