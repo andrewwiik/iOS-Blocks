@@ -88,6 +88,8 @@ BOOL rearrangingIcons = NO;
 BOOL iWidgets = NO;
 BOOL isRotating = NO;
 
+BOOL allWidgetsNeedLocking = NO;
+
 static BBServer* __weak IBKBBServer;
 
 // Hooks
@@ -152,6 +154,10 @@ static BBServer* __weak IBKBBServer;
 - (id)iconAtPoint:(struct CGPoint)arg1 index:(unsigned long long *)arg2 proposedOrder:(int *)arg3 grabbedIcon:(id)arg4 {
     id orig = %orig;
     
+    if ([IBKResources hoverOnly]) {
+        return orig;
+    }
+    
     /* Proposed orderings:
      * 0 = don't move
      * 1 = move and shunt icons
@@ -182,6 +188,10 @@ static BBServer* __weak IBKBBServer;
 - (unsigned int)indexForCoordinate:(struct SBIconCoordinate)arg1 forOrientation:(int)arg2 {
     unsigned int orig = %orig;
     NSLog(@"Old index == %u", orig);
+    
+    if ([IBKResources hoverOnly]) {
+        return orig;
+    }
     
     //NSLog(@"arg1 == {col: %lu, row: %lu}", (unsigned long)arg1.col, (unsigned long)arg1.row);
     
@@ -246,6 +256,10 @@ static BBServer* __weak IBKBBServer;
 
 - (struct SBIconCoordinate)iconCoordinateForIndex:(unsigned int)arg1 forOrientation:(int)arg2 {
     SBIconCoordinate orig = %orig;
+    
+    if ([IBKResources hoverOnly]) {
+        return orig;
+    }
     
     if (![[self class] isEqual:[objc_getClass("SBDockIconListView") class]] && ![[self class] isEqual:[objc_getClass("SBFolderIconListView") class]]) {
         // Deal with row underneath widget
@@ -661,6 +675,11 @@ CGSize defaultIconSizing;
 - (CGPoint)iconImageCenter {
     if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
         CGPoint point = %orig;
+        
+        if ([IBKResources hoverOnly]) {
+            return point;
+        }
+        
         IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self.icon applicationBundleID]];
         point = CGPointMake(widgetController.view.frame.size.width/2, widgetController.view.frame.size.height/2);
         
@@ -710,6 +729,10 @@ CGSize defaultIconSizing;
         defaultIconSizing = frame.size;
         IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self.icon applicationBundleID]];
         frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height + [self _frameForLabel].size.height);
+        
+        if ([IBKResources hoverOnly]) {
+            frame.origin = CGPointMake(frame.origin.x - frame.size.width + (defaultIconSizing.width/2), frame.origin.y - frame.size.height + (defaultIconSizing.height/2));
+        }
         
         return frame;
     }
@@ -810,6 +833,11 @@ CGSize defaultIconSizing;
             widgetController.view.layer.shadowOpacity = 0.0;
             widgetController.shimIcon.alpha = 0.0;
             widgetController.shimIcon.hidden = YES;
+            
+            if ([IBKResources hoverOnly]) {
+                widgetController.view.center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+                widgetController.view.layer.shadowOpacity = 0.3;
+            }
         }
         
         // Testing
@@ -913,6 +941,21 @@ NSObject *panGesture;
             [self removeGestureRecognizer:arg];
         } else if ([[arg class] isEqual:[objc_getClass("UIScrollViewPagingSwipeGestureRecognizer") class]]) {
             [arg requireGestureRecognizerToFail:pinch];
+        }
+    }
+}
+
+-(void)layoutSubviews {
+    %orig;
+    
+    // Now, layout the widgets for hover mode.
+    
+    if ([IBKResources hoverOnly]) {
+        for (NSString *key in [widgetViewControllers allKeys]) {
+            IBKWidgetViewController *contr = [widgetViewControllers objectForKey:key];
+            UIView *view = contr.view;
+            
+            [[view superview] addSubview:view];
         }
     }
 }
@@ -1039,6 +1082,10 @@ NSInteger page = 0;
         if ((scale-1.0) > 0.75) { // Scale is 1.0 onwards, but we expect 0.0 onwards
             [widget setScaleForView:8.0 withDuration:0.3];
             [IBKResources addNewIdentifier:[widgetIcon applicationBundleID]];
+            
+            if ([IBKResources hoverOnly]) {
+                return;
+            }
             
             // Relayout icons.
             if (currentOrientation == 1 || currentOrientation == 2)
@@ -1206,6 +1253,8 @@ static SBIcon *temp;
         IBKWidgetViewController *contr = [widgetViewControllers objectForKey:[temp applicationBundleID]];
         arg1 = contr.view.bounds;
         
+        // TODO: Fix for hover mode
+        
         [[self superview] addSubview:self]; // Bring to front.
     }
     
@@ -1255,6 +1304,25 @@ static SBIcon *temp;
     contr = nil;
     
     [IBKResources removeIdentifier:bundleId];
+}
+
+%end
+
+#pragma mark Handle re-locking widgets when locking
+
+%hook SBLockScreenManager
+
+-(void)lockUIFromSource:(int)arg1 withOptions:(id)arg2 {
+    %orig;
+    
+    if ([IBKResources relockWidgets] || allWidgetsNeedLocking) {
+        for (NSString *key in [widgetViewControllers allKeys]) {
+            IBKWidgetViewController *contr = [widgetViewControllers objectForKey:key];
+            [contr lockWidget];
+        }
+        
+        allWidgetsNeedLocking = NO;
+    }
 }
 
 %end
@@ -1449,6 +1517,17 @@ static void reloadAllWidgets(CFNotificationCenterRef center, void *observer, CFS
     }
 }
 
+static void changedLockAll(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+    NSLog(@"RECIEVED LOCK ALL");
+    
+    [IBKResources reloadSettings];
+    
+    for (NSString *key in [widgetViewControllers allKeys]) {
+        IBKWidgetViewController *controller = [widgetViewControllers objectForKey:key];
+        [controller reloadWidgetForSettingsChange];
+    }
+}
+
 static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     [IBKResources reloadSettings];
 }
@@ -1488,5 +1567,6 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, settingsChangedForWidget, CFSTR("com.matchstic.ibk/settingschangeforwidget"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, reloadAllWidgets, CFSTR("com.matchstic.ibk/reloadallwidgets"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, reloadSettings, CFSTR("com.matchstic.ibk/reloadsettings"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, changedLockAll, CFSTR("com.matchstic.ibk/changedlockall"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 }
 

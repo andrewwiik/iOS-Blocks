@@ -146,11 +146,6 @@ static NSDictionary *settings;
 
 //// BEGIN ACTUAL SETTINGS CHECKS.
 
-+(BOOL)bundleIdentiferWantsToBeLocked:(NSString*)bundleIdentifier {
-    NSArray *lockedBundleIdentifiers = settings[@"lockedBundleIdentifiers"];
-    return [lockedBundleIdentifiers containsObject:bundleIdentifier];
-}
-
 +(BOOL)shouldHideBadgeWhenWidgetExpanded {
     id temp = settings[@"shouldHideBadge"];
     return (temp ? [temp boolValue] : NO);
@@ -171,9 +166,46 @@ static NSDictionary *settings;
     return (temp ? [temp boolValue] : YES);
 }
 
++(BOOL)hoverOnly {
+    id temp = settings[@"hoverOnly"];
+    return (temp ? [temp boolValue] : NO);
+}
+
 +(BOOL)debugLoggingEnabled {
     id temp = settings[@"debug"];
     return (temp ? [temp boolValue] : NO);
+}
+
+#pragma mark Widget locking
+
++(BOOL)allWidgetsLocked {
+    id temp = settings[@"allWidgetsLocked"];
+    return (temp ? [temp boolValue] : NO);
+}
+
++(BOOL)relockWidgets {
+    NSNumber *temp = settings[@"relockWidgets"];
+    if (temp) {
+        return ([temp intValue] == 0 ? NO : YES);
+    } else {
+        return NO;
+    }
+}
+
++(NSString*)passcodeHash {
+    id temp = settings[@"passcodeHash"];
+    return (temp && ![temp isEqualToString:@""] ? temp : nil);
+}
+
++(BOOL)isWidgetLocked:(NSString*)identifier {
+    if (![IBKResources passcodeHash]) {
+        return NO;
+    } else if ([IBKResources allWidgetsLocked]) {
+        return YES;
+    }
+    
+    NSArray *lockedBundleIdentifiers = settings[@"lockedBundleIdentifiers"];
+    return [lockedBundleIdentifiers containsObject:identifier];
 }
 
 +(void)reloadSettings {

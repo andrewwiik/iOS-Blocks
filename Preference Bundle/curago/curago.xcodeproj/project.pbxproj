@@ -30,8 +30,12 @@
 		C9A94E4E1ABA169E00ED4C69 /* IBKCreatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */; };
 		C9A94E511ABA1E7600ED4C69 /* IBKCreatorCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */; };
 		C9A94E521ABA1E7600ED4C69 /* IBKCreatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A94E501ABA1E7600ED4C69 /* IBKCreatorCell.m */; };
+		C9AD7D3D1ADE69E000915070 /* IBKPINModalController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9AD7D3B1ADE69E000915070 /* IBKPINModalController.h */; };
+		C9AD7D3E1ADE69E000915070 /* IBKPINModalController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9AD7D3C1ADE69E000915070 /* IBKPINModalController.m */; };
 		C9B5A6601AD8546700F0F93D /* IBKWidgetSelectorController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9B5A65E1AD8546700F0F93D /* IBKWidgetSelectorController.h */; };
 		C9B5A6611AD8546700F0F93D /* IBKWidgetSelectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B5A65F1AD8546700F0F93D /* IBKWidgetSelectorController.m */; };
+		C9B8537A1ADDB277003A89F9 /* IBKPasscodeController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9B853781ADDB277003A89F9 /* IBKPasscodeController.h */; };
+		C9B8537B1ADDB277003A89F9 /* IBKPasscodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9B853791ADDB277003A89F9 /* IBKPasscodeController.m */; };
 		C9CCCBC11A9E5DA800480738 /* iCarousel.h in Headers */ = {isa = PBXBuildFile; fileRef = C9CCCBBF1A9E5DA800480738 /* iCarousel.h */; };
 		C9CCCBC21A9E5DA800480738 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = C9CCCBC01A9E5DA800480738 /* iCarousel.m */; };
 		C9CCCBC51A9E5E5F00480738 /* IBKCarouselController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9CCCBC31A9E5E5F00480738 /* IBKCarouselController.h */; };
@@ -78,8 +82,12 @@
 		C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKCreatorController.m; sourceTree = "<group>"; };
 		C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKCreatorCell.h; sourceTree = "<group>"; };
 		C9A94E501ABA1E7600ED4C69 /* IBKCreatorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKCreatorCell.m; sourceTree = "<group>"; };
+		C9AD7D3B1ADE69E000915070 /* IBKPINModalController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKPINModalController.h; sourceTree = "<group>"; };
+		C9AD7D3C1ADE69E000915070 /* IBKPINModalController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKPINModalController.m; sourceTree = "<group>"; };
 		C9B5A65E1AD8546700F0F93D /* IBKWidgetSelectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKWidgetSelectorController.h; sourceTree = "<group>"; };
 		C9B5A65F1AD8546700F0F93D /* IBKWidgetSelectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKWidgetSelectorController.m; sourceTree = "<group>"; };
+		C9B853781ADDB277003A89F9 /* IBKPasscodeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKPasscodeController.h; sourceTree = "<group>"; };
+		C9B853791ADDB277003A89F9 /* IBKPasscodeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKPasscodeController.m; sourceTree = "<group>"; };
 		C9CCCBBF1A9E5DA800480738 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		C9CCCBC01A9E5DA800480738 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		C9CCCBC31A9E5E5F00480738 /* IBKCarouselController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKCarouselController.h; sourceTree = "<group>"; };
@@ -160,6 +168,10 @@
 				C997D1DA1ABB113B00DB4294 /* IBKWidgetSettingsController.m */,
 				C9B5A65E1AD8546700F0F93D /* IBKWidgetSelectorController.h */,
 				C9B5A65F1AD8546700F0F93D /* IBKWidgetSelectorController.m */,
+				C9B853781ADDB277003A89F9 /* IBKPasscodeController.h */,
+				C9B853791ADDB277003A89F9 /* IBKPasscodeController.m */,
+				C9AD7D3B1ADE69E000915070 /* IBKPINModalController.h */,
+				C9AD7D3C1ADE69E000915070 /* IBKPINModalController.m */,
 				C9A94E4B1ABA169E00ED4C69 /* IBKCreatorController.h */,
 				C9A94E4C1ABA169E00ED4C69 /* IBKCreatorController.m */,
 				C9A94E4F1ABA1E7600ED4C69 /* IBKCreatorCell.h */,
@@ -295,6 +307,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9B8537A1ADDB277003A89F9 /* IBKPasscodeController.h in Headers */,
 				C9A94E511ABA1E7600ED4C69 /* IBKCreatorCell.h in Headers */,
 				C96194AF1A98DF35001E7914 /* FBShimmering.h in Headers */,
 				C997D1DB1ABB113B00DB4294 /* IBKWidgetSettingsController.h in Headers */,
@@ -305,6 +318,7 @@
 				C972E7281AB8906D006DE26B /* OrderedDictionary.h in Headers */,
 				C96194AE1A98DF35001E7914 /* FBShimmering-Prefix.pch in Headers */,
 				C96194B21A98DF35001E7914 /* FBShimmeringView.h in Headers */,
+				C9AD7D3D1ADE69E000915070 /* IBKPINModalController.h in Headers */,
 				C9A94E4D1ABA169E00ED4C69 /* IBKCreatorController.h in Headers */,
 				C9D1ECD01A9F8B9700FC5EF4 /* IBKHeaderView.h in Headers */,
 				C9CCCBC11A9E5DA800480738 /* iCarousel.h in Headers */,
@@ -414,8 +428,10 @@
 				C9A94E4E1ABA169E00ED4C69 /* IBKCreatorController.m in Sources */,
 				C972E7291AB8906D006DE26B /* OrderedDictionary.m in Sources */,
 				C96194B11A98DF35001E7914 /* FBShimmeringLayer.m in Sources */,
+				C9B8537B1ADDB277003A89F9 /* IBKPasscodeController.m in Sources */,
 				C961948F1A98D988001E7914 /* curagoController.m in Sources */,
 				C9CCCBC21A9E5DA800480738 /* iCarousel.m in Sources */,
+				C9AD7D3E1ADE69E000915070 /* IBKPINModalController.m in Sources */,
 				C96194B71A98DF4C001E7914 /* CKBlurView.m in Sources */,
 				C997D1DC1ABB113B00DB4294 /* IBKWidgetSettingsController.m in Sources */,
 				C9A94E521ABA1E7600ED4C69 /* IBKCreatorCell.m in Sources */,

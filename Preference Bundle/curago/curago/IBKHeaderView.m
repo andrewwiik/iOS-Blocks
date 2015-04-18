@@ -17,34 +17,6 @@ int getCPUType(void);
 
 @implementation IBKHeaderView
 
-int getCPUType(void) {
-    NSMutableString *cpu = [[NSMutableString alloc] init];
-    size_t size;
-    cpu_type_t type;
-    cpu_subtype_t subtype;
-    size = sizeof(type);
-    sysctlbyname("hw.cputype", &type, &size, NULL, 0);
-    
-    size = sizeof(subtype);
-    sysctlbyname("hw.cpusubtype", &subtype, &size, NULL, 0);
-    
-    // values for cputype and cpusubtype defined in mach/machine.h
-    if (type == CPU_TYPE_ARM) {
-        switch (subtype) {
-            case CPU_SUBTYPE_ARM_V7:
-            case CPU_SUBTYPE_ARM_V7EM:
-            case CPU_SUBTYPE_ARM_V7F:
-            case CPU_SUBTYPE_ARM_V7K:
-            case CPU_SUBTYPE_ARM_V7M:
-                return 0;
-            default:
-                return 1;
-        }
-    }
-    
-    return cpu;
-}
-
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -86,18 +58,16 @@ int getCPUType(void) {
         
         [self addSubview:self.foremostWidget];
         
-        //if (getCPUType() == 1) {
-            if (self.blur) {
-                [self.blur removeFromSuperview];
-                self.blur = nil;
-            }
+        if (self.blur) {
+            [self.blur removeFromSuperview];
+            self.blur = nil;
+        }
             
-            self.blur = [[CKBlurView alloc] initWithFrame:self.bounds];
-            self.blur.blurCroppingRect = self.bounds;
-            self.blur.alpha = 0.0;
+        self.blur = [[CKBlurView alloc] initWithFrame:self.bounds];
+        self.blur.blurCroppingRect = self.bounds;
+        self.blur.alpha = 0.0;
         
-            [self addSubview:self.blur];
-        //}
+        [self addSubview:self.blur];
         
         if (self.shimmer) {
             [blocksLabel removeFromSuperview];
@@ -134,6 +104,15 @@ int getCPUType(void) {
         
         self.contr = [[IBKCarouselController alloc] initWithNibName:nil bundle:nil];
         [self addSubview:self.contr.view];
+        
+        self.triangle = [[UIView alloc] initWithFrame:CGRectMake(0, 320, self.bounds.size.width, 20)];
+        self.triangle.backgroundColor = [UIColor whiteColor];
+        [self addSubview:self.triangle];
+        
+        self.bg = [[UIView alloc] initWithFrame:CGRectMake(0, -[UIScreen mainScreen].bounds.size.height, self.bounds.size.width, 130 + 40 + [UIScreen mainScreen].bounds.size.height)];
+        self.bg.backgroundColor = [UIColor whiteColor];
+        
+        [self insertSubview:self.bg atIndex:0];
     }
     return self;
 }
@@ -162,8 +141,7 @@ int getCPUType(void) {
     } completion:nil];
     
     [UIView animateWithDuration:0.45 delay:0.55 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        //if (getCPUType() == 1)
-            self.blur.alpha = 1.0;
+        self.blur.alpha = 1.0;
         self.shimmer.alpha = 1.0;
     } completion:nil];
 }
@@ -184,41 +162,39 @@ int getCPUType(void) {
     blocksLabel.frame = CGRectMake(0, 0, self.bounds.size.width, 130);
     
     self.shimmer.center = self.foremostWidget.center;
+    self.shimmer.shimmering = YES;
     
-    if (getCPUType() == 1)
-        self.shimmer.shimmering = YES;
-    
-    UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, -[UIScreen mainScreen].bounds.size.height, self.bounds.size.width, 130 + 40 + [UIScreen mainScreen].bounds.size.height)];
-    bg.backgroundColor = [UIColor whiteColor];
-    
-    [self insertSubview:bg atIndex:0];
+    self.bg.frame = CGRectMake(0, -[UIScreen mainScreen].bounds.size.height, self.bounds.size.width, 130 + 40 + [UIScreen mainScreen].bounds.size.height);
     
     self.contr.view.frame = CGRectMake(0, 160, self.bounds.size.width, 160);
     self.contr.carousel.frame = CGRectMake(0, 0, self.bounds.size.width, 160);
     
-    UIView *triangle = [[UIView alloc] initWithFrame:CGRectMake(0, 320, self.bounds.size.width, 20)];
-    triangle.backgroundColor = [UIColor whiteColor];
+    self.triangle.frame = CGRectMake(0, 320, self.bounds.size.width, 20);
     
     UIBezierPath *path = [UIBezierPath new];
     [path moveToPoint:(CGPoint){0, 0}];
-    [path addLineToPoint:(CGPoint){triangle.frame.size.width, 0}];
-    [path addLineToPoint:(CGPoint){triangle.frame.size.width, 20}];
-    [path addLineToPoint:(CGPoint){(triangle.frame.size.width/2) + 15, 20}];
-    [path addLineToPoint:(CGPoint){(triangle.frame.size.width/2), 5}];
-    [path addLineToPoint:(CGPoint){(triangle.frame.size.width/2) - 15, 20}];
+    [path addLineToPoint:(CGPoint){self.triangle.frame.size.width, 0}];
+    [path addLineToPoint:(CGPoint){self.triangle.frame.size.width, 20}];
+    [path addLineToPoint:(CGPoint){(self.triangle.frame.size.width/2) + 15, 20}];
+    [path addLineToPoint:(CGPoint){(self.triangle.frame.size.width/2), 5}];
+    [path addLineToPoint:(CGPoint){(self.triangle.frame.size.width/2) - 15, 20}];
     [path addLineToPoint:(CGPoint){0, 20}];
     [path addLineToPoint:(CGPoint){0, 0}];
     
     // Create a CAShapeLayer with this triangular path
     // Same size as the original imageView
-    CAShapeLayer *mask = [CAShapeLayer new];
-    mask.frame = triangle.bounds;
+    
+    CAShapeLayer *mask;
+    
+    if (self.triangle.layer.mask)
+        mask = (CAShapeLayer*)self.triangle.layer.mask;
+    else
+        mask = [CAShapeLayer new];
+    mask.frame = self.triangle.bounds;
     mask.path = path.CGPath;
     
     // Mask the imageView's layer with this shape
-    triangle.layer.mask = mask;
-    
-    [self addSubview:triangle];
+    self.triangle.layer.mask = mask;
 }
 
 -(void)dealloc {

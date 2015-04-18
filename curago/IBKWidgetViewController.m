@@ -17,6 +17,7 @@
 
 #import "IBKWidgetViewController.h"
 #import "IBKResources.h"
+#import "IBKAPI.h"
 
 #import <SpringBoard7.0/SBIconController.h>
 #import <SpringBoard7.0/SBIconModel.h>
@@ -135,6 +136,81 @@
     return CGRectMake(0, 0, spacingX + (2*width), spacingY + (2*height));
 }
 
+-(void)lockWidget {
+    if ([IBKResources isWidgetLocked:[IBKResources getRedirectedIdentifierIfNeeded:self.applicationIdentifer]]) {
+        // Hide everything on top of the topBase, and show locked UI
+        self.isLocked = YES;
+        
+        self.viw.alpha = 0.0;
+        self.buttons.alpha = 0.0;
+        self.alternateIcon.alpha = 0.0;
+        self.otherIcon.alpha = 0.0;
+        self.iconImageView.alpha = 1.0;
+        self.iconImageView.hidden = NO;
+        self.notificationsTableView.alpha = 0.0;
+        self.gcTableView.alpha = 0.0;
+        self.webView.alpha = 0.0;
+        self.noNotifsLabel.alpha = 0.0;
+        
+        [self.lockView removeFromSuperview];
+        self.lockView = nil;
+        
+        self.lockView = [[IBKWidgetLockView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, [IBKAPI heightForContentView]) passcodeHash:[IBKResources passcodeHash] isLight:self.isLight];
+        self.lockView.delegate = self;
+        [topBase addSubview:self.lockView];
+        
+        self.lockView.alpha = 1.0;
+        self.lockView.hidden = NO;
+    }
+}
+
+-(void)unlockWidget {
+    // set up from
+    CATransform3D fromViewRotationPerspectiveTrans = CATransform3DIdentity;
+    fromViewRotationPerspectiveTrans.m34 = -0.003; // 3D ish effect
+    fromViewRotationPerspectiveTrans = CATransform3DRotate(fromViewRotationPerspectiveTrans, M_PI_2, 0.0f, -1.0f, 0.0f);
+    
+    // set up to
+    CATransform3D toViewRotationPerspectiveTrans = CATransform3DIdentity;
+    toViewRotationPerspectiveTrans.m34 = -0.003;
+    toViewRotationPerspectiveTrans = CATransform3DRotate(toViewRotationPerspectiveTrans, M_PI_2, 0.0f, 1.0f, 0.0f);
+    
+    [UIView animateWithDuration:0.3 delay:0.15 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.view.layer.transform = fromViewRotationPerspectiveTrans;
+    } completion:^(BOOL finished) {
+        self.view.layer.transform = toViewRotationPerspectiveTrans;
+        
+        self.lockView.alpha = 0.0;
+        self.viw.alpha = 1.0;
+        self.buttons.alpha = 1.0;
+        self.alternateIcon.alpha = 1.0;
+        self.otherIcon.alpha = 1.0;
+        if (self.alternateIcon || self.otherIcon)
+            self.iconImageView.alpha = 0.0;
+        else
+            self.iconImageView.alpha = 1.0;
+        self.notificationsTableView.alpha = 1.0;
+        self.gcTableView.alpha = 1.0;
+        self.webView.alpha = 1.0;
+        
+        if ([self.notificationsDataSource count] == 0)
+            self.noNotifsLabel.alpha = 1.0;
+        else
+            self.noNotifsLabel.alpha = 0.0;
+        
+        [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+            self.view.layer.transform = CATransform3DMakeRotation(M_PI_2, 0.0, 0.0, 0.0);
+        } completion:^(BOOL finished) {
+            self.lockView.hidden = YES;
+            if (self.alternateIcon)
+                self.iconImageView.hidden = YES;
+            
+            self.isLocked = NO;
+        }];
+                         
+    }];
+}
+
 -(void)loadWidgetInterface {
     if (!self.view) {
         [self loadView];
@@ -224,6 +300,7 @@
     [self.view addGestureRecognizer:pinch];
     
     // Background color setup.
+    self.isLight = [IBKNotificationsTableCell isSuperviewColourationBright:(self.gradientLayer ? [UIColor colorWithCGColor:(__bridge CGColorRef)(self.gradientLayer.colors[0])] : self.view.backgroundColor)];
     
     CGFloat red, green, blue;
     [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
@@ -234,6 +311,8 @@
     [self setupTransparentWidgetIfNeeded:infoPlist];
     
     self.isWidgetLoaded = YES;
+    
+    [self lockWidget];
 }
 
 -(UIColor*)colorFromString:(NSString*)arg1 {
@@ -354,15 +433,15 @@
         self.iconImageView.hidden = YES;
         
         if ([self.widget respondsToSelector:@selector(alternativeIconViewWithFrame:)] && [self.widget hasAlternativeIconView]) {
-            UIView *icon = [self.widget alternativeIconViewWithFrame:self.iconImageView.frame];
-            icon.backgroundColor = [UIColor clearColor];
-            [topBase addSubview:icon];
+            self.alternateIcon = [self.widget alternativeIconViewWithFrame:self.iconImageView.frame];
+            self.alternateIcon.backgroundColor = [UIColor clearColor];
+            [topBase addSubview:self.alternateIcon];
         } else {
-            UIImageView *newIcon = [[UIImageView alloc] initWithImage:iconfile];
-            newIcon.frame = self.iconImageView.frame;
-            newIcon.backgroundColor = [UIColor clearColor];
+            self.otherIcon = [[UIImageView alloc] initWithImage:iconfile];
+            self.otherIcon.frame = self.iconImageView.frame;
+            self.otherIcon.backgroundColor = [UIColor clearColor];
         
-            [topBase addSubview:newIcon];
+            [topBase addSubview:self.otherIcon];
         }
     } else {
         // Bring icon back up to top view
@@ -413,9 +492,9 @@
         
         @try {
             CGFloat originx = self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width + 4;
-            UIView *buttons = [self.widget buttonAreaViewWithFrame:CGRectMake(originx, self.iconImageView.frame.origin.y, [IBKResources widthForWidget] - originx - 8, self.iconImageView.frame.size.height)];
-            buttons.backgroundColor = [UIColor clearColor];
-            [topBase addSubview:buttons];
+            self.buttons = [self.widget buttonAreaViewWithFrame:CGRectMake(originx, self.iconImageView.frame.origin.y, [IBKResources widthForWidget] - originx - 8, self.iconImageView.frame.size.height)];
+            self.buttons.backgroundColor = [UIColor clearColor];
+            [topBase addSubview:self.buttons];
         } @catch (NSException *e) {
             NSLog(@"\n\n%@\n\nPlease ensure you have implemented -buttonAreaViewWithFrame: within your widget if -hasButtonArea is returning YES!", e);
         }
@@ -766,9 +845,11 @@
     [UIView animateWithDuration:duration animations:^{
         self.view.transform = CGAffineTransformMakeScale((fin ? 1.0 : scale), (fin ? 1.0 : scale));
         self.shimIcon.alpha = iconAlpha;
-        self.viw.alpha = 1.0-iconAlpha;
-        self.notificationsTableView.alpha = 1.0-iconAlpha;
-        self.gcTableView.alpha = 1.0-iconAlpha;
+        if (!self.isLocked) {
+            self.viw.alpha = 1.0-iconAlpha;
+            self.notificationsTableView.alpha = 1.0-iconAlpha;
+            self.gcTableView.alpha = 1.0-iconAlpha;
+        }
     
         // Depending on how far we've scaled, adjust the icon image view at a much faster rate.
         self.iconImageView.alpha = 1.0-iconAlpha;
@@ -841,7 +922,8 @@ float scale2 = 0.0;
             
             [UIView animateWithDuration:0.3 animations:^{
                 self.view.transform = CGAffineTransformMakeScale(iconScale, iconScale);
-                self.view.center = CGPointMake(([(UIView*)[self.correspondingIconView _iconImageView] frame].size.width/2)-1, ([(UIView*)[self.correspondingIconView _iconImageView] frame].size.height/2)-1);
+                if (![IBKResources hoverOnly])
+                    self.view.center = CGPointMake(([(UIView*)[self.correspondingIconView _iconImageView] frame].size.width/2)-1, ([(UIView*)[self.correspondingIconView _iconImageView] frame].size.height/2)-1);
                 self.shimIcon.alpha = 1.0;
                 /*for (UIView *subview in self.view.subviews) {
                     if (![subview isEqual:self.shimIcon] && subview != self.shimIcon)
@@ -860,14 +942,16 @@ float scale2 = 0.0;
                 }
                 
                 // Reload everything.
-                [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] removeAllCachedIcons];
-                if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
-                    //[(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+                if (![IBKResources hoverOnly]) {
+                    [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] removeAllCachedIcons];
+                    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+                        //[(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
                     
-                    [lst setIconsNeedLayout];
-                    [lst layoutIconsIfNeeded:0.3 domino:NO];
-                } else
-                    [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+                        [lst setIconsNeedLayout];
+                        [lst layoutIconsIfNeeded:0.3 domino:NO];
+                    } else
+                        [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+                }
             } completion:^(BOOL finished) {
                 [[self.correspondingIconView _iconImageView] setAlpha:1.0];
                 self.view.hidden = YES;
@@ -875,8 +959,10 @@ float scale2 = 0.0;
                 [[objc_getClass("SBIconController") sharedInstance] removeIdentifierFromWidgets:self.applicationIdentifer];
                 
                 // Reset icon frames.
-                [lst setIconsNeedLayout];
-                [lst layoutIconsIfNeeded:0.0 domino:NO];
+                if (![IBKResources hoverOnly]) {
+                    [lst setIconsNeedLayout];
+                    [lst layoutIconsIfNeeded:0.0 domino:NO];
+                }
             }];
         }
         

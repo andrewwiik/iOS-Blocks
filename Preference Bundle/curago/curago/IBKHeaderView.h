@@ -21,6 +21,8 @@
 @property (nonatomic, strong) CKBlurView *blur;
 @property (nonatomic, strong) FBShimmeringView *shimmer;
 @property (nonatomic, strong) IBKCarouselController *contr;
+@property (nonatomic, strong) UIView *triangle;
+@property (nonatomic, strong) UIView *bg;
 
 -(void)beginAnimations;
 

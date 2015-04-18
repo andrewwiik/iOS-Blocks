@@ -43,6 +43,11 @@
 +(BOOL)transparentBackgroundForWidgets;
 +(BOOL)showBorderWhenTransparent;
 +(BOOL)debugLoggingEnabled;
++(BOOL)hoverOnly;
++(NSString*)passcodeHash;
++(BOOL)allWidgetsLocked;
++(BOOL)relockWidgets;
++(BOOL)isWidgetLocked:(NSString*)identifier;
 +(void)reloadSettings;
 
 @end

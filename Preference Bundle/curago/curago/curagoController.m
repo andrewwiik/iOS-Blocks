@@ -16,11 +16,30 @@
 #include <sys/stat.h>
 #import <objc/runtime.h>
 
+#define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
 enum {
     ALApplicationIconSizeSmall = 29,
     ALApplicationIconSizeLarge = 59
 };
 typedef NSUInteger ALApplicationIconSize;
+
+@interface DevicePINPane (iOS7)
+- (void)setSimplePIN:(bool)arg1 requiresKeyboard:(bool)arg2 numericOnly:(bool)arg3;
+@property(retain) UIView<PINEntryView> * pinView;
+@end
+
+@interface DevicePINController (IOS7)
+- (void)setPinDelegate:(id)arg1;
+- (void)setSpecifier:(id)arg1;
+- (void)setMode:(int)arg1;
+@end
+
+@interface PSRootController (IOS7)
+- (void)pushController:(id)arg1 animate:(bool)arg2;
+- (void)pushViewController:(id)arg1 animated:(BOOL)animated;
+- (id)popViewControllerAnimated:(bool)arg1;
+@end
 
 @interface ALApplicationList : NSObject {
 @private
@@ -41,6 +60,7 @@ typedef NSUInteger ALApplicationIconSize;
 
 static curagoController *shared;
 static int currentIndex = 0;
+static NSIndexPath *indexPathForPasscodeIdentifier;
 NSBundle *strings;
 
 static OrderedDictionary *dataSourceSystem;
@@ -156,6 +176,56 @@ static OrderedDictionary *dataSourceUser;
         });
     });
     return cell;
+}
+
+-(void)tableView:(id)view didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+    if (currentIndex == 1 && indexPath.section == 2 && [[self passcodeLockEnabled:nil] boolValue]) {
+        // Show PIN pane if needed.
+        self.pinController = [[IBKPINModalController alloc] init];
+        self.pinController.ibkDelegate = self;
+        self.pinController.customMode = IBKOpenPasscodePane;
+        
+        [self.pinController setPinDelegate:self];
+        [self.pinController setSpecifier:[self specifierForID:@"passcode"]];
+        
+        [(DevicePINPane*)[self.pinController pane] activateKeypadView];
+        [(DevicePINPane*)[self.pinController pane] becomeFirstResponder];
+        
+        if (isPad) {
+            UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.pinController];
+            
+            self.ipadPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
+            
+            //size as needed
+            self.ipadPopover.popoverContentSize = CGSizeMake(320, 480);
+            self.ipadPopover.delegate = self;
+            
+            //show the popover next to the annotation view (pin)
+            [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:NULL animated:YES];
+        } else {
+            UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.pinController];
+            [self.parentController presentViewController:navController animated:YES completion:^{
+                // Move to passcode pane.
+                IBKPasscodeController *cont = [[IBKPasscodeController alloc] init];
+                cont.specifier = [self specifierForID:@"passcode"];
+                cont.rootController = self.rootController;
+                cont.parentController = self;
+                
+                if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+                    [self.rootController pushViewController:cont animated:NO];
+                else
+                    [self.rootController pushController:cont animate:NO];
+            }];
+        }
+        
+        indexPathForPasscodeIdentifier = indexPath;
+    } else {
+        [super tableView:view didSelectRowAtIndexPath:indexPath];
+    }
+}
+
+-(void)popoverController:(UIPopoverController *)popoverController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view {
+    *rect = [[UIApplication sharedApplication] keyWindow].bounds;
 }
 
 -(NSMutableArray*)preferencesForManage {
@@ -368,6 +438,51 @@ static OrderedDictionary *dataSourceUser;
     }
 }
 
+// Passcode handling
+
+-(id)passcodeLockEnabled:(id)sender {
+    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    if ([[currentSettings objectForKey:@"passcodeHash"] isEqualToString:@""] || ![currentSettings objectForKey:@"passcodeHash"]) {
+        return [NSNumber numberWithBool:NO];
+    } else {
+        return [NSNumber numberWithBool:YES];
+    }
+}
+
+-(void)didAcceptEnteredPIN {
+    if (isPad) {
+        [self.ipadPopover dismissPopoverAnimated:YES];
+        
+        // Move to passcode pane.
+        IBKPasscodeController *cont = [[IBKPasscodeController alloc] init];
+        cont.specifier = [self specifierForID:@"passcode"];
+        cont.rootController = self.rootController;
+        cont.parentController = self;
+        
+        //if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+        //    [self.parentController pushViewController:cont animated:YES];
+        //else
+        [self.rootController pushController:cont];
+    } else {
+        [self.parentController dismissViewControllerAnimated:YES completion:nil];
+    }
+
+    [_table deselectRowAtIndexPath:indexPathForPasscodeIdentifier animated:NO];
+    
+    // Move to passcode pane.
+}
+
+-(void)didCancelEnteringPIN {
+    if (isPad) {
+        [self.ipadPopover dismissPopoverAnimated:YES];
+    } else {
+        [self.rootController popViewControllerAnimated:NO];
+        [self.parentController dismissViewControllerAnimated:YES completion:nil];
+    }
+    
+    [_table deselectRowAtIndexPath:indexPathForPasscodeIdentifier animated:NO];
+}
+
 -(id)readPreferenceValue:(PSSpecifier*)specifier {
 	NSDictionary *exampleTweakSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
 	if (!exampleTweakSettings[specifier.properties[@"key"]]) {
@@ -393,7 +508,9 @@ static OrderedDictionary *dataSourceUser;
 
 -(void)viewWillAppear:(BOOL)view {
     self.headerview.frame = CGRectMake(0, 0, self.table.frame.size.width, 345);
-    [self.table setTableHeaderView:self.headerview];
+    
+    if (![self.table.tableHeaderView isEqual:self.headerview])
+        [self.table setTableHeaderView:self.headerview];
     
     // Set title!
     

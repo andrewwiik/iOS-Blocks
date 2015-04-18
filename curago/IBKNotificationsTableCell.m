@@ -53,7 +53,7 @@
         
         pixelBytes = nil;
         
-        isLight = percievedLuminance < 0.3;
+        isLight = percievedLuminance < 0.2;
     }
     
     data = nil;

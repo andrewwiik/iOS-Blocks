@@ -13,6 +13,7 @@
 #import <SpringBoard7.0/SBIconView.h>
 #import "IBKGameCenterTableView.h"
 #import "IBKWidgetTopBase.h"
+#import "IBKWidgetLockView.h"
 #import "IBKLabel.h"
 
 @interface IBKWidgetViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
@@ -22,6 +23,9 @@
 @property (nonatomic, strong) NSObject<IBKWidget> *widget;
 @property (nonatomic, retain) NSBundle *bundle;
 @property (nonatomic, strong) UIView *viw;
+@property (nonatomic, strong) UIView *buttons;
+@property (nonatomic, strong) UIView *alternateIcon;
+@property (nonatomic, strong) UIImageView *otherIcon;
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
 @property (nonatomic, copy) NSString *applicationIdentifer;
 @property (nonatomic, strong) UIView *iconImageView; // This may be set as a UIImageView or SBIconImageView
@@ -37,6 +41,10 @@
 @property (readwrite) BOOL fallbackToNotificationList;
 @property (readwrite) BOOL isWidgetLoaded;
 @property (readwrite) BOOL scalingDown;
+@property (readwrite) BOOL isLight;
+@property (readwrite) BOOL isLocked;
+
+@property (nonatomic, strong) IBKWidgetLockView *lockView;
 
 -(void)setScaleForView:(CGFloat)scale withDuration:(CGFloat)duration;
 -(void)layoutViewForPreExpandedWidget;
@@ -51,5 +59,8 @@
 -(void)reloadWidgetForSettingsChange;
 
 -(UIView*)topBase;
+
+-(void)lockWidget;
+-(void)unlockWidget;
 
 @end

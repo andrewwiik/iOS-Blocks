@@ -12,7 +12,7 @@
 			<key>label</key>
 			<string>Icons:</string>
 			<key>footerText</key>
-			<string>If a widget pushes icons onto the next SpringBoard page, this will attempt to move them back after closing a widget.</string>
+			<string>If a widget pushes icons onto the next page, this will attempt to move them back after closing a widget.</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
@@ -26,7 +26,7 @@
 			<key>key</key>
 			<string>shouldHideBadge</string>
 			<key>label</key>
-			<string>Hide badge on widgets</string>
+			<string>Hide Badge on Widgets</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
@@ -40,7 +40,7 @@
 			<key>key</key>
 			<string>returnIcons</string>
 			<key>label</key>
-			<string>Move icons back after closing</string>
+			<string>Move Icons Back After Closing</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -60,7 +60,7 @@
 			<key>key</key>
 			<string>transparentWidgets</string>
 			<key>label</key>
-			<string>Transparent background</string>
+			<string>Transparent Background</string>
 			<key>set</key>
 			<string>setTransparentBackground:specifier:</string>
 		</dict>
@@ -76,10 +76,32 @@
 			<key>key</key>
 			<string>borderedWidgets</string>
 			<key>label</key>
-			<string>Show border</string>
+			<string>Show Border</string>
 			<key>id</key>
 			<string>borderedWidgets</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Lock widgets using a passcode.</string>
+		</dict>
+		<dict> 
+              <key>cell</key> 
+              <string>PSLinkListCell</string> 
+              <key>detail</key>
+              <string>IBKPasscodeController</string> 
+              <key>get</key> 
+              <string>passcodeLockEnabled:</string> 
+              <key>id</key>
+              <string>passcode</string> 
+              <key>label</key> 
+              <string>Passcode</string> 
+              <key>mode</key>
+              <integer>3</integer> 
+              <key>pane</key> 
+              <string>DevicePINPane</string> 
+         </dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
@@ -98,7 +120,7 @@
 			<key>key</key>
 			<string>debug</string>
 			<key>label</key>
-			<string>Debug logging</string>
+			<string>Debug Logging</string>
 		</dict>
 	</array>
 </dict>

@@ -81,7 +81,7 @@
         self.alarmsController = [[IBKMTAlarmViewController alloc] initWithCollectionViewLayout:layout];
         [self.alarmsController loadAlarmsFromManager];
         
-        UICollectionView *colView = [[UICollectionView alloc] initWithFrame:CGRectMake(self.frame.size.width + 20, 10, self.frame.size.width-40, [objc_getClass("IBKAPI") heightForContentView]-20) collectionViewLayout:layout];
+        UICollectionView *colView = [[UICollectionView alloc] initWithFrame:CGRectMake(self.frame.size.width + 20, 0, self.frame.size.width-40, [objc_getClass("IBKAPI") heightForContentView]) collectionViewLayout:layout];
         self.alarmsController.collectionView = colView;
          
         self.alarmsController.collectionView.backgroundColor = [UIColor clearColor];
@@ -93,7 +93,7 @@
         self.alarmsController.collectionView.dataSource = self.alarmsController;
         self.alarmsController.collectionView.delegate = self.alarmsController;
          
-        self.alarmsController.collectionView.frame = CGRectMake(self.frame.size.width + 20, 20, self.frame.size.width-40, [objc_getClass("IBKAPI") heightForContentView]-10);
+        self.alarmsController.collectionView.frame = CGRectMake(self.frame.size.width + 20, 0, self.frame.size.width-40, self.frame.size.height);
         
         [self.alarmsController.collectionView registerClass:[IBKMTAlarmsCell class] forCellWithReuseIdentifier:@"alarmsCell"];
          
@@ -124,8 +124,12 @@
     }
     
     self.clockFace.frame = CGRectMake(20, 10, longerLength, longerLength);
+    self.clockFace.secondHandLength = (longerLength/2) - 5;
+    self.clockFace.minuteHandLength = (longerLength/2) - 5;
+    self.clockFace.hourHandLength = (longerLength/2) - 25;
+    
     //self.timerView.frame = CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
-    self.alarmsController.collectionView.frame = CGRectMake(self.frame.size.width + 20, 10, self.frame.size.width-40, [objc_getClass("IBKAPI") heightForContentView]-10);
+    self.alarmsController.collectionView.frame = CGRectMake(self.frame.size.width + 20, 0, self.frame.size.width-40, self.frame.size.height);
 }
 
 #pragma mark Clock delegate
