@@ -178,20 +178,22 @@ static OrderedDictionary *dataSourceUser;
     return cell;
 }
 
--(void)tableView:(id)view didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+-(void)tableView:(UITableView*)view didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     if (currentIndex == 1 && indexPath.section == 2 && [[self passcodeLockEnabled:nil] boolValue]) {
         // Show PIN pane if needed.
         self.pinController = [[IBKPINModalController alloc] init];
         self.pinController.ibkDelegate = self;
         self.pinController.customMode = IBKOpenPasscodePane;
         
-        [self.pinController setPinDelegate:self];
+        //[self.pinController setPinDelegate:self];
         [self.pinController setSpecifier:[self specifierForID:@"passcode"]];
         
         [(DevicePINPane*)[self.pinController pane] activateKeypadView];
         [(DevicePINPane*)[self.pinController pane] becomeFirstResponder];
         
         if (isPad) {
+            [view deselectRowAtIndexPath:indexPath animated:YES];
+            
             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.pinController];
             
             self.ipadPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
@@ -459,28 +461,25 @@ static OrderedDictionary *dataSourceUser;
         cont.rootController = self.rootController;
         cont.parentController = self;
         
-        //if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
-        //    [self.parentController pushViewController:cont animated:YES];
-        //else
-        [self.rootController pushController:cont];
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+            [self.rootController pushViewController:cont animated:YES];
+        else
+            [self.rootController pushController:cont animate:YES];
     } else {
         [self.parentController dismissViewControllerAnimated:YES completion:nil];
+        [_table deselectRowAtIndexPath:indexPathForPasscodeIdentifier animated:NO];
     }
-
-    [_table deselectRowAtIndexPath:indexPathForPasscodeIdentifier animated:NO];
-    
-    // Move to passcode pane.
 }
 
 -(void)didCancelEnteringPIN {
+    [self.rootController popViewControllerAnimated:NO];
+    
     if (isPad) {
         [self.ipadPopover dismissPopoverAnimated:YES];
     } else {
-        [self.rootController popViewControllerAnimated:NO];
         [self.parentController dismissViewControllerAnimated:YES completion:nil];
+        [_table deselectRowAtIndexPath:indexPathForPasscodeIdentifier animated:NO];
     }
-    
-    [_table deselectRowAtIndexPath:indexPathForPasscodeIdentifier animated:NO];
 }
 
 -(id)readPreferenceValue:(PSSpecifier*)specifier {
@@ -506,8 +505,10 @@ static OrderedDictionary *dataSourceUser;
     [self.headerview beginAnimations];
 }
 
+
+
 -(void)viewWillAppear:(BOOL)view {
-    self.headerview.frame = CGRectMake(0, 0, self.table.frame.size.width, 345);
+    //self.headerview.frame = CGRectMake(0, 0, self.table.frame.size.width, 345);
     
     if (![self.table.tableHeaderView isEqual:self.headerview])
         [self.table setTableHeaderView:self.headerview];

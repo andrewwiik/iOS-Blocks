@@ -9,6 +9,7 @@
 #import "IBKWidgetLockView.h"
 #import "IBKWidgetViewController.h"
 #import "IBKResources.h"
+#import "AGWindowView.h"
 #import <objc/runtime.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <CommonCrypto/CommonDigest.h>
@@ -180,9 +181,10 @@ BOOL previousMatchingSetting;
         self.backdropView.userInteractionEnabled = YES;
         self.backdropView.alpha = 0.0;
         
-        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
             self.passcodeView = [objc_getClass("SBUIPasscodeLockViewFactory") passcodeLockViewForStyle:0];
-        else
+            self.passcodeView.customBackgroundColor = [UIColor blackColor];
+        } else
             self.passcodeView = [objc_getClass("SBUIPasscodeLockViewFactory") _passcodeLockViewForStyle:0 withLightStyle:NO];
         self.passcodeView.showsEmergencyCallButton = NO;
         self.passcodeView.shouldResetForFailedPasscodeAttempt = YES;
@@ -191,8 +193,35 @@ BOOL previousMatchingSetting;
         [self.passcodeView setBiometricMatchMode:1];
         
         [self.backdropView addSubview:self.passcodeView];
-    
-        [[[UIApplication sharedApplication] keyWindow] addSubview:self.backdropView];
+        
+        if (isPad) {
+            self.ipadWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            self.ipadWindow.backgroundColor = [UIColor clearColor];
+            self.ipadWindow.windowLevel = UIWindowLevelStatusBar - 1;
+            [self.ipadWindow makeKeyAndVisible];
+            
+            // AGWindowView now.
+            UIView *eh = [[UIView alloc] initWithFrame:CGRectMake(-5, -5, 5, 5)];
+            eh.backgroundColor = [UIColor clearColor];
+            eh.tag = 133337;
+            
+            [self.ipadWindow addSubview:eh];
+            
+            AGWindowView *rotate = [[AGWindowView alloc] initAndAddToWindow:self.ipadWindow];
+            rotate.backgroundColor = [UIColor clearColor];
+            rotate.supportedInterfaceOrientations = AGInterfaceOrientationMaskAll;
+            rotate.clipsToBounds = YES;
+            
+            [self.ipadWindow addSubview:rotate];
+            
+            [rotate addSubview:self.backdropView];
+            
+            self.backdropView.frame = rotate.bounds;
+            
+            //[rotate rotateManuallyToOrientation:orient];
+        } else {
+            [[[UIApplication sharedApplication] keyWindow] addSubview:self.backdropView];
+        }
     
         [UIView animateWithDuration:0.3 animations:^{
             self.backdropView.alpha = 1.0;
@@ -211,6 +240,15 @@ BOOL previousMatchingSetting;
         
         [self.backdropView removeFromSuperview];
         self.backdropView = nil;
+        
+        if (isPad) {
+            for (UIView *subview in self.ipadWindow.subviews) {
+                [subview removeFromSuperview];
+            }
+            
+            self.ipadWindow.hidden = YES;
+            self.ipadWindow = nil;
+        }
         
         [self stopMonitoring];
     }];
@@ -256,6 +294,15 @@ BOOL previousMatchingSetting;
                 
                 [self.backdropView removeFromSuperview];
                 self.backdropView = nil;
+                
+                if (isPad) {
+                    for (UIView *subview in self.ipadWindow.subviews) {
+                        [subview removeFromSuperview];
+                    }
+                    
+                    self.ipadWindow.hidden = YES;
+                    self.ipadWindow = nil;
+                }
             }];
             
 			[self stopMonitoring];
@@ -316,6 +363,15 @@ BOOL previousMatchingSetting;
             [self.backdropView removeFromSuperview];
             self.backdropView = nil;
         
+            if (isPad) {
+                for (UIView *subview in self.ipadWindow.subviews) {
+                    [subview removeFromSuperview];
+                }
+                
+                self.ipadWindow.hidden = YES;
+                self.ipadWindow = nil;
+            }
+            
             [self stopMonitoring];
         }];
     } else {

@@ -22,6 +22,7 @@
 @property bool shouldResetForFailedPasscodeAttempt;
 @property bool showsEmergencyCallButton;
 @property(readonly) NSString * passcode;
+@property(retain, nonatomic) UIColor *customBackgroundColor;
 @property double backgroundAlpha;
 - (void)resetForFailedPasscode;
 - (void)setBiometricMatchMode:(unsigned long long)arg1;
@@ -68,6 +69,7 @@
 @property (nonatomic, strong) NSString *passcodeHash;
 @property (nonatomic, strong) UIView *backdropView;
 @property (nonatomic, strong) SBUIPasscodeLockViewBase *passcodeView;
+@property (nonatomic, strong) UIWindow *ipadWindow;
 
 - (id)initWithFrame:(CGRect)frame passcodeHash:(NSString*)hash isLight:(BOOL)isLight;
 

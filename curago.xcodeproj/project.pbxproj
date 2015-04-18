@@ -22,6 +22,9 @@
 		C94890FD1ABDDD090041F86F /* M13ProgressViewRing.m in Sources */ = {isa = PBXBuildFile; fileRef = C94890F41ABDD9C10041F86F /* M13ProgressViewRing.m */; };
 		C950B6B519FE6C5E0093B892 /* IBKAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = C950B6B319FE6C5E0093B892 /* IBKAPI.h */; };
 		C950B6B619FE6C5E0093B892 /* IBKAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = C950B6B419FE6C5E0093B892 /* IBKAPI.m */; };
+		C95206361AE1ECE90031CDC2 /* AGWindowView.h in Headers */ = {isa = PBXBuildFile; fileRef = C95206341AE1ECE90031CDC2 /* AGWindowView.h */; };
+		C95206371AE1ECE90031CDC2 /* AGWindowView.m in Sources */ = {isa = PBXBuildFile; fileRef = C95206351AE1ECE90031CDC2 /* AGWindowView.m */; };
+		C95206391AE1ED9C0031CDC2 /* AGWindowViewDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = C95206381AE1ED9C0031CDC2 /* AGWindowViewDefines.h */; };
 		C9674CFD198978100094C597 /* UIImageAverageColorAddition.h in Headers */ = {isa = PBXBuildFile; fileRef = C9674CFB198978100094C597 /* UIImageAverageColorAddition.h */; };
 		C9674CFE198978100094C597 /* UIImageAverageColorAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = C9674CFC198978100094C597 /* UIImageAverageColorAddition.m */; };
 		C9674D0119897B070094C597 /* CKBlurView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9674CFF19897B070094C597 /* CKBlurView.h */; };
@@ -99,6 +102,9 @@
 		C94890FB1ABDD9C10041F86F /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		C950B6B319FE6C5E0093B892 /* IBKAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKAPI.h; sourceTree = "<group>"; };
 		C950B6B419FE6C5E0093B892 /* IBKAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKAPI.m; sourceTree = "<group>"; };
+		C95206341AE1ECE90031CDC2 /* AGWindowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowView.h; sourceTree = "<group>"; };
+		C95206351AE1ECE90031CDC2 /* AGWindowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGWindowView.m; sourceTree = "<group>"; };
+		C95206381AE1ED9C0031CDC2 /* AGWindowViewDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGWindowViewDefines.h; sourceTree = "<group>"; };
 		C9674CFB198978100094C597 /* UIImageAverageColorAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageAverageColorAddition.h; sourceTree = "<group>"; };
 		C9674CFC198978100094C597 /* UIImageAverageColorAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageAverageColorAddition.m; sourceTree = "<group>"; };
 		C9674CFF19897B070094C597 /* CKBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKBlurView.h; sourceTree = "<group>"; };
@@ -173,6 +179,9 @@
 				C94890DE1ABDD9C10041F86F /* Progress */,
 				C9674CFB198978100094C597 /* UIImageAverageColorAddition.h */,
 				C9674CFC198978100094C597 /* UIImageAverageColorAddition.m */,
+				C95206341AE1ECE90031CDC2 /* AGWindowView.h */,
+				C95206351AE1ECE90031CDC2 /* AGWindowView.m */,
+				C95206381AE1ED9C0031CDC2 /* AGWindowViewDefines.h */,
 				C9C45D851AB1FC8E0085DA7C /* IBKLabel.h */,
 				C9C45D861AB1FC8E0085DA7C /* IBKLabel.m */,
 				C9E77D521A8A544E003F9893 /* MarqueeLabel.h */,
@@ -336,6 +345,7 @@
 				C950B6B519FE6C5E0093B892 /* IBKAPI.h in Headers */,
 				C944009919467F5900483B32 /* IBKWidgetViewController.h in Headers */,
 				C9C45D871AB1FC8E0085DA7C /* IBKLabel.h in Headers */,
+				C95206391AE1ED9C0031CDC2 /* AGWindowViewDefines.h in Headers */,
 				C93BEEC5193F64D900EACE71 /* IBKResources.h in Headers */,
 				C9AA7E671ADAEA13005C3DC4 /* IBKSetupViewController.h in Headers */,
 				C9AA7E631ADAE994005C3DC4 /* IBKSetupWindow.h in Headers */,
@@ -344,6 +354,7 @@
 				C9E77D4C1A8A4C2E003F9893 /* IBKGameCenterTableView.h in Headers */,
 				C9E77D541A8A544E003F9893 /* MarqueeLabel.h in Headers */,
 				C9E77D501A8A50DF003F9893 /* IBKGameCenterTableCell.h in Headers */,
+				C95206361AE1ECE90031CDC2 /* AGWindowView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +451,7 @@
 				C9E77D551A8A544E003F9893 /* MarqueeLabel.m in Sources */,
 				C989B9461AA3C66C0093863B /* IBKWidgetTopBase.m in Sources */,
 				C9674D0219897B070094C597 /* CKBlurView.m in Sources */,
+				C95206371AE1ECE90031CDC2 /* AGWindowView.m in Sources */,
 				C950B6B619FE6C5E0093B892 /* IBKAPI.m in Sources */,
 				C9674CFE198978100094C597 /* UIImageAverageColorAddition.m in Sources */,
 				C9EDBAED1ADC57D30046EE14 /* IBKWidgetLockView.m in Sources */,
