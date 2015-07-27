@@ -126,18 +126,18 @@
     while (swaps != 0) {
         swaps = 0;
         for (int count = 0; count < max; count++) {
-            CGFloat valOne = [array[count] internal].percentComplete;
-            CGFloat valTwo = [array[count+1] internal].percentComplete;
+            //CGFloat valOne = [array[count] internal].percentComplete;
+            //CGFloat valTwo = [array[count+1] internal].percentComplete;
             
             GKAchievementDescription *descOne = array[count];
             GKAchievementDescription *decTwo = array[count+1];
             
-            if (valTwo < valOne) {
+            /*if (valTwo < valOne) {
                 array[count] = decTwo;
                 array[count+1] = descOne;
                 
                 swaps++;
-            }
+            }*/
         }
         
         max--;

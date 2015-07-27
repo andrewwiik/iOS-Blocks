@@ -1,8 +1,8 @@
 /*
 //
-// Curago
+// Curago (now iOS Blocks)
 //
-// Take control.
+// This is a widget system blah blah blah. Build, install and you'll see.
 //
 // (c) Matt Clarke, 2014.
 //
@@ -10,6 +10,7 @@
 //
 */
 
+// Sorry about the headers here, I'll need to have these all included within the project directory 
 #import <SpringBoard7.0/SBIconController.h>
 #import <SpringBoard7.0/SBFolder.h>
 #import <SpringBoard7.0/SBRootFolder.h>
@@ -403,7 +404,7 @@ static BBServer* __weak IBKBBServer;
     NSIndexPath *pathz = [NSIndexPath indexPathForRow:orig.row inSection:orig.col];
     [movedIndexPaths addObject:pathz];
 
-    // Cache this index path - do this on another thread
+    // Cache this index path
     if (!rearrangingIcons) {
        // NSLog(@"Caching index path");
         if (orientation == 1 || orientation == 2)
@@ -484,15 +485,19 @@ BOOL inSwitcher = NO;
     inSwitcher = NO;
 }
 
-- (void)animatePresentationFromDisplayIdentifier:(id)arg1 withViews:(id)arg2 fromSide:(int)arg3 withCompletion:(id)arg4 {
-    inSwitcher = YES;
+%end
 
+%hook SBUIController
+
+-(void)_activateSwitcher {
+    inSwitcher = YES;
+    
     // Oh bollocks. We need to ensure that all widgets are reset to showing again.
     for (NSString *key in [widgetViewControllers allKeys]) {
         IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:key];
         widgetController.view.alpha = 1.0;
     }
-
+    
     %orig;
 }
 
@@ -507,18 +512,6 @@ NSString *lastOpenedWidgetId;
 - (void)switcherWasDismissed:(BOOL)arg1 {
     %orig;
     inSwitcher = NO;
-}
-
-- (void)animatePresentationFromDisplayLayout:(id)arg1 withViews:(id)arg2 withCompletion:(id)arg3 {
-    inSwitcher = YES;
-
-    // Oh bollocks. We need to ensure that all widgets are reset to showing again.
-    for (NSString *key in [widgetViewControllers allKeys]) {
-        IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:key];
-        widgetController.view.alpha = 1.0;
-    }
-
-    %orig;
 }
 
 %end
@@ -712,7 +705,7 @@ CGSize defaultIconSizing;
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
         [view.layer renderInContext:UIGraphicsGetCurrentContext()];
 
-        UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
 
         UIGraphicsEndImageContext();
 
@@ -858,7 +851,7 @@ CGSize defaultIconSizing;
 
 %end
 
-// Fix up fading to app on launch
+// TODO: Fix up fading to app on launch
 
 #pragma mark Handle de-caching indexes when in editing mode
 
@@ -1060,7 +1053,7 @@ NSInteger page = 0;
 
         CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidget];
 
-        NSLog(@"BEGININNNG SCALE IS %f", iconScale);
+        NSLog(@"BEGINNING SCALE IS %f", iconScale);
 
         widget.view.transform = CGAffineTransformMakeScale(iconScale, iconScale);
     } else if (pinch.state == UIGestureRecognizerStateChanged && widget) {
@@ -1086,10 +1079,10 @@ NSInteger page = 0;
          NSLog(@"Pinching ended");
         if ([[widgetIcon class] isEqual:[objc_getClass("SBFolderIcon") class]]) return;
          // Handle end of touch. If scale greater than a set value, drop down regardless of time spent held in place.
-        // Also, we need to check whether we'll be overlapping another widget, and if so, don't drop /the bass/
+         // Also, we need to check whether we'll be overlapping another widget, and if so, don't drop /the bass/
          // We should add onto the homescreen now.
 
-        if ((scale-1.0) > 0.75) { // Scale is 1.0 onwards, but we expect 0.0 onwards
+        if ((scale-1.0) > 0.75) { // Scale is 1.0 onwards, but we expect 0.0 onwards for our code
             [widget setScaleForView:8.0 withDuration:0.3];
             [IBKResources addNewIdentifier:[widgetIcon applicationBundleID]];
 
@@ -1106,8 +1099,6 @@ NSInteger page = 0;
             // Move icons to next page if needed.
 
             SBIconListView *lst = [self IBKListViewForIdentifierTwo:widget.applicationIdentifer];
-
-            // Add three dummy icons onto the listView?
 
             // Count how many widgets on listView
             int count = 0;
@@ -1374,6 +1365,8 @@ static SBIcon *temp;
 
 #pragma mark Media data handling
 
+// Once available, InfoStats2 can be used to completely negate all this lot here.
+
 // iOS 8 shit.
 
 #include <MediaRemote/MediaRemote.h>
@@ -1553,7 +1546,6 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
 
     // Subclass SBIconView at runtime.
     Class $IBKIconView = objc_allocateClassPair(objc_getClass("SBIconView"), "IBKIconView", 0);
-    //class_addIvar($IBKIconView, "_widgetViewController", sizeof(UIView*), rint(log2(sizeof(UIView*))), @encode(UIView*));
 
     objc_registerClassPair($IBKIconView);
 

@@ -51,7 +51,11 @@ static IBKWeatherLayerFactory *shared;
     parser.delegate = self;
     parser.baseURL = [NSURL URLWithString:@"file:///System/Library/PrivateFrameworks/Weather.framework/"];
     
-    [parser parseContentsOfURL:[self filenameForCondition:arg1 isDay:arg2 largest:largest]];
+    NSURL *url = [self filenameForCondition:arg1 isDay:arg2 largest:largest];
+    
+    NSLog(@"Trying to load %@", url);
+    
+    [parser parseContentsOfURL:url];
     
     if (parser.error) {
         NSLog(@"ERROR: %@", parser.error);
@@ -70,8 +74,8 @@ static IBKWeatherLayerFactory *shared;
 }
 
 -(UIImage*)iconForCondition:(int)condition isDay:(BOOL)isDay wantsLargerIcons:(BOOL)larger {
-    // Larger ("centered-")icons are only available on iOS 8+
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0 && larger) {
+    // larger icons are the "centered-" ones.
+    if ([[[UIDevice currentDevice] systemName] floatValue] < 8.0) {
         larger = NO;
     }
     
@@ -191,12 +195,12 @@ static IBKWeatherLayerFactory *shared;
         filename = [NSString stringWithFormat:@"centered-%@", filename];
     }
     
-    filename = [NSString stringWithFormat:@"/System/Library/PrivateFrameworks/Weather.framework/%@", filename];
+    NSString *finalPath = [NSString stringWithFormat:@"/System/Library/PrivateFrameworks/Weather.framework/%@", filename];
     
     // Apply iPad ending if needed.
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        filename = [filename stringByAppendingString:@"~ipad"];
+        finalPath = [finalPath stringByAppendingString:@"~ipad"];
     }
     
     NSString *suffix = @"";
@@ -209,9 +213,14 @@ static IBKWeatherLayerFactory *shared;
         suffix = @".png";
     }
     
-    filename = [filename stringByAppendingString:suffix];
+    finalPath = [finalPath stringByAppendingString:suffix];
     
-    return [UIImage imageWithContentsOfFile:filename];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:finalPath]) {
+        // We'll have to load the image from inside Assets.car instead
+        return [UIImage imageNamed:filename inBundle:self.weatherFrameworkBundle compatibleWithTraitCollection:nil];
+    }
+    
+    return [UIImage imageWithContentsOfFile:finalPath];
 }
 
 -(NSString*)nameForCondition:(int)condition {
@@ -781,7 +790,13 @@ static IBKWeatherLayerFactory *shared;
     urlString = [urlString stringByReplacingOccurrencesOfString:@"assets/" withString:@""];
     urlString = [urlString stringByReplacingOccurrencesOfString:@".png" withString:@".cpbitmap"];
     
-    UIImage *image = [UIImage imageWithContentsOfCPBitmapFile:urlString flags:0];
+    UIImage *image;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:urlString]) {
+        urlString = [urlString stringByReplacingOccurrencesOfString:@".cpbitmap" withString:@".png"];
+        image = [UIImage imageWithContentsOfFile:urlString];
+    } else {
+        image = [UIImage imageWithContentsOfCPBitmapFile:urlString flags:0];
+    }
     
     return image.CGImage;
 }
