@@ -21,8 +21,7 @@ UIImage* applyMask(UIImage* image) {
     colr = [[UIColor alloc] initWithWhite:0 alpha:0.46];
     
     // begin image context
-    if (UIGraphicsBeginImageContextWithOptions == NULL)
-    {
+    if (&UIGraphicsBeginImageContextWithOptions == NULL) {
         UIGraphicsBeginImageContext(bnds.size);
     }
     else

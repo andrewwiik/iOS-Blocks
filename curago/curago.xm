@@ -1365,40 +1365,23 @@ static SBIcon *temp;
 
 #pragma mark Media data handling
 
-// Once available, InfoStats2 can be used to completely negate all this lot here.
-
-// iOS 8 shit.
-
-#include <MediaRemote/MediaRemote.h>
-
-@interface MPUNowPlayingController : NSObject
-@property(readonly) UIImage * currentNowPlayingArtwork;
-@property(readonly) NSDictionary * currentNowPlayingInfo;
-
-+(id)sharedMPU;
-- (BOOL)isPlaying;
--(void)update;
-@end
-
-MPUNowPlayingController *sharedMPU;
-
 %hook SBMediaController
 
 -(void)_nowPlayingInfoChanged {
     %orig;
 
-    // Give it a sec.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"IBK-UpdateMusic" object:nil];
 }
 
 - (void)setNowPlayingInfo:(id)arg1 {
     %orig;
 
-    // Give it a sec.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"IBK-UpdateMusic" object:nil];
 }
 
 %end
+
+#pragma mark IOS 8 stuff
 
 %group iOS8
 
@@ -1407,73 +1390,6 @@ MPUNowPlayingController *sharedMPU;
 %new
 -(id)alternateIconView {
     return nil; // Small fix for Auxo 3 of all things?!
-}
-
-%end
-
-%hook MPUNowPlayingController
-
-- (id)init {
-    sharedMPU = %orig;
-
-    return sharedMPU;
-}
-
-%new
-
-+(id)ibksharedMPU {
-    return sharedMPU;
-}
-
-%end
-
-%hook SBMediaController
-
--(BOOL)isPlaying {
-    return [sharedMPU isPlaying];
-}
-
-%new
-
--(NSString*)ibkNowPlayingArtist {
-    NSDictionary *dict = sharedMPU.currentNowPlayingInfo;
-    return [dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtist];
-}
-
-%new
-
--(NSString*)ibkNowPlayingAlbum {
-    NSDictionary *dict = sharedMPU.currentNowPlayingInfo;
-    return [dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoAlbum];
-}
-
-%new
-
--(NSString*)ibkNowPlayingTitle {
-    NSDictionary *dict = sharedMPU.currentNowPlayingInfo;
-    return [dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoTitle];
-}
-
-%new
-
--(UIImage*)ibkArtwork {
-    NSDictionary *dict = sharedMPU.currentNowPlayingInfo;
-    NSData *data = [dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoArtworkData];
-    return [UIImage imageWithData:data];
-}
-
-%new
-
--(BOOL)ibkTrackSupports15SecondFF {
-    NSDictionary *dict = sharedMPU.currentNowPlayingInfo;
-    return [[dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoSupportsFastForward15Seconds] boolValue];
-}
-
-%new
-
--(BOOL)ibkTrackSupports15SecondRewind {
-    NSDictionary *dict = sharedMPU.currentNowPlayingInfo;
-    return [[dict objectForKey:(__bridge NSString*)kMRMediaRemoteNowPlayingInfoSupportsRewind15Seconds] boolValue];
 }
 
 %end

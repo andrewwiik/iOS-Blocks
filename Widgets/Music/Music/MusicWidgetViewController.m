@@ -12,6 +12,9 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <objc/runtime.h>
 
+typedef void (^MRMediaRemoteGetNowPlayingInfoCompletion)(CFDictionaryRef information);
+void MRMediaRemoteGetNowPlayingInfo(dispatch_queue_t queue, MRMediaRemoteGetNowPlayingInfoCompletion completion);
+
 @interface SBMediaController (iOS8)
 -(NSString*)ibkNowPlayingArtist;
 -(NSString*)ibkNowPlayingAlbum;
@@ -147,7 +150,7 @@ static UIImage *cachedMosaic;
     
     if (IOS8_or_higher) {
         // Deal with that shit.
-        [self performSelector:@selector(delayed8update) withObject:nil afterDelay:1.0];
+        [self delayed8update];
     } else {
         self.artwork.image = [UIImage imageWithData:[(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] _nowPlayingInfo] [@"artworkData"]];
         self.songtitle.text = [(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] nowPlayingTitle];
@@ -171,24 +174,32 @@ static UIImage *cachedMosaic;
 }
 
 -(void)delayed8update {
-    self.artwork.image = [(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] ibkArtwork];
-    self.songtitle.text = [(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] ibkNowPlayingTitle];
-    self.artist.text = [(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] ibkNowPlayingArtist];
+    UIImage __block *artwork;
+    BOOL __block isPlaying;
     
-    // Update control buttons state.
-    [self setPlayButtonState:[(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying]];
-    
-    if (![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying] && ![(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] ibkArtwork]) {
-        self.noMediaPlaying.alpha = 1.0;
-    
-        if (cachedMosaic) {
-            self.artwork.image = cachedMosaic;
-            self.artwork.alpha = 0.5;
+    MRMediaRemoteGetNowPlayingInfo(dispatch_get_main_queue(), ^(CFDictionaryRef information) {
+        artwork = [UIImage imageWithData:[(__bridge NSDictionary*)information objectForKey:@"kMRMediaRemoteNowPlayingInfoArtworkData"]];
+        
+        self.songtitle.text = [(__bridge NSDictionary*)information objectForKey:@"kMRMediaRemoteNowPlayingInfoArtist"];
+        self.artist.text = [(__bridge NSDictionary*)information objectForKey:@"kMRMediaRemoteNowPlayingInfoAlbum"];
+        self.artwork.image = artwork;
+        isPlaying = [[(__bridge NSDictionary*)information objectForKey:@"kMRMediaRemoteNowPlayingInfoPlaybackRate"] boolValue];
+        
+        // Update control buttons state.
+        [self setPlayButtonState:isPlaying];
+        
+        if (!isPlaying && !artwork) {
+            self.noMediaPlaying.alpha = 1.0;
+            
+            if (cachedMosaic) {
+                self.artwork.image = cachedMosaic;
+                self.artwork.alpha = 0.5;
+            }
+        } else {
+            self.noMediaPlaying.alpha = 0.0;
+            self.artwork.alpha = 1.0;
         }
-    } else {
-        self.noMediaPlaying.alpha = 0.0;
-        self.artwork.alpha = 1.0;
-    }
+    });
 }
 
 -(void)setPlayButtonState:(BOOL)state {
