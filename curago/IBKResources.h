@@ -49,5 +49,6 @@
 +(BOOL)relockWidgets;
 +(BOOL)isWidgetLocked:(NSString*)identifier;
 +(void)reloadSettings;
++(int)defaultColourType;
 
 @end

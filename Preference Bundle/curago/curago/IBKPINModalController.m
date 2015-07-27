@@ -95,6 +95,10 @@
 
 - (void)setPIN:(NSString*)arg1 completion:(id)arg2 {
     NSMutableDictionary *currentSettings = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    if (!currentSettings) {
+        currentSettings = [NSMutableDictionary dictionary];
+    }
+    
     [currentSettings setObject:(arg1 ? [arg1 sha1] : @"") forKey:@"passcodeHash"];
     [currentSettings writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
 

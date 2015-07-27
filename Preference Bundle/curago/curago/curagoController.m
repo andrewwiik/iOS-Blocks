@@ -29,6 +29,17 @@ typedef NSUInteger ALApplicationIconSize;
 @property(retain) UIView<PINEntryView> * pinView;
 @end
 
+@interface UIPopoverPresentationController : UIViewController
+@property (nonatomic, assign) UIPopoverArrowDirection permittedArrowDirections;
+@property (nonatomic, weak) id delegate;
+- (void)setSourceRect:(CGRect)arg1;
+- (void)setSourceView:(id)arg1;
+@end
+
+@interface UINavigationController (iOS8)
+@property (nonatomic, strong) UIPopoverPresentationController *popoverPresentationController;
+@end
+
 @interface DevicePINController (IOS7)
 - (void)setPinDelegate:(id)arg1;
 - (void)setSpecifier:(id)arg1;
@@ -195,15 +206,28 @@ static OrderedDictionary *dataSourceUser;
             [view deselectRowAtIndexPath:indexPath animated:YES];
             
             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.pinController];
+            if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
+                self.ipadPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
             
-            self.ipadPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
+                //size as needed
+                self.ipadPopover.popoverContentSize = CGSizeMake(320, 480);
+                self.ipadPopover.delegate = self;
             
-            //size as needed
-            self.ipadPopover.popoverContentSize = CGSizeMake(320, 480);
-            self.ipadPopover.delegate = self;
-            
-            //show the popover next to the annotation view (pin)
-            [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:NULL animated:YES];
+                //show the popover next to the annotation view (pin)
+                [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:NULL animated:YES];
+            } else {
+                navController.modalPresentationStyle = 7;
+                navController.preferredContentSize = CGSizeMake(320, 480);
+                
+                // Load up UIPopoverPresentationController.
+                UIPopoverPresentationController *cont = navController.popoverPresentationController;
+                [cont setSourceRect:[[UIApplication sharedApplication] keyWindow].bounds];
+                [cont setSourceView:[[UIApplication sharedApplication] keyWindow]];
+                cont.permittedArrowDirections = NULL;
+                cont.delegate = self;
+                
+                [self.parentController presentViewController:navController animated:YES completion:nil];
+            }
         } else {
             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.pinController];
             [self.parentController presentViewController:navController animated:YES completion:^{
@@ -227,6 +251,10 @@ static OrderedDictionary *dataSourceUser;
 }
 
 -(void)popoverController:(UIPopoverController *)popoverController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view {
+    *rect = [[UIApplication sharedApplication] keyWindow].bounds;
+}
+
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view {
     *rect = [[UIApplication sharedApplication] keyWindow].bounds;
 }
 
@@ -453,7 +481,10 @@ static OrderedDictionary *dataSourceUser;
 
 -(void)didAcceptEnteredPIN {
     if (isPad) {
-        [self.ipadPopover dismissPopoverAnimated:YES];
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+            [self.ipadPopover dismissPopoverAnimated:YES];
+        else
+            [self.parentController dismissViewControllerAnimated:YES completion:nil];
         
         // Move to passcode pane.
         IBKPasscodeController *cont = [[IBKPasscodeController alloc] init];
@@ -472,11 +503,13 @@ static OrderedDictionary *dataSourceUser;
 }
 
 -(void)didCancelEnteringPIN {
-    [self.rootController popViewControllerAnimated:NO];
-    
     if (isPad) {
-        [self.ipadPopover dismissPopoverAnimated:YES];
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+            [self.ipadPopover dismissPopoverAnimated:YES];
+        else
+            [self.parentController dismissViewControllerAnimated:YES completion:nil];
     } else {
+        [self.rootController popViewControllerAnimated:NO];
         [self.parentController dismissViewControllerAnimated:YES completion:nil];
         [_table deselectRowAtIndexPath:indexPathForPasscodeIdentifier animated:NO];
     }

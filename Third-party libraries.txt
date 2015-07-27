@@ -3,3 +3,6 @@ iCarousel
 MarqueeLabel
 ShadowLabel
 BEMAnalogClockView
+AGWindowView
+UIImage+UIImageAverageColorAddition
+CKBlurView

@@ -10,9 +10,13 @@
 #import <UIKit/UIKit.h>
 #import "IBKWidgetDelegate.h"
 #import "MobileTimerContentView.h"
+#import "MobileTimerIconView.h"
 
 @interface MobileTimerWidgetViewController : NSObject <IBKWidgetDelegate>
 
 @property (nonatomic, strong) MobileTimerContentView *contentView;
+@property (nonatomic, strong) MobileTimerIconView *iconView;
+
+-(void)updateIconWithPercentage:(CGFloat)percentage;
 
 @end

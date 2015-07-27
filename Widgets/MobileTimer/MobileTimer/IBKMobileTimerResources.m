@@ -8,14 +8,22 @@
 
 #import "IBKMobileTimerResources.h"
 
+static NSDictionary *settings;
+
 @implementation IBKMobileTimerResources
 
 +(BOOL)hasNumbers {
-    return YES;
+    id temp = settings[@"hasNumbers"];
+    return (temp ? [temp boolValue] : YES);
 }
 
 +(BOOL)hasGraduations {
-    return NO;
+    id temp = settings[@"hasGraduations"];
+    return (temp ? [temp boolValue] : NO);
+}
+
++(void)reloadSettings {
+    settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.mobiletimer.ibkwidget.plist"];
 }
 
 @end

@@ -20,6 +20,17 @@
 - (void)setMode:(int)arg1;
 @end
 
+@interface UIPopoverPresentationController : UIViewController
+@property (nonatomic, assign) UIPopoverArrowDirection permittedArrowDirections;
+@property (nonatomic, weak) id delegate;
+- (void)setSourceRect:(CGRect)arg1;
+- (void)setSourceView:(id)arg1;
+@end
+
+@interface UINavigationController (iOS8)
+@property (nonatomic, strong) UIPopoverPresentationController *popoverPresentationController;
+@end
+
 @implementation IBKPasscodeController
 
 -(id)specifiers {
@@ -118,15 +129,28 @@
     
     if (isPad) {
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.pinController];
-        
-        self.ipadPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
-        
-        //size as needed
-        self.ipadPopover.popoverContentSize = CGSizeMake(320, 480);
-        self.ipadPopover.delegate = self;
-        
-        //show the popover next to the annotation view (pin)
-        [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:NULL animated:YES];
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
+            self.ipadPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
+            
+            //size as needed
+            self.ipadPopover.popoverContentSize = CGSizeMake(320, 480);
+            self.ipadPopover.delegate = self;
+            
+            //show the popover next to the annotation view (pin)
+            [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:NULL animated:YES];
+        } else {
+            navController.modalPresentationStyle = 7;
+            navController.preferredContentSize = CGSizeMake(320, 480);
+            
+            // Load up UIPopoverPresentationController.
+            UIPopoverPresentationController *cont = navController.popoverPresentationController;
+            [cont setSourceRect:[[UIApplication sharedApplication] keyWindow].bounds];
+            [cont setSourceView:[[UIApplication sharedApplication] keyWindow]];
+            cont.permittedArrowDirections = NULL;
+            cont.delegate = self;
+            
+            [self.parentController presentViewController:navController animated:YES completion:nil];
+        }
     } else {
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.pinController];
     
@@ -135,6 +159,10 @@
 }
 
 -(void)popoverController:(UIPopoverController *)popoverController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view {
+    *rect = [[UIApplication sharedApplication] keyWindow].bounds;
+}
+
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView **)view {
     *rect = [[UIApplication sharedApplication] keyWindow].bounds;
 }
 
@@ -153,27 +181,35 @@
 }
 
 -(void)didAcceptEnteredPIN {
-    if (isPad)
-        [self.ipadPopover dismissPopoverAnimated:YES];
-    else
+    if (isPad) {
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+            [self.ipadPopover dismissPopoverAnimated:YES];
+        else
+            [self.parentController dismissViewControllerAnimated:YES completion:nil];
+    } else
         [self.parentController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)didChangePasscode {
     [self reloadSpecifiers];
     
-    if (isPad)
-        [self.ipadPopover dismissPopoverAnimated:YES];
-    else
+    if (isPad) {
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+            [self.ipadPopover dismissPopoverAnimated:YES];
+        else
+            [self.parentController dismissViewControllerAnimated:YES completion:nil];
+    } else
         [self.parentController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)didCancelEnteringPIN {
-    if (isPad)
-        [self.ipadPopover dismissPopoverAnimated:YES];
-    else
-        [self.parentController dismissViewControllerAnimated:YES completion:nil];
-}
+    if (isPad) {
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+            [self.ipadPopover dismissPopoverAnimated:YES];
+        else
+            [self.parentController dismissViewControllerAnimated:YES completion:nil];
+    } else
+        [self.parentController dismissViewControllerAnimated:YES completion:nil];}
 
 #pragma mark UIAlertViewDelegate
 

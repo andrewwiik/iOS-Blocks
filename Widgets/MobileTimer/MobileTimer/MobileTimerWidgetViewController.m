@@ -13,6 +13,7 @@
 -(UIView *)viewWithFrame:(CGRect)frame isIpad:(BOOL)isIpad {
 	if (!self.contentView) {
 		self.contentView = [[MobileTimerContentView alloc] initWithFrame:frame];
+        self.contentView.delegate = self;
 	}
 
 	return self.contentView;
@@ -23,11 +24,20 @@
 }
 
 -(BOOL)hasAlternativeIconView {
-    return NO;
+    return YES;
+}
+
+-(UIView*)alternativeIconViewWithFrame:(CGRect)frame {
+    self.iconView = [[MobileTimerIconView alloc] initWithFrame:frame];
+    return self.iconView;
 }
 
 -(BOOL)wantsGradientBackground {
     return YES;
+}
+
+-(void)updateIconWithPercentage:(CGFloat)percentage {
+    [self.iconView changeToPercentage:percentage];
 }
 
 -(NSArray*)gradientBackgroundColors {

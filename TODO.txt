@@ -13,3 +13,5 @@ OTHER WORK:
 - Finish up on Help UI
 - Add “Setting up…” UI
 - Rewrite pinch handling to use a UIWindow over icons; kills all pinch issues
+- Add padlock image for iPad widget locking
+- Check that passcode popover on iPad iOS 8 looks right

@@ -227,7 +227,17 @@
     NSDictionary *infoPlist = [NSDictionary dictionaryWithContentsOfFile:path];
     
     // Set our background colour to the average of the app's icon.
-    self.view.backgroundColor = [(UIImage*)[(SBIconImageView*)self.iconImageView squareContentsImage] mergedColor];
+    switch ([IBKResources defaultColourType]) {
+        case 1:
+            self.view.backgroundColor = [(UIImage*)[(SBIconImageView*)self.iconImageView squareContentsImage] dominantColor];
+            break;
+            
+        case 0:
+        default:
+            self.view.backgroundColor = [(UIImage*)[(SBIconImageView*)self.iconImageView squareContentsImage] mergedColor];
+            break;
+    }
+    
     
     // Double check for GameCenter
     SBApplication* app;

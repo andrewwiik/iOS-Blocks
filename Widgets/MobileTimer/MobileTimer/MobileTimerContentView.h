@@ -12,13 +12,16 @@
 #import "IBKMTTimerView.h"
 #import "IBKMTAlarmViewController.h"
 
-@interface MobileTimerContentView : UIView <BEMAnalogClockDelegate> {
+@interface MobileTimerContentView : UIView <BEMAnalogClockDelegate, UIScrollViewDelegate> {
     NSTimer *clockUpdater;
 }
+
+@property (nonatomic, weak) id delegate;
 
 @property (nonatomic, strong) IBKBEMAnalogClockView *clockFace;
 @property (nonatomic, strong) UIScrollView *scroll;
 @property (nonatomic, strong) IBKMTTimerView *timerView;
 @property (nonatomic, strong) IBKMTAlarmViewController *alarmsController;
+@property (nonatomic, strong) UIView *alarmsContainer;
 
 @end

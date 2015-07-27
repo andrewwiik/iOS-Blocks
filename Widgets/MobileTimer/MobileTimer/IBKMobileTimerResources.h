@@ -12,5 +12,6 @@
 
 +(BOOL)hasGraduations;
 +(BOOL)hasNumbers;
++(void)reloadSettings;
 
 @end

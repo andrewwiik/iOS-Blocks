@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C93169D11AE4571200626502 /* MobileTimerIconView.h in Headers */ = {isa = PBXBuildFile; fileRef = C93169CF1AE4571200626502 /* MobileTimerIconView.h */; };
+		C93169D21AE4571200626502 /* MobileTimerIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = C93169D01AE4571200626502 /* MobileTimerIconView.m */; };
 		C9A1187D1AD03323001440A8 /* IBKMTTimerView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A1187B1AD03323001440A8 /* IBKMTTimerView.h */; };
 		C9A1187E1AD03323001440A8 /* IBKMTTimerView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A1187C1AD03323001440A8 /* IBKMTTimerView.m */; };
 		C9BAE2AF1AD2B36900687BA3 /* IBKMTAlarmViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9BAE2AD1AD2B36900687BA3 /* IBKMTAlarmViewController.h */; };
@@ -26,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C93169CF1AE4571200626502 /* MobileTimerIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileTimerIconView.h; sourceTree = "<group>"; };
+		C93169D01AE4571200626502 /* MobileTimerIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileTimerIconView.m; sourceTree = "<group>"; };
 		C9A1187B1AD03323001440A8 /* IBKMTTimerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKMTTimerView.h; sourceTree = "<group>"; };
 		C9A1187C1AD03323001440A8 /* IBKMTTimerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKMTTimerView.m; sourceTree = "<group>"; };
 		C9BAE2AD1AD2B36900687BA3 /* IBKMTAlarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKMTAlarmViewController.h; sourceTree = "<group>"; };
@@ -102,6 +106,8 @@
 				C9EDC8A41ACF2E9600310D21 /* MobileTimerWidgetViewController.m */,
 				C9EDC8A01ACF2E9600310D21 /* MobileTimerContentView.h */,
 				C9EDC8A11ACF2E9600310D21 /* MobileTimerContentView.m */,
+				C93169CF1AE4571200626502 /* MobileTimerIconView.h */,
+				C93169D01AE4571200626502 /* MobileTimerIconView.m */,
 				C9A1187B1AD03323001440A8 /* IBKMTTimerView.h */,
 				C9A1187C1AD03323001440A8 /* IBKMTTimerView.m */,
 				C9BAE2AD1AD2B36900687BA3 /* IBKMTAlarmViewController.h */,
@@ -211,6 +217,7 @@
 				C9A1187D1AD03323001440A8 /* IBKMTTimerView.h in Headers */,
 				C9EDC8C01ACF485C00310D21 /* IBKMobileTimerResources.h in Headers */,
 				C9BAE2B31AD2B65F00687BA3 /* IBKMTAlarmsCell.h in Headers */,
+				C93169D11AE4571200626502 /* MobileTimerIconView.h in Headers */,
 				C9EDC8BC1ACF30B000310D21 /* KSMHand.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,6 +291,7 @@
 			files = (
 				C9A1187E1AD03323001440A8 /* IBKMTTimerView.m in Sources */,
 				C9EDC8A51ACF2E9600310D21 /* MobileTimerWidgetViewController.m in Sources */,
+				C93169D21AE4571200626502 /* MobileTimerIconView.m in Sources */,
 				C9EDC8A21ACF2E9600310D21 /* MobileTimerContentView.m in Sources */,
 				C9BAE2B41AD2B65F00687BA3 /* IBKMTAlarmsCell.m in Sources */,
 				C9EDC8BD1ACF30B000310D21 /* KSMHand.m in Sources */,

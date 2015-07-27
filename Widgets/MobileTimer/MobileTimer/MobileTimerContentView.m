@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "MobileTimerContentView.h"
 #import "IBKMobileTimerResources.h"
+#import "MobileTimerWidgetViewController.h"
 #import "IBKMTAlarmsCell.h"
 #import <objc/runtime.h>
 
@@ -22,6 +23,8 @@
 -(id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     
+    [IBKMobileTimerResources reloadSettings];
+    
     if (self) {
         CGFloat longerLength = 0;
         
@@ -32,6 +35,7 @@
         }
         
         self.scroll = [[UIScrollView alloc] initWithFrame:frame];
+        self.scroll.delegate = self;
         self.scroll.backgroundColor = [UIColor clearColor];
         self.scroll.contentSize = CGSizeMake(frame.size.width*2, frame.size.height);
         self.scroll.pagingEnabled = YES;
@@ -81,7 +85,7 @@
         self.alarmsController = [[IBKMTAlarmViewController alloc] initWithCollectionViewLayout:layout];
         [self.alarmsController loadAlarmsFromManager];
         
-        UICollectionView *colView = [[UICollectionView alloc] initWithFrame:CGRectMake(self.frame.size.width + 20, 0, self.frame.size.width-40, [objc_getClass("IBKAPI") heightForContentView]) collectionViewLayout:layout];
+        UICollectionView *colView = [[UICollectionView alloc] initWithFrame:CGRectMake(20, 0, self.frame.size.width-40, [objc_getClass("IBKAPI") heightForContentView]) collectionViewLayout:layout];
         self.alarmsController.collectionView = colView;
          
         self.alarmsController.collectionView.backgroundColor = [UIColor clearColor];
@@ -93,11 +97,46 @@
         self.alarmsController.collectionView.dataSource = self.alarmsController;
         self.alarmsController.collectionView.delegate = self.alarmsController;
          
-        self.alarmsController.collectionView.frame = CGRectMake(self.frame.size.width + 20, 0, self.frame.size.width-40, self.frame.size.height);
+        self.alarmsController.collectionView.frame = CGRectMake(20, 0, self.frame.size.width-40, self.frame.size.height);
         
         [self.alarmsController.collectionView registerClass:[IBKMTAlarmsCell class] forCellWithReuseIdentifier:@"alarmsCell"];
-         
-        [self.scroll addSubview:self.alarmsController.collectionView];
+        
+        CAGradientLayer *grad = [CAGradientLayer layer];
+        grad.anchorPoint = CGPointZero;
+        grad.startPoint = CGPointMake(0.5f, 1.0f);
+        grad.endPoint = CGPointMake(0.5f, 0.0f);
+        
+        UIColor *innerColour = [UIColor colorWithWhite:1.0 alpha:1.0];
+        
+        NSArray *colors = [NSArray arrayWithObjects:
+                           (id)[innerColour CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.975f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.95f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.9f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.8f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.7f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.6f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.5f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.4f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.3f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.2f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.1f] CGColor],
+                           (id)[[UIColor clearColor] CGColor],
+                           nil];
+        
+        colors = [[colors reverseObjectEnumerator] allObjects];
+        
+        grad.colors = colors;
+        grad.bounds = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        
+        self.alarmsContainer = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.frame.size.height)];
+        self.alarmsContainer.backgroundColor = [UIColor clearColor];
+        
+        self.alarmsContainer.layer.mask = grad;
+        
+        [self.alarmsContainer addSubview:self.alarmsController.collectionView];
+        
+        [self.scroll addSubview:self.alarmsContainer];
     }
     
     return self;
@@ -124,12 +163,17 @@
     }
     
     self.clockFace.frame = CGRectMake(20, 10, longerLength, longerLength);
+    
+    [self.clockFace reloadClock];
+    
     self.clockFace.secondHandLength = (longerLength/2) - 5;
     self.clockFace.minuteHandLength = (longerLength/2) - 5;
     self.clockFace.hourHandLength = (longerLength/2) - 25;
     
     //self.timerView.frame = CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
-    self.alarmsController.collectionView.frame = CGRectMake(self.frame.size.width + 20, 0, self.frame.size.width-40, self.frame.size.height);
+    self.alarmsController.collectionView.frame = CGRectMake(20, 0, self.frame.size.width-40, self.frame.size.height);
+    self.alarmsContainer.frame = CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
+    self.alarmsContainer.layer.mask.bounds = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 }
 
 #pragma mark Clock delegate
@@ -189,6 +233,16 @@
             return [UIColor lightGrayColor];
             break;
     }
+}
+
+#pragma mark UIScrollViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    // Our contentOffset.x tells the story.
+    CGFloat offset = scrollView.contentOffset.x;
+    CGFloat percent = offset/self.frame.size.width;
+    
+    [(MobileTimerWidgetViewController*)self.delegate updateIconWithPercentage:percent];
 }
 
 -(void)dealloc {

@@ -90,7 +90,14 @@ NSBundle *strings;
 
 -(void)setCurrentWidgetLocked:(id)value specifier:(id)specifier {
     NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    if (!settings) {
+        settings = [NSMutableDictionary dictionary];
+    }
     NSMutableArray *array = settings[@"lockedBundleIdentifiers"];
+    
+    if (!array) {
+        array = [NSMutableArray array];
+    }
     
     if ((__bridge CFBooleanRef)value == kCFBooleanTrue) {
         if (![array containsObject:self.bundleIdentifier]) {

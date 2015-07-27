@@ -176,6 +176,15 @@ static NSDictionary *settings;
     return (temp ? [temp boolValue] : NO);
 }
 
++(int)defaultColourType { // Used for switching which method to use for average colour of icon.
+    id temp = settings[@"defaultColourType"];
+    return (temp ? [temp intValue] : 0);
+    
+    // Enum:
+    // 0 = average of 1px
+    // 1 = dominant colour
+}
+
 #pragma mark Widget locking
 
 +(BOOL)allWidgetsLocked {

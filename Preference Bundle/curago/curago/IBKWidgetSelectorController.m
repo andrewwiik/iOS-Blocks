@@ -145,6 +145,9 @@ static NSBundle *strings;
 
 -(id)getForKey:(NSString*)key {
     NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    if (!settings) {
+        settings = [NSDictionary dictionary];
+    }
     
     NSString *currentKey = settings[@"redirectedIdentifiers"][self.bundleIdentifier];
     
