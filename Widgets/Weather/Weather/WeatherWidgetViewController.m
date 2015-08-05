@@ -139,8 +139,8 @@ static void significantTimeChange(CFNotificationCenterRef center, void *observer
         [self.currentCity associateWithDelegate:self];
         
         //[[WeatherLocationManager sharedWeatherLocationManager] setDelegate:locationManager];
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
-            [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:YES activelyTracking:NO];
+        //if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+          //  [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingReady:YES activelyTracking:NO];
         [[WeatherLocationManager sharedWeatherLocationManager] setLocationTrackingActive:YES];
         [[WeatherPreferences sharedPreferences] setLocalWeatherEnabled:YES];
         

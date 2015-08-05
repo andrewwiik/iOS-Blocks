@@ -565,6 +565,9 @@ BOOL launchingWidget;
     %orig;
 
     sup = NO;
+    
+    IBKWidgetViewController *widgetController = [widgetViewControllers objectForKey:[self bundleIdentifier]];
+    widgetController.view.alpha = 1.0;
 }
 
 // iOS 7
@@ -784,6 +787,17 @@ CGSize defaultIconSizing;
     // Else, pinching will fail.
 
     return orig;
+}
+
+-(void)addSubview:(UIView*)view {
+    NSLog(@"ICON VIEW ADDING SUBVIEW %@", view);
+    
+    IBKWidgetViewController *cont = [objc_getClass("IBKIconView") getWidgetViewControllerForIcon:self.icon orBundleID:nil];
+    if (cont && [[view class] isEqual:[objc_getClass("SBCloseBoxView") class]]) {
+        [cont.view addSubview:view];
+    } else {
+        %orig;
+    }
 }
 
 %new
@@ -1342,6 +1356,8 @@ static SBIcon *temp;
     IBKWidgetViewController *contr = [widgetViewControllers objectForKey:[arg1 sectionID]];
     if (contr)
         [contr addBulletin:arg1];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:[NSString stringWithFormat:@"%@/notificationrecieved", [arg1 sectionID]] object:arg1];
 
     %orig;
 }
@@ -1351,6 +1367,8 @@ static SBIcon *temp;
         if ([[(IBKWidgetViewController*)[widgetViewControllers objectForKey:key] applicationIdentifer] isEqual:[arg1 sectionID]])
             [(IBKWidgetViewController*)[widgetViewControllers objectForKey:key] removeBulletin:arg1];
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:[NSString stringWithFormat:@"%@/notificationremoved", [arg1 sectionID]] object:arg1];
 
     %orig;
 }
@@ -1368,12 +1386,6 @@ static SBIcon *temp;
 %hook SBMediaController
 
 -(void)_nowPlayingInfoChanged {
-    %orig;
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"IBK-UpdateMusic" object:nil];
-}
-
-- (void)setNowPlayingInfo:(id)arg1 {
     %orig;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"IBK-UpdateMusic" object:nil];

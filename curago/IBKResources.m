@@ -178,7 +178,7 @@ static NSDictionary *settings;
 
 +(int)defaultColourType { // Used for switching which method to use for average colour of icon.
     id temp = settings[@"defaultColourType"];
-    return (temp ? [temp intValue] : 1);
+    return (temp ? [temp intValue] : 0);
     
     // Enum:
     // 0 = average of 1px

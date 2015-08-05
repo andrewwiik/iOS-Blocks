@@ -9,6 +9,12 @@
 #import "IBKNotificationsTableCell.h"
 #import <BulletinBoard/BBAttachments.h>
 
+#define is_IOS8_3 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.2) && ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0)
+
+@interface BBBulletin (EHHH)
+-(id)sectionDisplayName;
+@end
+
 @implementation IBKNotificationsTableCell
 
 + (UIImage *)imageWithColor:(UIColor *)color {
@@ -92,6 +98,10 @@
     }
     
     self.title.text = [bulletin title];
+    
+    if (is_IOS8_3 && ([self.title.text isEqualToString:@""] || !self.title.text)) {
+        self.title.text = [bulletin sectionDisplayName];
+    }
     
     [self.title sizeToFit];
     

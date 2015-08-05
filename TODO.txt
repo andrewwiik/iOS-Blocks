@@ -1,7 +1,6 @@
 BUGS:
 
 - Editing mode
-- Close button not touchable on widgets
 - Corner clipping isn’t perfect
 
 OTHER WORK:
