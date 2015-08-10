@@ -2,6 +2,7 @@ BUGS:
 
 - Editing mode
 - Corner clipping isn’t perfect
+- Adding icons to folders in editing mode leads to a crash
 
 OTHER WORK:
 
