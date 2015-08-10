@@ -151,6 +151,7 @@ static BBServer* __weak IBKBBServer;
     return column;
 }
 
+// TODO: This causes the adding icons to folders crash in editing mode
 - (id)iconAtPoint:(struct CGPoint)arg1 index:(unsigned long long *)arg2 proposedOrder:(int *)arg3 grabbedIcon:(id)arg4 {
     id orig = %orig;
 
@@ -511,6 +512,7 @@ NSString *lastOpenedWidgetId;
 
 - (void)switcherWasDismissed:(BOOL)arg1 {
     %orig;
+    
     inSwitcher = NO;
 }
 
@@ -789,9 +791,7 @@ CGSize defaultIconSizing;
     return orig;
 }
 
--(void)addSubview:(UIView*)view {
-    NSLog(@"ICON VIEW ADDING SUBVIEW %@", view);
-    
+-(void)addSubview:(UIView*)view {    
     IBKWidgetViewController *cont = [objc_getClass("IBKIconView") getWidgetViewControllerForIcon:self.icon orBundleID:nil];
     if (cont && [[view class] isEqual:[objc_getClass("SBCloseBoxView") class]]) {
         [cont.view addSubview:view];
@@ -864,8 +864,6 @@ CGSize defaultIconSizing;
 }
 
 %end
-
-// TODO: Fix up fading to app on launch
 
 #pragma mark Handle de-caching indexes when in editing mode
 
@@ -1111,6 +1109,8 @@ NSInteger page = 0;
                 [cachedIndexesLandscape removeAllObjects];
 
             // Move icons to next page if needed.
+            
+            // TODO: This needs to be redone slightly so that if the next page is also full, it moves icons on again, etc
 
             SBIconListView *lst = [self IBKListViewForIdentifierTwo:widget.applicationIdentifer];
 

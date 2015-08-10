@@ -8,11 +8,21 @@
 
 #import "IBKNotificationsTableCell.h"
 #import <BulletinBoard/BBAttachments.h>
+#import <SpringBoard7.0/SBApplicationController.h>
+#import <objc/runtime.h>
 
 #define is_IOS8_3 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.2) && ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0)
 
 @interface BBBulletin (EHHH)
 -(id)sectionDisplayName;
+@end
+
+@interface SBApplication : NSObject
+-(id)displayName;
+@end
+
+@interface SBApplicationController (iOS8)
+- (id)applicationWithBundleIdentifier:(id)arg1;
 @end
 
 @implementation IBKNotificationsTableCell
@@ -99,8 +109,14 @@
     
     self.title.text = [bulletin title];
     
-    if (is_IOS8_3 && ([self.title.text isEqualToString:@""] || !self.title.text)) {
-        self.title.text = [bulletin sectionDisplayName];
+    if (!self.title.text || [self.title.text isEqualToString:@""]) {
+        SBApplication *app;
+        if ([(SBApplicationController *)[objc_getClass("SBApplicationController") sharedInstance] respondsToSelector:@selector(applicationWithDisplayIdentifier:)])
+            app = [(SBApplicationController *)[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:[bulletin sectionID]];
+        else
+            app = [(SBApplicationController *)[objc_getClass("SBApplicationController") sharedInstance] applicationWithBundleIdentifier:[bulletin sectionID]];
+        
+        self.title.text = [app displayName]; // Translate to app name
     }
     
     [self.title sizeToFit];
