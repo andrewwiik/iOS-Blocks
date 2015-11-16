@@ -1,8 +1,6 @@
 # README #
 
-iOS Blocks.
-
-Curago is being used as a name here since it was a abandoned project with a premise very similar ot this one. Figured it still fitted, as curago means "manage"/"take charge".
+Homescreen widgets.
 
 ### How do I get set up? ###
 
