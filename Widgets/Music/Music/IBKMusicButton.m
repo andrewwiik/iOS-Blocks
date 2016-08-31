@@ -8,9 +8,7 @@
 
 #import "IBKMusicButton.h"
 
-@implementation IBKMusicButton
-
-UIImage* applyMask(UIImage* image) {
+static UIImage* applyMask(UIImage* image) {
     const CGSize  size = image.size;
     const CGRect  bnds = CGRectMake(0.0, 0.0, size.width, size.height);
     UIColor*      colr = nil;
@@ -48,6 +46,8 @@ UIImage* applyMask(UIImage* image) {
     
     return copy;
 }
+
+@implementation IBKMusicButton
 
 -(id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];

@@ -1,0 +1,30 @@
+/*
+ Root.strings
+ Convergance
+ 
+ Created by Aeneon on 22/12/2014.
+ 
+ */
+
+"Enabled" = "Aktiviert";
+"Theming" = "Theming";
+"Theme" = "Theme";
+"Thin Fonts" = "Schlanke Schrift";
+"Interface" = "Oberfläche";
+"Background" = "Hintergrund";
+"Widgets" = "Widgets";
+"Toggles" = "Schalter";
+"Album Artwork" = "Album Cover";
+"Fullscreen" = "Vollbild";
+"Medium" = "Mittel";
+"Mini" = "Mini";
+"Advanced" = "Erweitert";
+"Legal" = "Nutzungsbedingungen";
+"Lite Mode" = "Einfacher Modus";
+"Status Bar" = "Statusleiste";
+"Launchpad" = "Launchpad";
+"Hidden" = "Ausgeblendet";
+"Battery only" = "Nur Akkuanzeige";
+"All items" = "Alle Elemente";
+"Choose whether to hide the status bar, show only the battery percentage, or to display all status bar elements." = "Wähle aus, ob die Statusleiste ausgeblendet werden soll oder nur die Akkuanzeige bzw. alle Elemente eingebelendet werden sollen.";
+"Support / FAQ" = "Support / FAQ";

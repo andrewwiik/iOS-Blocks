@@ -1,0 +1,13 @@
+/* 
+  Wallpaper.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Aanzetten";
+"Disabled" = "Uitschakelen";
+"Toggles" = "Aan/uitknoppen";
+"Widgets" = "Widgets";
+"%d Enabled" = "%d Aanzetten";

@@ -1,0 +1,23 @@
+/* 
+  Wallpaper.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Aktivert";
+"Disabled" = "Deaktivert";
+"Toggles" = "Toggles";
+"Widgets" = "Widgets";
+"%d Enabled" = "%d Aktivert";
+"Edit" = "Rediger";
+"Done" = "Ferdig";
+
+// New in 1.1
+
+"Notification Centre" = "Varslingssenter";
+"Applications" = "Applikasjoner";
+"System" = "System";
+"User" = "Bruker";
+"Cancel" = "Avbryt";

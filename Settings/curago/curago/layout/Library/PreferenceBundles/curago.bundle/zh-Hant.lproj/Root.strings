@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Advanced</key>
+	<string>高级</string>
+	<key>Album Artwork</key>
+	<string>专辑插图</string>
+	<key>Background</key>
+	<string>锁屏背景</string>
+	<key>Battery Percent</key>
+	<string>电池百分比</string>
+	<key>Enabled</key>
+	<string>开启</string>
+	<key>Fullscreen</key>
+	<string>全屏样式</string>
+	<key>Interface</key>
+	<string>锁屏界面</string>
+	<key>Legal</key>
+	<string>法律信息</string>
+	<key>Medium</key>
+	<string>iOS7样式</string>
+	<key>Mini</key>
+	<string>迷你样式</string>
+	<key>Support</key>
+	<string>技术支持</string>
+	<key>Theme</key>
+	<string>主题</string>
+	<key>Theming</key>
+	<string>锁屏主题</string>
+	<key>Thin Fonts</key>
+	<string>较细字体</string>
+	<key>Toggles</key>
+	<string>快捷开关</string>
+	<key>Widgets</key>
+	<string>插件</string>
+</dict>
+</plist>

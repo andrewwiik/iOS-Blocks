@@ -1,0 +1,23 @@
+/* 
+  Wallpaper.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Разрешен";
+"Disabled" = "Заблокирован";
+"Toggles" = "Переключатели";
+"Widgets" = "Виджеты";
+"%d Enabled" = "%d Разрешен";
+"Edit" = "Изменить";
+"Done" = "Готово";
+
+// New in 1.1
+
+"Notification Centre" = "Центр уведомлений";
+"Applications" = "Приложения";
+"System" = "Система";
+"User" = "Пользователь";
+"Cancel" = "Отменить";

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <GameCenterFoundation/GKAchievementDescription.h>
+#import "../headers/GameCenterFoundation/GKAchievementDescription.h"
 #import "MarqueeLabel.h"
 
 @interface IBKGameCenterTableCell : UITableViewCell

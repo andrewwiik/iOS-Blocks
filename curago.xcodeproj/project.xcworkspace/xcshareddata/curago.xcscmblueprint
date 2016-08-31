@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "2A20C3918457CA51E2A31C0875B4C625B78EBAD7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D1BF2177069EA0E1B2979BF22292AECF69A93D8E" : 0,
+    "2A20C3918457CA51E2A31C0875B4C625B78EBAD7" : 0,
+    "30D81EEEF164C17352AA773A9B90C64960F53548" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "AA65EBFE-BE5D-4615-AA0C-0D5F9FC88FA8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D1BF2177069EA0E1B2979BF22292AECF69A93D8E" : "MWFeedParser\/",
+    "2A20C3918457CA51E2A31C0875B4C625B78EBAD7" : "Git",
+    "30D81EEEF164C17352AA773A9B90C64960F53548" : "..\/..\/opt\/iOSOpenDev"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "curago",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "curago.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/Matchstic\/curago.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2A20C3918457CA51E2A31C0875B4C625B78EBAD7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/kokoabim\/iOSOpenDev.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "30D81EEEF164C17352AA773A9B90C64960F53548"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mwaterfall\/MWFeedParser.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D1BF2177069EA0E1B2979BF22292AECF69A93D8E"
+    }
+  ]
+}

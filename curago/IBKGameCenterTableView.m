@@ -7,9 +7,9 @@
 //
 
 #import "IBKGameCenterTableView.h"
-#import <GameCenterFoundation/GKAchievementDescription.h>
-#import <GameCenterFoundation/GKAchievementInternal.h>
-#import <GameCenterFoundation/GKGame.h>
+#import "../headers/GameCenterFoundation/GKAchievementDescription.h"
+#import "../headers/GameCenterFoundation/GKAchievementInternal.h"
+#import "../headers/GameCenterFoundation/GKGame.h"
 #import "IBKGameCenterTableCell.h"
 #import "CKBlurView.h"
 #import <objc/runtime.h>

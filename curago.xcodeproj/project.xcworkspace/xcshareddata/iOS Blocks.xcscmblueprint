@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "2A20C3918457CA51E2A31C0875B4C625B78EBAD7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2A20C3918457CA51E2A31C0875B4C625B78EBAD7" : 0,
+    "30D81EEEF164C17352AA773A9B90C64960F53548" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "009921D7-13E9-4B21-BC1B-36EF00750B8E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2A20C3918457CA51E2A31C0875B4C625B78EBAD7" : "ios-blocks\/",
+    "30D81EEEF164C17352AA773A9B90C64960F53548" : "..\/..\/opt\/iOSOpenDev"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "iOS Blocks",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "iOS Blocks.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/Matchstic\/ios-blocks.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2A20C3918457CA51E2A31C0875B4C625B78EBAD7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/kokoabim\/iOSOpenDev.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "30D81EEEF164C17352AA773A9B90C64960F53548"
+    }
+  ]
+}

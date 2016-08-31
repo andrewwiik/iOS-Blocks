@@ -1,0 +1,23 @@
+/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Käytössä";
+"Theming" = "Ulkoasu";
+"Theme" = "Teema";
+"Thin Fonts" = "Ohut kirjaisin";
+"Interface" = "Käyttöliittymä";
+"Background" = "Taustakuva";
+"Widgets" = "Pienoisohjelmat";
+"Toggles" = "Kytkimet";
+"Battery Percent" = "Akku prosentteina";
+"Album Artwork" = "Albumikuvitus";
+"Fullscreen" = "Koko näyttö";
+"Medium" = "Keskikoko";
+"Mini" = "Pieni";
+"Support" = "Tuki";
+"Legal" = "Oikeudet";

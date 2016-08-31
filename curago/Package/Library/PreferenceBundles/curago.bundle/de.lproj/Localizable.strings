@@ -1,0 +1,20 @@
+/*
+ Localizable.strings
+ Convergance
+ 
+ Created by Aeneon on 22/12/2014.
+ 
+ */
+
+"%d Enabled" = "%d Aktiviert";
+"Disabled" = "Deaktiviert";
+"Done" = "Fertig";
+"Edit" = "Bearbeiten";
+"Enabled" = "Aktiviert";
+"Toggles" = "Schalter";
+"Widgets" = "Widgets";
+"Notification Centre" = "Mitteilungszentrale";
+"Applications" = "Anwendungen";
+"System" = "System";
+"User" = "Benutzer";
+"Cancel" = "Abbrechen";

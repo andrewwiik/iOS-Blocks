@@ -26,14 +26,14 @@ void MRMediaRemoteGetNowPlayingInfo(dispatch_queue_t queue, MRMediaRemoteGetNowP
 
 @interface IBKResources : NSObject
 
-+(CGFloat)widthForWidget;
++(CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier;
 
 @end
 
 static UIImage *cachedMosaic;
 
 #define IOS8_or_higher ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
-#define path @"/var/mobile/Library/Curago/Widgets/com.apple.Music/"
+#define path @"/var/mobile/Library/Curago/Widgets/com.matchstic.Music/"
 
 @implementation MusicWidgetViewController
 
@@ -94,7 +94,7 @@ static UIImage *cachedMosaic;
         cachedMosaic = mosaic;
         
         if (!mosaic) {
-            self.noMediaPlaying = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, [objc_getClass("IBKResources") widthForWidget]-40, (isIpad ? 207 : 118)-(isIpad ? 50 : 30))];
+            self.noMediaPlaying = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, frame.size.width - 40, (isIpad ? 207 : 118)-(isIpad ? 50 : 30))];
             self.noMediaPlaying.numberOfLines = 0;
             self.noMediaPlaying.text = @"No media playing";
             self.noMediaPlaying.textAlignment = NSTextAlignmentCenter;

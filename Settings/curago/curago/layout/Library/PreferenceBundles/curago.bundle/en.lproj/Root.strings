@@ -1,0 +1,24 @@
+/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Enabled";
+"Theming" = "Theming";
+"Theme" = "Theme";
+"Thin Fonts" = "Thin Fonts";
+"Interface" = "Interface";
+"Background" = "Background";
+"Widgets" = "Widgets";
+"Toggles" = "Toggles";
+"Battery Percent" = "Battery Percent";
+"Album Artwork" = "Album Artwork";
+"Fullscreen" = "Fullscreen";
+"Medium" = "Medium";
+"Mini" = "Mini";
+"Advanced" = "Advanced";
+"Support" = "Support";
+"Legal" = "Legal";

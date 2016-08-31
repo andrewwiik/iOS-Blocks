@@ -1,0 +1,25 @@
+﻿/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Aktivera";
+"Theming" = "Theming";
+"Theme" = "Tema";
+"Thin Fonts" = "Tunna Fonter";
+"Interface" = "Gränssnitt";
+"Lite Mode" = "Lite läge";
+"Background" = "Bakgrund";
+"Widgets" = "Widgettar";
+"Toggles" = "Toggles";
+"Battery Percent" = "Batteri Procent";
+"Album Artwork" = "Album konstverk";
+"Fullscreen" = "Helskärm";
+"Medium" = "Medium";
+"Mini" = "Minimal";
+"Advanced" = "Advancerat";
+"Support" = "Stöd";
+"Legal" = "Lagligt";

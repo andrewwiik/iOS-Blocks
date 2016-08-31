@@ -39,5 +39,9 @@
 	<array>
 		<string>iPhoneOS</string>
 	</array>
+	<key>IBKSupportedApps</key>
+	<array>
+		<string>com.apple.weather</string>
+	</array>
 </dict>
 </plist>

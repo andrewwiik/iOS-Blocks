@@ -1,0 +1,24 @@
+﻿/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "활성화";
+"Theming" = "주제";
+"Theme" = "테마";
+"Thin Fonts" = "얄쌉한폰트";
+"Interface" = "인터페이스";
+"Background" = "배경";
+"Widgets" = "위젯";
+"Toggles" = "토글";
+"Battery Percent" = "베터리 퍼센트";
+"Album Artwork" = "앨범 아트워크";
+"Fullscreen" = "전체화면";
+"Medium" = "미디엄";
+"Mini" = "미니";
+"Advanced" = "고급설정";
+"Support" = "지원";
+"Legal" = "법";

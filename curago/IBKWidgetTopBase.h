@@ -14,6 +14,10 @@
  * for this purpose, which is baffling.
 */
 
+@interface UIView (DelegateHelper)
+@property (getter=_viewDelegate, setter=_setViewDelegate:, nonatomic) UIViewController *viewDelegate;
+@end
+
 @interface IBKWidgetTopBase : UIButton
 
 @end

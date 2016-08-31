@@ -1,0 +1,24 @@
+/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Ενεργοποιημένο";
+"Theming" = "Θεματοποίηση";
+"Theme" = "Θέμα";
+"Thin Fonts" = "Λεπτές Γραμματοσειρές";
+"Interface" = "Περιβάλλον";
+"Background" = "Φόντο";
+"Widgets" = "Widgets";
+"Toggles" = "Toggles";
+"Battery Percent" = "Ποσότητα Μπαταρίας Τοις Εκατό";
+"Album Artwork" = "Εικόνα Album";
+"Fullscreen" = "Προβολη σε πλήρη οθόνη";
+"Medium" = "Μεσαίο";
+"Mini" = "Μικρό";
+"Advanced" = "Αναλυτικότερα";
+"Support" = "Υποστήριξη";
+"Legal" = "Νομικά";

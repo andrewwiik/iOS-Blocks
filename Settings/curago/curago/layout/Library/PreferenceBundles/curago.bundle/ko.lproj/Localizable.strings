@@ -1,0 +1,15 @@
+﻿/* 
+  Wallpaper.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "활성화";
+"Disabled" = "비활성화";
+"Toggles" = "토글";
+"Widgets" = "위젯";
+"%d Enabled" = "%d 활성화";
+"Edit" = "수정";
+"Done" = "완료";

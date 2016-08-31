@@ -14,6 +14,8 @@
 #import <objc/runtime.h>
 #import "BBCNewsSettings.h"
 
+#define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
 static BOOL isUpdating;
 
 @interface IBKAPI : NSObject
@@ -78,7 +80,7 @@ static BOOL isUpdating;
         
         [self.loadingView addSubview:faded];
         
-        IBKLabel *text = [[IBKLabel alloc] initWithFrame:CGRectMake(7, [objc_getClass("IBKAPI") heightForContentView]-38, self.frame.size.width-10, 33)];
+        IBKLabel *text = [[IBKLabel alloc] initWithFrame:CGRectMake(7, (self.superview.frame.size.height -(isPad ? 50.0 : 30.0)-7.0)-38, self.frame.size.width-10, 33)];
         text.textAlignment = NSTextAlignmentLeft;
         text.textColor = [UIColor whiteColor];
         text.backgroundColor = [UIColor clearColor];
@@ -142,7 +144,7 @@ static BOOL isUpdating;
         view.backgroundColor = [UIColor clearColor];
         view.layer.masksToBounds = YES;
         
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, view.bounds.size.width, [objc_getClass("IBKAPI") heightForContentView])];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, view.bounds.size.width, (self.superview.frame.size.height -(isPad ? 50.0 : 30.0)))];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.backgroundColor = [UIColor blackColor];
         imageView.layer.masksToBounds = NO;
@@ -180,7 +182,7 @@ static BOOL isUpdating;
         
         imageView.layer.mask = grad;
         
-        UIView *eh = [[UIView alloc] initWithFrame:CGRectMake(0, [objc_getClass("IBKAPI") heightForContentView], view.bounds.size.width, view.bounds.size.height - [objc_getClass("IBKAPI") heightForContentView])];
+        UIView *eh = [[UIView alloc] initWithFrame:CGRectMake(0, (self.superview.frame.size.height -(isPad ? 50.0 : 30.0)), view.bounds.size.width, view.bounds.size.height - (self.superview.frame.size.height -(isPad ? 50.0 : 30.0)))];
         eh.backgroundColor = [UIColor blackColor];
         
         CAGradientLayer *darken = [self gradientFrom:[UIColor clearColor] to:[UIColor colorWithWhite:0.0 alpha:1.0]];
@@ -193,7 +195,7 @@ static BOOL isUpdating;
         
         [imageView addSubview:eh];
         
-        IBKLabel *text = [[IBKLabel alloc] initWithFrame:CGRectMake(7, [objc_getClass("IBKAPI") heightForContentView]-38, self.frame.size.width-14, 35)];
+        IBKLabel *text = [[IBKLabel alloc] initWithFrame:CGRectMake(7, (self.superview.frame.size.height -(isPad ? 50.0 : 30.0))-38, self.frame.size.width-14, 35)];
         text.textAlignment = NSTextAlignmentLeft;
         text.textColor = [UIColor whiteColor];
         text.backgroundColor = [UIColor clearColor];
