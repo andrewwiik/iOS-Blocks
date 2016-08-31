@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <BulletinBoard/BBBulletin.h>
+#import "../headers/BulletinBoard/BBBulletin.h"
 #import "IBKLabel.h"
 
 #define isIpadDevice (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)

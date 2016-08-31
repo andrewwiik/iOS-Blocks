@@ -1,0 +1,15 @@
+/* 
+  Wallpaper.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Enabled";
+"Disabled" = "Disabled";
+"Toggles" = "Toggles";
+"Widgets" = "Widgets";
+"%d Enabled" = "%d Enabled";
+"Edit" = "Edit";
+"Done" = "Done";

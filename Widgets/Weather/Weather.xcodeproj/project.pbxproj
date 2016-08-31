@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		465AAC031D5E9239009E3B45 /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 465AAC021D5E9239009E3B45 /* Weather.framework */; };
 		C916D2AB1AC4B05600462E2D /* IBKLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = C916D2A91AC4B05600462E2D /* IBKLabel.h */; };
 		C916D2AC1AC4B05600462E2D /* IBKLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C916D2AA1AC4B05600462E2D /* IBKLabel.m */; };
 		C97FEEB91AC9E24A0006AB9C /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = C97FEEB71AC9E24A0006AB9C /* Reachability.h */; };
@@ -24,10 +25,10 @@
 		C9FFF8F71AC0620E00488688 /* WeatherContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FFF8F61AC0620E00488688 /* WeatherContentView.m */; };
 		C9FFF8FA1AC0620E00488688 /* WeatherWidgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FFF8F91AC0620E00488688 /* WeatherWidgetViewController.m */; };
 		C9FFF90C1AC0655C00488688 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FFF90B1AC0655C00488688 /* CoreLocation.framework */; };
-		C9FFF90E1AC0658300488688 /* Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FFF90D1AC0658300488688 /* Weather.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		465AAC021D5E9239009E3B45 /* Weather.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Weather.framework; path = "../../../Downloads/iOS10-Runtime-Headers-master/PrivateFrameworks/Weather.framework"; sourceTree = "<group>"; };
 		C916D2A91AC4B05600462E2D /* IBKLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBKLabel.h; sourceTree = "<group>"; };
 		C916D2AA1AC4B05600462E2D /* IBKLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBKLabel.m; sourceTree = "<group>"; };
 		C97FEEB71AC9E24A0006AB9C /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -57,7 +58,6 @@
 		C9FFF9041AC0620E00488688 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Package/var/mobile/Library/Curago/Widgets/com.matchstic.Weather/Icon@2x.png"; sourceTree = "<group>"; };
 		C9FFF9051AC0620E00488688 /* IBKWidgetDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IBKWidgetDelegate.h; sourceTree = "<group>"; };
 		C9FFF90B1AC0655C00488688 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		C9FFF90D1AC0658300488688 /* Weather.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Weather.framework; path = ../../../../../../../../opt/iOSOpenDev/frameworks/Weather.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9FFF90E1AC0658300488688 /* Weather.framework in Frameworks */,
+				465AAC031D5E9239009E3B45 /* Weather.framework in Frameworks */,
 				C9FFF90C1AC0655C00488688 /* CoreLocation.framework in Frameworks */,
 				C9FFF8EA1AC0620E00488688 /* Foundation.framework in Frameworks */,
 				C9FFF8EC1AC0620E00488688 /* UIKit.framework in Frameworks */,
@@ -95,7 +95,7 @@
 		C9FFF8E81AC0620E00488688 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C9FFF90D1AC0658300488688 /* Weather.framework */,
+				465AAC021D5E9239009E3B45 /* Weather.framework */,
 				C9FFF90B1AC0655C00488688 /* CoreLocation.framework */,
 				C9FFF8E91AC0620E00488688 /* Foundation.framework */,
 				C9FFF8EB1AC0620E00488688 /* UIKit.framework */,
@@ -313,7 +313,8 @@
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(iOSOpenDevPath)/frameworks/**",
-					"$(SDKROOT)/System/Library/PrivateFrameworks",
+					"$(SDKROOT)/System/Library/PrivateFrameworks/**",
+					"$(SDKROOT)/../iPhoneOS9.2.sdk/System/Library/PrivateFrameworks/**",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -330,7 +331,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos9.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 				iOSOpenDevPath = /opt/iOSOpenDev;
@@ -346,7 +347,8 @@
 				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(iOSOpenDevPath)/frameworks/**",
-					"$(SDKROOT)/System/Library/PrivateFrameworks",
+					"$(SDKROOT)/System/Library/PrivateFrameworks/**",
+					"$(SDKROOT)/../iPhoneOS9.2.sdk/System/Library/PrivateFrameworks/**",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -355,7 +357,7 @@
 				HEADER_SEARCH_PATHS = "$(iOSOpenDevPath)/include/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = "$(iOSOpenDevPath)/lib/**";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos9.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				iOSOpenDevPath = /opt/iOSOpenDev;
@@ -373,12 +375,18 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/iOSOpenDev/frameworks,
+					"$(SDKROOT)/../iPhoneOS9.2.sdk/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Weather/Weather-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/../iPhoneOS9.2.sdk/**",
+					"$(iOSOpenDevPath)/include/**",
+				);
 				INSTALL_PATH = /var/mobile/Library/Curago/Widgets/com.matchstic.Weather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				SDKROOT = iphoneos9.2;
+				iOSOpenDevBuildPackageOnAnyBuild = YES;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
 				iOSOpenDevInstallOnAnyBuild = NO;
@@ -399,12 +407,18 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/iOSOpenDev/frameworks,
+					"$(SDKROOT)/../iPhoneOS9.2.sdk/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Weather/Weather-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(SDKROOT)/../iPhoneOS9.2.sdk/**",
+					"$(iOSOpenDevPath)/include/**",
+				);
 				INSTALL_PATH = /var/mobile/Library/Curago/Widgets/com.matchstic.Weather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				SDKROOT = iphoneos9.2;
+				iOSOpenDevBuildPackageOnAnyBuild = YES;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
 				iOSOpenDevInstallOnAnyBuild = NO;

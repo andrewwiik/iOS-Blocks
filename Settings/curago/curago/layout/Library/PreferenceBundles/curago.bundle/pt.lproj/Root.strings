@@ -1,0 +1,32 @@
+/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Ativado";
+"Theming" = "Temas";
+"Theme" = "Tema";
+"Thin Fonts" = "Fontes finas";
+"Interface" = "Interface";
+"Background" = "Plano de fundo";
+"Widgets" = "Widgets";
+"Toggles" = "Alavancas";
+"Album Artwork" = "Foto do Álbum";
+"Fullscreen" = "Tela cheia";
+"Medium" = "Médio";
+"Mini" = "Mini";
+"Advanced" = "Avançado";
+"Legal" = "Legal";
+
+// new in 1.1
+
+"Lite Mode" = "Modo Leve";
+"Status Bar" = "Status Bar";
+"Hidden" = "Oculta";
+"Battery only" = "Somente bateria";
+"All items" = "Todos os itens";
+"Choose whether to hide the status bar, show only the battery percentage, or to display all status bar elements." = "Escolha se quer ocultar a status bar, mostrar somente a porcentagem da bateria, or mostrar tudo.";
+"Support / FAQ" = "Suporte / Perguntas";

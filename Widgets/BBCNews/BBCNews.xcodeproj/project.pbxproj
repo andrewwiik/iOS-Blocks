@@ -246,7 +246,7 @@
 		C98D8B991AB21FF500E533E9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 			};
 			buildConfigurationList = C98D8B9C1AB21FF500E533E9 /* Build configuration list for PBXProject "BBCNews" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -369,11 +369,11 @@
 				GCC_PREFIX_HEADER = "BBCNews/BBCNews-Prefix.pch";
 				INSTALL_PATH = /var/mobile/Library/Curago/Widgets/com.matchstic.BBCNews;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevBuildPackageOnAnyBuild = YES;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
 				iOSOpenDevInstallOnAnyBuild = NO;
-				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevInstallOnProfiling = NO;
 				iOSOpenDevRespringOnInstall = YES;
 				iOSOpenDevUsePackageVersionPList = YES;
 			};
@@ -392,11 +392,11 @@
 				GCC_PREFIX_HEADER = "BBCNews/BBCNews-Prefix.pch";
 				INSTALL_PATH = /var/mobile/Library/Curago/Widgets/com.matchstic.BBCNews;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevBuildPackageOnAnyBuild = YES;
 				iOSOpenDevCopyOnBuild = NO;
 				iOSOpenDevDevice = "";
 				iOSOpenDevInstallOnAnyBuild = NO;
-				iOSOpenDevInstallOnProfiling = YES;
+				iOSOpenDevInstallOnProfiling = NO;
 				iOSOpenDevRespringOnInstall = YES;
 				iOSOpenDevUsePackageVersionPList = YES;
 			};

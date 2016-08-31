@@ -18,6 +18,6 @@
  * @return The average colour of a specified icon, taking into account changes made by WinterBoard themes.
  */
 +(UIColor*)averageColorForIconIdentifier:(NSString*)bundleId;
-+(CGFloat)heightForContentView;
++(CGFloat)heightForContentViewWithIdentifier:(NSString *)identifier;
 
 @end

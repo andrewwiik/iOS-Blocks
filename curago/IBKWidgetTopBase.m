@@ -8,6 +8,7 @@
 
 #import "IBKWidgetTopBase.h"
 #import "IBKResources.h"
+#import "IBKWidgetViewController.h"
 
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
@@ -19,7 +20,8 @@
 */
 
 -(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
-    CGRect rect = CGRectMake(0, [IBKResources heightForWidget]-(isPad ? 50 : 30)-14, (isPad ? 50 : 30)+14, (isPad ? 50 : 30)+14);
+    if ([[NSClassFromString(@"SBIconController") sharedInstance] isEditing]) return NO;
+    CGRect rect = CGRectMake(0, self.frame.size.height-(isPad ? 50 : 30), (isPad ? 50 : 30), (isPad ? 50 : 30));
     CGRect intersect = CGRectMake(point.x, point.y, 1, 1);
     
     return !CGRectIntersectsRect(rect, intersect);

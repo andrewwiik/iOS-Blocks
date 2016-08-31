@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <SpringBoard7.0/SBIconImageView.h>
+
+#import "../headers/SpringBoard/SBIconImageView.h"
 #import "IBKWidget.h"
-#import <BulletinBoard/BBObserver.h>
-#import <SpringBoard7.0/SBIconView.h>
+#import "../headers/BulletinBoard/BBObserver.h"
+#import "../headers/SpringBoard/SBIconView.h"
 #import "IBKGameCenterTableView.h"
 #import "IBKWidgetTopBase.h"
 #import "IBKWidgetLockView.h"
@@ -38,6 +39,8 @@
 @property (nonatomic, strong) IBKLabel *noNotifsLabel;
 @property (nonatomic, strong) UIView *shimIcon;
 @property (nonatomic, strong) NSMutableArray *notificationsDataSource; // This is full of BBBulletins.
+
+@property (nonatomic) CGFloat currentScale;
 @property (readwrite) BOOL fallbackToNotificationList;
 @property (readwrite) BOOL isWidgetLoaded;
 @property (readwrite) BOOL scalingDown;
@@ -51,6 +54,9 @@
 -(void)loadWidgetInterface; // Call when pinch out recognised
 -(void)unloadWidgetInterface; // Call when recycling view
 -(void)unloadFromPinchGesture;
+-(void)handlePinchGesture:(UIPinchGestureRecognizer*)pinch;
+-(void)performRotationWithDuration:(CGFloat)duration;
+-(void)closeWidgetAnimated;
 
 -(void)addBulletin:(id)arg2;
 -(void)removeBulletin:(id)arg2;

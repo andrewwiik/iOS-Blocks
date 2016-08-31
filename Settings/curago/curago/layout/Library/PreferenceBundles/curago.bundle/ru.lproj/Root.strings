@@ -1,0 +1,32 @@
+/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Разрешен";
+"Theming" = "Темизация";
+"Theme" = "Тема";
+"Thin Fonts" = "Разреженный шрифт";
+"Interface" = "Интерфейс";
+"Background" = "Фон";
+"Widgets" = "Виджеты";
+"Toggles" = "Переключатели";
+"Album Artwork" = "Альбом Работ";
+"Fullscreen" = "Полный экран";
+"Medium" = "Средний";
+"Mini" = "Мини";
+"Advanced" = "Расширенный";
+"Legal" = "Допустимый";
+
+// new in 1.1
+
+"Lite Mode" = "Облегченный режим";
+"Status Bar" = "Статусная строка";
+"Hidden" = "Скрытый";
+"Battery only" = "Только батарея";
+"All items" = "Все элементы";
+"Choose whether to hide the status bar, show only the battery percentage, or to display all status bar elements." = "Выбрать скрыть ли статусу строку и показывать процент оставшейся батареи или отобразить все элементы статусной строки.";
+"Support / FAQ" = "Помощь / Популярные вопросы";

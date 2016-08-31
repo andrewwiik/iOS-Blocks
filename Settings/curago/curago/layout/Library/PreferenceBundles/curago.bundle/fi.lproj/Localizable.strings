@@ -1,0 +1,13 @@
+/* 
+  Wallpaper.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Käytössä";
+"Disabled" = "Ei käytössä";
+"Toggles" = "Kytkimet";
+"Widgets" = "Pienoisohjelmat";
+"%d Enabled" = "%d Käytössä";

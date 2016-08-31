@@ -7,8 +7,8 @@
 //
 
 #import "IBKNotificationsTableCell.h"
-#import <BulletinBoard/BBAttachments.h>
-#import <SpringBoard7.0/SBApplicationController.h>
+#import "../headers/BulletinBoard/BBAttachments.h"
+#import "../headers/SpringBoard/SBApplicationController.h"
 #import <objc/runtime.h>
 
 #define is_IOS8_3 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.2) && ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0)

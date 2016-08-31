@@ -1,0 +1,23 @@
+/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Aanzetten";
+"Theming" = "Thema's";
+"Theme" = "Thema";
+"Thin Fonts" = "Slank ";
+"Interface" = "Interface";
+"Background" = "Achtergrond";
+"Widgets" = "Widgets";
+"Toggles" = "Aan/uitknoppen";
+"Battery Percent" = "Batterij Percentage";
+"Album Artwork" = "Albumafbeeldingen";
+"Fullscreen" = "Volledig scherm";
+"Medium" = "Middelgroot";
+"Mini" = "Klein";
+"Support" = "Ondersteuning";
+"Legal" = "Legaal";

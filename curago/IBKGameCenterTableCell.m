@@ -8,7 +8,7 @@
 
 #import "IBKGameCenterTableCell.h"
 #import "IBKNotificationsTableCell.h"
-#import <GameCenterFoundation/GKAchievementInternal.h>
+#import "../headers/GameCenterFoundation/GKAchievementInternal.h"
 
 @implementation IBKGameCenterTableCell
 

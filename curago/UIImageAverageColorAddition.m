@@ -80,6 +80,8 @@
 
 - (UIColor *)mergedColor
 {
+//    return [self averageColor];
+//    return [UIColor colorWithAverageColorFromImage:self];
 	CGSize size = {1, 1};
 	UIGraphicsBeginImageContext(size);
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -89,9 +91,11 @@
 	UIColor *color = [UIColor colorWithRed:data[2] / 255.0f
 									 green:data[1] / 255.0f
 									  blue:data[0] / 255.0f
-									 alpha:1];
+									 alpha:data[3]];
 	UIGraphicsEndImageContext();
 	return color;
 }
+
+
 
 @end

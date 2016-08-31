@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%d Enabled</key>
+	<string>%d开启</string>
+	<key>Disabled</key>
+	<string>关闭</string>
+	<key>Done</key>
+	<string>完成</string>
+	<key>Edit</key>
+	<string>编辑</string>
+	<key>Enabled</key>
+	<string>开启</string>
+	<key>Toggles</key>
+	<string>快捷开关</string>
+	<key>Widgets</key>
+	<string>插件</string>
+</dict>
+</plist>

@@ -8,9 +8,11 @@
 
 #import "IBKAPI.h"
 #import "UIImageAverageColorAddition.h"
-#import <SpringBoard7.0/SBIconImageView.h>
-#import <SpringBoard7.0/SBIconModel.h>
-#import <SpringBoard7.0/SBIconController.h>
+
+#import "../headers/SpringBoard/SBIconImageView.h"
+#import "../headers/SpringBoard/SBIconModel.h"
+#import "../headers/SpringBoard/SBIconController.h"
+
 #import <objc/runtime.h>
 
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -38,8 +40,8 @@
     return [(UIImage*)[(SBIconImageView*)iconImageView squareContentsImage] mergedColor];
 }
 
-+(CGFloat)heightForContentView {
-    CGFloat bbb = [IBKResources heightForWidget]-(isPad ? 50.0 : 30.0)-7.0;
++(CGFloat)heightForContentViewWithIdentifier:(NSString *)identifier {
+    CGFloat bbb = [IBKResources heightForWidgetWithIdentifier:identifier]-(isPad ? 50.0 : 30.0)-7.0;
     return bbb;
 }
 

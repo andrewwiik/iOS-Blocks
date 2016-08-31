@@ -8,7 +8,7 @@
 
 #import "WeatherWidgetViewController.h"
 #import <CoreLocation/CLLocationManager.h>
-#import <Weather/TWCCityUpdater.h>
+#import <Weather/T>
 #import <objc/runtime.h>
 #import "Reachability.h"
 #import "IBKWeatherResources.h"

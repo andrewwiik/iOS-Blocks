@@ -1,0 +1,32 @@
+/* 
+  Root.strings
+  Convergance
+
+  Created by Matt Clarke on 21/01/2014.
+
+*/
+
+"Enabled" = "Aktivert";
+"Theming" = "Theming";
+"Theme" = "Tema";
+"Thin Fonts" = "Tynne Fonter";
+"Interface" = "Grensesnitt";
+"Background" = "Bakgrunn";
+"Widgets" = "Widgets";
+"Toggles" = "Toggles";
+"Album Artwork" = "Albumbilde";
+"Fullscreen" = "Fullskjerm";
+"Medium" = "Medium";
+"Mini" = "Mini";
+"Advanced" = "Avansert";
+"Legal" = "Juridisk";
+
+// new in 1.1
+
+"Lite Mode" = "Lite Mode";
+"Status Bar" = "Statuslinje";
+"Hidden" = "Skjult";
+"Battery only" = "Bare batteri";
+"All items" = "Alle elementer";
+"Choose whether to hide the status bar, show only the battery percentage, or to display all status bar elements." = "Velg om statuslinjen skal skjules, bare vise batteriprosent, eller vise alle statuslinje elementene";
+"Support / FAQ" = "Support / Ofte stilte spørsmål";
