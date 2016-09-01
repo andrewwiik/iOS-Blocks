@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'camera' target in the 'camera' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
