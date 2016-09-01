@@ -29,12 +29,12 @@
 @end
 
 @interface DevicePINController (IOS7)
-- (void)setSuccess:(bool)arg1;
+- (void)setSuccess:(BOOL)arg1;
 @end
 
 @implementation IBKPINModalController
 
-- (bool)attemptValidationWithPIN:(NSString*)pin {
+- (BOOL)attemptValidationWithPIN:(NSString*)pin {
     // Get hash of string, and compare against stored.
     
     NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
@@ -51,11 +51,11 @@
     }
 }
 
--(bool)isBlocked {
+-(BOOL)isBlocked {
     return NO;
 }
 
--(bool)isNumericPIN {
+-(BOOL)isNumericPIN {
     return YES;
 }
 -(BOOL)requiresKeyboard {
@@ -89,7 +89,7 @@
     [self.ibkDelegate didCancelEnteringPIN];
 }
 
--(long long)numberOfFailedAttempts {
+-(long)numberOfFailedAttempts {
     return self.failedAttempts;
 }
 

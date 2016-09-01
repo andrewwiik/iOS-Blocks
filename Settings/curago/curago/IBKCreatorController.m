@@ -17,7 +17,7 @@
 
 -(NSArray*)specifiers {
     if (_specifiers == nil) {
-		NSMutableArray *testingSpecs = [self loadSpecifiersFromPlistName:@"Creators" target:self];
+		NSMutableArray *testingSpecs = [[self loadSpecifiersFromPlistName:@"Creators" target:self] mutableCopy];
         
         _specifiers = testingSpecs;
     }

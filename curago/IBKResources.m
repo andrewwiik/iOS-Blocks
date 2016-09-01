@@ -6,41 +6,15 @@
 //
 //
 
-typedef struct SBIconCoordinate {
-    NSInteger row;
-    NSInteger col;
-} SBIconCoordinate;
-
-
 #import "IBKResources.h"
+#import "IBKFunctions.h"
 
 #import "../headers/SpringBoard/SBIconListModel.h"
 #import "../headers/SpringBoard/SBApplicationIcon.h"
 #import "../headers/SpringBoard/SBApplicationController.h"
+#import "../headers/SpringBoard/SpringBoard-Structs.h"
 
 #import <objc/runtime.h>
-
-
-@interface SBIconIndexMutableList (Curago)
-@property (nonatomic) SBIconListView *listView;
-@property (nonatomic) BOOL processing;
-@property (nonatomic) BOOL needsProcessing;
-- (void)moveToNextPage:(id)icon;
-@end
-
-@interface SBSaturatedIconView : UIImageView
--(id)initWithApplication:(id)arg1 iconFormat:(int)arg2 ;
--(CGSize)sizeThatFits:(CGSize)arg1 ;
--(id)initWithImage:(id)arg1 ;
-@end
-
-struct SBIconCoordinate SBIconCoordinateMake(long long row, long long col) {
-    SBIconCoordinate coordinate;
-    coordinate.row = row;
-    coordinate.col = col;
-    return coordinate;
-}
-
 
 @interface SBFAnimationFactory : NSObject
 + (id)factoryWithDuration:(double)arg1;
@@ -52,10 +26,11 @@ struct SBIconCoordinate SBIconCoordinateMake(long long row, long long col) {
 static NSMutableSet *widgetIdentifiers;
 static NSDictionary *settings;
 static NSMutableDictionary *iconIndexes;
+static NSMutableDictionary *widgetViewControllers;
 
 @implementation IBKResources
 
-+(CGFloat)adjustedAnimationSpeed:(CGFloat)duration {
++ (CGFloat)adjustedAnimationSpeed:(CGFloat)duration {
     if ([objc_getClass("SBFAnimationFactory") respondsToSelector:@selector(factoryWithDuration:)]) {
         return [(SBFAnimationFactory*)[objc_getClass("SBFAnimationFactory") factoryWithDuration:duration] duration];
     } else {
@@ -63,7 +38,7 @@ static NSMutableDictionary *iconIndexes;
     }
 }
 
-+(NSSet*)widgetBundleIdentifiers {
++ (NSSet*)widgetBundleIdentifiers {
     if (!widgetIdentifiers) {
         NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:plist];
         widgetIdentifiers = [NSMutableSet setWithArray:[[dict objectForKey:@"loadedWidgets"] mutableCopy]];
@@ -88,7 +63,7 @@ static NSMutableDictionary *iconIndexes;
     return widgetIdentifiers;
 }
 
-+(void)addNewIdentifier:(NSString*)arg1 {
++ (void)addNewIdentifier:(NSString*)arg1 {
     if (arg1) {
         [widgetIdentifiers addObject:arg1];
         
@@ -111,7 +86,7 @@ static NSMutableDictionary *iconIndexes;
     }
 }
 
-+(void)removeIdentifier:(NSString*)arg1 {
++ (void)removeIdentifier:(NSString*)arg1 {
     if (arg1) {
         [widgetIdentifiers removeObject:arg1];
         [iconIndexes removeObjectForKey:arg1];
@@ -136,7 +111,7 @@ static NSMutableDictionary *iconIndexes;
     }
 }
 
-+(void)saveIdentifiersToPlist {
++ (void)saveIdentifiersToPlist {
     // Save to plist.
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:plist];
     
@@ -155,7 +130,7 @@ static NSMutableDictionary *iconIndexes;
 
 // TODO: THIS ASSUMES IT'S ALWAYS 4 ICONS PER ROW!
 
-+(CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier {
++ (CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier {
     
     SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
     SBIconListView *listView = [iconController rootIconListAtIndex:0];
@@ -184,7 +159,7 @@ static NSMutableDictionary *iconIndexes;
     
 }
 
-+(CGFloat)heightForWidgetWithIdentifier:(NSString *)identifier {
++ (CGFloat)heightForWidgetWithIdentifier:(NSString *)identifier {
     
     SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
     SBIconListView *listView = [iconController rootIconListAtIndex:0];
@@ -212,7 +187,7 @@ static NSMutableDictionary *iconIndexes;
     return spaceBetween;
 }
 
-+(NSArray*)generateWidgetIndexesForListView:(SBIconListView*)view {
++ (NSArray *)generateWidgetIndexesForListView:(SBIconListView*)view {
     NSMutableArray *array = [NSMutableArray array];
     for (NSString *bundleID in [IBKResources widgetBundleIdentifiers]) {
         unsigned int index = [[view model] indexForLeafIconWithIdentifier:bundleID];
@@ -223,7 +198,7 @@ static NSMutableDictionary *iconIndexes;
     return array;
 }
 
-+(NSString*)getRedirectedIdentifierIfNeeded:(NSString*)identifier {
++ (NSString *)getRedirectedIdentifierIfNeeded:(NSString*)identifier {
     if (!settings)
         [IBKResources reloadSettings];
     
@@ -235,7 +210,7 @@ static NSMutableDictionary *iconIndexes;
         return identifier;
 }
 
-+(NSString*)suffix {
++ (NSString *)suffix {
     NSString *suffix = @"";
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -268,6 +243,7 @@ static NSMutableDictionary *iconIndexes;
     
 }
 + (unsigned long long)indexForBundleID:(NSString *)bundleID {
+
     if (!iconIndexes) {
         iconIndexes = [[[NSDictionary dictionaryWithContentsOfFile:plist] objectForKey:@"widgetIndexes"] mutableCopy];
         if (!iconIndexes) iconIndexes = [NSMutableDictionary new];
@@ -282,38 +258,45 @@ static NSMutableDictionary *iconIndexes;
 }
 //// BEGIN ACTUAL SETTINGS CHECKS.
 
-+(BOOL)shouldHideBadgeWhenWidgetExpanded {
++ (BOOL)shouldHideBadgeWhenWidgetExpanded {
+
     id temp = settings[@"shouldHideBadge"];
     return (temp ? [temp boolValue] : NO);
 }
 
-+(BOOL)shouldReturnIconsIfNotMoved {
++ (BOOL)shouldReturnIconsIfNotMoved {
+
     id temp = settings[@"returnIcons"];
     return (temp ? [temp boolValue] : NO);
 }
 
-+(BOOL)transparentBackgroundForWidgets {
++ (BOOL)transparentBackgroundForWidgets {
+
     id temp = settings[@"transparentWidgets"];
     return (temp ? [temp boolValue] : NO);
 }
 
-+(BOOL)showBorderWhenTransparent {
++ (BOOL)showBorderWhenTransparent {
+
     id temp = settings[@"borderedWidgets"];
     return (temp ? [temp boolValue] : YES);
 }
 
-+(BOOL)hoverOnly {
++ (BOOL)hoverOnly {
+
     id temp = settings[@"hoverOnly"];
     //return YES;
     return (temp ? [temp boolValue] : NO);
 }
 
-+(BOOL)debugLoggingEnabled {
++ (BOOL)debugLoggingEnabled {
+
     id temp = settings[@"debug"];
     return (temp ? [temp boolValue] : NO);
 }
 
-+(int)defaultColourType { // Used for switching which method to use for average colour of icon.
++ (int)defaultColourType { // Used for switching which method to use for average colour of icon.
+
     id temp = settings[@"defaultColourType"];
     return (temp ? [temp intValue] : 0);
     // Enum:
@@ -327,34 +310,41 @@ static NSMutableDictionary *iconIndexes;
     return 2;
 }
 + (int)verticalWidgetSizeForBundleID:(NSString *)bundleID {
+
     return 2;
 }
 
 #pragma mark Widget locking
 
-+(BOOL)allWidgetsLocked {
++ (BOOL)allWidgetsLocked {
+
     id temp = settings[@"allWidgetsLocked"];
     return (temp ? [temp boolValue] : NO);
 }
 
-+(BOOL)relockWidgets {
++ (BOOL)relockWidgets {
     NSNumber *temp = settings[@"relockWidgets"];
     if (temp) {
+
         return ([temp intValue] == 0 ? NO : YES);
     } else {
+
         return NO;
     }
 }
 
-+(NSString*)passcodeHash {
++ (NSString *)passcodeHash {
     id temp = settings[@"passcodeHash"];
     return (temp && ![temp isEqualToString:@""] ? temp : nil);
 }
 
-+(BOOL)isWidgetLocked:(NSString*)identifier {
++ (BOOL)isWidgetLocked:(NSString*)identifier {
+
     if (![IBKResources passcodeHash]) {
+
         return NO;
     } else if ([IBKResources allWidgetsLocked]) {
+
         return YES;
     }
     
@@ -362,26 +352,49 @@ static NSMutableDictionary *iconIndexes;
     return [lockedBundleIdentifiers containsObject:identifier];
 }
 
-+(void)reloadSettings {
++ (void)reloadSettings {
+
     settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
 }
 
-+(id)iconIndexes {
++ (id)iconIndexes {
+
     return iconIndexes;
 }
 
-+(id)weirdIconViewForBundleIdentifier:(NSString *)identifier {
-    //[[SBApplicationController sharedInstance] applicationWithDisplayIdentifier:@"com.yourcompany.appname"];
-    
-    return [[NSClassFromString(@"SBSaturatedIconView") alloc] initWithApplication:[[NSClassFromString(@"SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:identifier] iconFormat:1];
++ (BOOL)bundleIdentiferWantsToBeLocked:(NSString*)bundleIdentifier {
+
+    return NO;
 }
 
-@end
++ (IBKWidgetViewController *)getWidgetViewControllerForIcon:(SBIcon *)arg1 orBundleID:(NSString*)arg2 {
+    NSString *bundleIdentifier;
+    if (arg1)
+        bundleIdentifier = [arg1 applicationBundleID];
+    else
+        bundleIdentifier = arg2;
 
-@implementation UIImage (SBSaturated)
+    return [widgetViewControllers objectForKey:bundleIdentifier];
+}
 
-- (id)saturatedIconView {
-    return [[NSClassFromString(@"SBSaturatedIconView") alloc] initWithImage:self];
++ (SBIconListView *)listViewForBundleID:(NSString *)bundleID {
+    SBIconController *viewcont = [objc_getClass("SBIconController") sharedInstance];
+    SBIconModel *model = [viewcont model];
+    SBIcon *icon = [model expectedIconForDisplayIdentifier:bundleID];
+
+    SBIconController *controller = [objc_getClass("SBIconController") sharedInstance];
+    SBRootFolder *rootFolder = [controller valueForKeyPath:@"rootFolder"];
+    NSIndexPath *indexPath = [rootFolder indexPathForIcon:icon];
+    SBIconListView *listView = nil;
+    [controller getListView:&listView folder:NULL relativePath:NULL forIndexPath:indexPath createIfNecessary:YES];
+    return listView;
+}
+
++ (NSMutableDictionary *)widgetViewControllers {
+    if (!widgetViewControllers) {
+        widgetViewControllers = [NSMutableDictionary new];
+    }
+    return widgetViewControllers;
 }
 
 @end

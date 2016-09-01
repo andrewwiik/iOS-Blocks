@@ -129,8 +129,6 @@
             //CGFloat valOne = [array[count] internal].percentComplete;
             //CGFloat valTwo = [array[count+1] internal].percentComplete;
             
-            GKAchievementDescription *descOne = array[count];
-            GKAchievementDescription *decTwo = array[count+1];
             
             /*if (valTwo < valOne) {
                 array[count] = decTwo;

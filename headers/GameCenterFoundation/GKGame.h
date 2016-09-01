@@ -81,7 +81,7 @@
 - (id)init;
 - (id)initWithCoder:(id)arg1;
 - (id)initWithInternalRepresentation:(id)arg1;
-- (id)internal;
+- (GKGameInternal *)internal;
 - (bool)isDownloading;
 - (bool)isEqual:(id)arg1;
 - (bool)isGameCenter;

@@ -17,14 +17,6 @@
 
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
-@interface SBIconImageView (iOS7_1)
-- (void)setIcon:(id)arg1 location:(int)arg2 animated:(BOOL)arg3;
-@end
-
-@interface SBIconModel (iOS8)
-- (id)applicationIconForBundleIdentifier:(id)arg1;
-@end
-
 @implementation IBKAPI
 
 +(UIColor*)averageColorForIconIdentifier:(NSString*)bundleId {
@@ -37,10 +29,12 @@
     else // iOS 8
         [iconImageView setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:bundleId] location:2 animated:NO];
     
-    return [(UIImage*)[(SBIconImageView*)iconImageView squareContentsImage] mergedColor];
+    return [(UIImage*)[(SBIconImageView*)iconImageView contentsImage] mergedColor];
 }
 
 +(CGFloat)heightForContentViewWithIdentifier:(NSString *)identifier {
+
+
     CGFloat bbb = [IBKResources heightForWidgetWithIdentifier:identifier]-(isPad ? 50.0 : 30.0)-7.0;
     return bbb;
 }

@@ -76,6 +76,7 @@
 @property(nonatomic) int location; // @synthesize location=_iconLocation;
 @property(nonatomic) id <SBIconViewObserver> observer; // @synthesize observer=_observer;
 @property(nonatomic) id <SBIconViewDelegate> delegate; // @synthesize delegate=_delegate;
+@property(retain, nonatomic) UILongPressGestureRecognizer *shortcutMenuPeekGesture; // iOS 9
 @property(retain, nonatomic) SBIcon *icon;
 - (void)iconLaunchEnabledDidChange:(id)arg1;
 - (void)iconAccessoriesDidUpdate:(id)arg1;
@@ -163,6 +164,11 @@
 - (void)setPaused:(BOOL)arg1;
 - (void)dealloc;
 - (id)initWithDefaultSize;
+
+// iOS Blocks
+
+@property (nonatomic, retain) UIView *widgetView;
+
 
 @end
 

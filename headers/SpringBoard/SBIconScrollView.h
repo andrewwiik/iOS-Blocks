@@ -18,7 +18,11 @@
 - (BOOL)cancelTouchTracking;
 
 // Remaining properties
-@property(nonatomic, strong) id <SBIconScrollViewDelegate> delegate;
+@property(assign,nonatomic) id <SBIconScrollViewDelegate> delegate;
+
+// iOS Blocks
+
+-(void)handlePinchGesture:(UIPinchGestureRecognizer*)pinch;
 
 @end
 

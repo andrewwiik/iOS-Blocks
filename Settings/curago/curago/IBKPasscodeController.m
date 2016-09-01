@@ -35,7 +35,7 @@
 
 -(id)specifiers {
     if (_specifiers == nil) {
-		NSMutableArray *testingSpecs = [self loadSpecifiersFromPlistName:@"Passcode" target:self];
+		NSMutableArray *testingSpecs = [[self loadSpecifiersFromPlistName:@"Passcode" target:self] mutableCopy];
         _specifiers = [self localizedSpecifiersForSpecifiers:[self modifySpecifiersAsNeeded:testingSpecs]];
     }
     
@@ -137,17 +137,17 @@
             self.ipadPopover.delegate = self;
             
             //show the popover next to the annotation view (pin)
-            [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:NULL animated:YES];
+            [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         } else {
             navController.modalPresentationStyle = 7;
             navController.preferredContentSize = CGSizeMake(320, 480);
-            
+        
             // Load up UIPopoverPresentationController.
             UIPopoverPresentationController *cont = navController.popoverPresentationController;
             [cont setSourceRect:[[UIApplication sharedApplication] keyWindow].bounds];
             [cont setSourceView:[[UIApplication sharedApplication] keyWindow]];
-            cont.permittedArrowDirections = NULL;
-            cont.delegate = self;
+            cont.permittedArrowDirections = UIPopoverArrowDirectionAny;
+            cont.delegate = (id<UIPopoverPresentationControllerDelegate>)self;
             
             [self.parentController presentViewController:navController animated:YES completion:nil];
         }

@@ -6,6 +6,7 @@
 
 #import <UIKit/UIView.h>
 
+#import "SpringBoard-Structs.h"
 #import "SBIconListLayoutDelegate-Protocol.h"
 
 @class NSArray, NSMutableArray, NSMutableSet, SBIcon, SBIconListModel, SBIconViewMap;
@@ -64,8 +65,8 @@
 - (void)updateEditingStateAnimated:(BOOL)arg1;
 - (void)showIconImagesFromColumn:(int)arg1 toColumn:(int)arg2 totalColumns:(int)arg3 allowAnimations:(BOOL)arg4;
 - (void)showAllIcons;
-- (id)iconAtPoint:(CGPoint)arg1 index:(unsigned int *)arg2 proposedOrder:(int *)arg3 grabbedIcon:(id)arg4;
-- (id)iconAtPoint:(CGPoint)arg1 index:(unsigned int *)arg2;
+- (SBIcon *)iconAtPoint:(CGPoint)arg1 index:(unsigned int *)arg2 proposedOrder:(int *)arg3 grabbedIcon:(id)arg4;
+- (SBIcon *)iconAtPoint:(CGPoint)arg1 index:(unsigned int *)arg2;
 - (void)layoutIconsIfNeeded:(CGFloat)arg1 domino:(BOOL)arg2;
 - (void)layoutIconsNow;
 - (void)setIconsNeedLayout;
