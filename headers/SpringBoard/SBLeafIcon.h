@@ -5,11 +5,9 @@
  */
 
 #import "SBIcon.h"
+#import "SBLeafIconDataSource-Protocol.h"
 
 @class NSMutableSet, NSString;
-
-@protocol SBLeafIconDataSource <NSObject>
-@end
 
 @interface SBLeafIcon : SBIcon <NSCopying>
 {

@@ -74,7 +74,7 @@
 - (BOOL)completedInputIsValid:(id)arg1;
 - (void)dealloc;
 - (struct __CFString)defaultsID;
-- (id)doneButtonTitle;
+- (NSString *)doneButtonTitle;
 - (struct __CFString)failedAttemptsKey;
 - (BOOL)hidesCancelButton;
 - (BOOL)hidesNavigationButtons;
@@ -99,7 +99,7 @@
 - (id)pinPane;
 - (BOOL)requiresKeyboard;
 - (void)setAllowOptionsButton:(BOOL)arg1;
-- (void)setDoneButtonTitle:(id)arg1;
+- (void)setDoneButtonTitle:(NSString *)arg1;
 - (void)setHidesCancelButton:(BOOL)arg1;
 - (void)setHidesNavigationButtons:(BOOL)arg1;
 - (void)setLastEntry:(id)arg1;

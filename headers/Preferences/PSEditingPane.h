@@ -30,10 +30,10 @@
 - (void)setDelegate:(id)arg1;
 - (void)setPreferenceSpecifier:(id)arg1;
 - (void)setPreferenceValue:(id)arg1;
-- (void)setViewController:(id)arg1;
+- (void)setViewController:(UIViewController *)arg1;
 - (BOOL)shouldInsetContent;
 - (id)specifierLabel;
-- (id)viewController;
+- (UIViewController *)viewController;
 - (void)viewDidBecomeVisible;
 - (BOOL)wantsNewButton;
 - (void)willAnimateRotationToInterfaceOrientation:(int)arg1 duration:(double)arg2;

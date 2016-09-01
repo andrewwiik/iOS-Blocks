@@ -9,7 +9,7 @@
 #import "SBIconIndexNodeObserver-Protocol.h"
 #import "SBIconIndexMutableListObserver-Protocol.h"
 
-@class NSMapTable, NSMutableArray;
+@class NSMapTable, NSMutableArray, SBIconListView;
 
 @interface SBIconIndexMutableList : NSObject <SBIconIndexNodeObserver, NSFastEnumeration>
 {
@@ -40,6 +40,16 @@
 - (BOOL)containsNodeIdentifier:(id)arg1;
 - (void)dealloc;
 - (id)init;
+
+// Curago
+
+@property (nonatomic) SBIconListView *listView;
+@property (nonatomic) BOOL processing;
+@property (nonatomic) BOOL needsProcessing;
+@property (nonatomic, retain) NSIndexPath *listViewIndexPath;
+@property (nonatomic, retain) SBIconListView *nextPage;
+@property (nonatomic, retain) NSMutableArray *nextPageIcons;
+- (void)moveToNextPage:(id)icon;
 
 @end
 

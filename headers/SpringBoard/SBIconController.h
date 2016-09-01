@@ -15,6 +15,7 @@
 #import "SBIconViewDelegate-Protocol.h"
 #import "SBIconViewMapDelegate-Protocol.h"
 #import "SBSearchGestureObserver-Protocol.h"
+#import "SBIconViewMap.h"
 
 @class BBObserver, NSIndexPath, NSMutableArray, NSMutableSet, NSObject, NSSet, NSTimer, SBFolder, SBIcon, SBIconColorSettings, SBIconContentView, SBIconModel, SBLeafIcon, SBRootFolderController, UITouch, _UILegibilitySettings;
 
@@ -243,6 +244,6 @@
 - (void)_noteFolderAnimationStateDidChange;
 - (id)iconListViewAtIndex:(unsigned int)arg1 inFolder:(id)arg2 createIfNecessary:(BOOL)arg3;
 - (void)getListView:(id *)arg1 folder:(id *)arg2 relativePath:(id *)arg3 forIndexPath:(id)arg4 createIfNecessary:(BOOL)arg5;
-
+- (SBIconViewMap *)homescreenIconViewMap; // iOS 9.3.3
 @end
 

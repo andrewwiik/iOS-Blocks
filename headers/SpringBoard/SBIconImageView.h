@@ -54,6 +54,7 @@
 - (void)setProgressState:(int)arg1 paused:(BOOL)arg2 percent:(float)arg3 animated:(BOOL)arg4;
 - (void)_updateOverlayAlpha;
 - (void)setIcon:(id)arg1 animated:(BOOL)arg2;
+- (void)setIcon:(id)arg1 location:(int)arg2 animated:(BOOL)arg3;
 - (void)dealloc;
 - (id)initWithFrame:(struct CGRect)arg1;
 

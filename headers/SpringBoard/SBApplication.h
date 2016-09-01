@@ -12,6 +12,7 @@
 #import "SBSystemLocalNotificationAlertDelegate-Protocol.h"
 #import "SBWindowContextHostManagerDelegate-Protocol.h"
 #import "SBWindowContextManagerDelegate-Protocol.h"
+#import "SpringBoard-Structs.h"
 
 @class BKSApplicationDataStore, BKSCFBundle, BKSMachSendRight, BKSProcessAssertion, NSArray, NSDate, NSDictionary, NSHashTable, NSMapTable, NSMutableArray, NSMutableDictionary, NSMutableSet, NSSet, NSString, NSTimer, PCPersistentTimer, SBActivationContext, SBWindowContextManager, UILocalNotification, UIRemoteApplication;
 
@@ -310,7 +311,7 @@
 - (BOOL)provisioningProfileValidated;
 - (void)markApplicationIdentityAsTrusted;
 - (id)_expirationDateForProvisioningProfile;
-- (BOOL)_doesProfileMatchSignerIdentity:(struct _MISProfile *)arg1;
+- (BOOL)_doesProfileMatchSignerIdentity:(struct _MISProfile)arg1;
 - (BOOL)_signatureNeedsExplicitUserTrust;
 - (int)applicationSignatureState;
 - (id)signerIdentity;

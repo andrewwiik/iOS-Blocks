@@ -15,29 +15,14 @@
 #include <sys/stat.h>
 #import <objc/runtime.h>
 #import "../../../headers/Preferences/Preferences.h"
-#import "../../../headers/Preferences/PSViewController.h"
+#import "../../../headers/AppList/AppList.h"
 
 
 
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
-enum {
-    ALApplicationIconSizeSmall = 29,
-    ALApplicationIconSizeLarge = 59
-};
-typedef NSUInteger ALApplicationIconSize;
-
 
 //@class PSLinkListCell;
-
-@interface DevicePINPane (iOS7)
-- (void)setSimplePIN:(bool)arg1 requiresKeyboard:(bool)arg2 numericOnly:(bool)arg3;
-@property(retain) UIView* pinView;
-@end
-
-@interface curagoController (Fix)
-- (id)navigationItem;
-@end
 
 //@interface UIPopoverPresentationController : UIViewController
 //@property (nonatomic, assign) UIPopoverArrowDirection permittedArrowDirections;
@@ -48,35 +33,6 @@ typedef NSUInteger ALApplicationIconSize;
 
 @interface UINavigationController (iOS8)
 @property (nonatomic, strong) UIPopoverPresentationController *popoverPresentationController;
-@end
-
-@interface DevicePINController (IOS7)
-- (void)setPinDelegate:(id)arg1;
-- (void)setSpecifier:(id)arg1;
-- (void)setMode:(int)arg1;
-@end
-
-@interface PSRootController (IOS7)
-- (void)pushController:(id)arg1 animate:(bool)arg2;
-- (void)pushViewController:(id)arg1 animated:(BOOL)animated;
-- (id)popViewControllerAnimated:(bool)arg1;
-@end
-
-@interface ALApplicationList : NSObject {
-@private
-    NSMutableDictionary *cachedIcons;
-}
-
-+ (ALApplicationList *)sharedApplicationList;
-
-@property (nonatomic, readonly) NSDictionary *applications;
-- (NSDictionary *)applicationsFilteredUsingPredicate:(NSPredicate *)predicate;
-- (id)valueForKeyPath:(NSString *)keyPath forDisplayIdentifier:(NSString *)displayIdentifier;
-- (id)valueForKey:(NSString *)keyPath forDisplayIdentifier:(NSString *)displayIdentifier;
-- (CGImageRef)copyIconOfSize:(ALApplicationIconSize)iconSize forDisplayIdentifier:(NSString *)displayIdentifier;
-- (UIImage *)iconOfSize:(ALApplicationIconSize)iconSize forDisplayIdentifier:(NSString *)displayIdentifier;
-- (BOOL)hasCachedIconOfSize:(ALApplicationIconSize)iconSize forDisplayIdentifier:(NSString *)displayIdentifier;
-
 @end
 
 static curagoController *shared;
@@ -105,7 +61,7 @@ static OrderedDictionary *dataSourceUser;
 
 -(id)specifiers {
     if (_specifiers == nil) {
-		NSMutableArray *testingSpecs = [self loadSpecifiersFromPlistName:@"Root" target:self];
+		NSMutableArray *testingSpecs = [[self loadSpecifiersFromPlistName:@"Root" target:self] mutableCopy];
         testingSpecs = [[self localizedSpecifiersForSpecifiers:testingSpecs] mutableCopy];
         
         [testingSpecs addObjectsFromArray:[self getPrefsForIndex:currentIndex]];
@@ -144,7 +100,7 @@ static OrderedDictionary *dataSourceUser;
             [specifiers addObjectsFromArray:[self loadSpecifiersFromPlistName:@"Manage" target:self]];
             break;
         case 1:
-            specifiers = [self loadSpecifiersFromPlistName:@"Advanced" target:self];
+            specifiers = [[self loadSpecifiersFromPlistName:@"Advanced" target:self] mutableCopy];
             
             // Setup stuff!
             for (PSSpecifier *specifier in specifiers) {
@@ -159,7 +115,7 @@ static OrderedDictionary *dataSourceUser;
             }
             break;
         case 2:
-            specifiers = [self loadSpecifiersFromPlistName:@"Support" target:self];
+            specifiers = [[self loadSpecifiersFromPlistName:@"Support" target:self] mutableCopy];
             break;
     }
     
@@ -224,7 +180,7 @@ static OrderedDictionary *dataSourceUser;
                 self.ipadPopover.delegate = self;
             
                 //show the popover next to the annotation view (pin)
-                [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:NULL animated:YES];
+                [self.ipadPopover presentPopoverFromRect:[[UIApplication sharedApplication] keyWindow].bounds inView:[[UIApplication sharedApplication] keyWindow] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
             } else {
                 navController.modalPresentationStyle = 7;
                 navController.preferredContentSize = CGSizeMake(320, 480);
@@ -233,8 +189,8 @@ static OrderedDictionary *dataSourceUser;
                 UIPopoverPresentationController *cont = navController.popoverPresentationController;
                 [cont setSourceRect:[[UIApplication sharedApplication] keyWindow].bounds];
                 [cont setSourceView:[[UIApplication sharedApplication] keyWindow]];
-                cont.permittedArrowDirections = NULL;
-                cont.delegate = self;
+                cont.permittedArrowDirections =  UIPopoverArrowDirectionAny;
+                cont.delegate = (id<UIPopoverPresentationControllerDelegate>)self;
                 
                 [self.parentController presentViewController:navController animated:YES completion:nil];
             }
@@ -324,9 +280,9 @@ static OrderedDictionary *dataSourceUser;
 }
 
 -(NSString*)getIsWidgetSetForSpecifier:(PSSpecifier*)spec {
-    NSString *bundleIdentifier = [spec propertyForKey:@"bundleIdentifier"];
+    //NSString *bundleIdentifier = [spec propertyForKey:@"bundleIdentifier"];
     
-    NSString *path = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/%@", [self getRedirectedIdentifierIfNeeded:bundleIdentifier]];
+    // NSString *path = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/%@", [self getRedirectedIdentifierIfNeeded:bundleIdentifier]];
     
     //if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         return @"";

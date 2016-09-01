@@ -76,6 +76,7 @@
 - (id)_iconState;
 - (id)iconState;
 - (id)applicationIconForDisplayIdentifier:(id)arg1;
+- (id)applicationIconForBundleIdentifier:(id)arg1; // iOS 8
 - (id)leafIconForIdentifier:(id)arg1;
 - (id)expectedIconForDisplayIdentifier:(id)arg1;
 - (id)_applicationIcons;
@@ -102,6 +103,7 @@
 - (id)rootFolder;
 - (void)dealloc;
 - (id)initWithStore:(id)arg1 applicationDataSource:(id)arg2;
+- (void)saveIconStateIfNeeded; // iOS 8
 
 @end
 

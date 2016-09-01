@@ -11,10 +11,10 @@
 - (void)didRotateFromInterfaceOrientation:(int)arg1;
 - (void)loadPane;
 - (void)loadView;
-- (id)pane;
+- (PSEditingPane *)pane;
 - (struct CGRect)paneFrame;
 - (void)saveChanges;
-- (void)setPane:(id)arg1;
+- (void)setPane:(PSEditingPane *)arg1;
 - (void)statusBarWillAnimateByHeight:(float)arg1;
 - (void)suspend;
 - (id)title;

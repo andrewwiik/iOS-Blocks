@@ -109,6 +109,10 @@
     [self setNeedsDisplay];
 }
 
+- (id)copy {
+    return [super copy];
+}
+
 @end
 
 @implementation M13ProgressViewMetro

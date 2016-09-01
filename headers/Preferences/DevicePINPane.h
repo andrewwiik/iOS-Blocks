@@ -60,9 +60,9 @@
 - (void)okButtonPressed;
 - (id)passcodeOptionsHandler;
 - (id)password;
-- (id)pinView;
-- (void)pinView:(id)arg1 pinEntered:(id)arg2;
-- (void)pinView:(id)arg1 pinValueChanged:(id)arg2;
+- (UIView *)pinView;
+- (void)pinView:(UIView *)arg1 pinEntered:(id)arg2;
+- (void)pinView:(UIView *)arg1 pinValueChanged:(id)arg2;
 - (BOOL)requiresKeyboard;
 - (BOOL)resignFirstResponder;
 - (void)setAutocapitalizationType:(int)arg1;
@@ -74,7 +74,7 @@
 - (void)setPINLength:(unsigned int)arg1;
 - (void)setPINPolicyString:(id)arg1 visible:(BOOL)arg2;
 - (void)setPasscodeOptionsHandler:(id /* block */)arg1;
-- (void)setPinView:(id)arg1;
+- (void)setPinView:(UIView *)arg1;
 - (void)setSimplePIN:(BOOL)arg1 requiresKeyboard:(BOOL)arg2;
 - (void)setSimplePIN:(BOOL)arg1 requiresKeyboard:(BOOL)arg2 numericOnly:(BOOL)arg3;
 - (void)setSimplePIN:(BOOL)arg1 requiresKeyboard:(BOOL)arg2 numericOnly:(BOOL)arg3 showsOptions:(BOOL)arg4;

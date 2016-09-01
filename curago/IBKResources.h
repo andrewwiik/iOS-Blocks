@@ -23,6 +23,10 @@
 #import "../headers/SpringBoard/SBIconBadgeView.h"
 #import "../headers/SpringBoard/SBRootFolderController.h"
 #import "../headers/SpringBoard/SBRootFolderView.h"
+#import "../headers/SpringBoard/SBIcon.h"
+#import "../headers/SpringBoard/SpringBoard-Structs.h"
+
+#import "IBKWidgetViewController.h"
 
 @interface IBKResources : NSObject
 
@@ -36,37 +40,40 @@
 
 #define orient [[UIApplication sharedApplication] statusBarOrientation]
 
-+(CGFloat)adjustedAnimationSpeed:(CGFloat)duration;
++ (CGFloat)adjustedAnimationSpeed:(CGFloat)duration;
 
-+(NSSet*)widgetBundleIdentifiers;
-+(void)addNewIdentifier:(NSString*)arg1;
-+(void)removeIdentifier:(NSString*)arg1;
-+(NSArray*)generateWidgetIndexesForListView:(SBIconListView*)view;
++ (NSSet*)widgetBundleIdentifiers;
++ (void)addNewIdentifier:(NSString*)arg1;
++ (void)removeIdentifier:(NSString*)arg1;
++ (NSArray*)generateWidgetIndexesForListView:(SBIconListView*)view;
 
-+(CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier;
-+(CGFloat)heightForWidgetWithIdentifier:(NSString *)identifier;
++ (CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier;
++ (CGFloat)heightForWidgetWithIdentifier:(NSString *)identifier;
 
-+(NSString*)getRedirectedIdentifierIfNeeded:(NSString*)identifier;
++ (NSString*)getRedirectedIdentifierIfNeeded:(NSString*)identifier;
 
-+(NSString*)suffix;
++ (NSString*)suffix;
 
 // Settings.
 
-+(BOOL)bundleIdentiferWantsToBeLocked:(NSString*)bundleIdentifier;
-+(BOOL)shouldHideBadgeWhenWidgetExpanded;
-+(BOOL)shouldReturnIconsIfNotMoved;
-+(BOOL)transparentBackgroundForWidgets;
-+(BOOL)showBorderWhenTransparent;
-+(BOOL)debugLoggingEnabled;
-+(BOOL)hoverOnly;
-+(NSString*)passcodeHash;
-+(BOOL)allWidgetsLocked;
-+(BOOL)relockWidgets;
-+(BOOL)isWidgetLocked:(NSString*)identifier;
-+(void)reloadSettings;
-+(int)defaultColourType;
++ (BOOL)bundleIdentiferWantsToBeLocked:(NSString*)bundleIdentifier;
++ (BOOL)shouldHideBadgeWhenWidgetExpanded;
++ (BOOL)shouldReturnIconsIfNotMoved;
++ (BOOL)transparentBackgroundForWidgets;
++ (BOOL)showBorderWhenTransparent;
++ (BOOL)debugLoggingEnabled;
++ (BOOL)hoverOnly;
++ (NSString*)passcodeHash;
++ (BOOL)allWidgetsLocked;
++ (BOOL)relockWidgets;
++ (BOOL)isWidgetLocked:(NSString*)identifier;
++ (void)reloadSettings;
++ (int)defaultColourType;
 + (void)setIndex:(unsigned long long)index forBundleID:(NSString *)bundleID;
 + (unsigned long long)indexForBundleID:(NSString *)bundleID;
 + (int)horiztonalWidgetSizeForBundleID:(NSString *)bundleID;
 + (int)verticalWidgetSizeForBundleID:(NSString *)bundleID;
++ (IBKWidgetViewController *)getWidgetViewControllerForIcon:(SBIcon *)icon orBundleID:(NSString*)bundleID;
++ (SBIconListView *)listViewForBundleID:(NSString *)bundleID;
++ (NSMutableDictionary *)widgetViewControllers;
 @end

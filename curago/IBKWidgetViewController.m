@@ -40,42 +40,12 @@
 
 @end
 
-@interface SBApplicationController (iOS8)
--(id)applicationWithBundleIdentifier:(NSString*)arg1;
-@end
-
-@interface SBIconImageView (iOS7_1)
-- (void)setIcon:(id)arg1 location:(int)arg2 animated:(BOOL)arg3;
-@end
-
 @interface BBServer (Additions)
-+(id)sharedIBKBBServer;
++ (id)sharedIBKBBServer;
 - (id)_bulletinsForSectionID:(id)arg1 inFeeds:(unsigned int)arg2;
 @end
 
-@interface SBIconController (Additions)
--(void)removeIdentifierFromWidgets:(NSString*)identifier;
--(void)removeAllCachedIcons;
-@end
-
-@interface SBIconModel (iOS8)
-- (id)applicationIconForBundleIdentifier:(id)arg1;
-@end
-
 @implementation IBKWidgetViewController
-
--(SBIconListView *)IBKListViewForIdentifierTwo:(NSString*)identifier {
-    SBIconController *viewcont = [objc_getClass("SBIconController") sharedInstance];
-    SBIconModel *model = [viewcont model];
-    SBIcon *icon = [model expectedIconForDisplayIdentifier:identifier];
-    
-    SBIconController *controller = [objc_getClass("SBIconController") sharedInstance];
-    SBRootFolder *rootFolder = [controller valueForKeyPath:@"rootFolder"];
-    NSIndexPath *indexPath = [rootFolder indexPathForIcon:icon];
-    SBIconListView *listView = nil;
-    [controller getListView:&listView folder:NULL relativePath:NULL forIndexPath:indexPath createIfNecessary:YES];
-    return listView;
-}
 
 -(void)loadView {
     // Begin building our base widget view
@@ -908,13 +878,7 @@ float scale2 = 0.0;
             // Animate shim icon to top corner.
             CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
             
-            const CGFloat *components;
-            
-            if ([IBKResources transparentBackgroundForWidgets]) {
-                if ([IBKResources showBorderWhenTransparent]) {
-                    components = CGColorGetComponents(self.view.layer.borderColor);
-                }
-            }
+            const CGFloat *components = CGColorGetComponents(self.view.layer.borderColor);
             
             CGFloat red, green, blue;
             [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
@@ -923,8 +887,8 @@ float scale2 = 0.0;
                 [IBKResources removeIdentifier:self.applicationIdentifer];
             }
             
-            SBIconListView *lst = [self IBKListViewForIdentifierTwo:self.applicationIdentifer];
-            [[objc_getClass("SBIconController") sharedInstance] removeIdentifierFromWidgets:self.applicationIdentifer];
+            SBIconListView *lst = [NSClassFromString(@"IBKResources") listViewForBundleID:self.applicationIdentifer];
+            [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:self.applicationIdentifer];
             
             self.currentScale = iconScale;
 //            [[self.correspondingIconView _iconImageView] setHidden:NO];
@@ -1288,13 +1252,7 @@ float scale2 = 0.0;
     // Animate shim icon to top corner.
     CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
     
-    const CGFloat *components;
-    
-    if ([IBKResources transparentBackgroundForWidgets]) {
-        if ([IBKResources showBorderWhenTransparent]) {
-            components = CGColorGetComponents(self.view.layer.borderColor);
-        }
-    }
+    const CGFloat *components = CGColorGetComponents(self.view.layer.borderColor);
     
     CGFloat red, green, blue;
     [self.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
@@ -1303,8 +1261,8 @@ float scale2 = 0.0;
         [IBKResources removeIdentifier:self.applicationIdentifer];
     }
     
-    SBIconListView *lst = [self IBKListViewForIdentifierTwo:self.applicationIdentifer];
-    [[objc_getClass("SBIconController") sharedInstance] removeIdentifierFromWidgets:self.applicationIdentifer];
+    SBIconListView *lst = [NSClassFromString(@"IBKResources") listViewForBundleID:self.applicationIdentifer];
+    [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:self.applicationIdentifer];
     
     self.currentScale = iconScale;
     [UIView animateWithDuration:0.3 animations:^{
@@ -1340,7 +1298,7 @@ float scale2 = 0.0;
                 [lst layoutIconsIfNeeded:0.3 domino:NO];
             } else
                 [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
-            [[objc_getClass("SBIconController") sharedInstance] removeIdentifierFromWidgets:self.applicationIdentifer];
+            [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:self.applicationIdentifer];
         }
     } completion:^(BOOL finished) {
         //                [[self.correspondingIconView _iconImageView] setAlpha:1.0];

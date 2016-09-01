@@ -90,6 +90,7 @@
 - (void)_unregisterForAVSystemControllerNotifications;
 - (void)dealloc;
 - (id)init;
+- (id)applicationWithBundleIdentifier:(NSString *)arg1; // iOS 8
 
 @end
 
