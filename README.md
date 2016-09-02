@@ -11,7 +11,7 @@ iOS Blocks can be compiled using either Theos or iOSOpenDev.
 
 #### Theos (Recommended) ####
 
-To compile iOS Blocks using theos the iOS 9.2 SDK along with the newest version of theos is required. If you do not have theos installed you can find instructions for installing Theos <a href="https://github.com/theos/theos/wiki/Installation">here</a>. Also make sure you have the environment variable for theos exported properly. If you do not have the environment variable for theos not exported properly you can do so by running the following command:
+To compile iOS Blocks using theos the iOS 9.2 SDK along with the newest version of Theos is required. If you do not have Theos installed you can find instructions for installing Theos <a href="https://github.com/theos/theos/wiki/Installation">here</a>. Also make sure you have the environment variables for theos exported properly. If you do not have the environment variables for Theos not exported properly you can do so by running the following command:
 
 ``` export THEOS=PATH_TO_YOUR_THEOS_INSTALLATION ```
 
