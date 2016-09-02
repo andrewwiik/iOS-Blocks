@@ -2,7 +2,7 @@
 
 ### What is iOS Blocks? ###
 
-iOS Blocks is a widget-like system for iOS. It was originally designed by Jay Machalani for a project called "Pushing iOS", you can read all about the project <a href="http://jaymachalani.com/blog/2014/5/29/pushing-ios">here</a>. iOS Blocks was originally developed largely by Matt Clarke with a few others, after about a year and a half the project got tiring so it was open-sourced in the hopes that a future developer would finish the project. In 2016 a tweak development team called Creatix picked up the project and is working on bringing it to completition. iOS Blocks is currently aiming to support iOS 7 - 9.3.3 on all iPhones, iPads, and iPod Touches.
+iOS Blocks is a widget-like system for iOS. It was originally designed by Jay Machalani for a project called "Pushing iOS", a more detailed explanation of the project can be found <a href="http://jaymachalani.com/blog/2014/5/29/pushing-ios">here</a>. iOS Blocks was originally developed largely by Matt Clarke with a few others, after about a year and a half the project got tiring so it was open-sourced in the hopes that a future developer would finish the project. In 2016 a tweak development team called Creatix picked up the project and is working on bringing it to completition. iOS Blocks is currently aiming to support iOS 7 - 9.3.3 on all iPhones, iPads, and iPod Touches.
 
 ### How do I get set up? ###
 
