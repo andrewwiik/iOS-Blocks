@@ -6,7 +6,7 @@ iOS Blocks is a widget-like system for iOS. It was originally designed by Jay Ma
 
 ### What is needed to compile iOS Blocks? ###
 
-iOS Blocks can be compiled using either iOSOpenDev or just Theos.
+iOS Blocks can be compiled using Theos or iOSOpenDev.
 
 #### Theos (Recommended) ####
 
