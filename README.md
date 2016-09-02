@@ -23,7 +23,7 @@ make package
 
 After iOS Blocks is compiled you should be able to find a debian package (.deb) in a folder titled "debs" in the same directory that you ran the commands to compile iOS Blocks.
 
-#### iOSOpenDev (OSX users obly) ####
+#### iOSOpenDev (OS X users only) ####
 
 In order to compile iOS Blocks using iOSOpenDev you need to follow the instructions outlined <a href="https://github.com/wzqcongcong/iOSOpenDev">here</a> to intstall iOSOpenDev. Please make sure you either download the XCode version 7.2.1 or manually install the 9.2 SDK as Apple started stripping private symbols from SDKs starting with iOS 9.3.
 
