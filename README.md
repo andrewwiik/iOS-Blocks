@@ -1,6 +1,8 @@
 <a name="top" href="http://b4b4r07.com/dotfiles"><img align="right" style="margin: -45px;" src="https://github.com/andrewwiik/iOS-Blocks/blob/master/iOS-Blocks.png?raw=true"></a>
 
-Homescreen widgets.
+### What is iOS Blocks? ###
+
+iOS Blocks is a widget-like system for iOS. It was originally designed by Jay Machalani. One of the big issues that iOS Blocks hopes to solve in iOS is the need to open an app to do everything. Jay Machalani outlined this pretty well in a detailed blog post you can find <a href="http://jaymachalani.com/blog/2014/5/29/pushing-ios">here</a>.
 
 ### How do I get set up? ###
 
