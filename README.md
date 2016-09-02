@@ -28,7 +28,7 @@ After iOS Blocks is compiled you should be able to find a debian package (.deb) 
 
 In order to compile iOS Blocks using iOSOpenDev you need to follow the instructions outlined <a href="https://github.com/wzqcongcong/iOSOpenDev">here</a> to intstall iOSOpenDev. Please make sure you either download the XCode version 7.2.1 or manually install the 9.2 SDK as Apple started stripping private symbols from SDKs starting with iOS 9.3.
 
-After iOSOpenDev and the proper SDK installed just open the *curago.xcodeproj* file and press build. After iOS Blocks is finished building you should find  a folder labeled *Packages* in the root directory of the project, inside the directory you will find a debian file (.deb) for iOS Blocks along with a .zip that will contain the contents of the debian package for easier examination.
+After iOSOpenDev and the proper SDK is installed just open the **curago.xcodeproj** file and press build. After iOS Blocks is finished building you should find  a folder labeled **Packages** in the root directory of the project, inside the directory you will find a debian file (.deb) for iOS Blocks along with a .zip that will contain the contents of the debian package for easier examination.
 
 
 ### Bugs ###
