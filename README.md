@@ -4,9 +4,9 @@
 
 iOS Blocks is a widget-like system for iOS. It was originally designed by Jay Machalani for a project called "Pushing iOS", a more detailed explanation of the project can be found <a href="http://jaymachalani.com/blog/2014/5/29/pushing-ios">here</a>. iOS Blocks was originally developed largely by Matt Clarke with a few others, after about a year and a half the project got tiring so it was open-sourced in the hopes that a future developer would finish the project. In 2016 a tweak development team called Creatix picked up the project and is working on bringing it to completition. iOS Blocks is currently aiming to support iOS 7 - 9.3.3 on all iPhones, iPads, and iPod Touches.
 
-### What is needed to compile iOS Blocks? ###
+### What is required to compile iOS Blocks? ###
 
-iOS Blocks can be compiled using Theos or iOSOpenDev.
+iOS Blocks can be compiled using either Theos or iOSOpenDev.
 
 #### Theos (Recommended) ####
 
@@ -21,7 +21,14 @@ cd curago
 make package
 ```
 
-After iOS Blocks is compiled you should be able to find a debian package (.deb) in a folder titled "debs" in the same directory that you ran the commands to build iOS Blocks.
+After iOS Blocks is compiled you should be able to find a debian package (.deb) in a folder titled "debs" in the same directory that you ran the commands to compile iOS Blocks.
+
+#### iOSOpenDev (OSX users obly) ####
+
+In order to compile iOS Blocks using iOSOpenDev you need to follow the instructions outlined <a href="https://github.com/wzqcongcong/iOSOpenDev">here</a> to intstall iOSOpenDev. Please make sure you either download the XCode version 7.2.1 or manually install the 9.2 SDK as Apple started stripping private symbols from SDKs starting with iOS 9.3.
+
+After iOSOpenDev and the proper SDK installed just open the *curago.xcodeproj* file and press build. After iOS Blocks is finished building you should find  a folder labeled *Packages* in the root directory of the project, inside the directory you will find a debian file (.deb) for iOS Blocks along with a .zip that will contain the contents of the debian package for easier examination.
+
 
 ### Bugs ###
 
