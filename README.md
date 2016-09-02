@@ -18,9 +18,7 @@ All of the private headers that iOS Blocks utilizes have been baked into the pro
 
 ``` 
 cd curago
-
 make package
-
 ```
 
 After iOS Blocks is compiled you should be able to find a debian package (.deb) in a folder titled "debs" in the same directory that you ran the commands to build iOS Blocks.
