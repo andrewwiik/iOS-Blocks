@@ -22,7 +22,7 @@ cd curago
 make package
 ```
 
-After iOS Blocks is compiled you should be able to find a debian package (.deb) in a folder titled "debs" in the same directory that you ran the commands to compile iOS Blocks.
+After iOS Blocks is compiled you should be able to find a debian package (.deb) in a folder labeled **debs** in the same directory that you ran the commands to compile iOS Blocks.
 
 #### iOSOpenDev (OS X users only) ####
 
