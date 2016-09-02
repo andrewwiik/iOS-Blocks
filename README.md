@@ -1,4 +1,4 @@
-<a name="top" href="http://b4b4r07.com/dotfiles"><img align="right" style="margin: -45px;" src="https://github.com/andrewwiik/iOS-Blocks/blob/master/iOS-Blocks.png?raw=true"></a>
+<a name="top" href="http://iosblocks.com"><img align="right" style="margin: -45px;" src="https://github.com/andrewwiik/iOS-Blocks/blob/master/iOS-Blocks.png?raw=true"></a>
 
 What is iOS Blocks?
 ======
