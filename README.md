@@ -2,7 +2,7 @@
 
 ### What is iOS Blocks? ###
 
-iOS Blocks is a widget-like system for iOS. It was originally designed by Jay Machalani. One of the big issues that iOS Blocks hopes to solve in iOS is the need to open an app to do everything. Jay Machalani outlined this pretty well in a detailed blog post you can find <a href="http://jaymachalani.com/blog/2014/5/29/pushing-ios">here</a>.
+iOS Blocks is a widget-like system for iOS. It was originally designed by Jay Machalani. iOS Blocks aims to remove the need to open an application everytime the end user wants to do something like check stocks or take a photo, Jay Machalani outlined this pretty well in a detailed blog post you can find <a href="http://jaymachalani.com/blog/2014/5/29/pushing-ios">here</a>.
 
 ### How do I get set up? ###
 
