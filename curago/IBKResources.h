@@ -7,24 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "../headers/SpringBoard/SBIconListView.h"
-#import "../headers/SpringBoard/SBIconController.h"
-#import "../headers/SpringBoard/SBFolder.h"
-#import "../headers/SpringBoard/SBRootFolder.h"
-#import "../headers/SpringBoard/SBIconListModel.h"
-#import "../headers/SpringBoard/SBIconModel.h"
-#import "../headers/SpringBoard/SBIconImageView.h"
-#import "../headers/SpringBoard/SBIconView.h"
-#import "../headers/SpringBoard/SBApplicationIcon.h"
-#import "../headers/SpringBoard/SBFolderIcon.h"
-#import "../headers/SpringBoard/SBIconIndexMutableList.h"
-#import "../headers/SpringBoard/SBIconViewMap.h"
-#import "../headers/SpringBoard/SBIconScrollView.h"
-#import "../headers/SpringBoard/SBIconBadgeView.h"
-#import "../headers/SpringBoard/SBRootFolderController.h"
-#import "../headers/SpringBoard/SBRootFolderView.h"
-#import "../headers/SpringBoard/SBIcon.h"
-#import "../headers/SpringBoard/SpringBoard-Structs.h"
+#import "../headers/SpringBoard/SpringBoard.h"
 
 #import "IBKWidgetViewController.h"
 
@@ -76,4 +59,6 @@
 + (IBKWidgetViewController *)getWidgetViewControllerForIcon:(SBIcon *)icon orBundleID:(NSString*)bundleID;
 + (SBIconListView *)listViewForBundleID:(NSString *)bundleID;
 + (NSMutableDictionary *)widgetViewControllers;
++ (NSIndexPath *)indexPathForIcon:(SBIcon *)icon orBundleID:(NSString *)bundleID;
++ (SBIcon *)iconForBundleID:(NSString *)bundleID;
 @end

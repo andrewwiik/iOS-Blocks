@@ -9,9 +9,7 @@
 #import "IBKAPI.h"
 #import "UIImageAverageColorAddition.h"
 
-#import "../headers/SpringBoard/SBIconImageView.h"
-#import "../headers/SpringBoard/SBIconModel.h"
-#import "../headers/SpringBoard/SBIconController.h"
+#import "../headers/SpringBoard/SpringBoard.h"
 
 #import <objc/runtime.h>
 
