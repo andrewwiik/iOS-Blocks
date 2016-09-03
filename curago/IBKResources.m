@@ -9,11 +9,6 @@
 #import "IBKResources.h"
 #import "IBKFunctions.h"
 
-#import "../headers/SpringBoard/SBIconListModel.h"
-#import "../headers/SpringBoard/SBApplicationIcon.h"
-#import "../headers/SpringBoard/SBApplicationController.h"
-#import "../headers/SpringBoard/SpringBoard-Structs.h"
-
 #import <objc/runtime.h>
 
 @interface SBFAnimationFactory : NSObject
@@ -27,6 +22,7 @@ static NSMutableSet *widgetIdentifiers;
 static NSDictionary *settings;
 static NSMutableDictionary *iconIndexes;
 static NSMutableDictionary *widgetViewControllers;
+SBIconController *iconController;
 
 @implementation IBKResources
 
@@ -377,21 +373,87 @@ static NSMutableDictionary *widgetViewControllers;
     return [widgetViewControllers objectForKey:bundleIdentifier];
 }
 
-+ (SBIconListView *)listViewForBundleID:(NSString *)bundleID {
-    SBIconController *viewcont = [objc_getClass("SBIconController") sharedInstance];
-    SBIconModel *model = [viewcont model];
-    SBIcon *icon = [model expectedIconForDisplayIdentifier:bundleID];
++ (SBIcon *)iconForBundleID:(NSString *)bundleID {
 
-    SBIconController *controller = [objc_getClass("SBIconController") sharedInstance];
-    SBRootFolder *rootFolder = [controller valueForKeyPath:@"rootFolder"];
-    NSIndexPath *indexPath = [rootFolder indexPathForIcon:icon];
-    SBIconListView *listView = nil;
-    [controller getListView:&listView folder:NULL relativePath:NULL forIndexPath:indexPath createIfNecessary:YES];
-    return listView;
+    if ([iconController respondsToSelector:@selector(model)]) {
+
+        SBIconModel *iconModel = [iconController model];
+
+        if ([iconModel respondsToSelector:@selector(expectedIconForDisplayIdentifier:)]) {
+
+            SBIcon *icon = [iconModel expectedIconForDisplayIdentifier:bundleID];
+
+            if (icon && [icon isKindOfClass:NSClassFromString(@"SBIcon")]) {
+
+                return icon;
+            }
+        }
+    }
+
+    return nil;
+}
+
++ (NSIndexPath *)indexPathForIcon:(SBIcon *)icon orBundleID:(NSString *)bundleID {
+
+    if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
+
+        SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+
+        if ([iconController respondsToSelector:@selector(rootFolder)]) {
+
+            SBRootFolder *rootFolder = [iconController rootFolder];
+
+            if ([rootFolder respondsToSelector:@selector(indexPathForIcon:)]) {
+
+                if (!icon && bundleID) {
+
+                    icon = [NSClassFromString(@"IBKResources") iconForBundleID:bundleID];
+                }
+
+                if (icon && [icon isKindOfClass:NSClassFromString(@"SBIcon")]) {
+
+                    NSIndexPath *indexPathForIcon = [rootFolder indexPathForIcon:icon];
+
+                    if (indexPathForIcon) {
+
+                        return indexPathForIcon;
+                    }
+                }
+            }
+        }
+    }
+
+    return nil;
+}
+
++ (SBIconListView *)listViewForBundleID:(NSString *)bundleID {
+
+    if ([NSClassFromString(@"SBIconController") instancesRespondToSelector:@selector(sharedInstance)]) {
+
+        SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+
+        NSIndexPath *indexPathForIcon = [NSClassFromString(@"IBKResources") indexPathForIcon:nil orBundleID:bundleID];
+
+        if ([iconController respondsToSelector:@selector(getListView:folder:relativePath:forIndexPath:createIfNecessary:)]) {
+
+            SBIconListView *listView = nil;
+
+            [iconController getListView:&listView folder:nil relativePath:nil forIndexPath:indexPathForIcon createIfNecessary:YES];
+
+            if (listView) {
+
+                return listView;
+            }
+        }
+    }
+
+    return nil;
 }
 
 + (NSMutableDictionary *)widgetViewControllers {
+
     if (!widgetViewControllers) {
+
         widgetViewControllers = [NSMutableDictionary new];
     }
     return widgetViewControllers;

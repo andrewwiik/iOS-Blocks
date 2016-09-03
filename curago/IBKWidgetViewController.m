@@ -22,11 +22,6 @@
 #import "UIImageAverageColorAddition.h"
 #import "CKBlurView.h"
 
-#import "../headers/SpringBoard/SBIconController.h"
-#import "../headers/SpringBoard/SBIconModel.h"
-#import "../headers/SpringBoard/SBApplicationController.h"
-#import "../headers/SpringBoard/SBApplication.h"
-#import "../headers/SpringBoard/SBRootFolder.h"
 #import "../headers/BulletinBoard/BBBulletin.h"
 #import "../headers/BulletinBoard/BBServer.h"
 

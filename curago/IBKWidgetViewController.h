@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "../headers/SpringBoard/SBIconImageView.h"
 #import "IBKWidget.h"
-#import "../headers/BulletinBoard/BBObserver.h"
-#import "../headers/SpringBoard/SBIconView.h"
 #import "IBKGameCenterTableView.h"
 #import "IBKWidgetTopBase.h"
 #import "IBKWidgetLockView.h"
 #import "IBKLabel.h"
+
+#import "../headers/SpringBoard/SpringBoard.h"
+#import "../headers/BulletinBoard/BBObserver.h"
 
 @interface IBKWidgetViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
     IBKWidgetTopBase *topBase;
