@@ -33,8 +33,4 @@ After iOSOpenDev and the proper SDK is installed just open the **curago.xcodepro
 
 ### Bugs ###
 
-<<<<<<< HEAD
-Editing mode is borked for all devices. It's an issue within the code for determining where icons should go AFAIK.# iOS-Blocks
-=======
 Too many to list right now...
->>>>>>> 4ae945164d1bc88dd3ae0b704d687720e0d960f9
