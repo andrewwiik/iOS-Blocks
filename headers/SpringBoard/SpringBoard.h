@@ -1,3 +1,4 @@
+#import "_UISettingsKeyObserver-Protocol.h"
 #import "SBApplication.h"
 #import "SBApplicationController.h"
 #import "SBApplicationIcon.h"
@@ -51,9 +52,11 @@
 #import "SBScreenObserver-Protocol.h"
 #import "SBSearchGestureObserver-Protocol.h"
 #import "SBSystemLocalNotificationAlertDelegate-Protocol.h"
+#import "SBUIBiometricEventMonitor.h"
+#import "SBUIBiometricEventMonitorDelegate-Protocol.h"
+#import "SBUIPasscodeLockViewBase.h"
+#import "SBUIPasscodeLockViewDelegate-Protocol.h"
+#import "SBUIPasscodeLockViewFactory.h"
 #import "SBWindowContextHostManagerDelegate-Protocol.h"
 #import "SBWindowContextManagerDelegate-Protocol.h"
 #import "SpringBoard-Structs.h"
-
-
-

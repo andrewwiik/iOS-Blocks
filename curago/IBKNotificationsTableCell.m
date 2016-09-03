@@ -7,23 +7,10 @@
 //
 
 #import "IBKNotificationsTableCell.h"
-#import "../headers/BulletinBoard/BBAttachments.h"
-#import "../headers/SpringBoard/SBApplicationController.h"
+
 #import <objc/runtime.h>
 
 #define is_IOS8_3 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.2) && ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0)
-
-@interface BBBulletin (EHHH)
--(id)sectionDisplayName;
-@end
-
-@interface SBApplication : NSObject
--(id)displayName;
-@end
-
-@interface SBApplicationController (iOS8)
-- (id)applicationWithBundleIdentifier:(id)arg1;
-@end
 
 @implementation IBKNotificationsTableCell
 

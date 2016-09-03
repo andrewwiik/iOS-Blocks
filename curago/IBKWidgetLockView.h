@@ -9,48 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "MarqueeLabel.h"
 
-@protocol SBUIPasscodeLockViewDelegate <NSObject>
-@optional
--(void)passcodeLockViewEmergencyCallButtonPressed:(id)pressed;
--(void)passcodeLockViewCancelButtonPressed:(id)pressed;
--(void)passcodeLockViewPasscodeEntered:(id)entered;
--(void)passcodeLockViewPasscodeDidChange:(id)passcodeLockViewPasscode;
-@end
-
-@interface SBUIPasscodeLockViewBase : UIView
-@property id<SBUIPasscodeLockViewDelegate> delegate;
-@property bool shouldResetForFailedPasscodeAttempt;
-@property bool showsEmergencyCallButton;
-@property(readonly) NSString * passcode;
-@property(retain, nonatomic) UIColor *customBackgroundColor;
-@property double backgroundAlpha;
-- (void)resetForFailedPasscode;
-- (void)setBiometricMatchMode:(unsigned long long)arg1;
-- (void)_resetForFailedMesaAttempt;
-- (void)autofillForSuccessfulMesaAttemptWithCompletion:(id)arg1;
-@end
-
-@interface SBUIPasscodeLockViewFactory : NSObject
-+(SBUIPasscodeLockViewBase*)_passcodeLockViewForStyle:(int)arg1 withLightStyle:(bool)arg2;
-+(SBUIPasscodeLockViewBase*)passcodeLockViewForStyle:(int)arg1;
-@end
-
-@protocol SBUIBiometricEventMonitorDelegate
-@required
--(void)biometricEventMonitor:(id)monitor handleBiometricEvent:(unsigned)event;
-@end
-
-@interface SBUIBiometricEventMonitor : NSObject
-- (void)addObserver:(id)arg1;
-- (void)removeObserver:(id)arg1;
-- (void)_startMatching;
-- (void)_setMatchingEnabled:(BOOL)arg1;
-- (BOOL)isMatchingEnabled;
-@end
-
-@interface BiometricKit : NSObject
-+ (id)manager;
-@end
+#import "../headers/SpringBoard/SpringBoard.h"
+#import "../headers/BiometricKit/BiometricKit.h"
+#import "../headers/UIKit/UIKit-Private.h"
 
 #define TouchIDFingerDown  1
 #define TouchIDFingerUp    0

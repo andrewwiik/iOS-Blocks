@@ -33,14 +33,6 @@
 
 @end
 
-@interface _UIBackdropView : UIView
-- (id)initWithFrame:(CGRect)arg1 autosizesToFitSuperview:(BOOL)arg2 settings:(id)arg3;
-@end
-
-@interface _UIBackdropViewSettings : NSObject
-+ (id)settingsForStyle:(int)arg1;
-@end
-
 BOOL isMonitoring;
 BOOL previousMatchingSetting;
 
