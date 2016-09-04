@@ -10,11 +10,11 @@ env:
 
 before_install:
   # update homebrew and install dependencies
-  - brew update; fi
-  - brew install dpkg ldid; fi
+  - brew update
+  - brew install dpkg ldid
   
   # install theos
-  - git clone --recursive https://github.com/theos/theos.git ~/theos
+  - git clone https://github.com/theos/theos.git ~/theos
 
 script:
   # got to main project directory
