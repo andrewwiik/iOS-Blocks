@@ -7,6 +7,7 @@ env:
   global:
     # $THEOS is absolutely needed for theos to even be found
     - THEOS=~/theos
+    - ORIGDIR=$PWD
 
 before_install:
   # os x: update homebrew and install dependencies
@@ -15,7 +16,9 @@ before_install:
   
   # install theos
   - git clone --depth=50 --branch=master https://github.com/theos/theos.git ~/theos
-  
+  - cd ~/theos
+  - git submodule update --init --recursive
+  - cd $ORIGDIR
 
 script:
   # create a directory
