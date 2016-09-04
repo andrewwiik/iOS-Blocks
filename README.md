@@ -1,4 +1,4 @@
-<a name="top" href="http://iosblocks.com"><img align="right" style="margin: -45px;" src="https://github.com/andrewwiik/iOS-Blocks/blob/master/iOS-Blocks.png?raw=true"></a>
+<a name="top" href="http://iosblocks.com"><img align="right" style="margin: -45px;" src="https://github.com/andrewwiik/iOS-Blocks/blob/master/iOS-Blocks.png?raw=true"></a>[![Build Status](https://travis-ci.org/ioscreatix/iOS-Blocks.svg?branch=master)](https://travis-ci.org/ioscreatix/iOS-Blocks)
 
 What is iOS Blocks?
 ======

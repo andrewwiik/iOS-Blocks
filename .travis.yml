@@ -20,4 +20,8 @@ script:
   # got to main project directory
   - cd curago
   # build!
+<<<<<<< HEAD
   - make package
+=======
+  - make package
+>>>>>>> 1ff8d454751bf0e3d681cd6eb2d33694a50815e3
