@@ -1,0 +1,33 @@
+os: osx
+osx_image: xcode7.2
+language: objective-c
+sudo: false
+
+env:
+  global:
+    # $THEOS is absolutely needed for theos to even be found
+    - THEOS=theos
+
+before_install:
+  # os x: update homebrew and install dependencies
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install dpkg ldid; fi
+  
+  # install theos
+  - mkdir theos
+  - cd theos
+  - curl -Lso theos.tar.gz https://github.com/theos/theos/tarball/master
+  # extract
+  - tar -x --strip-components=1 -f theos.tar.gz
+  - cd ..
+  
+
+script:
+  # create a directory
+  - cd curago
+  # build!
+  - make package messages=yes
+  # go back up
+  - cd ../../
+  # remove test, ready for the next one
+  - rm -rf theos

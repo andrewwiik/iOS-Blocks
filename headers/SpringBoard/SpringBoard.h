@@ -45,6 +45,7 @@
 #import "SBLeafIcon.h"
 #import "SBLeafIconDataSource-Protocol.h"
 #import "SBLSApplicationLifecycleObserver-Protocol.h"
+#import "SBMediaController.h"
 #import "SBPlaceholderIcon.h"
 #import "SBRootFolder.h"
 #import "SBRootFolderController.h"

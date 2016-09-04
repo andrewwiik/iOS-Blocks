@@ -8,8 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
+
+#import "../../../headers/SpringBoard/SBMediaController.h"
+
 #import "IBKWidgetDelegate.h"
 #import "IBKMusicButton.h"
+
 
 @interface MusicWidgetViewController : NSObject <IBKWidgetDelegate>
 

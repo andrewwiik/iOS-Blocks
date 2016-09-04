@@ -7,9 +7,8 @@
 //
 
 #import "MusicWidgetViewController.h"
-#import <SpringBoard7.0/SBMediaController.h>
 #import "IBKMusicButton.h"
-#import <MediaPlayer/MediaPlayer.h>
+
 #import <objc/runtime.h>
 
 typedef void (^MRMediaRemoteGetNowPlayingInfoCompletion)(CFDictionaryRef information);

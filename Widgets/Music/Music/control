@@ -1,0 +1,11 @@
+Package: com.matchstic.Music
+Name: Music
+Description: 
+Section: Addons (Curago)
+Depends: firmware (>= 7.0)
+Conflicts: 
+Replaces: 
+Priority: optional
+Architecture: iphoneos-arm
+Author: Matt Clarke
+Version: 1.0-1

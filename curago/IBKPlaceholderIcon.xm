@@ -224,3 +224,9 @@ UIImage *imageFromView(UIView *view)
 
 %end
 
+%ctor {
+	class_addIvar(NSClassFromString(@"IBKPlaceholderIcon"), "_gayFriend", sizeof(id), log2(sizeof(id)), @encode(id));
+	%init;
+	class_addIvar(NSClassFromString(@"IBKPlaceholderIcon"), "_gayFriend", sizeof(id), log2(sizeof(id)), @encode(id));
+}
+
