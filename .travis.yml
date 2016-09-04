@@ -24,7 +24,7 @@ script:
   # create a directory
   - cd curago
   # build!
-  - make package messages=yes
+  - make package
   # go back up
   - cd ../../
   # remove test, ready for the next one
