@@ -6,7 +6,7 @@ sudo: false
 env:
   global:
     # $THEOS is absolutely needed for theos to even be found
-    - THEOS=theos
+    - THEOS=/theos
 
 before_install:
   # os x: update homebrew and install dependencies
