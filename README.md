@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ioscreatix/iOS-Blocks.svg?branch=master)](https://travis-ci.org/ioscreatix/iOS-Blocks)
+
 <a name="top" href="http://iosblocks.com"><img align="right" style="margin: -45px;" src="https://github.com/andrewwiik/iOS-Blocks/blob/master/iOS-Blocks.png?raw=true"></a>
 
 What is iOS Blocks?
