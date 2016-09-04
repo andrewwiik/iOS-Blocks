@@ -14,7 +14,7 @@ before_install:
   - brew install dpkg ldid
   
   # install theos
-  - git clone https://github.com/theos/theos.git ~/theos
+  - git clone --recursive git://github.com/theos/theos.git ~/theos
 
 script:
   # got to main project directory
