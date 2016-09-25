@@ -98,6 +98,19 @@ void reloadAllWidgetsNow() {
     }
 }
 
+void reloadLayout() {
+    SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+    SBRootFolderController *rootFolder = [iconController valueForKeyPath:@"_rootFolderController"];
+    
+    for (SBIconListView *listView in (NSArray *)[rootFolder valueForKey:@"iconListViews"]) {
+        
+        if ([listView isKindOfClass:NSClassFromString(@"SBRootIconListView")]) {
+            SBIconIndexMutableList *list = [[listView model] valueForKey:@"_icons"];
+            list.needsProcessing = YES;
+        }
+    }
+}
+
 // Hooks
 
 #pragma mark Icon co-ordinate placements
@@ -710,7 +723,7 @@ BOOL launchingWidget;
             }
         }
         
-//        [self removeAllNodes];
+        // [self removeAllNodes];
         [self setValue:[NSMutableArray new] forKey:@"_nodes"];
         
         for (id icon in finalGrid) {
@@ -1660,6 +1673,7 @@ NSInteger page = 0;
                 [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
 
             // Move frame of widget into new position.
+            reloadLayout();
             CGRect widgetViewFrame = widget.correspondingIconView.frame;
             widgetViewFrame.size = CGSizeMake([IBKResources widthForWidgetWithIdentifier:widget.applicationIdentifer], [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer]);
             [UIView animateWithDuration:0.3 animations:^{

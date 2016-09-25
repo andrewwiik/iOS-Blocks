@@ -1,0 +1,8 @@
+Package: com.iosblocks.calendar
+Name: Calendar
+Depends: mobilesubstrate, com.iosblocks.curago, firmware (>= 7.0)
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: A Block for iOS Block!
+Author: iOS Blocks
+Section: Blocks (iOS Blocks)
