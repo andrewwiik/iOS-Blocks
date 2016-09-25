@@ -63,7 +63,11 @@ SBIconController *iconController;
     if (arg1) {
         [widgetIdentifiers addObject:arg1];
         
-        SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+        if (!iconController) {
+            if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
+                iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+            }
+        }
         SBIconModel *model = [iconController model];
         SBIcon *widgetIcon = [model expectedIconForDisplayIdentifier:arg1];
         SBRootFolder *rootFolder = [iconController valueForKeyPath:@"rootFolder"];
@@ -89,8 +93,12 @@ SBIconController *iconController;
         
       //  NSLog(@"*** Attempted to remove %@", arg1);
         //NSLog(@"*** Loaded widget identifiers are now %@", widgetIdentifiers);
-        
-        SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+        if (!iconController) {
+            if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
+                iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+            }
+        }
+
         SBIconModel *model = [iconController model];
         SBIcon *widgetIcon = [model expectedIconForDisplayIdentifier:arg1];
         SBRootFolder *rootFolder = [iconController valueForKeyPath:@"rootFolder"];
@@ -127,8 +135,13 @@ SBIconController *iconController;
 // TODO: THIS ASSUMES IT'S ALWAYS 4 ICONS PER ROW!
 
 + (CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier {
+
+    if (!iconController) {
+        if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
+            iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+        }
+    }
     
-    SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
     SBIconListView *listView = [iconController rootIconListAtIndex:0];
     
     SBIconCoordinate widgetCoordinate = SBIconCoordinateMake(1, 1);
@@ -140,7 +153,7 @@ SBIconController *iconController;
     CGPoint widgetIconOrigin = [listView originForIconAtCoordinate:widgetCoordinate];
     CGFloat spaceBetween = (farIconOrigin.x + ((farIconCenter.x - farIconOrigin.x) * 2)) - widgetIconOrigin.x;
     
-    NSLog(@"Space Between Height for Bundle Identifier: %@ \n is: %f", identifier, spaceBetween);
+    // NSLog(@"Space Between Height for Bundle Identifier: %@ \n is: %f", identifier, spaceBetween);
 //    if (spaceBetween <  100) {
 //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 //            return 252;
@@ -156,8 +169,13 @@ SBIconController *iconController;
 }
 
 + (CGFloat)heightForWidgetWithIdentifier:(NSString *)identifier {
+
+    if (!iconController) {
+        if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
+            iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+        }
+    }
     
-    SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
     SBIconListView *listView = [iconController rootIconListAtIndex:0];
     
     SBIconCoordinate widgetCoordinate = SBIconCoordinateMake(1, 1);
@@ -168,7 +186,7 @@ SBIconController *iconController;
     CGPoint widgetIconOrigin = [listView originForIconAtCoordinate:widgetCoordinate];
     CGFloat spaceBetween = (farIconOrigin.y + ((farIconCenter.y - farIconOrigin.y) * 2)) - widgetIconOrigin.y;
     
-    NSLog(@"Space Between Width for Bundle Identifier: %@ \n is: %f", identifier, spaceBetween);
+    // NSLog(@"Space Between Width for Bundle Identifier: %@ \n is: %f", identifier, spaceBetween);
     
 //    if (spaceBetween < 100) {
 //        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -375,15 +393,27 @@ SBIconController *iconController;
 
 + (SBIcon *)iconForBundleID:(NSString *)bundleID {
 
+    if (!iconController) {
+        if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
+            iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+        }
+    }
+
     if ([iconController respondsToSelector:@selector(model)]) {
+
+        NSLog(@"GOT PAST ICON STAGE 1");
 
         SBIconModel *iconModel = [iconController model];
 
         if ([iconModel respondsToSelector:@selector(expectedIconForDisplayIdentifier:)]) {
 
+            NSLog(@"GOT PAST ICON STAGE 2");
+
             SBIcon *icon = [iconModel expectedIconForDisplayIdentifier:bundleID];
 
             if (icon && [icon isKindOfClass:NSClassFromString(@"SBIcon")]) {
+
+                NSLog(@"GOT PAST ICON STAGE 3");
 
                 return icon;
             }
@@ -395,29 +425,34 @@ SBIconController *iconController;
 
 + (NSIndexPath *)indexPathForIcon:(SBIcon *)icon orBundleID:(NSString *)bundleID {
 
-    if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
 
-        SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
 
-        if ([iconController respondsToSelector:@selector(rootFolder)]) {
+    if ([iconController respondsToSelector:@selector(rootFolder)]) {
 
-            SBRootFolder *rootFolder = [iconController rootFolder];
+        NSLog(@"GOT PAST SUB-STAGE 2");
 
-            if ([rootFolder respondsToSelector:@selector(indexPathForIcon:)]) {
+        SBRootFolder *rootFolder = [iconController rootFolder];
 
-                if (!icon && bundleID) {
+        if ([rootFolder respondsToSelector:@selector(indexPathForIcon:)]) {
 
-                    icon = [NSClassFromString(@"IBKResources") iconForBundleID:bundleID];
-                }
+            NSLog(@"GOT PAST SUB-STAGE 3");
 
-                if (icon && [icon isKindOfClass:NSClassFromString(@"SBIcon")]) {
+            if (!icon && bundleID) {
 
-                    NSIndexPath *indexPathForIcon = [rootFolder indexPathForIcon:icon];
+                NSLog(@"GOT PAST SUB-STAGE 4");
+                icon = [NSClassFromString(@"IBKResources") iconForBundleID:bundleID];
+            }
 
-                    if (indexPathForIcon) {
+            if (icon && [icon isKindOfClass:NSClassFromString(@"SBIcon")]) {
 
-                        return indexPathForIcon;
-                    }
+                NSLog(@"GOT PAST SUB-STAGE 5");
+
+                NSIndexPath *indexPathForIcon = [rootFolder indexPathForIcon:icon];
+
+                if (indexPathForIcon) {
+
+                    NSLog(@"GOT PAST SUB-STAGE 6");
+                    return indexPathForIcon;
                 }
             }
         }
@@ -428,9 +463,11 @@ SBIconController *iconController;
 
 + (SBIconListView *)listViewForBundleID:(NSString *)bundleID {
 
-    if ([NSClassFromString(@"SBIconController") instancesRespondToSelector:@selector(sharedInstance)]) {
-
-        SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+        if (!iconController) {
+            if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
+                iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+            }
+        }
 
         NSIndexPath *indexPathForIcon = [NSClassFromString(@"IBKResources") indexPathForIcon:nil orBundleID:bundleID];
 
@@ -438,14 +475,16 @@ SBIconController *iconController;
 
             SBIconListView *listView = nil;
 
+             NSLog(@"GOT PAST STAGE 2");
+
             [iconController getListView:&listView folder:nil relativePath:nil forIndexPath:indexPathForIcon createIfNecessary:YES];
 
             if (listView) {
 
+                 NSLog(@"GOT PAST STAGE 3");
                 return listView;
             }
         }
-    }
 
     return nil;
 }
