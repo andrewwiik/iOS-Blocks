@@ -218,15 +218,8 @@ UIImage *imageFromView(UIView *view)
 - (Class)viewMap:(id)map iconViewClassForIcon:(SBIcon *)icon {
 
 	if ([icon isKindOfClass:NSClassFromString(@"IBKPlaceholderIcon")])
-		return NSClassFromString(@"SBWDXPlaceholderIconView");
+		return NSClassFromString(@"IBKPlaceholderIconView");
 	else return %orig;
 }
 
 %end
-
-%ctor {
-	class_addIvar(NSClassFromString(@"IBKPlaceholderIcon"), "_gayFriend", sizeof(id), log2(sizeof(id)), @encode(id));
-	%init;
-	class_addIvar(NSClassFromString(@"IBKPlaceholderIcon"), "_gayFriend", sizeof(id), log2(sizeof(id)), @encode(id));
-}
-

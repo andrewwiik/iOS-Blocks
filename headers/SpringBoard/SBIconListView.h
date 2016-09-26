@@ -119,5 +119,9 @@
 - (id)init;
 - (Class)modelClass;
 
+// iOS Blocks
+
+@property (nonatomic, retain) NSMutableDictionary *rotationHelper;
+
 @end
 

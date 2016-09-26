@@ -117,6 +117,8 @@ void reloadLayout() {
 
 %hook SBIconListView
 
+%property (nonatomic, retain) NSMutableDictionary *rotationHelper;
+
 //- (_Bool)isFull {
 //    int count = 1;
 //
@@ -168,6 +170,122 @@ void reloadLayout() {
 //    list.needsProcessing = YES;
 //    isRotating = NO;
 //}
+
+// - (struct SBIconCoordinate)iconCoordinateForIndex:(unsigned int)index forOrientation:(UIInterfaceOrientation)orientation {
+//     if (!self.rotationHelper) {
+
+//         NSMutableDictionary *grid = [NSMutableDictionary new];
+
+//         int maxNumberOfColumns = 0;
+//         int maxNumberOfRows = 0;
+
+//         NSMutableArray *leftLandscape= [NSMutableArray new];
+
+//         if ([NSClassFromString(@"SBRootIconListView") respondsToSelector:@selector(iconColumnsForInterfaceOrientation:)]) {
+//             maxNumberOfColumns = [NSClassFromString(@"SBRootIconListView") iconColumnsForInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
+                
+//             if ([NSClassFromString(@"SBRootIconListView") respondsToSelector:@selector(iconRowsForInterfaceOrientation:)]) {
+//                 maxNumberOfRows = [NSClassFromString(@"SBRootIconListView") iconRowsForInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
+//             }
+//         }
+
+//         for (int r = 0; r < maxNumberOfRows; r++) {
+//             leftLandscape[r] = [NSMutableArray new];
+//             for (int c = 0; c < maxNumberOfColumns; c++) {
+//                 leftLandscape[r][c] = [NSNull null];
+//             }
+//         }
+
+
+//         int x = maxNumberOfRows*maxNumberOfColumns;
+//         x--;
+//         for (int c = maxNumberOfColumns; c > 0; c--) {
+//             for (int r = 0; r < maxNumberOfRows; r++) {
+//                 leftLandscape[r][c-1] = [NSNumber numberWithInt:x];
+//                 x--;
+//             }
+//         }
+
+//         grid[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeRight]] = leftLandscape;
+
+//         // grid[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeLeft]] = [originalLayout mutableCopy];
+//         // grid[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeRight]] = rotateArray90Deg([originalLayout mutableCopy]);
+
+//         // for (int b = 0; b < 3; b++) {
+//         //     grid[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeLeft]] = rotateArray90Deg(grid[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeLeft]]);
+//         // }
+
+//         self.rotationHelper = grid;
+
+//     }
+
+//     SBIconCoordinate orig = %orig;
+
+//   //  for (id objectStuff in self.rotationHelper[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeRight]]) {
+//    //     NSLog(@"GRID: %@", objectStuff);
+//     //}
+
+//     //NSLog(@"GRID 1: %@", self.rotationHelper[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeRight]]);
+//    // NSLog(@"GRID 2: %@", self.rotationHelper[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeRight]]);
+//     // if (orientation == UIInterfaceOrientationLandscapeRight)
+//     //     return %orig([(NSNumber *)(self.rotationHelper[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeRight]][(int)orig.row][(int)orig.col]) unsignedIntValue], orientation);
+//     if (orientation == UIInterfaceOrientationLandscapeRight) {
+
+//         if (index == 0)
+//             return SBIconCoordinateMake(4,1);
+//         else if (index == 1)
+//             return SBIconCoordinateMake(3,1);
+//         else if (index == 2)
+//             return SBIconCoordinateMake(2,1);
+//         else if (index == 3)
+//             return SBIconCoordinateMake(1,1);
+//         else if (index == 4)
+//             return SBIconCoordinateMake(4,2);
+//         else if (index == 5)
+//             return SBIconCoordinateMake(3,2);
+//         else if (index == 6)
+//             return SBIconCoordinateMake(2,2);
+//         else if (index == 7)
+//             return SBIconCoordinateMake(1,2);
+//         else if (index == 8)
+//             return SBIconCoordinateMake(4,3);
+//         else if (index == 9)
+//             return SBIconCoordinateMake(3,3);
+//         else if (index == 10)
+//             return SBIconCoordinateMake(2,3);
+//         else if (index == 11)
+//             return SBIconCoordinateMake(1,3);
+//         else if (index == 12)
+//             return SBIconCoordinateMake(4,4);
+//         else if (index == 13)
+//             return SBIconCoordinateMake(3,4);
+//         else if (index == 14)
+//             return SBIconCoordinateMake(2,4);
+//         else if (index == 15)
+//             return SBIconCoordinateMake(1,4);
+//         else if (index == 16)
+//             return SBIconCoordinateMake(4,5);
+//         else if (index == 17)
+//             return SBIconCoordinateMake(3,5);
+//         else if (index == 18)
+//             return SBIconCoordinateMake(2,5);
+//         else if (index == 19)
+//             return SBIconCoordinateMake(1,5);
+//         else if (index == 20)
+//             return SBIconCoordinateMake(4,6);
+//         else if (index == 21)
+//             return SBIconCoordinateMake(3,6);
+//         else if (index == 22)
+//             return SBIconCoordinateMake(2,6);
+//         else if (index == 23)
+//             return SBIconCoordinateMake(1,6);
+//         else return orig;
+
+//     }
+//          //return %orig([(NSNumber *)(self.rotationHelper[[NSString stringWithFormat:@"%d", UIInterfaceOrientationLandscapeRight]][(int)orig.row-1][(int)orig.col-1]) unsignedIntValue], orientation);
+//     else
+//         return orig;
+// }
 
 %end
 
@@ -543,8 +661,15 @@ BOOL launchingWidget;
                     SBIconCoordinate origCoord;
                     
                     if ([self.listView respondsToSelector:@selector(iconCoordinateForIndex:forOrientation:)]) {
-                        coord = [self.listView iconCoordinateForIndex:index forOrientation:currentOrientation];
-                        origCoord = coord;
+                        if (currentOrientation == UIInterfaceOrientationLandscapeRight) {
+                            index++;
+                            coord = SBIconCoordinateMake(abs((index % maxNumberOfRows)-maxNumberOfRows),index/maxNumberOfRows+1);
+
+                            index = [self.listView indexForCoordinate:coord forOrientation:currentOrientation];
+                            // [IBKResources setIndex: index forBundleID:iconIdentifier];
+                        }
+                            coord = [self.listView iconCoordinateForIndex:index forOrientation:currentOrientation];
+                            origCoord = coord;
                     } else {
                         
                         // If |SBIconListView| does not respond to the selector (iconCoordinateForIndex:forOrientation)
@@ -796,8 +921,6 @@ BOOL launchingWidget;
 %hook SBIconView
 
 %property (nonatomic, retain) UIView *widgetView;
-
-// hack - I wanted to play about with the Obj-C runtime and make a subclass to keep things neat.
 
 - (BOOL)isUserInteractionEnabled {
     if ([self.icon isKindOfClass:[%c(IBKPlaceholderIcon) class]]) return NO;
