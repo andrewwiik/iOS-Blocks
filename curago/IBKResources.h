@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "../headers/SpringBoard/SpringBoard.h"
 
+#import "IBKFunctions.h"
 #import "IBKWidgetViewController.h"
+
 
 @interface IBKResources : NSObject
 
@@ -20,10 +22,12 @@
 
 #define IS_IPHONE_6 (SCREEN_MAX_LENGTH == 667)
 #define IS_IPHONE_6_PLUS (SCREEN_MAX_LENGTH == 736.0)
+#define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
 #define orient [[UIApplication sharedApplication] statusBarOrientation]
 
 + (CGFloat)adjustedAnimationSpeed:(CGFloat)duration;
++ (BOOL)isRTL;
 
 + (NSSet*)widgetBundleIdentifiers;
 + (void)addNewIdentifier:(NSString*)arg1;
@@ -52,8 +56,8 @@
 + (BOOL)isWidgetLocked:(NSString*)identifier;
 + (void)reloadSettings;
 + (int)defaultColourType;
-+ (void)setIndex:(unsigned long long)index forBundleID:(NSString *)bundleID;
-+ (unsigned long long)indexForBundleID:(NSString *)bundleID;
++ (void)setIndex:(unsigned long long)index forBundleID:(NSString *)bundleID forOrientation:(UIInterfaceOrientation)orientation;
++ (unsigned long long)indexForBundleID:(NSString *)bundleID forOrientation:(UIInterfaceOrientation)orientation;
 + (int)horiztonalWidgetSizeForBundleID:(NSString *)bundleID;
 + (int)verticalWidgetSizeForBundleID:(NSString *)bundleID;
 + (IBKWidgetViewController *)getWidgetViewControllerForIcon:(SBIcon *)icon orBundleID:(NSString*)bundleID;
@@ -61,4 +65,5 @@
 + (NSMutableDictionary *)widgetViewControllers;
 + (NSIndexPath *)indexPathForIcon:(SBIcon *)icon orBundleID:(NSString *)bundleID;
 + (SBIcon *)iconForBundleID:(NSString *)bundleID;
++ (SBIconView *)iconViewForBundleID:(NSString *)bundleID;
 @end

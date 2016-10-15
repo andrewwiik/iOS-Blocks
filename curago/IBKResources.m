@@ -7,7 +7,6 @@
 //
 
 #import "IBKResources.h"
-#import "IBKFunctions.h"
 
 #import <objc/runtime.h>
 
@@ -22,6 +21,7 @@ static NSMutableSet *widgetIdentifiers;
 static NSDictionary *settings;
 static NSMutableDictionary *iconIndexes;
 static NSMutableDictionary *widgetViewControllers;
+static int isRTL = -1;
 SBIconController *iconController;
 
 @implementation IBKResources
@@ -86,11 +86,28 @@ SBIconController *iconController;
     }
 }
 
-+ (void)removeIdentifier:(NSString*)arg1 {
-    if (arg1) {
-        [widgetIdentifiers removeObject:arg1];
-        [iconIndexes removeObjectForKey:arg1];
-        
++ (void)removeIdentifier:(NSString*)bundleID {
+    if (bundleID) {
+        [widgetIdentifiers removeObject:bundleID];
+
+        if (!iconIndexes) {
+            iconIndexes = [[NSMutableDictionary dictionaryWithContentsOfFile:plist] objectForKey:@"widgetIndexes"];
+            if (!iconIndexes) iconIndexes = [NSMutableDictionary new];
+
+            if (![iconIndexes objectForKey:@"Landscape"])
+                [iconIndexes setObject:[NSMutableDictionary new] forKey:@"Landscape"];
+            else {
+                 [iconIndexes setObject:[(NSDictionary *)[iconIndexes objectForKey:@"Landscape"] mutableCopy] forKey:@"Landscape"];
+            }
+            if (![iconIndexes objectForKey:@"Portrait"])
+                [iconIndexes setObject:[NSMutableDictionary new] forKey:@"Portrait"];
+            else {
+                 [iconIndexes setObject:[(NSDictionary *)[iconIndexes objectForKey:@"Portrait"] mutableCopy] forKey:@"Portrait"];
+            }
+        }
+
+        [(NSMutableDictionary *)[iconIndexes objectForKey:@"Portrait"] removeObjectForKey:bundleID];
+        [(NSMutableDictionary *)[iconIndexes objectForKey:@"Landscape"] removeObjectForKey:bundleID];
       //  NSLog(@"*** Attempted to remove %@", arg1);
         //NSLog(@"*** Loaded widget identifiers are now %@", widgetIdentifiers);
         if (!iconController) {
@@ -100,7 +117,7 @@ SBIconController *iconController;
         }
 
         SBIconModel *model = [iconController model];
-        SBIcon *widgetIcon = [model expectedIconForDisplayIdentifier:arg1];
+        SBIcon *widgetIcon = [model expectedIconForDisplayIdentifier:bundleID];
         SBRootFolder *rootFolder = [iconController valueForKeyPath:@"rootFolder"];
         NSIndexPath *indexPath = [rootFolder indexPathForIcon:widgetIcon];
         SBIconListView *listView = nil;
@@ -132,73 +149,52 @@ SBIconController *iconController;
     [dict writeToFile:plist atomically:YES];
 }
 
-// TODO: THIS ASSUMES IT'S ALWAYS 4 ICONS PER ROW!
-
 + (CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier {
 
-    if (!iconController) {
-        if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
-            iconController = [NSClassFromString(@"SBIconController") sharedInstance];
-        }
+    int widgetWidth = [IBKResources horiztonalWidgetSizeForBundleID:identifier];
+
+    SBRootIconListView *listView;
+    listView = [[NSClassFromString(@"SBIconController") sharedInstance] rootIconListAtIndex:0];
+    if (!listView) {
+        CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+        CGFloat statusBarWidth = statusBarSize.width > statusBarSize.height ? statusBarSize.width : statusBarSize.height;
+        listView = [[NSClassFromString(@"SBRootIconListView") alloc] initWithFrame:CGRectMake(0,0,statusBarWidth,0)];
+        listView.orientation = [[UIApplication sharedApplication] statusBarOrientation];
     }
-    
-    SBIconListView *listView = [iconController rootIconListAtIndex:0];
-    
-    SBIconCoordinate widgetCoordinate = SBIconCoordinateMake(1, 1);
-    
-    SBIconCoordinate farIconCoordinate = SBIconCoordinateMake(1, [IBKResources horiztonalWidgetSizeForBundleID:identifier]);
-    
-    CGPoint farIconOrigin = [listView originForIconAtCoordinate:(struct SBIconCoordinate)farIconCoordinate];
-    CGPoint farIconCenter = [listView centerForIconCoordinate:farIconCoordinate];
-    CGPoint widgetIconOrigin = [listView originForIconAtCoordinate:widgetCoordinate];
-    CGFloat spaceBetween = (farIconOrigin.x + ((farIconCenter.x - farIconOrigin.x) * 2)) - widgetIconOrigin.x;
-    
-    // NSLog(@"Space Between Height for Bundle Identifier: %@ \n is: %f", identifier, spaceBetween);
-//    if (spaceBetween <  100) {
-//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//            return 252;
-//        else if (IS_IPHONE_6)
-//            return 147;
-//        else if (IS_IPHONE_6_PLUS)
-//            return 343.5;
-//        else
-//            return 136;
-//    }
-    return spaceBetween;
-    
+    if ([NSClassFromString(@"IBKResources") isRTL]) {
+      //  NSLog(@"called is RTL");
+       // NSUInteger maxCols = [listView iconColumnsForCurrentOrientation];
+        // NSLog(@"first coord: %@", NSStringFromCGPoint([listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth -1))]));
+        // NSLog(@"second coord: %@", NSStringFromCGPoint([listView originForIconAtCoordinate:SBIconCoordinateMake(1,maxCols - (widgetWidth - 1))]));
+        return [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].x - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth - 1))].x + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
+    }
+    return [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth -1))].x - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].x + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
 }
 
 + (CGFloat)heightForWidgetWithIdentifier:(NSString *)identifier {
 
-    if (!iconController) {
-        if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
-            iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+    int widgetHeight = [IBKResources verticalWidgetSizeForBundleID:identifier];
+    
+    SBRootIconListView *listView;
+    listView = [[NSClassFromString(@"SBIconController") sharedInstance] rootIconListAtIndex:0];
+    if (!listView) {
+
+        CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+        CGFloat statusBarWidth = statusBarSize.width > statusBarSize.height ? statusBarSize.width : statusBarSize.height;
+        CGFloat statusBarHeight = statusBarSize.width < statusBarSize.height ? statusBarSize.width : statusBarSize.height;
+        CGFloat screenWidth = SCREEN_WIDTH;
+        CGFloat screenHeight = SCREEN_HEIGHT;
+        CGFloat dockHeight = [NSClassFromString(@"SBDockIconListView") defaultHeight];
+        if (statusBarWidth != screenWidth && statusBarWidth != screenHeight) {
+            dockHeight = 0;
         }
+        screenHeight = statusBarWidth <= (screenWidth + 10) ? screenHeight : screenWidth;
+        CGFloat listViewHeight = screenHeight - dockHeight - statusBarHeight - 16;
+
+        listView = [[NSClassFromString(@"SBRootIconListView") alloc] initWithFrame:CGRectMake(0,0,statusBarWidth,listViewHeight)];
+        listView.orientation = [[UIApplication sharedApplication] statusBarOrientation];
     }
-    
-    SBIconListView *listView = [iconController rootIconListAtIndex:0];
-    
-    SBIconCoordinate widgetCoordinate = SBIconCoordinateMake(1, 1);
-    SBIconCoordinate farIconCoordinate = SBIconCoordinateMake([IBKResources verticalWidgetSizeForBundleID:identifier], 1);
-    
-    CGPoint farIconOrigin = [listView originForIconAtCoordinate:(struct SBIconCoordinate)farIconCoordinate];
-    CGPoint farIconCenter = [listView centerForIconCoordinate:farIconCoordinate];
-    CGPoint widgetIconOrigin = [listView originForIconAtCoordinate:widgetCoordinate];
-    CGFloat spaceBetween = (farIconOrigin.y + ((farIconCenter.y - farIconOrigin.y) * 2)) - widgetIconOrigin.y;
-    
-    // NSLog(@"Space Between Width for Bundle Identifier: %@ \n is: %f", identifier, spaceBetween);
-    
-//    if (spaceBetween < 100) {
-//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-//            return 237;
-//        else if (IS_IPHONE_6)
-//            return 148;
-//        else if (IS_IPHONE_6_PLUS)
-//            return 158;
-//        else
-//            return 148;
-//    }
-    return spaceBetween;
+    return [listView originForIconAtCoordinate:SBIconCoordinateMake(1 + (widgetHeight -1),1)].y - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].y + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].height;
 }
 
 + (NSArray *)generateWidgetIndexesForListView:(SBIconListView*)view {
@@ -245,28 +241,107 @@ SBIconController *iconController;
 
 
 
-+ (void)setIndex:(unsigned long long)index forBundleID:(NSString *)bundleID {
++ (void)setIndex:(unsigned long long)index forBundleID:(NSString *)bundleID forOrientation:(UIInterfaceOrientation)orientation {
+
     if (!iconIndexes) {
-        iconIndexes = [[[NSDictionary dictionaryWithContentsOfFile:plist] objectForKey:@"widgetIndexes"] mutableCopy];
+        iconIndexes = [[NSMutableDictionary dictionaryWithContentsOfFile:plist] objectForKey:@"widgetIndexes"];
         if (!iconIndexes) iconIndexes = [NSMutableDictionary new];
+
+        if (![iconIndexes objectForKey:@"Landscape"])
+            [iconIndexes setObject:[NSMutableDictionary new] forKey:@"Landscape"];
+        else {
+             [iconIndexes setObject:[(NSDictionary *)[iconIndexes objectForKey:@"Landscape"] mutableCopy] forKey:@"Landscape"];
+        }
+        if (![iconIndexes objectForKey:@"Portrait"])
+            [iconIndexes setObject:[NSMutableDictionary new] forKey:@"Portrait"];
+        else {
+             [iconIndexes setObject:[(NSDictionary *)[iconIndexes objectForKey:@"Portrait"] mutableCopy] forKey:@"Portrait"];
+        }
     }
     if (bundleID) {
-        [iconIndexes setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:bundleID];
+
+        SBRootIconListView *listView = [NSClassFromString(@"SBRootIconListView") alloc];
+        int maxRows = 0;
+        int maxCols = 0;
+
+        if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) {
+
+            int horiztonalWidgetSize = [IBKResources horiztonalWidgetSizeForBundleID:bundleID];
+
+            if ([NSClassFromString(@"SBRootIconListView") respondsToSelector:@selector(iconColumnsForInterfaceOrientation:)]) {
+                maxCols = [NSClassFromString(@"SBRootIconListView") iconColumnsForInterfaceOrientation:UIInterfaceOrientationPortrait];
+                    
+                if ([NSClassFromString(@"SBRootIconListView") respondsToSelector:@selector(iconRowsForInterfaceOrientation:)]) {
+                    maxRows = [NSClassFromString(@"SBRootIconListView") iconRowsForInterfaceOrientation:UIInterfaceOrientationPortrait];
+                }
+            }
+
+            int row = abs(((int)index % (int)maxCols) - (int)maxCols) - ((int)horiztonalWidgetSize - 1);
+            int column = (int)index/(int)maxCols + 1;
+
+            unsigned long long landscapeIndex = [listView indexForCoordinate:SBIconCoordinateMake(row,column) forOrientation:UIInterfaceOrientationLandscapeLeft];
+
+            [(NSMutableDictionary *)[iconIndexes objectForKey:@"Landscape"] setObject:[NSNumber numberWithUnsignedLongLong:landscapeIndex] forKey:bundleID];
+            [(NSMutableDictionary *)[iconIndexes objectForKey:@"Portrait"] setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:bundleID];
+
+        } else if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+
+            int verticalWidgetSize = [IBKResources verticalWidgetSizeForBundleID:bundleID];
+
+            if ([NSClassFromString(@"SBRootIconListView") respondsToSelector:@selector(iconColumnsForInterfaceOrientation:)]) {
+                maxCols = [NSClassFromString(@"SBRootIconListView") iconColumnsForInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
+                    
+                if ([NSClassFromString(@"SBRootIconListView") respondsToSelector:@selector(iconRowsForInterfaceOrientation:)]) {
+                    maxRows = [NSClassFromString(@"SBRootIconListView") iconRowsForInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
+                }
+            }
+
+            int row = ((int)index % (int)maxCols) + 1;
+            int column = abs(((int)index/(int)maxCols) - (int)maxRows) - ((int)verticalWidgetSize - 1);
+
+            unsigned long long portraitIndex = [listView indexForCoordinate:SBIconCoordinateMake(row,column) forOrientation:UIInterfaceOrientationPortrait];
+
+            [(NSMutableDictionary *)[iconIndexes objectForKey:@"Portrait"] setObject:[NSNumber numberWithUnsignedLongLong:portraitIndex] forKey:bundleID];
+            [(NSMutableDictionary *)[iconIndexes objectForKey:@"Landscape"] setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:bundleID];
+        } else {
+           // NSLog(@"A Error Occured");
+        }
+        // [iconIndexes setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:bundleID];
         [IBKResources saveIdentifiersToPlist];
     }
     
 }
-+ (unsigned long long)indexForBundleID:(NSString *)bundleID {
++ (unsigned long long)indexForBundleID:(NSString *)bundleID forOrientation:(UIInterfaceOrientation)orientation {
 
     if (!iconIndexes) {
-        iconIndexes = [[[NSDictionary dictionaryWithContentsOfFile:plist] objectForKey:@"widgetIndexes"] mutableCopy];
+        iconIndexes = [[NSMutableDictionary dictionaryWithContentsOfFile:plist] objectForKey:@"widgetIndexes"];
         if (!iconIndexes) iconIndexes = [NSMutableDictionary new];
+
+        if (![iconIndexes objectForKey:@"Landscape"])
+            [iconIndexes setObject:[NSMutableDictionary new] forKey:@"Landscape"];
+        else {
+             [iconIndexes setObject:[(NSDictionary *)[iconIndexes objectForKey:@"Landscape"] mutableCopy] forKey:@"Landscape"];
+        }
+        if (![iconIndexes objectForKey:@"Portrait"])
+            [iconIndexes setObject:[NSMutableDictionary new] forKey:@"Portrait"];
+        else {
+             [iconIndexes setObject:[(NSDictionary *)[iconIndexes objectForKey:@"Portrait"] mutableCopy] forKey:@"Portrait"];
+        }
     }
     if (bundleID) {
-        if ([iconIndexes objectForKey:bundleID]) {
-            return [(NSNumber*)[iconIndexes objectForKey:bundleID] unsignedLongLongValue];
+        if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) {
+            if ([(NSMutableDictionary *)[iconIndexes objectForKey:@"Portrait"] objectForKey:bundleID]) {
+                return [(NSNumber *)[(NSMutableDictionary *)[iconIndexes objectForKey:@"Portrait"] objectForKey:bundleID] unsignedLongLongValue];
+            }
+            return 973;
+        } else if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
+            if ([(NSMutableDictionary *)[iconIndexes objectForKey:@"Landscape"] objectForKey:bundleID]) {
+                return [(NSNumber *)[(NSMutableDictionary *)[iconIndexes objectForKey:@"Landscape"] objectForKey:bundleID] unsignedLongLongValue];
+            }
+            return 973;
+        } else {
+            return 973;
         }
-        return 973;
     }
     return 973;
 }
@@ -320,7 +395,7 @@ SBIconController *iconController;
 
 + (int)horiztonalWidgetSizeForBundleID:(NSString *)bundleID {
     
-//    if ([bundleID isEqualToString:@"com.apple.Music"]) return 4;
+    // if ([bundleID isEqualToString:@"com.apple.Music"]) return 4;
     return 2;
 }
 + (int)verticalWidgetSizeForBundleID:(NSString *)bundleID {
@@ -387,7 +462,6 @@ SBIconController *iconController;
         bundleIdentifier = [arg1 applicationBundleID];
     else
         bundleIdentifier = arg2;
-
     return [widgetViewControllers objectForKey:bundleIdentifier];
 }
 
@@ -401,19 +475,11 @@ SBIconController *iconController;
 
     if ([iconController respondsToSelector:@selector(model)]) {
 
-        NSLog(@"GOT PAST ICON STAGE 1");
-
         SBIconModel *iconModel = [iconController model];
-
         if ([iconModel respondsToSelector:@selector(expectedIconForDisplayIdentifier:)]) {
 
-            NSLog(@"GOT PAST ICON STAGE 2");
-
             SBIcon *icon = [iconModel expectedIconForDisplayIdentifier:bundleID];
-
             if (icon && [icon isKindOfClass:NSClassFromString(@"SBIcon")]) {
-
-                NSLog(@"GOT PAST ICON STAGE 3");
 
                 return icon;
             }
@@ -429,29 +495,18 @@ SBIconController *iconController;
 
     if ([iconController respondsToSelector:@selector(rootFolder)]) {
 
-        NSLog(@"GOT PAST SUB-STAGE 2");
-
         SBRootFolder *rootFolder = [iconController rootFolder];
-
         if ([rootFolder respondsToSelector:@selector(indexPathForIcon:)]) {
 
-            NSLog(@"GOT PAST SUB-STAGE 3");
-
             if (!icon && bundleID) {
-
-                NSLog(@"GOT PAST SUB-STAGE 4");
                 icon = [NSClassFromString(@"IBKResources") iconForBundleID:bundleID];
             }
 
             if (icon && [icon isKindOfClass:NSClassFromString(@"SBIcon")]) {
 
-                NSLog(@"GOT PAST SUB-STAGE 5");
-
                 NSIndexPath *indexPathForIcon = [rootFolder indexPathForIcon:icon];
-
                 if (indexPathForIcon) {
 
-                    NSLog(@"GOT PAST SUB-STAGE 6");
                     return indexPathForIcon;
                 }
             }
@@ -462,7 +517,6 @@ SBIconController *iconController;
 }
 
 + (SBIconListView *)listViewForBundleID:(NSString *)bundleID {
-
         if (!iconController) {
             if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
                 iconController = [NSClassFromString(@"SBIconController") sharedInstance];
@@ -474,28 +528,84 @@ SBIconController *iconController;
         if ([iconController respondsToSelector:@selector(getListView:folder:relativePath:forIndexPath:createIfNecessary:)]) {
 
             SBIconListView *listView = nil;
-
-             NSLog(@"GOT PAST STAGE 2");
-
             [iconController getListView:&listView folder:nil relativePath:nil forIndexPath:indexPathForIcon createIfNecessary:YES];
 
             if (listView) {
-
-                 NSLog(@"GOT PAST STAGE 3");
                 return listView;
             }
         }
-
     return nil;
 }
 
++ (SBIconView *)iconViewForBundleID:(NSString *)bundleID {
+    if (bundleID) {
+        SBIconView *iconView = nil;
+        if ([[NSClassFromString(@"SBIconController") sharedInstance] respondsToSelector:@selector(homescreenIconViewMap)]) {
+            if ([[[NSClassFromString(@"SBIconController") sharedInstance] homescreenIconViewMap] respondsToSelector:@selector(mappedIconViewForIcon:)])
+                iconView = [[[NSClassFromString(@"SBIconController") sharedInstance] homescreenIconViewMap] mappedIconViewForIcon:[IBKResources iconForBundleID:bundleID]];
+        }
+        else if ([NSClassFromString(@"SBIconViewMap") respondsToSelector:@selector(homescreenMap)]) {
+            if ([[NSClassFromString(@"SBIconViewMap") homescreenMap] respondsToSelector:@selector(mappedIconViewForIcon:)])
+                iconView = [[NSClassFromString(@"SBIconViewMap") homescreenMap] mappedIconViewForIcon:[IBKResources iconForBundleID:bundleID]];
+        }
+        if (iconView) 
+            return iconView;
+    }
+    return nil;    
+}
+
 + (NSMutableDictionary *)widgetViewControllers {
-
     if (!widgetViewControllers) {
-
         widgetViewControllers = [NSMutableDictionary new];
     }
     return widgetViewControllers;
 }
+
++ (BOOL)isRTL {
+    if (isRTL == -1) {
+        if ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
+            isRTL = 1;
+        }
+        else {
+            isRTL = 0;
+        }
+    }
+    return (BOOL)isRTL;
+}
+
+// + (UIBezierPath *)roundedPathFromRect:(CGRect)frame
+// {
+//   UIBezierPath *path = [[UIBezierPath alloc] init];
+//   CGFloat radius = [NSClassFromString(@"SBIconImageView") cornerRadius];
+
+//   // Draw the path
+//   [path moveToPoint:CGPointMake(radius, 0)];
+//   [path addLineToPoint:CGPointMake(frame.size.width - radius, 0)];
+//   [path addArcWithCenter:CGPointMake(frame.size.width - radius, radius)
+//                   radius:radius
+//               startAngle:- (M_PI / 2)
+//                 endAngle:0
+//                clockwise:YES];
+//   [path addLineToPoint:CGPointMake(frame.size.width, frame.size.height - radius)];
+//   [path addArcWithCenter:CGPointMake(frame.size.width - radius, frame.size.height - radius)
+//                   radius:radius
+//               startAngle:0
+//                 endAngle:- ((M_PI * 3) / 2)
+//                clockwise:YES];
+//   [path addLineToPoint:CGPointMake(radius, frame.size.height)];
+//   [path addArcWithCenter:CGPointMake(radius, frame.size.height - radius)
+//                   radius:radius
+//               startAngle:- ((M_PI * 3) / 2)
+//                 endAngle:- M_PI
+//                clockwise:YES];
+//   [path addLineToPoint:CGPointMake(0, radius)];
+//   [path addArcWithCenter:CGPointMake(radius, radius)
+//                   radius:radius
+//               startAngle:- M_PI
+//                 endAngle:- (M_PI / 2)
+//                clockwise:YES];
+
+//   return path;
+// }
 
 @end

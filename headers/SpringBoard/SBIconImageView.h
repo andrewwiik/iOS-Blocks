@@ -25,7 +25,7 @@
 
 + (id)dequeueRecycledIconImageViewOfClass:(Class)arg1;
 + (void)recycleIconImageView:(id)arg1;
-+ (float)cornerRadius;
++ (CGFloat)cornerRadius;
 @property(nonatomic) BOOL showsSquareCorners; // @synthesize showsSquareCorners=_showsSquareCorners;
 @property(nonatomic) float overlayAlpha; // @synthesize overlayAlpha=_overlayAlpha;
 @property(nonatomic) float brightness; // @synthesize brightness=_brightness;

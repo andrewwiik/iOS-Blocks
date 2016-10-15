@@ -16,6 +16,8 @@
 #import "SBIconViewMapDelegate-Protocol.h"
 #import "SBSearchGestureObserver-Protocol.h"
 #import "SBIconViewMap.h"
+#import "SBIconContentView.h"
+#import "SBRootIconListView.h"
 
 @class BBObserver, NSIndexPath, NSMutableArray, NSMutableSet, NSObject, NSSet, NSTimer, SBFolder, SBIcon, SBIconColorSettings, SBIconContentView, SBIconModel, SBLeafIcon, SBRootFolderController, UITouch, _UILegibilitySettings;
 
@@ -64,7 +66,8 @@
 }
 
 + (id)sharedInstance;
-@property(retain, nonatomic) _UILegibilitySettings *legibilitySettings; // @synthesize legibilitySettings=_legibilitySettings;
+@property(retain, nonatomic) _UILegibilitySettings *legibilitySettings;
+@property(retain, nonatomic) SBIconContentView *view; // @synthesize legibilitySettings=_legibilitySettings;
 - (void)searchGesture:(id)arg1 changedPercentComplete:(float)arg2;
 - (void)folderControllerDidEndScrolling:(id)arg1;
 - (void)folderControllerShouldBeginEditing:(id)arg1;
@@ -198,7 +201,6 @@
 - (void)_resetRootIconLists;
 - (void)_prepareToResetRootIconLists;
 - (id)folderIconListAtIndex:(unsigned int)arg1;
-- (id)rootIconListAtIndex:(int)arg1;
 - (int)currentFolderIconListIndex;
 - (int)currentIconListIndex;
 - (id)_currentFolderController;
@@ -245,5 +247,6 @@
 - (id)iconListViewAtIndex:(unsigned int)arg1 inFolder:(id)arg2 createIfNecessary:(BOOL)arg3;
 - (void)getListView:(id *)arg1 folder:(id *)arg2 relativePath:(id *)arg3 forIndexPath:(id)arg4 createIfNecessary:(BOOL)arg5;
 - (SBIconViewMap *)homescreenIconViewMap; // iOS 9.3.3
+- (SBRootIconListView *)rootIconListAtIndex:(long long)arg1 ;
 @end
 

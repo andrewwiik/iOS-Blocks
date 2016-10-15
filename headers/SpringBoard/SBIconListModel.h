@@ -20,7 +20,7 @@
     SBFolder *_folder;
 }
 
-+ (unsigned int)maxIcons;
++ (NSUInteger)maxIcons;
 + (Class)viewClass;
 - (unsigned int)countByEnumeratingWithState:(id *)arg1 objects:(id *)arg2 count:(unsigned int)arg3;
 - (void)list:(id)arg1 didRemoveContainedNodeIdentifiers:(id)arg2;

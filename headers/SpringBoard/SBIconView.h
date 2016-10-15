@@ -168,6 +168,7 @@
 // iOS Blocks
 
 @property (nonatomic, retain) UIView *widgetView;
+- (void)loadWidget;
 
 
 @end

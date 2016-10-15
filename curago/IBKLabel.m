@@ -75,24 +75,4 @@
  * behind the text of the label.
  */
 
-- (void)drawTextInRect:(CGRect)rect {
-    if (self.shadowingEnabled) {
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSaveGState(context);
-        
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        CGSize shadowOffset = CGSizeZero;
-        CGColorRef col = CGColorCreate(colorSpace, CGColorGetComponents([UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:_shadowAlpha].CGColor));
-        
-        CGContextSetShadowWithColor(context, shadowOffset, _blurRadius, col);
-        [super drawTextInRect:rect];
-        
-        CGColorSpaceRelease(colorSpace);
-        CGContextRestoreGState(context);
-        CGColorRelease(col);
-    } else {
-        [super drawTextInRect:rect];
-    }
-}
-
 @end

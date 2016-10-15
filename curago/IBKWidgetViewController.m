@@ -50,8 +50,8 @@
     topBase = [IBKWidgetTopBase buttonWithType:UIButtonTypeCustom];
     topBase.frame = initialFrame;
     topBase.backgroundColor = [UIColor clearColor];
-    topBase.layer.cornerRadius = 12;
-    topBase.layer.masksToBounds = YES;
+    // topBase.layer.cornerRadius = 12;
+    // topBase.layer.masksToBounds = YES;
     topBase.userInteractionEnabled = YES;
     
     [topBase addTarget:self action:@selector(didTapTopBase:) forControlEvents:UIControlEventTouchUpInside];
@@ -60,9 +60,9 @@
     baseView.alpha = 1.0;
     baseView.userInteractionEnabled = YES;
     baseView.layer.cornerRadius = 12;
-    baseView.layer.masksToBounds = NO;
-    baseView.layer.shadowOffset = CGSizeZero;
-    baseView.layer.shadowOpacity = 0.3;
+    baseView.layer.masksToBounds = YES;
+    // baseView.layer.shadowOffset = CGSizeZero;
+    // baseView.layer.shadowOpacity = 0.3;
     baseView.hidden = YES;
     // Center is configured by IBKIconView
     
@@ -414,11 +414,20 @@
     else // iOS 8
         [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:self.applicationIdentifer] location:2 animated:NO];
     
-    self.iconImageView.frame = CGRectMake(7, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30)-7, (isPad ? 50 : 30), (isPad ? 50 : 30));
+    if ([NSClassFromString(@"IBKResources") isRTL]) {
+        self.iconImageView.frame = CGRectMake([IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer] - (7 + (isPad ? 50 : 30)), [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30)-7, (isPad ? 50 : 30), (isPad ? 50 : 30));
+    }
+    else {
+        self.iconImageView.frame = CGRectMake(7, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30)-7, (isPad ? 50 : 30), (isPad ? 50 : 30));
+    }
     self.iconImageView.alpha = 0.0;
+
     self.iconImageView.layer.shadowOpacity = 0.15;
-    self.iconImageView.layer.shadowOffset = CGSizeZero;
+    self.iconImageView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.iconImageView.bounds cornerRadius:[NSClassFromString(@"SBIconImageView") cornerRadius]].CGPath;
     self.iconImageView.layer.shadowRadius = 5.0;
+    self.iconImageView.layer.shouldRasterize = YES;
+    self.iconImageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    self.iconImageView.layer.shadowOffset = CGSizeZero;
     
     [topBase addSubview:self.iconImageView];
 }
@@ -728,7 +737,7 @@
     self.view.hidden = NO;
     self.currentScale = 1.0;
     self.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
-    self.view.layer.shadowOpacity = 0.0;
+    // self.view.layer.shadowOpacity = 0.0;
     
     if ([IBKResources transparentBackgroundForWidgets]) {
         if ([IBKResources showBorderWhenTransparent]) {
@@ -754,7 +763,7 @@
     
     BOOL fin = NO;
     
-    if (scale >= 8.0) {
+    if (scale >= 7.0) {
         fin = YES;
     }
     
@@ -1056,7 +1065,7 @@ float scale2 = 0.0;
     BBBulletin *bulletin = (self.notificationsDataSource)[indexPath.row];
     
     cell.superviewColouration = self.view.backgroundColor;
-    [cell initialiseForBulletin:bulletin andRowWidth:[IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-20];
+    [cell initialiseForBulletin:bulletin andRowWidth:tableView.frame.size.width];
     
    // NSLog(@"Finished creating new cell");
     

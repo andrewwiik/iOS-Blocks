@@ -123,7 +123,7 @@
 - (void)_setCurrentPageIndex:(int)arg1;
 - (void)_setAnimatedScrolling:(BOOL)arg1;
 @property(nonatomic, getter=isScrolling) BOOL scrolling; // @synthesize scrolling=_isScrolling;
-- (id)scrollView;
+- (UIView *)scrollView;
 - (void)dealloc;
 - (id)initWithFolder:(id)arg1 orientation:(int)arg2 viewMap:(id)arg3;
 - (id)initWithFolder:(id)arg1 orientation:(int)arg2;

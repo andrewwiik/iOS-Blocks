@@ -242,6 +242,7 @@
 
 -(void)prepareForReuse {
     // Take everything out - title, time, timer and content
+    [super prepareForReuse];
     
     self.title.text = @"";
     self.dateLabel.text = @"";
