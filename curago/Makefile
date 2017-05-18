@@ -1,8 +1,14 @@
 # THEOS_PACKAGE_DIR_NAME = debs
 # GO_EASY_ON_ME = 1
-export TARGET = simulator:clang:latest:7.0
-ARCHS = x86_64
+ARCHS = armv7 arm64
 Curago_CFLAGS = -fobjc-arc -I../headers -Wno-deprecated-declarations
+
+ifeq ($(SIMULATOR),1)
+	TARGET = simulator:clang:latest:7.0
+	ARCHS = x86_64 i386
+else
+	TARGET = iphone:latest
+endif
 
 include $(THEOS)/makefiles/common.mk
 export TWEAK_NAME = Curago
