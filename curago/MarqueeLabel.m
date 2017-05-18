@@ -878,7 +878,7 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
     
     // Set values
     animation.values = values;
-    animation.delegate = self;
+    animation.delegate = (id<CAAnimationDelegate>)self;
     
     return animation;
 }

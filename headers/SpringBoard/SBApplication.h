@@ -14,7 +14,7 @@
 #import "SBWindowContextManagerDelegate-Protocol.h"
 #import "SpringBoard-Structs.h"
 
-@class BKSApplicationDataStore, BKSCFBundle, BKSMachSendRight, BKSProcessAssertion, NSArray, NSDate, NSDictionary, NSHashTable, NSMapTable, NSMutableArray, NSMutableDictionary, NSMutableSet, NSSet, NSString, NSTimer, PCPersistentTimer, SBActivationContext, SBWindowContextManager, UILocalNotification, UIRemoteApplication;
+@class BKSApplicationDataStore, BKSCFBundle, BKSMachSendRight, BKSProcessAssertion, NSArray, NSDate, NSDictionary, NSHashTable, NSMapTable, NSMutableArray, NSMutableDictionary, NSMutableSet, NSSet, NSString, NSTimer, PCPersistentTimer, SBActivationContext, SBWindowContextManager, UIRemoteApplication;
 
 @interface SBApplication : NSObject <SBScreenObserver, SBWindowContextManagerDelegate, SBSystemLocalNotificationAlertDelegate, SBDisplayProtocol, SBWindowContextHostManagerDelegate, SBLeafIconDataSource>
 {
@@ -109,7 +109,6 @@
     NSDate *_nextApplicationWakeDate;
     PCPersistentTimer *_applicationWakeTimer;
     PCPersistentTimer *_localNotificationTimer;
-    UILocalNotification *_pendingLocalNotification;
     BKSProcessAssertion *_transientProcessAssertion;
     NSTimer *_transientSuspendTimer;
     int _transientAssertionType;

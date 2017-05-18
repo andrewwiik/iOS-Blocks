@@ -31,6 +31,11 @@
 #define is_IOS7_0 ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.10)
 #define orient [[UIApplication sharedApplication] statusBarOrientation]
 
+#import <Foundation/Foundation.h>
+#include <dlfcn.h>
+
+#define __BBServerQueue (__bridge dispatch_queue_t)(dlsym(NULL, "__BBServerQueue"));
+
 @interface IBKWidgetViewController ()
 
 @end
@@ -1092,7 +1097,7 @@ float scale2 = 0.0;
         // make some UI changes
         // ...
         // show actionSheet for example
-        if (![self.notificationsDataSource count] == 0) {
+        if (![self.notificationsDataSource count]) {
             if (!self.notificationsTableView) {
                 [self loadNotificationsTableView];
                 [self.notificationsTableView reloadData];
@@ -1101,7 +1106,7 @@ float scale2 = 0.0;
                 [self.notificationsTableView reloadData];
             }
         }
-        if (![self.notificationsDataSource count] == 0) {
+        if (![self.notificationsDataSource count]) {
             [UIView animateWithDuration:0.3 animations:^{
                 self.noNotifsLabel.alpha = 0.0;
             }];
@@ -1127,9 +1132,15 @@ float scale2 = 0.0;
     
     self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_queue_t correctQueue = nil;
+    if (NSClassFromString(@"CCUIControlCenterButton")) {
+        correctQueue = __BBServerQueue;
+    } else {
+        correctQueue = dispatch_get_main_queue();
+    }
+    dispatch_sync(correctQueue, ^{
         
-        if (![self.notificationsDataSource count] == 0) {
+        if ([self.notificationsDataSource count]) {
             if (!self.notificationsTableView) {
                 [self loadNotificationsTableView];
                 [self.notificationsTableView reloadData];
@@ -1159,10 +1170,15 @@ float scale2 = 0.0;
 }
 
 -(void)observer:(id)observer noteInvalidatedBulletinIDs:(id)ids {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_queue_t correctQueue = nil;
+    if (NSClassFromString(@"CCUIControlCenterButton")) {
+        correctQueue = __BBServerQueue;
+    } else {
+        correctQueue = dispatch_get_main_queue();
+    }
+    dispatch_sync(correctQueue, ^{
         
-        if (![self.notificationsDataSource count] == 0) {
+        if (!([self.notificationsDataSource count] == 0)) {
             if (!self.notificationsTableView) {
                 [self loadNotificationsTableView];
                 [self.notificationsTableView reloadData];

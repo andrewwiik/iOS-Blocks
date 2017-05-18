@@ -213,28 +213,53 @@
 - (void)rotateWithDisplayLink:(CADisplayLink *)displayLink
 {
     //Take account for lag
-    for (int i = 0; i < displayLink.frameInterval; i++){
-		
-        //Calculate the new angle
-		CGFloat displacement = rotation - restRotation;
-		CGFloat kx = _springConstant * displacement;
-		CGFloat bv = _dampingCoefficient * velocity;
-		CGFloat acceleration = (kx + bv) / _mass;
-		
-		velocity -= (acceleration * displayLink.duration);
-		rotation += (velocity * displayLink.duration);
-		
-        //Set the angle
-        [letterpressView setTransform:CGAffineTransformMakeRotation(rotation * M_PI / 180)];
-        
-        UIView *view = [[self subviews] lastObject];
-        [view setTransform:CGAffineTransformMakeRotation(rotation * M_PI / 180)];
-		
-        //If we are slowing down, animate to a new angle.
-		if (fabs(velocity) < 1) {
-            restRotation += (arc4random() & 2 ? 90 : -90);
+    if (NSClassFromString(@"CCUIControlCenterButton")) {
+        for (int i = 0; i < displayLink.preferredFramesPerSecond; i++){
+            
+            //Calculate the new angle
+            CGFloat displacement = rotation - restRotation;
+            CGFloat kx = _springConstant * displacement;
+            CGFloat bv = _dampingCoefficient * velocity;
+            CGFloat acceleration = (kx + bv) / _mass;
+            
+            velocity -= (acceleration * displayLink.duration);
+            rotation += (velocity * displayLink.duration);
+            
+            //Set the angle
+            [letterpressView setTransform:CGAffineTransformMakeRotation(rotation * M_PI / 180)];
+            
+            UIView *view = [[self subviews] lastObject];
+            [view setTransform:CGAffineTransformMakeRotation(rotation * M_PI / 180)];
+            
+            //If we are slowing down, animate to a new angle.
+            if (fabs(velocity) < 1) {
+                restRotation += (arc4random() & 2 ? 90 : -90);
+            }
         }
-	}
+    } else {
+        for (int i = 0; i < displayLink.frameInterval; i++){
+    		
+            //Calculate the new angle
+    		CGFloat displacement = rotation - restRotation;
+    		CGFloat kx = _springConstant * displacement;
+    		CGFloat bv = _dampingCoefficient * velocity;
+    		CGFloat acceleration = (kx + bv) / _mass;
+    		
+    		velocity -= (acceleration * displayLink.duration);
+    		rotation += (velocity * displayLink.duration);
+    		
+            //Set the angle
+            [letterpressView setTransform:CGAffineTransformMakeRotation(rotation * M_PI / 180)];
+            
+            UIView *view = [[self subviews] lastObject];
+            [view setTransform:CGAffineTransformMakeRotation(rotation * M_PI / 180)];
+    		
+            //If we are slowing down, animate to a new angle.
+    		if (fabs(velocity) < 1) {
+                restRotation += (arc4random() & 2 ? 90 : -90);
+            }
+    	}
+    }
 }
 
 @end
