@@ -34,7 +34,8 @@
 #import <Foundation/Foundation.h>
 #include <dlfcn.h>
 
-#define __BBServerQueue (__bridge dispatch_queue_t)(dlsym(NULL, "__BBServerQueue"));
+//#define __BBServerQueue (__bridge dispatch_queue_t)(dlsym(NULL, "__BBServerQueue"))
+extern dispatch_queue_t __BBServerQueue;
 
 @interface IBKWidgetViewController ()
 
@@ -536,42 +537,47 @@
     self.notificationsDataSource = [NSMutableArray array];
     
     // Fill the array with notifications
-    
-    BBServer *server = [objc_getClass("BBServer") sharedIBKBBServer];
-    for (BBBulletin *bulletin in [server _allBulletinsForSectionID:self.applicationIdentifer])
-        [self.notificationsDataSource addObject:bulletin];
-    
-    self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
-    
-   // NSLog(@"Bulletins array == %@", self.notificationsDataSource);
-    
-    if ([self.notificationsDataSource count] != 0) {
-        [self loadNotificationsTableView];
-        
+
+   // dispatch_queue_t backgroundQueue = [(SpringBoard *)[UIApplication sharedApplication] bulletinBoardQueue];
+    if (__BBServerQueue) {
+        dispatch_sync(__BBServerQueue, ^{
+            BBServer *server;
+            for (BBBulletin *bulletin in [server _allBulletinsForSectionID:self.applicationIdentifer])
+                [self.notificationsDataSource addObject:bulletin];
+            
+            self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([self.notificationsDataSource count] != 0) {
+                [self loadNotificationsTableView];
+                    
+                }
+                
+                // If no notifications, say so
+                self.noNotifsLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-40, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30))];
+                self.noNotifsLabel.text = [[NSBundle mainBundle] localizedStringForKey:@"NOTIFICATION_CENTER_CONTENT_UNAVAILABLE_ALL" value:nil table:@"SpringBoard"];
+                self.noNotifsLabel.textAlignment = NSTextAlignmentCenter;
+                self.noNotifsLabel.numberOfLines = 0;
+                self.noNotifsLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
+                
+                [self.noNotifsLabel setLabelSize:kIBKLabelSizingLarge];
+                self.noNotifsLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor];
+                
+                self.noNotifsLabel.backgroundColor = [UIColor clearColor];
+                if ([self.notificationsDataSource count] == 0)
+                    self.noNotifsLabel.alpha = 1.0;
+                else
+                    self.noNotifsLabel.alpha = 0.0;
+                
+                [topBase addSubview:self.noNotifsLabel];
+                
+                // Bring icon back up to top view
+                [topBase addSubview:self.iconImageView];
+                
+                [self setColorAndOrIcon:infoPlist];
+            });    
+        });
     }
-    
-    // If no notifications, say so
-    self.noNotifsLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-40, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30))];
-    self.noNotifsLabel.text = [[NSBundle mainBundle] localizedStringForKey:@"NOTIFICATION_CENTER_CONTENT_UNAVAILABLE_ALL" value:nil table:@"SpringBoard"];
-    self.noNotifsLabel.textAlignment = NSTextAlignmentCenter;
-    self.noNotifsLabel.numberOfLines = 0;
-    self.noNotifsLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
-    
-    [self.noNotifsLabel setLabelSize:kIBKLabelSizingLarge];
-    self.noNotifsLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor];
-    
-    self.noNotifsLabel.backgroundColor = [UIColor clearColor];
-    if ([self.notificationsDataSource count] == 0)
-        self.noNotifsLabel.alpha = 1.0;
-    else
-        self.noNotifsLabel.alpha = 0.0;
-    
-    [topBase addSubview:self.noNotifsLabel];
-    
-    // Bring icon back up to top view
-    [topBase addSubview:self.iconImageView];
-    
-    [self setColorAndOrIcon:infoPlist];
 }
 
 -(void)loadNotificationsTableView {

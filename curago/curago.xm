@@ -21,6 +21,8 @@
 #import "IBKWidgetViewController.h"
 #import "IBKPlaceholderIcon.h"
 
+
+
 // struct SBIconCoordinate SBIconCoordinateMake(long long row, long long col) {
 //     SBIconCoordinate coordinate;
 //     coordinate.row = row;
@@ -254,6 +256,33 @@ BOOL launchingWidget;
     sup = YES;
 //    widgetController.view.alpha = 1.0;
     %orig;
+}
+
+-(void)didAnimateDeactivationOnStarkScreenController:(id)arg1 {
+    %orig;
+     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    widgetController.view.alpha = 1.0;
+    
+    sup = NO;
+    isLaunching = NO;
+}
+
+- (void)deactivate {
+     %orig;
+     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    widgetController.view.alpha = 1.0;
+    
+    sup = NO;
+    isLaunching = NO;
+}
+
+-(void)didDeactivateForEventsOnly:(BOOL)arg1 {
+     %orig;
+     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    widgetController.view.alpha = 1.0;
+    
+    sup = NO;
+    isLaunching = NO;
 }
 
 - (void)didAnimateDeactivation {
@@ -1196,6 +1225,13 @@ CGSize defaultIconSizing;
     }
 }
 
+-(Class)iconViewClassForIcon:(id)icon location:(int)arg2 {
+    if ([icon isKindOfClass:[NSClassFromString(@"IBKPlaceholderIcon") class]]) {
+        return NSClassFromString(@"IBKPlaceholderIconView");
+    }
+    return %orig;
+}
+
 - (void)_launchIcon:(id)arg1 {
     isLaunching = YES;
     %orig;
@@ -1276,7 +1312,7 @@ CGSize defaultIconSizing;
                  }
              }
          }
-     }
+     }  
      return proposedReturn;
  }
 

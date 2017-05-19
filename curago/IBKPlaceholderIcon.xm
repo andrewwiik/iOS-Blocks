@@ -168,6 +168,17 @@ UIImage *imageFromView(UIView *view)
 	return NO;
 }
 
+-(void)setIconLabelAlpha:(CGFloat)arg1 {
+	%orig(0);
+}
+
+-(void)_applyIconLabelAlpha:(CGFloat)arg1 {
+	%orig(0);
+}
+
+-(CGFloat)iconLabelAlpha {
+	return 0;
+}
 %end
 
 // |IBKPlaceholderIconImageView| is used as the image view for a |IBKPlaceholderIcon|.
