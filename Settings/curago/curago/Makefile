@@ -9,7 +9,7 @@ BUNDLE_NAME = curago
 curago_FILES = $(wildcard *.m)
 curago_INSTALL_PATH = /Library/PreferenceBundles
 curago_FRAMEWORKS = UIKit MobileCoreServices CoreGraphics SafariServices QuartzCore CoreImage MessageUI
-curago_PRIVATE_FRAMEWORKS = Preferences
+curago_LDFLAGS += ./Preferences.tbd
 curago_LIBRARIES = applist MobileGestalt
 include $(THEOS_MAKE_PATH)/bundle.mk
 
