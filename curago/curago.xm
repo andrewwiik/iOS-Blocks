@@ -2114,6 +2114,8 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
 
     [IBKResources reloadSettings];
 
+    //dlopen("/Applications/News.app/Plugins/NewsToday.appex/NewsToday",RTLD_LAZY);
+
     // Handlers for widget settings.
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, settingsChangedForWidget, CFSTR("com.matchstic.ibk/settingschangeforwidget"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, reloadAllWidgets, CFSTR("com.matchstic.ibk/reloadallwidgets"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);

@@ -44,5 +44,8 @@ SUBPROJECTS += ../Widgets/Music
 SUBPROJECTS += ../Widgets/MobileTimer
 SUBPROJECTS += ../Widgets/Calendar
 SUBPROJECTS += ../Widgets/MobileSMS
+SUBPROJECTS += ../Widgets/Fitness
+SUBPROJECTS += ../Widgets/Cydia
+SUBPROJECTS += ../Widgets/Camera
 include $(THEOS_MAKE_PATH)/aggregate.mk
 endif

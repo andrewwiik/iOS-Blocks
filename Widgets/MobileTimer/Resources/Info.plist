@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>com.iosblocks.mobiletimer.block</string>
+	<string>MobileTimer</string>
 	<key>CFBundleExecutable</key>
 	<string>MobileTimer</string>
 	<key>CFBundleIdentifier</key>

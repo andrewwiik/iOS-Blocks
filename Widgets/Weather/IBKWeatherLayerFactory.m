@@ -71,30 +71,37 @@ static IBKWeatherLayerFactory *shared;
         NSString *zipPath = @"http://appldnld.apple.com/iOS7.1/031-5051.20140630.1zyJC/com_apple_MobileAsset_SoftwareUpdate/be2f8a9534473bd41453e61169b860638d33c8e3.zip";
         parser.baseURL = [NSURL URLWithString:@"file:///var/mobile/Documents/IBKWeather.framework/"];
         // Loads the zip files central directory
-        PZFileBrowser *browser = [PZFileBrowser browserWithPath:zipPath byteRange:NSMakeRange(8602659, 61462)];
-        // NSString *firstPath = @"AssetData/payload/replace/System/Library/PrivateFrameworks/Weather.framework/";
-        // NSString *lastPath = @"AssetData/payload/replace/System/Library/PrivateFrameworks/WebBookmarks.framework/";
+        
 
-        // Because we know all the assets we want to access are in PhotoLibrary.framework it is now possible to get the range of these assets within the central directory
-        // NSRange range = [browser getByteRangeFromPath:firstPath toPath:lastPath];
-        // return range;
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul);
+        dispatch_async(queue, ^{
+            // Perform async operation
+            // Call your method/function here
+            // Example:
+            // NSString *result = [anObject calculateSomething];
+            PZFileBrowser *browser = [PZFileBrowser browserWithPath:zipPath byteRange:NSMakeRange(8602659, 61462)];
+            // NSString *firstPath = @"AssetData/payload/replace/System/Library/PrivateFrameworks/Weather.framework/";
+            // NSString *lastPath = @"AssetData/payload/replace/System/Library/PrivateFrameworks/WebBookmarks.framework/";
 
-        // Gets an array containing the paths to all files found in the central directory
-        // For large zip files allPaths contains too many paths to use NSLog and must be written to a text file for viewing
-        NSError *error;
+            // Because we know all the assets we want to access are in PhotoLibrary.framework it is now possible to get the range of these assets within the central directory
+            // NSRange range = [browser getByteRangeFromPath:firstPath toPath:lastPath];
+            // return range;
+
+            // Gets an array containing the paths to all files found in the central directory
+            // For large zip files allPaths contains too many paths to use NSLog and must be written to a text file for viewing
+            NSError *error;
             if([[NSFileManager defaultManager] createDirectoryAtPath:[NSString stringWithFormat:@"%@/",[parser.baseURL path]] withIntermediateDirectories:NO attributes:nil error:&error]) {
             }
 
-        self.filePaths = [browser getAllPaths];
-        for (NSString *path in self.filePaths) {
-            if ([path hasSuffix:@".caml"] || [path hasSuffix:@".cpbitmap"]) {
-                NSLog(@"DOWNLOADED ASSET: %@", path);
-                NSData *data = [browser getDataForPath:[NSString stringWithFormat:@"AssetData/payload/replace/System/Library/PrivateFrameworks/Weather.framework/%@", [path lastPathComponent]]];
-                [data writeToURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@",[parser.baseURL path],[path lastPathComponent]]] atomically:YES];
+            self.filePaths = [browser getAllPaths];
+            for (NSString *path in self.filePaths) {
+                if ([path hasSuffix:@".caml"] || [path hasSuffix:@".cpbitmap"]) {
+                   // NSLog(@"DOWNLOADED ASSET: %@", path);
+                    NSData *data = [browser getDataForPath:[NSString stringWithFormat:@"AssetData/payload/replace/System/Library/PrivateFrameworks/Weather.framework/%@", [path lastPathComponent]]];
+                    [data writeToURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@",[parser.baseURL path],[path lastPathComponent]]] atomically:YES];
+                }
             }
-        }
-
-        url = [self filenameForCondition:arg1 isDay:arg2 largest:largest];
+        });
     }
     
     NSLog(@"Trying to load %@", url);

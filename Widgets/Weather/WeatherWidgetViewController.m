@@ -63,11 +63,24 @@
         if([[WeatherPreferences sharedPreferences] isLocalWeatherEnabled]) {
             self.currentCity = [[WeatherPreferences sharedPreferences] localWeatherCity];
         } else {
-            self.currentCity = [[WeatherPreferences sharedPreferences] loadSavedCities][0];
+            if ([[WeatherPreferences sharedPreferences] loadSavedCities]) {
+                if ([[[WeatherPreferences sharedPreferences] loadSavedCities] count] > 0) {
+                    self.currentCity = [[WeatherPreferences sharedPreferences] loadSavedCities][0];
+                }
+
+            }
         }
 
         if(!self.currentCity) {
-            self.currentCity = [[WeatherPreferences sharedPreferences] _defaultCities][0];
+            if ([[WeatherPreferences sharedPreferences] _defaultCities]) {
+                if ([[[WeatherPreferences sharedPreferences] _defaultCities] count] > 0) {
+                    self.currentCity = [[WeatherPreferences sharedPreferences] _defaultCities][0];
+                }
+            }
+        }
+
+        if (self.currentCity) {
+            [self.contentView updateForCity:self.currentCity];
         }
         
         /*self.currentCity = [[City alloc] init];
@@ -79,7 +92,6 @@
         
         // [self fullUpdate];
         
-        [self.contentView updateForCity:self.currentCity];
     
        // cont = self;
         //CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, significantTimeChange, CFSTR("SignificantTimeChangeNotification"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
