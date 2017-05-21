@@ -18,12 +18,12 @@
         table = [[cydiaTableView alloc] initWithFrame:CGRectMake(0.0, 0.0, frame.size.width, [self contentViewHeight])];
         [self addSubview:table];
     }
-    
+
     return self;
 }
 
 -(float)contentViewHeight {
-    return [NSClassFromString(@"IBKAPI") heightForContentViewWithIdentifier:@"com.saurik.cydoa"] - 5;
+    return [NSClassFromString(@"IBKAPI") heightForContentViewWithIdentifier:@"com.saurik.cydia"] - 5;
 }
 
 -(void)layoutSubviews {

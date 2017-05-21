@@ -23,7 +23,7 @@
         [title setShadowColor:[UIColor.blackColor colorWithAlphaComponent: 0.2]];
         [title setShadowOffset: CGSizeMake(0.0, -0.3)];
         title.textAlignment = NSTextAlignmentLeft;
-        title.scrollDirection = CBAutoScrollDirectionRight;
+        title.scrollDirection = CBAutoScrollDirectionLeft;
         title.scrollSpeed = 10.0;
         title.pauseInterval = 2.0;
         title.labelSpacing = 20.0;
@@ -36,7 +36,7 @@
         [description setShadowColor:[UIColor.blackColor colorWithAlphaComponent: 0.2]];
         [description setShadowOffset: CGSizeMake(0.0, -0.3)];
         description.textAlignment = NSTextAlignmentLeft;
-        description.scrollDirection = CBAutoScrollDirectionRight;
+        description.scrollDirection = CBAutoScrollDirectionLeft;
         description.scrollSpeed = 10.0;
         description.pauseInterval = 2.0;
         description.labelSpacing = 20.0;
