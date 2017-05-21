@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 750 1334" clearsContext="1" edgeAntialiasingMask="0" id="#1" name="Root Layer" position="375 667"><sublayers><CALayer anchorPoint="0 1" bounds="0 0 640 1136" id="#3" name="Rotation" position="0 1334" transform="scale(1.175, 1.175, 1)"><sublayers>
+      <CALayer anchorPoint="0.5 1" bounds="0 0 640 480" contentsScaling="repeat" hidden="0" name="⛅ Scaled" opaque="0" position="320 1136" transform="matrix(1.000686679488 0.001239586649634 0 -3.147643824117e-6 -0.00499670789485 0.7962985310659 0 -0.001559730442906 0 0 1 0 -2.973912042792 0.5210547282553 0 0.2503221413815)">
+	<sublayers>
+	  <CALayer anchorPoint="0 0" bounds="0 0 1120 480" contentsGravity="resize" contentsScaling="repeat" hidden="0" name="⛅ Tile" position="-895.868854522705 0">
+	    <contents src="assets/Cloud-Tropical-Storm.png" type="CGImage" />
+	    <filters>
+	      <CAFilter filter="multiplyColor" inputColor="0.48 0.5 0.6" name="multiplyColor" />
+	    </filters>
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="60" fillMode="both" keyPath="position.x" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="0" />
+		  <integer value="-480" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CALayer bounds="0 0 400 400" hidden="0" name="Rain Tile Medium" position="320 568" transform="rotate(-62.5deg)">
+	<sublayers>
+	  <CALayer anchorPoint="0.5 0.3600000143051" bounds="0 0 1760 2000" contentsScaling="repeat" name="Tile" opacity="0.1199999973178" position="200 200" transform="scale(0.75, 0.75, 1)">
+	    <contents src="assets/Raindrop-Tile-Heavy.png" type="CGImage" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="0.4000000059605" fillMode="both" keyPath="position.y" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <real value="187.5" />
+		  <real value="-187.5" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CAEmitterLayer beginTime="-100" bounds="0 0 640 1136" cullRect="0 0 1.797693134862e308 1.797693134862e308" emitterPosition="320 1136" emitterShape="rectangle" emitterSize="1136 0" hidden="0" id="#2" name="__Emitter_2D_0" position="320 568">
+	<emitterBehaviors>
+	  <CAEmitterBehavior behavior="alignToMotion" name="alignToMotion" rotation="0" />
+	  <CAEmitterBehavior additive="0" attractorType="axial" behavior="valueOverDistance" falloff="1136" falloffDistance="0" keyPath="color.alpha" name="valueOverDistance" orientationLatitude="-1.570796370506" orientationLongitude="0" position="0 1136" zPosition="0">
+	    <radius type="integer" value="0" />
+	    <stiffness type="integer" value="1" />
+	    <values>
+	      <real value="0.75" />
+	      <integer value="1" />
+	      <integer value="0" />
+	    </values>
+	  </CAEmitterBehavior>
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.3000000119209" birthRate="90" contentsFrameCount="3" contentsFrameMode="random" contentsFramesPerRow="3" contentsRect="0 0 0.3333300054073 0.3330000042915" emissionLatitude="0" emissionLongitude="-2.64417386055" emissionRange="0.1047197580338" enabled="1" lifetime="100" name="30 Cluster" scale="0.6999999880791" scaleRange="0.3000000119209" velocity="1700" velocityRange="300" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.3" value="1 1 1" />
+	    <contents src="assets/Raindrop-Cluster-Small.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.4000000059605" birthRate="20" emissionLatitude="0" emissionLongitude="-2.694788455963" emissionRange="0.08726646006107" enabled="1" lifetime="100" name="Hero" scale="1.200000047684" scaleRange="0.3000000119209" velocity="2200" velocityRange="0" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.3234" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      <CAEmitterLayer bounds="0 0 640 1136" cullRect="-450 -8.988465674312e307 1.797693134862e308 1.797693134862e308" emitterPosition="1090 682" emitterShape="rectangle" emitterSize="0 400" hidden="0" id="#1" name="Foglet" position="320 568">
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.25" birthRate="0.5" lifetime="10" name="Cell 1" spinRange="0.5235987901688" velocity="-200" velocityRange="50">
+	    <color opacity="0.25" value="1 1 1" />
+	    <contents src="assets/Cloud-Patch-Two.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers></CALayer></sublayers><states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="hidden" targetId="#1">
+	    <value type="integer" value="1" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="hidden" targetId="#2">
+	    <value type="integer" value="1" />
+	  </LKStateSetValue>
+	  <LKStateRemoveElement keyPath="sublayers" objectId="#1" targetId="#3" />
+	  <LKStateRemoveElement keyPath="sublayers" objectId="#2" targetId="#3" />
+	</elements>
+      </LKState>
+    </states><stateTransitions /></CALayer>
+</caml>

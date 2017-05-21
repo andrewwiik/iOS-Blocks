@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer bounds="0 0 640 1136" doubleSided="1" id="#1" name="Root Layer" position="320 568" sortsSublayers="1">
+    <sublayers>
+      <CALayer bounds="0 0 400 400" hidden="0" id="#4" name="Snow Tile Small" position="320 568" transform="rotate(-72.3deg)">
+	<sublayers>
+	  <CALayer bounds="0 0 4000 4000" contentsScaling="repeat" hidden="0" name="Tile" opacity="0.3499999940395" position="200 200">
+	    <contents src="assets/Snow-Tile-One.png" type="CGImage" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="0.4499999880791" fillMode="both" keyPath="position.y" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="250" />
+		  <integer value="-250" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CALayer bounds="0 0 400 400" hidden="0" name="Snow Tile Medium" position="320 568" transform="rotate(-72.3deg)">
+	<sublayers>
+	  <CALayer bounds="0 0 4000 4000" contentsScaling="repeat" hidden="0" name="Tile" opacity="0.3499999940395" position="200 200" transform="scale(1.5, 1.5, 1)">
+	    <contents src="assets/Snow-Tile-One.png" type="CGImage" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="0.4499999880791" fillMode="both" keyPath="position.y" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="375" />
+		  <integer value="-375" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CAEmitterLayer beginTime="-30" bounds="0 0 640 1136" cullRect="0 0 1.797693134862e308 1.797693134862e308" emitterPosition="320 1136" emitterShape="rectangle" emitterSize="1136 0" hidden="0" id="#2" name="Emitter Top" position="320 568" renderMode="cheapScreen">
+	<emitterBehaviors>
+	  <CAEmitterBehavior behavior="alignToMotion" name="alignToMotion" rotation="0" />
+	  <CAEmitterBehavior ambientIntensity="0.1000000014901" appliesAlpha="1" behavior="light" color="1 1 1" coneAngle="0.3490658402443" coneEdgeSoftness="0.8726646304131" diffuseIntensity="1" directionLatitude="1.570796370506" directionLongitude="-1.570796370506" falloff="1210" falloffDistance="600" name="light" position="320 1250" spot="1" zPosition="0" />
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.3000000119209" birthRate="200" contentsFrameCount="3" contentsFrameMode="random" contentsFramesPerRow="3" contentsRect="0 0 0.3332999944687 0.3330000042915" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.1047197580338" enabled="1" lifetime="100" name="30 Cluster" scale="0.3000000119209" scaleRange="0.2000000029802" velocity="1500" velocityRange="300" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.1751" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred-Cluster.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.1039663478732" birthRate="180" contentsFrameCount="1" contentsFrameMode="single" contentsFramesPerRow="1" contentsRect="0 0 1 1" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.1047197580338" enabled="1" lifetime="100" name="30 Single" scale="0.07999999821186" scaleRange="0.07999999821186" velocity="1700" velocityRange="300" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.3721" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.4000000059605" birthRate="2" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.08726646006107" enabled="1" lifetime="100" name="Hero" scale="0.4499999880791" scaleRange="0.4000000059605" velocity="3000" velocityRange="0" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.1379" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.2000000029802" birthRate="20" contentsFrameCount="1" contentsFrameMode="single" contentsFramesPerRow="1" contentsRect="0 0 1 1" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.1047197580338" enabled="1" lifetime="100" name="50 Single" scale="0.2000000029802" scaleRange="0.07999999821186" velocity="1900" velocityRange="300" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.5306" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      <CAEmitterLayer beginTime="-30" bounds="0 0 640 1136" cullRect="0 0 1.797693134862e308 1.797693134862e308" emitterPosition="640 568" emitterShape="rectangle" emitterSize="0 1136" hidden="0" id="#3" name="Emitter Right" position="320 568" renderMode="cheapScreen">
+	<emitterBehaviors>
+	  <CAEmitterBehavior behavior="alignToMotion" name="alignToMotion" rotation="0" />
+	  <CAEmitterBehavior ambientIntensity="0.1000000014901" appliesAlpha="1" behavior="light" color="1 1 1" coneAngle="0.3490658402443" coneEdgeSoftness="0.8726646304131" diffuseIntensity="1" directionLatitude="1.570796370506" directionLongitude="-1.570796370506" falloff="1210" falloffDistance="600" name="light" position="320 1250" spot="1" zPosition="0" />
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.3000000119209" birthRate="300" contentsFrameCount="3" contentsFrameMode="random" contentsFramesPerRow="3" contentsRect="0 0 0.3332999944687 0.3332999944687" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.1047197580338" enabled="1" lifetime="100" name="30 Cluster" scale="0.3000000119209" scaleRange="0.2000000029802" velocity="1500" velocityRange="300" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.1751" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred-Cluster.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.1039663478732" birthRate="300" contentsFrameCount="1" contentsFrameMode="single" contentsFramesPerRow="1" contentsRect="0 0 1 1" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.1047197580338" enabled="1" lifetime="100" name="30 Single" scale="0.07999999821186" scaleRange="0.07999999821186" velocity="1700" velocityRange="300" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.3721" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.4000000059605" birthRate="3" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.08726646006107" enabled="1" lifetime="100" name="Hero" scale="0.4499999880791" scaleRange="0.4000000059605" velocity="3000" velocityRange="0" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.1379" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.2000000029802" birthRate="30" contentsFrameCount="1" contentsFrameMode="single" contentsFramesPerRow="1" contentsRect="0 0 1 1" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.1047197580338" enabled="1" lifetime="100" name="50 Single" scale="0.2000000029802" scaleRange="0.07999999821186" velocity="1900" velocityRange="300" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.5332" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#3">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	  <LKStateRemoveElement keyPath="emitterCells" targetId="#2">
+	    <object alphaRange="0.4000000059605" birthRate="2" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.08726646006107" enabled="1" lifetime="100" name="Hero" scale="0.4499999880791" scaleRange="0.4000000059605" type="CAEmitterCell" velocity="3000" velocityRange="0" xAcceleration="0" yAcceleration="0">
+	      <color opacity="0.1379" value="1 1 1" />
+	      <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement keyPath="emitterCells" targetId="#3">
+	    <object alphaRange="0.4000000059605" birthRate="3" emissionLatitude="0" emissionLongitude="-2.827433347702" emissionRange="0.08726646006107" enabled="1" lifetime="100" name="Hero" scale="0.4499999880791" scaleRange="0.4000000059605" type="CAEmitterCell" velocity="3000" velocityRange="0" xAcceleration="0" yAcceleration="0">
+	      <color opacity="0.1379" value="1 1 1" />
+	      <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement keyPath="sublayers" objectId="#4" targetId="#1" />
+	</elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer bounds="0 0 640 1136" id="#1" name="Root Layer" position="320 568">
+    <backgroundColor opacity="0" value="0 0 0" />
+    <sublayers>
+      <CALayer anchorPoint="0.5 1" bounds="0 0 640 480" contentsScaling="repeat" hidden="0" name="⛅ Scaled" opaque="0" position="320 1160" transform="matrix(0.8609998037851 -5.833911999939e-4 0 1.609976360488e-6 4.996400132551e-6 0.6000001581884 0 -8.755602687849e-4 0 0 1 0 -0.0575922923278 1.924220777717 0 0.4398904336102)">
+	<sublayers>
+	  <CALayer anchorPoint="0 0" bounds="0 0 1408 480" contentsGravity="resize" contentsScaling="repeat" hidden="0" name="⛅ Tile --night uses multiply color" position="-895.868854522705 0">
+	    <contents src="assets/Cloud-Drizzle.png" type="CGImage" />
+	    <filters>
+	      <CAFilter filter="multiplyColor" inputColor="0.32 0.3733 0.4" name="multiplyColor" />
+	    </filters>
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="120" fillMode="both" keyPath="position.x" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="0" />
+		  <integer value="-768" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CAEmitterLayer beginTime="-100" bounds="0 0 640 1136" cullRect="-8.988465674312e307 -10 1.797693134862e308 1.797693134862e308" emitterPosition="320 1146" emitterShape="line" emitterSize="660 0" geometryFlipped="0" id="#2" name="__Emitter_2D_0" position="320 568">
+	<emitterBehaviors>
+	  <CAEmitterBehavior additive="0" attractorType="axial" behavior="valueOverDistance" falloff="1136" falloffDistance="0" keyPath="color.alpha" name="valueOverDistance" orientationLatitude="-1.570796370506" orientationLongitude="0" position="0 1136" zPosition="0">
+	    <values>
+	      <real value="0.75" />
+	      <integer value="1" />
+	      <integer value="0" />
+	    </values>
+	    <stiffness type="integer" value="1" />
+	    <radius type="integer" value="0" />
+	  </CAEmitterBehavior>
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.5" birthRate="500" emissionRange="0" enabled="1" lifetime="1.5" name="Rain Small" rotation="0" scale="0.25" scaleRange="0.25" velocity="1000" velocityRange="300">
+	    <color opacity="0.15" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.5" birthRate="10" enabled="0" lifetime="1" lifetimeRange="0" name="Rain Med" rotation="0" scale="1" scaleRange="0.25" velocity="2000" velocityRange="1000">
+	    <color opacity="0.2015" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	</elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

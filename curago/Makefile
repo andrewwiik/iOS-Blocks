@@ -1,25 +1,25 @@
 # THEOS_PACKAGE_DIR_NAME = debs
 # GO_EASY_ON_ME = 1
 # ARCHS = armv7 arm64
-Curago_CFLAGS = -fobjc-arc -I../headers -Wno-deprecated-declarations
-Simulator = 0
+export SIMULATOR = 0
+Curago_CFLAGS = -fobjc-arc
 
 ifeq ($(SIMULATOR),1)
-	TARGET = simulator:clang:latest:7.0
-	ARCHS = x86_64
+	export TARGET = simulator:clang:latest:7.0
+	export ARCHS = x86_64
 else
-	TARGET = iphone:latest
-	ARCHS = armv7 arm64
+	export TARGET = iphone:latest:7.0
+	export ARCHS = armv7 arm64
 endif
 
-include $(THEOS)/makefiles/common.mk
+export ADDITIONAL_CFLAGS = -I$(THEOS_PROJECT_DIR)/../headers
+
 TWEAK_NAME = Curago
 Curago_FILES = $(wildcard *.m) $(wildcard Progress/*.m) $(wildcard *.xm)
 Curago_FRAMEWORKS = UIKit CoreGraphics QuartzCore Foundation MobileCoreServices CoreImage AudioToolbox
 Curago_PRIVATE_FRAMEWORKS = BulletinBoard
 
-# HOPPN_PRIVATE_FRAMEWORKS = MobileWiFi
-
+include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
 
 ifeq ($(THEOS_TARGET_NAME),iphone_simulator)
@@ -34,5 +34,14 @@ endif
 
 after-install::
 	install.exec "killall -9 SpringBoard"
+
+ifeq ($(SIMULATOR),0)
 SUBPROJECTS += ../Settings/curago/curago
+SUBPROJECTS += ../Widgets/Weather
+SUBPROJECTS += ../Widgets/Stocks
+SUBPROJECTS += ../Widgets/Music
+SUBPROJECTS += ../Widgets/MobileTimer
+SUBPROJECTS += ../Widgets/Calendar
+SUBPROJECTS += ../Widgets/MobileSMS
 include $(THEOS_MAKE_PATH)/aggregate.mk
+endif

@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 750 1334" clearsContext="1" edgeAntialiasingMask="0" id="#1" name="Root Layer" position="375 667"><sublayers><CALayer anchorPoint="0 1" bounds="0 0 640 1136" id="#1" name="Rotation" position="0 1334" transform="scale(1.175, 1.175, 1)"><sublayers>
+      <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 0" beginTime="-999" bounds="0 0 0 0" edgeAntialiasingMask="0" emitterMode="surface" hidden="0" name="📷 Flare" position="0 1136" speed="0.0625" transform="scale(1.75, 1.75, 1)">
+	<emitterCells>
+	  <CAEmitterCell birthRate="1.5" contentsFrameCount="4" contentsFrameMode="sequential" contentsFramesPerRow="4" contentsFramesPerSecond="0" contentsRect="0 0 0.25 1" emissionLatitude="0" emissionLongitude="0" emissionRange="0" lifetime="10" mass="1" name="Heptagons" scale="0" scaleRange="0.8000000119209" scaleSpeed="0.1000000014901" speed="1" velocity="100" velocityRange="150">
+	    <contents src="assets/Lens-Flare-Medium.png" type="CGImage" />
+	    <emitterBehaviors>
+	      <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="color.alpha" name="valueOverLife">
+		<values>
+		  <integer value="0" />
+		  <real value="0.1000000014901" />
+		  <real value="0.1000000014901" />
+		  <integer value="0" />
+		</values>
+	      </CAEmitterBehavior>
+	    </emitterBehaviors>
+	  </CAEmitterCell>
+	</emitterCells>
+	<animations>
+	  <animation-1 autoreverses="1" beginTime="1e-100" duration="0.75" enabled="1" fillMode="both" keyPath="transform.rotation.z" removedOnCompletion="0" repeatCount="Inf" timingFunction="easeInEaseOut" type="CAKeyframeAnimation">
+	    <keyTimes>
+	      <integer value="0" />
+	      <integer value="1" />
+	    </keyTimes>
+	    <values>
+	      <real value="-1.082104086876" />
+	      <real value="-1.01229095459" />
+	    </values>
+	  </animation-1>
+	  <animation-2 autoreverses="1" beginTime="1e-100" duration="0.75" enabled="1" fillMode="both" keyPath="transform.scale.xy" removedOnCompletion="0" repeatCount="Inf" timeOffset="-0.25" timingFunction="easeInEaseOut" type="CAKeyframeAnimation">
+	    <keyTimes>
+	      <integer value="0" />
+	      <integer value="1" />
+	    </keyTimes>
+	    <values>
+	      <real value="0.9499999880791" />
+	      <real value="1.049999952316" />
+	    </values>
+	  </animation-2>
+	</animations>
+      </CAEmitterLayer>
+      <CALayer bounds="0 0 240 240" hidden="0" name="🔆 Sun" position="120 1016">
+	<contents src="assets/Sun-Left.png" type="CGImage" />
+      </CALayer>
+      <CAEmitterLayer bounds="0 0 0 0" emitterPosition="-64 -384" emitterShape="line" emitterSize="420 0" name="🔆 Rays" position="0 1136" transform="rotate(45deg)">
+	<emitterBehaviors>
+	  <CAEmitterBehavior attractorType="radial" behavior="attractor" falloff="Inf" falloffDistance="0" name="attractor" orientationLatitude="1.570796370506" orientationLongitude="-1.570796370506" position="0 0" zPosition="0">
+	    <stiffness type="real" value="-0.01999999955297" />
+	    <radius type="integer" value="0" />
+	  </CAEmitterBehavior>
+	  <CAEmitterBehavior behavior="alignToMotion" name="alignToMotion" rotation="0" />
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell birthRate="2" color="1 1 1" lifetime="4" mass="1" name="Rays" scale="1.75">
+	    <contents src="assets/Ray-Cyan.png" type="CGImage" />
+	    <emitterBehaviors>
+	      <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		<colors>
+		  <CGColor opacity="0" value="1 1 1" />
+		  <CGColor value="1 1 1" />
+		</colors>
+	      </CAEmitterBehavior>
+	      <CAEmitterBehavior additive="1" behavior="valueOverLife" keyPath="color.alpha" name="valueOverLife">
+		<values>
+		  <integer value="0" />
+		  <integer value="-1" />
+		</values>
+	      </CAEmitterBehavior>
+	    </emitterBehaviors>
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers></CALayer></sublayers><states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateRemoveElement keyPath="sublayers" objectId="#2" targetId="#1" />
+	  <LKStateRemoveElement keyPath="sublayers" targetId="#1">
+	    <object anchorPoint="0 0" beginTime="-999" bounds="0 0 0 0" emitterMode="surface" hidden="0" name="📷 Flare" position="0 1136" speed="0.25" transform="scale(0.5, 0.5, 1)" type="CAEmitterLayer">
+	      <emitterCells>
+		<CAEmitterCell birthRate="1.5" contentsFrameCount="4" contentsFrameMode="sequential" contentsFramesPerRow="4" contentsFramesPerSecond="0" contentsRect="0 0 0.25 1" emissionLatitude="0" emissionLongitude="0" emissionRange="0" lifetime="10" mass="1" name="Heptagons" scale="0" scaleRange="0.8000000119209" scaleSpeed="0.1000000014901" speed="1" velocity="100" velocityRange="150">
+		  <contents src="assets/Lens-Flare-Medium.png" type="CGImage" />
+		  <emitterBehaviors>
+		    <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="color.alpha" name="valueOverLife">
+		      <values>
+			<integer value="0" />
+			<real value="0.1000000014901" />
+			<real value="0.1000000014901" />
+			<integer value="0" />
+		      </values>
+		    </CAEmitterBehavior>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+	      </emitterCells>
+	      <animations>
+		<animation-1 beginTime="1e-100" duration="1" enabled="1" fillMode="both" keyPath="transform.rotation.z" removedOnCompletion="0" type="CAKeyframeAnimation">
+		  <keyTimes>
+		    <integer value="0" />
+		    <integer value="1" />
+		  </keyTimes>
+		  <values>
+		    <real value="-2.094395160675" />
+		    <integer value="0" />
+		  </values>
+		</animation-1>
+		<animation-2 beginTime="1e-100" duration="1" fillMode="both" keyPath="transform.scale.xy" removedOnCompletion="0" type="CAKeyframeAnimation">
+		  <keyTimes>
+		    <integer value="0" />
+		    <integer value="1" />
+		  </keyTimes>
+		  <values>
+		    <real value="0.25" />
+		    <real value="1.75" />
+		  </values>
+		</animation-2>
+	      </animations>
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement keyPath="sublayers" targetId="#1">
+	    <object allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 0" beginTime="-999" bounds="0 0 0 0" edgeAntialiasingMask="0" emitterMode="surface" hidden="0" name="Gyro_📷 Flare (rot=roll scale=pitch)" position="0 1136" speed="0.25" transform="scale(0.5, 0.5, 1)" type="CAEmitterLayer">
+	      <emitterCells>
+		<CAEmitterCell birthRate="1.5" contentsFrameCount="4" contentsFrameMode="sequential" contentsFramesPerRow="4" contentsFramesPerSecond="0" contentsRect="0 0 0.25 1" emissionLatitude="0" emissionLongitude="0" emissionRange="0" lifetime="10" mass="1" name="Heptagons" scale="0" scaleRange="0.8000000119209" scaleSpeed="0.1000000014901" speed="1" velocity="100" velocityRange="150">
+		  <contents src="assets/Lens-Flare-Medium.png" type="CGImage" />
+		  <emitterBehaviors>
+		    <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="color.alpha" name="valueOverLife">
+		      <values>
+			<integer value="0" />
+			<real value="0.1000000014901" />
+			<real value="0.1000000014901" />
+			<integer value="0" />
+		      </values>
+		    </CAEmitterBehavior>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+	      </emitterCells>
+	      <animations>
+		<animation-2 beginTime="1e-100" duration="1" fillMode="both" keyPath="transform.scale.xy" removedOnCompletion="0" type="CAKeyframeAnimation">
+		  <keyTimes>
+		    <integer value="0" />
+		    <integer value="1" />
+		  </keyTimes>
+		  <values>
+		    <real value="0.25" />
+		    <real value="1.75" />
+		  </values>
+		</animation-2>
+		<animation-1 beginTime="1e-100" duration="1" enabled="1" fillMode="both" keyPath="transform.rotation.z" removedOnCompletion="0" type="CAKeyframeAnimation">
+		  <keyTimes>
+		    <integer value="0" />
+		    <integer value="1" />
+		  </keyTimes>
+		  <values>
+		    <real value="-2.094395160675" />
+		    <integer value="0" />
+		  </values>
+		</animation-1>
+	      </animations>
+	    </object>
+	  </LKStateRemoveElement>
+	</elements>
+      </LKState>
+    </states></CALayer>
+</caml>

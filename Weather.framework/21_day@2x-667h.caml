@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 750 1334" clearsContext="1" edgeAntialiasingMask="0" name="Root Layer" position="375 667">
+    <sublayers>
+      <CALayer anchorPoint="0 1" bounds="0 0 640 1136" id="#1" name="Rotation" position="0 1334" transform="scale(1.175, 1.175, 1)">
+	<sublayers>
+	  <CAEmitterLayer beginTime="-100" bounds="0 0 640 1136" cullRect="-580 0 1.797693134862e308 1.797693134862e308" emitterPosition="1024 800" emitterShape="rectangle" emitterSize="0 0" hidden="0" name="__Emitter_2D_0" position="320 568" speed="0.1000000014901">
+	    <emitterBehaviors>
+	      <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="color.alpha" name="valueOverLife">
+		<values>
+		  <integer value="0" />
+		  <integer value="1" />
+		  <integer value="1" />
+		  <integer value="0" />
+		</values>
+		<locations>
+		  <integer value="0" />
+		  <real value="0.1000000014901" />
+		  <real value="0.8999999761581" />
+		  <integer value="1" />
+		</locations>
+	      </CAEmitterBehavior>
+	    </emitterBehaviors>
+	    <emitterCells>
+	      <CAEmitterCell alphaRange="0.1000000014901" birthRate="3" blueRange="0" contentsFrameCount="4" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 0.5" enabled="1" greenRange="0" lifetime="1.700000047684" name="Cell 1" orientationLatitude="0" orientationLongitude="0" orientationRange="6.283185482025" redRange="0" rotation="0" scale="1.5" scaleRange="0.75" spin="1" spinRange="0.2" velocity="-800" velocityRange="200" xAcceleration="0" yAcceleration="0" zAcceleration="0">
+		<color opacity="0.3" value="0.8941 0.9243 0.9249" />
+		<contents src="assets/Cloud-Patch-One.png" type="CGImage" />
+	      </CAEmitterCell>
+	    </emitterCells>
+	  </CAEmitterLayer>
+	  <CALayer bounds="0 0 640 1136" hidden="0" name="Darken All" position="320 568">
+	    <backgroundColor opacity="0.1" value="0 0 0" />
+	  </CALayer>
+	  </sublayers>
+      </CALayer>
+    </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  </elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

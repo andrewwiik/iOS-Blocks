@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer bounds="0 0 640 1136" id="#1" name="Root Layer" position="320 568">
+    <sublayers>
+      <CAEmitterLayer beginTime="-100" bounds="0 0 640 1136" cullRect="-5 -10 650 1.797693134862e308" emitterPosition="320 1146" emitterShape="rectangle" emitterSize="660 0" hidden="0" id="#2" name="__Emitter_2D_0" position="320 568" renderMode="cheapScreen">
+	<emitterBehaviors>
+	  <CAEmitterBehavior ambientIntensity="0.5" appliesAlpha="1" behavior="light" color="1 1 1" coneAngle="1.570796370506" coneEdgeSoftness="0.1745329201221" diffuseIntensity="1" directionLatitude="1.570796370506" directionLongitude="-1.570796370506" falloff="1000" falloffDistance="0" name="light" position="320 1200" spot="0" zPosition="0" />
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="-1" birthRate="800" contentsFrameCount="4" contentsFrameMode="random" contentsFramesPerRow="4" contentsRect="0 0 0.25 1" emissionLatitude="0" emissionLongitude="-1.570796370506" enabled="1" lifetime="2" name="Sleet Large" particleType="plane" rotation="0" scale="0.07999999821186" scaleRange="-0.1800000071526" velocity="1750" velocityRange="1000" xAcceleration="0">
+	    <color opacity="0.2485" value="1 1 1" />
+	    <contents src="assets/Sleet-Frames.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="-0.5" birthRate="800" contentsFrameCount="4" contentsFrameMode="random" contentsFramesPerRow="4" contentsRect="0 0 0.25 1" emissionLatitude="0" emissionLongitude="-1.570796370506" enabled="1" lifetime="2" name="Sleet Small" particleType="plane" rotation="0" scale="0.0599999986589" scaleRange="0.03999999910593" velocity="1100" velocityRange="750" xAcceleration="0">
+	    <color opacity="0.15" value="1 1 1" />
+	    <contents src="assets/Sleet-Frames.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="emitterCells.Sleet Large.birthRate" targetId="#2">
+	    <value type="integer" value="600" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="emitterCells.Sleet Small.birthRate" targetId="#2">
+	    <value type="integer" value="600" />
+	  </LKStateSetValue>
+	</elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer id="#1" allowsEdgeAntialiasing="0" bounds="0 0 640 1136" clearsContext="1" edgeAntialiasingMask="0" hidden="0" name="Root Layer" position="320 568" sublayerTransform="perspective(975.144)">
+    <backgroundColor opacity="0" value="0 0 0"/>
+    <sublayers>
+      <CALayer id="#2" bounds="0 0 640 40" hidden="0" name="__status-bar.png" position="320 1116">
+	<backgroundColor opacity="0" value="0 0 0"/>
+	<compositingFilter type="CAFilter" filter="normalBlendMode" name="normalBlendMode"/>
+	<filters>
+	  <CAFilter filter="colorInvert" name="colorInvert" enabled="0"/>
+	</filters>
+      </CALayer>
+      <CALayer bounds="0 0 640 1136" hidden="0" name="Shake-Fine" position="320.142680966475 568.131631090392">
+	<backgroundColor opacity="0" value="0 0 0"/>
+	<sublayers>
+	  <CALayer id="Text_Effect_Layer" bounds="0 0 640 1136" name="Text_Effect_Layer" position="320 568">
+	    <backgroundColor opacity="0" value="0.5746 0.06557 0"/>
+	    <animations>
+	      <animation-1 type="CAKeyframeAnimation" calculationMode="linear" additive="0" cumulative="0" keyPath="position.y" beginTime="1e-100" duration="11.333000183105" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		<biasValues/>
+		<continuityValues/>
+		<keyTimes>
+		  <integer value="0"/>
+		  <real value="0.1000000014901"/>
+		  <real value="0.2000000029802"/>
+		  <real value="0.3000000119209"/>
+		  <real value="0.4000000059605"/>
+		  <real value="0.5"/>
+		  <real value="0.6000000238419"/>
+		  <real value="0.6999999880791"/>
+		  <real value="0.8000000119209"/>
+		  <real value="0.8999999761581"/>
+		  <integer value="1"/>
+		</keyTimes>
+		<tensionValues/>
+		<timingFunctions/>
+		<values>
+		  <integer value="568"/>
+		  <real value="565.760009765625"/>
+		  <integer value="568"/>
+		  <real value="567.159973144531"/>
+		  <real value="568.75"/>
+		  <integer value="568"/>
+		  <real value="568.650024414062"/>
+		  <integer value="568"/>
+		  <real value="568.700012207031"/>
+		  <real value="566.640014648437"/>
+		  <integer value="568"/>
+		</values>
+	      </animation-1>
+	      <animation-2 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="11.22200012207" fillMode="both" removedOnCompletion="0" repeatCount="Inf" speed="1.332999944687" timeOffset="0">
+		<keyTimes>
+		  <integer value="0"/>
+		  <real value="0.1"/>
+		  <real value="0.2"/>
+		  <real value="0.3"/>
+		  <real value="0.4"/>
+		  <real value="0.5"/>
+		  <real value="0.6"/>
+		  <real value="0.6999999880791"/>
+		  <real value="0.8"/>
+		  <real value="0.8999999761581"/>
+		  <integer value="1"/>
+		</keyTimes>
+		<timingFunctions/>
+		<values>
+		  <integer value="320"/>
+		  <real value="318.959991455078"/>
+		  <integer value="320"/>
+		  <real value="319.480010986328"/>
+		  <real value="320.359985351563"/>
+		  <integer value="320"/>
+		  <real value="320.640014648438"/>
+		  <integer value="320"/>
+		  <real value="320.700012207031"/>
+		  <real value="318.570007324219"/>
+		  <integer value="320"/>
+		</values>
+	      </animation-2>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+	<animations>
+	  <animation-1 type="CAKeyframeAnimation" calculationMode="linear" additive="0" cumulative="0" keyPath="position.y" beginTime="1e-100" duration="5.554999828339" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+	    <biasValues/>
+	    <continuityValues/>
+	    <keyTimes>
+	      <integer value="0"/>
+	      <real value="0.1000000014901"/>
+	      <real value="0.2000000029802"/>
+	      <real value="0.3000000119209"/>
+	      <real value="0.4000000059605"/>
+	      <real value="0.5"/>
+	      <real value="0.6000000238419"/>
+	      <real value="0.6999999880791"/>
+	      <real value="0.8000000119209"/>
+	      <real value="0.8999999761581"/>
+	      <integer value="1"/>
+	    </keyTimes>
+	    <tensionValues/>
+	    <timingFunctions/>
+	    <values>
+	      <integer value="568"/>
+	      <real value="565.760009765625"/>
+	      <integer value="568"/>
+	      <real value="567.159973144531"/>
+	      <real value="568.75"/>
+	      <integer value="568"/>
+	      <real value="568.650024414062"/>
+	      <integer value="568"/>
+	      <real value="568.700012207031"/>
+	      <real value="566.640014648437"/>
+	      <integer value="568"/>
+	    </values>
+	  </animation-1>
+	  <animation-2 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="4.443999767303" fillMode="both" removedOnCompletion="0" repeatCount="Inf" speed="1.332999944687" timeOffset="0">
+	    <keyTimes>
+	      <integer value="0"/>
+	      <real value="0.1"/>
+	      <real value="0.2"/>
+	      <real value="0.3"/>
+	      <real value="0.4"/>
+	      <real value="0.5"/>
+	      <real value="0.6"/>
+	      <real value="0.6999999880791"/>
+	      <real value="0.8"/>
+	      <real value="0.8999999761581"/>
+	      <integer value="1"/>
+	    </keyTimes>
+	    <timingFunctions/>
+	    <values>
+	      <integer value="320"/>
+	      <real value="318.959991455078"/>
+	      <integer value="320"/>
+	      <real value="319.480010986328"/>
+	      <real value="320.359985351563"/>
+	      <integer value="320"/>
+	      <real value="320.640014648438"/>
+	      <integer value="320"/>
+	      <real value="320.700012207031"/>
+	      <real value="318.570007324219"/>
+	      <integer value="320"/>
+	    </values>
+	  </animation-2>
+	</animations>
+      </CALayer>
+    </sublayers>
+    <states>
+      <LKState name="Full"/>
+      <LKState name="Mini">
+	<elements>
+	  <LKStateRemoveElement targetId="#1" keyPath="sublayers">
+	    <object type="CALayer" bounds="0 0 640 1136" hidden="1" name="__TEXT TREATMENT" position="320 568">
+	      <backgroundColor opacity="0" value="0 0 0"/>
+	      <shadowColor opacity="0" value="0 0 0"/>
+	      <sublayers>
+		<CATextLayer alignmentMode="center" fontSize="60" bounds="0 0 640 76" name="__Text" position="320 971">
+		  <font type="string" value="Helvetica Neue Light"/>
+		  <string type="string" value="Metropolis"/>
+		</CATextLayer>
+		<CATextLayer alignmentMode="center" fontSize="30" bounds="0 0 640 76" name="__Text" position="320 874">
+		  <font type="string" value="Helvetica Neue Light"/>
+		  <string type="string" value="Condition"/>
+		</CATextLayer>
+		<CATextLayer alignmentMode="center" fontSize="223" bounds="0 0 640 246" name="__Text" position="320 782">
+		  <font type="string" value="Helvetica Neue UltraLight"/>
+		  <string type="string" value="00˚"/>
+		</CATextLayer>
+	      </sublayers>
+	      <animations>
+		<animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="60" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		  <keyTimes>
+		    <integer value="0"/>
+		    <real value="0.05000000074506"/>
+		    <real value="0.07400000095367"/>
+		    <real value="0.1500000059605"/>
+		    <real value="0.2099999934435"/>
+		    <real value="0.25"/>
+		    <real value="0.3120000064373"/>
+		    <real value="0.3560000061989"/>
+		    <real value="0.3939999938011"/>
+		    <real value="0.4370000064373"/>
+		    <real value="0.5149999856949"/>
+		    <real value="0.5519999861717"/>
+		    <real value="0.5979999899864"/>
+		    <real value="0.6499999761581"/>
+		    <real value="0.6949999928474"/>
+		    <real value="0.75"/>
+		    <real value="0.8080000281334"/>
+		    <real value="0.8500000238419"/>
+		    <real value="0.9049999713898"/>
+		    <real value="0.9449999928474"/>
+		    <integer value="1"/>
+		  </keyTimes>
+		  <timingFunctions>
+		    <CAMediaTimingFunction value="easeInEaseOut"/>
+		    <CAMediaTimingFunction value="0.24971 0.0072464 0.011159 0.99275"/>
+		    <CAMediaTimingFunction value="easeInEaseOut"/>
+		    <CAMediaTimingFunction value="0.42 0 0.018406 0.98913"/>
+		    <CAMediaTimingFunction value="0.99246 0.0036232 0.75029 0.99638"/>
+		    <CAMediaTimingFunction value="easeInEaseOut"/>
+		    <CAMediaTimingFunction value="0.99609 0.0072464 0.76116 0.99275"/>
+		    <CAMediaTimingFunction value="0.2642 0.018116 2.8986e-4 0.98913"/>
+		    <CAMediaTimingFunction value="0.49971 0.021739 0.75391 0.98913"/>
+		    <CAMediaTimingFunction value="0.4671 0.032609 0.76116 0.99275"/>
+		    <CAMediaTimingFunction value="0.99246 0.01087 0.75391 0.98913"/>
+		    <CAMediaTimingFunction value="0.30043 0.018116 0.25754 0.98551"/>
+		    <CAMediaTimingFunction value="0.42 0 0.51478 0.98188"/>
+		    <CAMediaTimingFunction value="0.23159 0.014493 0.58 1"/>
+		    <CAMediaTimingFunction value="easeInEaseOut"/>
+		    <CAMediaTimingFunction value="0.42 0 0.13072 0.98188"/>
+		    <CAMediaTimingFunction value="easeInEaseOut"/>
+		    <CAMediaTimingFunction value="easeInEaseOut"/>
+		    <CAMediaTimingFunction value="0.98522 0.01087 0.85174 0.99275"/>
+		    <CAMediaTimingFunction value="0.17725 0.014493 0.025652 0.99275"/>
+		  </timingFunctions>
+		  <values>
+		    <integer value="0"/>
+		    <real value="0.01745329238474"/>
+		    <integer value="0"/>
+		    <real value="0.01745329238474"/>
+		    <integer value="0"/>
+		    <real value="0.02617993950844"/>
+		    <integer value="0"/>
+		    <real value="0.01745329238474"/>
+		    <integer value="0"/>
+		    <real value="0.01047197543085"/>
+		    <integer value="0"/>
+		    <real value="0.02617993950844"/>
+		    <integer value="0"/>
+		    <real value="0.01745329238474"/>
+		    <integer value="0"/>
+		    <real value="0.02617993950844"/>
+		    <integer value="0"/>
+		    <real value="0.01745329238474"/>
+		    <integer value="0"/>
+		    <real value="0.01047197543085"/>
+		    <integer value="0"/>
+		  </values>
+		</animation-1>
+	      </animations>
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement targetId="#1" keyPath="sublayers" objectId="#2"/>
+	  <LKStateRemoveElement targetId="#1" keyPath="sublayers">
+	    <object type="CALayer" bounds="0 0 640 1136" hidden="0" name="STRAYS" position="320 568">
+	      <sublayers>
+		<CALayer bounds="0 0 640 1136" hidden="0" name="Rotator" position="320 568" shouldRasterize="0">
+		  <sublayers>
+		    <CALayer bounds="0 0 640 1136" hidden="0" name="Anti-Rotator" position="240 567.719970703125">
+		      <sublayers>
+			<CALayer bounds="0 0 638 120" name="Slide Up/Down" position="320 1076">
+			  <backgroundColor opacity="0" value="0 0 0"/>
+			  <sublayers>
+			    <CAEmitterLayer emitterShape="rectangle" emitterSize="16 16" anchorPoint="0 0" bounds="0 0 240 240" name="Strays" position="260 120" transform="rotate(-90deg) scale(0.61, 0.61, 1)">
+			      <emitterCells>
+				<CAEmitterCell birthRate="2" enabled="1" lifetime="2" mass="1" massRange="1" name="Strays 1" orientationLatitude="0" orientationLongitude="0" rotationRange="0.5235987901688" scale="0.8999999761581" scaleRange="0.4499999880791" spinRange="3.141592741013" velocity="0" velocityRange="0" xAcceleration="0" yAcceleration="0">
+				  <color opacity="0.25" value="1 1 1"/>
+				  <emitterBehaviors>
+				    <CAEmitterBehavior behavior="attractor" name="attractor" zPosition="0" position="100 100" orientationLongitude="-1.570796370506" orientationLatitude="1.570796370506" falloffDistance="0" falloff="Inf" attractorType="radial">
+				      <radius type="integer" value="-1000"/>
+				      <stiffness type="integer" value="1"/>
+				    </CAEmitterBehavior>
+				    <CAEmitterBehavior behavior="wave" name="wave" frequency="1" force="1000 -2000 0"/>
+				    <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+				      <colors>
+					<CGColor opacity="0" value="1 1 1"/>
+					<CGColor value="1 1 1"/>
+					<CGColor opacity="0" value="1 1 1"/>
+				      </colors>
+				    </CAEmitterBehavior>
+				  </emitterBehaviors>
+				</CAEmitterCell>
+			      </emitterCells>
+			      <backgroundColor opacity="0" value="0 0 0"/>
+			      <animations>
+				<animation-1 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="5" enabled="1" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+				  <keyTimes>
+				    <integer value="0"/>
+				    <real value="0.25"/>
+				    <integer value="1"/>
+				  </keyTimes>
+				  <values>
+				    <integer value="760"/>
+				    <integer value="-240"/>
+				    <integer value="-240"/>
+				  </values>
+				</animation-1>
+			      </animations>
+			    </CAEmitterLayer>
+			  </sublayers>
+			  <animations>
+			    <animation-1 type="CAKeyframeAnimation" keyPath="position.y" autoreverses="1" beginTime="1e-100" duration="10" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			      <keyTimes>
+				<integer value="0"/>
+				<integer value="1"/>
+			      </keyTimes>
+			      <timingFunctions>
+				<CAMediaTimingFunction value="0.115 8.4459e-4 0.8875 0.99916"/>
+			      </timingFunctions>
+			      <values>
+				<integer value="936"/>
+				<integer value="200"/>
+			      </values>
+			    </animation-1>
+			  </animations>
+			</CALayer>
+		      </sublayers>
+		      <animations>
+			<animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			  <keyTimes>
+			    <integer value="0"/>
+			    <integer value="1"/>
+			  </keyTimes>
+			  <values>
+			    <real value="6.283185482025"/>
+			    <integer value="0"/>
+			  </values>
+			</animation-1>
+		      </animations>
+		    </CALayer>
+		  </sublayers>
+		  <animations>
+		    <animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		      <keyTimes>
+			<integer value="0"/>
+			<integer value="1"/>
+		      </keyTimes>
+		      <values>
+			<integer value="0"/>
+			<real value="6.283185482025"/>
+		      </values>
+		    </animation-1>
+		  </animations>
+		</CALayer>
+		<CALayer bounds="0 0 640 1136" hidden="0" name="Rotator 1" position="320 568" shouldRasterize="0" speed="0.8999999761581" timeOffset="-11">
+		  <sublayers>
+		    <CALayer bounds="0 0 640 1136" hidden="0" name="Anti-Rotator" position="240 567.719970703125">
+		      <sublayers>
+			<CALayer bounds="0 0 638 120" name="Slide Up/Down" position="320 1076">
+			  <backgroundColor opacity="0" value="0 0 0"/>
+			  <sublayers>
+			    <CAEmitterLayer emitterShape="rectangle" emitterSize="16 16" anchorPoint="0 0" bounds="0 0 240 240" name="Strays" position="260 120" transform="rotate(-90deg) scale(0.61, 0.61, 1)">
+			      <emitterCells>
+				<CAEmitterCell birthRate="2" enabled="1" greenSpeed="0" lifetime="2" mass="1" massRange="1" name="Strays 1" orientationLatitude="0" orientationLongitude="0" rotationRange="0.5235987901688" scale="0.8999999761581" scaleRange="0.4499999880791" spinRange="3.141592741013" velocity="0" velocityRange="0" xAcceleration="0" yAcceleration="0">
+				  <color opacity="0.25" value="1 1 1"/>
+				  <emitterBehaviors>
+				    <CAEmitterBehavior behavior="attractor" name="attractor" zPosition="0" position="100 100" orientationLongitude="-1.570796370506" orientationLatitude="1.570796370506" falloffDistance="0" falloff="Inf" attractorType="radial">
+				      <stiffness type="integer" value="1"/>
+				      <radius type="integer" value="-1000"/>
+				    </CAEmitterBehavior>
+				    <CAEmitterBehavior behavior="wave" name="wave" frequency="1" force="1000 -2000 0"/>
+				    <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+				      <colors>
+					<CGColor opacity="0" value="1 1 1"/>
+					<CGColor value="1 1 1"/>
+					<CGColor opacity="0" value="1 1 1"/>
+				      </colors>
+				    </CAEmitterBehavior>
+				  </emitterBehaviors>
+				</CAEmitterCell>
+			      </emitterCells>
+			      <backgroundColor opacity="0" value="0 0 0"/>
+			      <animations>
+				<animation-1 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="5" enabled="1" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+				  <keyTimes>
+				    <integer value="0"/>
+				    <real value="0.25"/>
+				    <integer value="1"/>
+				  </keyTimes>
+				  <values>
+				    <integer value="760"/>
+				    <integer value="-240"/>
+				    <integer value="-240"/>
+				  </values>
+				</animation-1>
+			      </animations>
+			    </CAEmitterLayer>
+			  </sublayers>
+			  <animations>
+			    <animation-1 type="CAKeyframeAnimation" keyPath="position.y" autoreverses="1" beginTime="1e-100" duration="10" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			      <keyTimes>
+				<integer value="0"/>
+				<integer value="1"/>
+			      </keyTimes>
+			      <timingFunctions>
+				<CAMediaTimingFunction value="0.115 8.4459e-4 0.8875 0.99916"/>
+			      </timingFunctions>
+			      <values>
+				<integer value="936"/>
+				<integer value="200"/>
+			      </values>
+			    </animation-1>
+			  </animations>
+			</CALayer>
+		      </sublayers>
+		      <animations>
+			<animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			  <keyTimes>
+			    <integer value="0"/>
+			    <integer value="1"/>
+			  </keyTimes>
+			  <values>
+			    <real value="6.283185482025"/>
+			    <integer value="0"/>
+			  </values>
+			</animation-1>
+		      </animations>
+		    </CALayer>
+		  </sublayers>
+		  <animations>
+		    <animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		      <keyTimes>
+			<integer value="0"/>
+			<integer value="1"/>
+		      </keyTimes>
+		      <values>
+			<integer value="0"/>
+			<real value="6.283185482025"/>
+		      </values>
+		    </animation-1>
+		  </animations>
+		</CALayer>
+		<CALayer bounds="0 0 640 1136" hidden="0" name="Rotator 2" position="320 568" shouldRasterize="0" speed="0.8000000119209" timeOffset="-22">
+		  <sublayers>
+		    <CALayer bounds="0 0 640 1136" hidden="0" name="Anti-Rotator" position="240 567.719970703125">
+		      <sublayers>
+			<CALayer bounds="0 0 638 120" name="Slide Up/Down" position="320 1076">
+			  <backgroundColor opacity="0" value="0 0 0"/>
+			  <sublayers>
+			    <CAEmitterLayer emitterShape="rectangle" emitterSize="16 16" anchorPoint="0 0" bounds="0 0 240 240" name="Strays" position="260 120" transform="rotate(-90deg) scale(0.61, 0.61, 1)">
+			      <emitterCells>
+				<CAEmitterCell birthRate="2" enabled="1" greenSpeed="0" lifetime="2" mass="1" massRange="1" name="Strays 1" orientationLatitude="0" orientationLongitude="0" rotationRange="0.5235987901688" scale="0.8999999761581" scaleRange="0.4499999880791" spinRange="3.141592741013" velocity="0" velocityRange="0" xAcceleration="0" yAcceleration="0">
+				  <color opacity="0.25" value="1 1 1"/>
+				  <emitterBehaviors>
+				    <CAEmitterBehavior behavior="attractor" name="attractor" zPosition="0" position="100 100" orientationLongitude="-1.570796370506" orientationLatitude="1.570796370506" falloffDistance="0" falloff="Inf" attractorType="radial">
+				      <radius type="integer" value="-1000"/>
+				      <stiffness type="integer" value="1"/>
+				    </CAEmitterBehavior>
+				    <CAEmitterBehavior behavior="wave" name="wave" frequency="1" force="1000 -2000 0"/>
+				    <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+				      <colors>
+					<CGColor opacity="0" value="1 1 1"/>
+					<CGColor value="1 1 1"/>
+					<CGColor opacity="0" value="1 1 1"/>
+				      </colors>
+				    </CAEmitterBehavior>
+				  </emitterBehaviors>
+				</CAEmitterCell>
+			      </emitterCells>
+			      <backgroundColor opacity="0" value="0 0 0"/>
+			      <animations>
+				<animation-1 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="5" enabled="1" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+				  <keyTimes>
+				    <integer value="0"/>
+				    <real value="0.25"/>
+				    <integer value="1"/>
+				  </keyTimes>
+				  <values>
+				    <integer value="760"/>
+				    <integer value="-240"/>
+				    <integer value="-240"/>
+				  </values>
+				</animation-1>
+			      </animations>
+			    </CAEmitterLayer>
+			  </sublayers>
+			  <animations>
+			    <animation-1 type="CAKeyframeAnimation" keyPath="position.y" autoreverses="1" beginTime="1e-100" duration="10" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			      <keyTimes>
+				<integer value="0"/>
+				<integer value="1"/>
+			      </keyTimes>
+			      <timingFunctions>
+				<CAMediaTimingFunction value="0.115 8.4459e-4 0.8875 0.99916"/>
+			      </timingFunctions>
+			      <values>
+				<integer value="936"/>
+				<integer value="200"/>
+			      </values>
+			    </animation-1>
+			  </animations>
+			</CALayer>
+		      </sublayers>
+		      <animations>
+			<animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			  <keyTimes>
+			    <integer value="0"/>
+			    <integer value="1"/>
+			  </keyTimes>
+			  <values>
+			    <real value="6.283185482025"/>
+			    <integer value="0"/>
+			  </values>
+			</animation-1>
+		      </animations>
+		    </CALayer>
+		  </sublayers>
+		  <animations>
+		    <animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		      <keyTimes>
+			<integer value="0"/>
+			<integer value="1"/>
+		      </keyTimes>
+		      <values>
+			<integer value="0"/>
+			<real value="6.283185482025"/>
+		      </values>
+		    </animation-1>
+		  </animations>
+		</CALayer>
+		<CALayer bounds="0 0 640 1136" hidden="0" name="Rotator 3" position="320 568" shouldRasterize="0" speed="0.6999999880791" timeOffset="-33">
+		  <sublayers>
+		    <CALayer bounds="0 0 640 1136" hidden="0" name="Anti-Rotator" position="240 567.719970703125">
+		      <sublayers>
+			<CALayer bounds="0 0 638 120" name="Slide Up/Down" position="320 1076">
+			  <backgroundColor opacity="0" value="0 0 0"/>
+			  <sublayers>
+			    <CAEmitterLayer emitterShape="rectangle" emitterSize="16 16" anchorPoint="0 0" bounds="0 0 240 240" name="Strays" position="260 120" transform="rotate(-90deg) scale(0.61, 0.61, 1)">
+			      <emitterCells>
+				<CAEmitterCell birthRate="2" enabled="1" lifetime="2" mass="1" massRange="1" name="Strays 1" orientationLatitude="0" orientationLongitude="0" rotationRange="0.5235987901688" scale="0.8999999761581" scaleRange="0.4499999880791" spinRange="3.141592741013" velocity="0" velocityRange="0" xAcceleration="0" yAcceleration="0">
+				  <color opacity="0.25" value="1 1 1"/>
+				  <emitterBehaviors>
+				    <CAEmitterBehavior behavior="attractor" name="attractor" zPosition="0" position="100 100" orientationLongitude="-1.570796370506" orientationLatitude="1.570796370506" falloffDistance="0" falloff="Inf" attractorType="radial">
+				      <stiffness type="integer" value="1"/>
+				      <radius type="integer" value="-1000"/>
+				    </CAEmitterBehavior>
+				    <CAEmitterBehavior behavior="wave" name="wave" frequency="1" force="1000 -2000 0"/>
+				    <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+				      <colors>
+					<CGColor opacity="0" value="1 1 1"/>
+					<CGColor value="1 1 1"/>
+					<CGColor opacity="0" value="1 1 1"/>
+				      </colors>
+				    </CAEmitterBehavior>
+				  </emitterBehaviors>
+				</CAEmitterCell>
+			      </emitterCells>
+			      <backgroundColor opacity="0" value="0 0 0"/>
+			      <animations>
+				<animation-1 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="5" enabled="1" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+				  <keyTimes>
+				    <integer value="0"/>
+				    <real value="0.25"/>
+				    <integer value="1"/>
+				  </keyTimes>
+				  <values>
+				    <integer value="760"/>
+				    <integer value="-240"/>
+				    <integer value="-240"/>
+				  </values>
+				</animation-1>
+			      </animations>
+			    </CAEmitterLayer>
+			  </sublayers>
+			  <animations>
+			    <animation-1 type="CAKeyframeAnimation" keyPath="position.y" autoreverses="1" beginTime="1e-100" duration="10" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			      <keyTimes>
+				<integer value="0"/>
+				<integer value="1"/>
+			      </keyTimes>
+			      <timingFunctions>
+				<CAMediaTimingFunction value="0.115 8.4459e-4 0.8875 0.99916"/>
+			      </timingFunctions>
+			      <values>
+				<integer value="936"/>
+				<integer value="200"/>
+			      </values>
+			    </animation-1>
+			  </animations>
+			</CALayer>
+		      </sublayers>
+		      <animations>
+			<animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			  <keyTimes>
+			    <integer value="0"/>
+			    <integer value="1"/>
+			  </keyTimes>
+			  <values>
+			    <real value="6.283185482025"/>
+			    <integer value="0"/>
+			  </values>
+			</animation-1>
+		      </animations>
+		    </CALayer>
+		  </sublayers>
+		  <animations>
+		    <animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		      <keyTimes>
+			<integer value="0"/>
+			<integer value="1"/>
+		      </keyTimes>
+		      <values>
+			<integer value="0"/>
+			<real value="6.283185482025"/>
+		      </values>
+		    </animation-1>
+		  </animations>
+		</CALayer>
+		<CALayer bounds="0 0 640 1136" hidden="0" name="Rotator 4" position="320 568" shouldRasterize="0" speed="0.6000000238419" timeOffset="-44">
+		  <sublayers>
+		    <CALayer bounds="0 0 640 1136" hidden="0" name="Anti-Rotator" position="240 567.719970703125">
+		      <sublayers>
+			<CALayer bounds="0 0 638 120" name="Slide Up/Down" position="320 1076">
+			  <backgroundColor opacity="0" value="0 0 0"/>
+			  <sublayers>
+			    <CAEmitterLayer emitterShape="rectangle" emitterSize="16 16" anchorPoint="0 0" bounds="0 0 240 240" name="Strays" position="260 120" transform="rotate(-90deg) scale(0.61, 0.61, 1)">
+			      <emitterCells>
+				<CAEmitterCell birthRate="2" enabled="1" greenSpeed="0" lifetime="2" mass="1" massRange="1" name="Strays 1" orientationLatitude="0" orientationLongitude="0" rotationRange="0.5235987901688" scale="0.8999999761581" scaleRange="0.4499999880791" spinRange="3.141592741013" velocity="0" velocityRange="0" xAcceleration="0" yAcceleration="0">
+				  <color opacity="0.25" value="1 1 1"/>
+				  <emitterBehaviors>
+				    <CAEmitterBehavior behavior="attractor" name="attractor" zPosition="0" position="100 100" orientationLongitude="-1.570796370506" orientationLatitude="1.570796370506" falloffDistance="0" falloff="Inf" attractorType="radial">
+				      <radius type="integer" value="-1000"/>
+				      <stiffness type="integer" value="1"/>
+				    </CAEmitterBehavior>
+				    <CAEmitterBehavior behavior="wave" name="wave" frequency="1" force="1000 -2000 0"/>
+				    <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+				      <colors>
+					<CGColor opacity="0" value="1 1 1"/>
+					<CGColor value="1 1 1"/>
+					<CGColor opacity="0" value="1 1 1"/>
+				      </colors>
+				    </CAEmitterBehavior>
+				  </emitterBehaviors>
+				</CAEmitterCell>
+			      </emitterCells>
+			      <backgroundColor opacity="0" value="0 0 0"/>
+			      <animations>
+				<animation-1 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="5" enabled="1" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+				  <keyTimes>
+				    <integer value="0"/>
+				    <real value="0.25"/>
+				    <integer value="1"/>
+				  </keyTimes>
+				  <values>
+				    <integer value="760"/>
+				    <integer value="-240"/>
+				    <integer value="-240"/>
+				  </values>
+				</animation-1>
+			      </animations>
+			    </CAEmitterLayer>
+			  </sublayers>
+			  <animations>
+			    <animation-1 type="CAKeyframeAnimation" keyPath="position.y" autoreverses="1" beginTime="1e-100" duration="10" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			      <keyTimes>
+				<integer value="0"/>
+				<integer value="1"/>
+			      </keyTimes>
+			      <timingFunctions>
+				<CAMediaTimingFunction value="0.115 8.4459e-4 0.8875 0.99916"/>
+			      </timingFunctions>
+			      <values>
+				<integer value="936"/>
+				<integer value="200"/>
+			      </values>
+			    </animation-1>
+			  </animations>
+			</CALayer>
+		      </sublayers>
+		      <animations>
+			<animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+			  <keyTimes>
+			    <integer value="0"/>
+			    <integer value="1"/>
+			  </keyTimes>
+			  <values>
+			    <real value="6.283185482025"/>
+			    <integer value="0"/>
+			  </values>
+			</animation-1>
+		      </animations>
+		    </CALayer>
+		  </sublayers>
+		  <animations>
+		    <animation-1 type="CAKeyframeAnimation" keyPath="transform.rotation.z" beginTime="1e-100" duration="2" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		      <keyTimes>
+			<integer value="0"/>
+			<integer value="1"/>
+		      </keyTimes>
+		      <values>
+			<integer value="0"/>
+			<real value="6.283185482025"/>
+		      </values>
+		    </animation-1>
+		  </animations>
+		</CALayer>
+	      </sublayers>
+	    </object>
+	  </LKStateRemoveElement>
+	</elements>
+      </LKState>
+    </states>
+  </CALayer>
+</caml>

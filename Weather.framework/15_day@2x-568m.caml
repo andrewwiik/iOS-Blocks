@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer bounds="0 0 640 1136" id="#1" name="Root Layer" position="320 568">
+    <sublayers>
+      <CALayer beginTime="-30" bounds="0 0 640 1136" name="Blowing Snow" position="320 568" sublayerTransform="perspective(687.793)">
+	<sublayers>
+	  <CAEmitterLayer anchorPointZ="50" bounds="0 0 686.474487304687 1218.402755737305" cullRect="-700 -750 Inf 4500" emitterDepth="1600" emitterPosition="1300 0" emitterShape="cuboid" emitterSize="100 2500" emitterZPosition="-800" hidden="0" id="#2" name="Blowing Snow 3D" position="320.022201538086 567.916000366211" preservesDepth="1" renderMode="backToFront" scale="1.200000047684">
+	    <emitterBehaviors>
+	      <CAEmitterBehavior behavior="wave" force="0 -111.076760975074 0" frequency="0.5" name="wave" />
+	      <CAEmitterBehavior ambientIntensity="0" appliesAlpha="1" behavior="light" color="1 1 1" coneAngle="1.570796370506" coneEdgeSoftness="1.570796370506" diffuseIntensity="1.299999952316" directionLatitude="1.570796370506" directionLongitude="-1.570796370506" falloff="2500" falloffDistance="0" name="light" position="0 1600" spot="1" zPosition="-1000" />
+	    </emitterBehaviors>
+	    <emitterCells>
+	      <CAEmitterCell alphaRange="0.5" birthRate="800" enabled="1" lifetime="2" name="Cell 1" orientationLatitude="0" orientationRange="6.283185482025" particleType="plane" rotation="0" rotationRange="6.283185482025" scale="0.2199999988079" scaleRange="0.1800000071526" spin="1.396263360977" spinRange="1.396263360977" velocity="-700" xAcceleration="-200">
+		<color opacity="0.5" value="1 1 1" />
+		<contents src="assets/Snow-Flake-Blowing.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior behavior="wave" force="0 400 0" frequency="1" name="wave" />
+		  <CAEmitterBehavior attractorType="axial" behavior="attractor" falloff="640" falloffDistance="0" name="attractor" orientationLatitude="1.570796370506" orientationLongitude="-1.570796370506" position="0 0" zPosition="0">
+		    <stiffness type="integer" value="1" />
+		    <radius type="integer" value="0" />
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior additive="0" attractorType="planar" behavior="valueOverDistance" falloff="100" falloffDistance="0" keyPath="mass" name="valueOverDistance" orientationLatitude="1.570796370506" orientationLongitude="-1.570796370506" position="0 0" zPosition="0">
+		    <radius type="integer" value="0" />
+		    <stiffness type="integer" value="1" />
+		    <values>
+		      <integer value="10" />
+		      <integer value="1" />
+		    </values>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	    <animations>
+	      <animation-2 beginTime="1e-100" duration="5" fillMode="both" keyPath="emitterCells.Cell 1.emitterBehaviors.wave.frequency" removedOnCompletion="0" repeatCount="Inf" timingFunction="easeInEaseOut" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <real value="0.5" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="1" />
+		  <integer value="2" />
+		  <integer value="1" />
+		</values>
+	      </animation-2>
+	      <animation-1 beginTime="1e-100" duration="5" fillMode="both" keyPath="emitterCells.Cell 1.xAcceleration" removedOnCompletion="0" repeatCount="Inf" timingFunction="easeInEaseOut" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <real value="0.5" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="-200" />
+		  <integer value="-2200" />
+		  <integer value="-200" />
+		</values>
+	      </animation-1>
+	      <animation-3 beginTime="1e-100" duration="5" enabled="1" fillMode="both" keyPath="emitterCells.Cell 1.emitterBehaviors.wave.force" removedOnCompletion="0" repeatCount="Inf" timingFunction="easeInEaseOut" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <real value="0.5" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <CAPoint3D value="0 400 0" />
+		  <CAPoint3D value="0 800 0" />
+		  <CAPoint3D value="0 400 0" />
+		</values>
+	      </animation-3>
+	      <animation-6 beginTime="1e-100" calculationMode="cubicPaced" duration="3" fillMode="both" keyPath="emitterBehaviors.wave.force" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <real value="0.05904058825517" />
+		  <real value="0.1254612541662" />
+		  <real value="0.14391143181" />
+		  <real value="0.2269372696973" />
+		  <real value="0.3948339621367" />
+		  <real value="0.6199261711807" />
+		  <real value="0.8653136515133" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <CAPoint3D value="0 0 0" />
+		  <CAPoint3D value="0 0 0" />
+		  <CAPoint3D value="0 1500 0" />
+		  <CAPoint3D value="0 1500 0" />
+		  <CAPoint3D value="0 39 0" />
+		  <CAPoint3D value="0 137 0" />
+		  <CAPoint3D value="0 2000 0" />
+		  <CAPoint3D value="0 2000 0" />
+		  <CAPoint3D value="0 74 0" />
+		</values>
+	      </animation-6>
+	    </animations>
+	  </CAEmitterLayer>
+	</sublayers>
+      </CALayer>
+      </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="100" />
+	  </LKStateSetValue>
+	</elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

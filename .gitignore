@@ -22,6 +22,9 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+Stocks_XCode/
+Music_Xcode/
+MobileTimer_XCode/
 
 obj/
 _/

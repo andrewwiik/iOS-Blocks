@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 750 1334" clearsContext="1" edgeAntialiasingMask="0" id="#1" name="Root Layer" position="375 667"><sublayers><CALayer anchorPoint="0 1" bounds="0 0 640 1136" id="#1" name="Rotation" position="0 1334" transform="scale(1.175, 1.175, 1)"><sublayers>
+      <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0.5 0.6999999880791" bounds="0 0 256 256" hidden="0" name="⛅ Scaled --night version uses multiply color" position="320 1136" sortsSublayers="0" transform="matrix(3 0 0 -2.989873860608e-15 1.380592758418e-4 1 0 -0.001718190582074 0 0 1 0 -0.009375001023386 -35.908747478808 0 0.5333007742882)">
+	<filters>
+	  <CAFilter filter="multiplyColor" inputColor="0.48 0.4867 0.5" name="multiplyColor" />
+	</filters>
+	<sublayers>
+	  <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 320 320" name="Rotator" position="128 120" sortsSublayers="0">
+	    <backgroundColor opacity="0" value="0.7132 0.277 0.3355" />
+	    <contents src="assets/Cloud-Tornado.png" type="CGImage" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="45" fillMode="both" keyPath="transform.rotation.z" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <real value="6.283185482025" />
+		  <integer value="0" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CAEmitterLayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 640 1136" cullRect="-50 -50 800 1300" emitterPosition="640 750" emitterShape="rectangle" emitterSize="0 500" hidden="0" name="Background Emitter" position="320 568" sortsSublayers="0">
+	<emitterBehaviors>
+	  <CAEmitterBehavior behavior="wave" force="0 100 0" frequency="0.5" name="wave" />
+	  <CAEmitterBehavior behavior="wave" force="100 -300 0" frequency="0.7699999809265" name="wave 2" />
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.2000000029802" alphaSpeed="0" birthRate="100" contentsFrameCount="8" contentsFrameMode="random" contentsFramesPerRow="2" contentsFramesPerSecond="0" contentsRect="0 0 0.5 0.25" emissionLongitude="3.141592741013" emissionRange="0.5235987901688" enabled="1" lifetime="3" lifetimeRange="0" mass="1.5" massRange="0.4000000059605" name="tiny bits" particleType="sprite" rotationRange="6.283185482025" scale="1.0042" scaleRange="0.15" velocity="600" velocityRange="150" yAcceleration="0">
+	    <color opacity="0.8" value="0.5 0.5 0.5" />
+	    <contents src="assets/Debris-Dirt-Frames.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" beginTime="-1000" bounds="0 0 640 1136" hidden="0" masksToBounds="0" name="Tornado" position="320 568" sortsSublayers="0">
+	<sublayers>
+	  <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 640 1136" hidden="0" name="Perspective" position="320 568" sortsSublayers="0" sublayerTransform="perspective(874.356)">
+	    <sublayers>
+	      <CAEmitterLayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 639 1136" cullMaxZ="2048" cullMinZ="-2048" cullRect="-512 -512 1400 2048" emitterDepth="200" emitterPosition="-100 450" emitterShape="cuboid" emitterSize="0 600" hidden="0" name="Background Debris" position="320.5 568" preservesDepth="1" renderMode="backToFront" sortsSublayers="0">
+		<emitterBehaviors>
+		  <CAEmitterBehavior ambientIntensity="0" appliesAlpha="1" behavior="light" color="1 1 1" coneAngle="1.350493123531" coneEdgeSoftness="1.053608833552" diffuseIntensity="1" directionLatitude="1.570796370506" directionLongitude="-1.570796370506" falloff="1762" falloffDistance="0" name="light" position="320 1483" spot="0" zPosition="1333" />
+		  <CAEmitterBehavior attractorType="axial" behavior="attractor" falloff="1200" falloffDistance="0" name="axialAttractor" orientationLatitude="-1.529425557749" orientationLongitude="-1.570796370506" position="320 384" zPosition="0">
+		    <radius type="integer" value="100" />
+		    <stiffness type="integer" value="8" />
+		    <appliesAlpha type="integer" value="1" />
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior behavior="wave" force="0 400 100" frequency="0.8000000119209" name="wave" />
+		  <CAEmitterBehavior behavior="wave" force="1000 0 200" frequency="1.299999952316" name="wave 2" />
+		</emitterBehaviors>
+		<emitterCells>
+		  <CAEmitterCell alphaRange="0" alphaSpeed="0" beginTime="0" birthRate="40" blueRange="0" blueSpeed="0" color="1 1 1" contentsFrameCount="8" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 0.25" emissionLatitude="-1.221730470657" emissionLongitude="0.1745329201221" emissionRange="0.7853981852531" enabled="1" greenRange="0" greenSpeed="0" lifetime="6" lifetimeRange="0" mass="1" massRange="0.3000000119209" name="small bits" orientationLatitude="0" orientationLongitude="0" orientationRange="6.283185482025" particleType="plane" redRange="0" redSpeed="0" rotation="0" rotationRange="0" scale="2.5" scaleRange="0.3000000119209" spin="0" spinRange="6.283185482025" velocity="300" velocityRange="200" xAcceleration="0" yAcceleration="5" zAcceleration="0">
+		    <contents src="assets/Debris-Dirt-Frames.png" type="CGImage" />
+		  </CAEmitterCell>
+		</emitterCells>
+		<animations>
+		  <animation-1 autoreverses="1" beginTime="1e-100" calculationMode="cubic" duration="15" enabled="1" keyPath="emitterBehaviors.axialAttractor.orientationLatitude" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		    <values>
+		      <real value="-1.570796370506" />
+		      <real value="-1.623156189919" />
+		      <real value="-1.570796370506" />
+		      <real value="-1.518436431885" />
+		      <real value="-1.570796370506" />
+		    </values>
+		  </animation-1>
+		</animations>
+	      </CAEmitterLayer>
+	    </sublayers>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      </sublayers></CALayer></sublayers><states>
+      <LKState name="Full" />
+      <LKState basedOn="" name="Mini">
+	<elements>
+	  <LKStateRemoveElement keyPath="sublayers" targetId="#1">
+	    <object allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 640 1136" cullRect="-50 -50 800 1300" emitterPosition="640 750" emitterShape="rectangle" emitterSize="0 500" hidden="0" name="Background Emitter" position="320 568" sortsSublayers="0" type="CAEmitterLayer">
+	      <emitterBehaviors>
+		<CAEmitterBehavior behavior="wave" force="0 100 0" frequency="0.5" name="wave" />
+		<CAEmitterBehavior behavior="wave" force="100 -300 0" frequency="0.7699999809265" name="wave 2" />
+	      </emitterBehaviors>
+	      <emitterCells>
+		<CAEmitterCell alphaRange="0.2000000029802" birthRate="200" contentsFrameCount="8" contentsFrameMode="random" contentsFramesPerRow="2" contentsFramesPerSecond="0" contentsRect="0 0 0.5 0.25" emissionLongitude="3.141592741013" emissionRange="0.5235987901688" enabled="1" lifetime="3" mass="1.5" massRange="0.4000000059605" name="tiny bits" particleType="sprite" rotationRange="6.283185482025" scale="1.0042" scaleRange="0.15" velocity="600" velocityRange="150" yAcceleration="0">
+		  <color opacity="0.3429" value="1 1 1" />
+		  <contents src="assets/Debris-Dirt-Frames.png" type="CGImage" />
+		</CAEmitterCell>
+	      </emitterCells>
+	    </object>
+	  </LKStateRemoveElement>
+	</elements>
+      </LKState>
+    </states><stateTransitions>
+      <LKStateTransition fromState="*" toState="Mini">
+	<elements />
+      </LKStateTransition>
+      <LKStateTransition fromState="Mini" toState="*">
+	<elements />
+      </LKStateTransition>
+    </stateTransitions></CALayer>
+</caml>

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer bounds="0 0 640 1136" hidden="0" id="#1" name="Root Layer" position="320 568">
+    <sublayers>
+      <CALayer bounds="0 0 640 800" hidden="0" name="Scattered-Sow-Showers-Glow.png" position="320 736">
+	<contents src="assets/Background-Glow-Night-Scattered-Snow-Showers.png" type="CGImage" />
+      </CALayer>
+      <CAEmitterLayer beginTime="-30" bounds="0 0 640 1136" cullRect="-10 -10 660 1.797693134862e308" emitterPosition="320 1146" emitterShape="line" emitterSize="700 0" geometryFlipped="0" hidden="0" id="#2" name="__Emitter_2D_0" position="320 568" renderMode="cheapScreen">
+	<emitterBehaviors>
+	  <CAEmitterBehavior behavior="wave" force="-10 0 0" frequency="0.001000000047497" name="wave" />
+	  <CAEmitterBehavior ambientIntensity="0.2199999988079" appliesAlpha="1" behavior="light" color="1 1 1" coneAngle="0.3490658402443" coneEdgeSoftness="0.6981316804886" diffuseIntensity="0.6000000238419" directionLatitude="1.570796370506" directionLongitude="-1.570796370506" falloff="1000" falloffDistance="0" name="light" position="320 1360" spot="1" zPosition="0" />
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.5" alphaSpeed="0" birthRate="100" contentsScale="1" emissionLatitude="0" emissionLongitude="0" emissionRange="0.2617993950844" enabled="1" lifetime="6" mass="6" massRange="2" name="med 1" particleType="sprite" scale="0.5" scaleRange="0.4499999880791" scaleSpeed="0" velocity="150" velocityRange="50" xAcceleration="0" yAcceleration="50">
+	    <color opacity="0.5" value="1 1 1" />
+	    <contents src="assets/Snow-Flake-Small.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.5" alphaSpeed="0" birthRate="200" color="1 1 1" emissionRange="0.5235987901688" enabled="1" lifetime="8" name="Back 1" scale="0.6000000238419" scaleRange="0.3000000119209" scaleSpeed="0" velocity="175" velocityRange="150" xAcceleration="0">
+	    <contents src="assets/Snow-Flake-Small.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.5" alphaSpeed="0" birthRate="30" color="1 1 1" emissionRange="0.5235987901688" enabled="1" lifetime="6" name="Front 1" scale="1" scaleRange="0.75" scaleSpeed="0" velocity="300" velocityRange="200">
+	    <contents src="assets/Snow-Flake-Small.png" type="CGImage" />
+	    <emitterBehaviors>
+	      <CAEmitterBehavior behavior="wave" force="100 0 0" frequency="0.1800000071526" name="wave" />
+	      <CAEmitterBehavior behavior="wave" force="-100 0 0" frequency="0.25" name="wave 2" />
+	    </emitterBehaviors>
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="emitterCells.med 1.birthRate" targetId="#2">
+	    <value type="integer" value="80" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="emitterCells.Back 1.birthRate" targetId="#2">
+	    <value type="integer" value="100" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="emitterCells.Front 1.birthRate" targetId="#2">
+	    <value type="integer" value="20" />
+	  </LKStateSetValue>
+	</elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

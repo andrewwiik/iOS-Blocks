@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 640 1136" clearsContext="1" edgeAntialiasingMask="0" id="#1" name="Root Layer" position="320 568">
+    <backgroundColor opacity="0" value="0 0 0" />
+    <sublayers>
+      <CAEmitterLayer allowsGroupBlending="0" allowsGroupOpacity="0" beginTime="-100" bounds="0 0 640 1136" cullRect="-8.988465674312e307 -10 1.797693134862e308 1.797693134862e308" emitterPosition="320 1146" emitterShape="line" emitterSize="660 0" geometryFlipped="0" hidden="0" id="#2" name="__Emitter_2D_0" position="320 568">
+	<emitterBehaviors>
+	  <CAEmitterBehavior ambientIntensity="0" appliesAlpha="1" behavior="light" color="1 1 1" coneAngle="1.570796370506" coneEdgeSoftness="0.3490658402443" diffuseIntensity="1" directionLatitude="1.570796370506" directionLongitude="-1.570796370506" falloff="1314" falloffDistance="200" name="light" position="320 1146" spot="0" zPosition="0" />
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.5" birthRate="380" emissionRange="0" enabled="1" lifetime="1.5" name="Rain Small" rotation="0" scale="0.25" scaleRange="0.5" velocity="800" velocityRange="400">
+	    <color opacity="0.1883" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.5" birthRate="30" enabled="1" lifetime="1" lifetimeRange="0" name="Rain Med" rotation="0" scale="1.200000047684" scaleRange="0.4000000059605" velocity="2000" velocityRange="800">
+	    <color opacity="0.2044" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	</elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

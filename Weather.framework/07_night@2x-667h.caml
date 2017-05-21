@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 750 1334" clearsContext="1" edgeAntialiasingMask="0" id="#1" name="Root Layer" position="375 667"><sublayers><CALayer anchorPoint="0 1" bounds="0 0 640 1136" id="#1" name="Rotation" position="0 1334" transform="scale(1.175, 1.175, 1)"><sublayers>
+      <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 400 400" hidden="0" name="Rain Tile Medium" position="320 568">
+	<sublayers>
+	  <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 1000 4000" contentsScaling="repeat" name="Tile" opacity="0.06069711595774" position="200 200" transform="scale(0.75, 0.75, 1)">
+	    <contents src="assets/Raindrop-Tile-Heavy.png" type="CGImage" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="0.6000000238419" fillMode="both" keyPath="position.y" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <real value="187.5" />
+		  <real value="-187.5" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CAEmitterLayer allowsGroupBlending="0" allowsGroupOpacity="0" beginTime="-100" bounds="0 0 640 1136" cullRect="-10 -10 660 1.797693134862e308" emitterPosition="320 1146" emitterShape="line" emitterSize="700 0" geometryFlipped="0" hidden="0" id="#2" name="__Emitter_2D_0" position="320 568" preservesDepth="1" renderMode="backToFront">
+	<emitterBehaviors>
+	  <CAEmitterBehavior behavior="wave" force="-50 0 0" frequency="0.5" name="wave" />
+	  <CAEmitterBehavior additive="0" attractorType="axial" behavior="valueOverDistance" falloff="1136" falloffDistance="0" keyPath="color.alpha" name="valueOverDistance" orientationLatitude="-1.570796370506" orientationLongitude="0" position="0 1136" zPosition="0">
+	    <values>
+	      <real value="0.3499999940395" />
+	      <integer value="1" />
+	      <integer value="0" />
+	    </values>
+	    <stiffness type="integer" value="1" />
+	    <radius type="integer" value="0" />
+	  </CAEmitterBehavior>
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.1800000071526" alphaSpeed="0" birthRate="50" contentsScale="1" emissionLatitude="0" emissionLongitude="0" emissionRange="0.3839724361897" enabled="1" lifetime="6" mass="6" massRange="2" name="med" particleType="sprite" scale="0.6000000238419" scaleRange="0.5" scaleSpeed="0" velocity="250" velocityRange="150" xAcceleration="0" yAcceleration="50">
+	    <color opacity="0.4553" value="1 1 1" />
+	    <contents src="assets/Wintery-Mix-Flake-7x7.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.1800000071526" alphaSpeed="0" birthRate="50" contentsScale="1" emissionLatitude="0" emissionLongitude="0" emissionRange="0.3839724361897" enabled="1" lifetime="6" mass="6" massRange="2" name="med_bright" particleType="sprite" scale="0.6000000238419" scaleRange="0.5" scaleSpeed="0" velocity="250" velocityRange="150" xAcceleration="0" yAcceleration="50">
+	    <color opacity="0.5427" value="1 1 1" />
+	    <contents src="assets/Wintery-Mix-Flake-7x7.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.5" birthRate="500" contentsFrameCount="9" contentsFrameMode="random" contentsFramesPerRow="3" contentsRect="0 0 1 1" enabled="1" lifetime="2" name="Hail Small 1" rotationRange="0" scale="0.07000000029802" scaleRange="0.05000000074506" velocity="800" velocityRange="600">
+	    <color opacity="0.5356" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.3000000119209" birthRate="25" contentsFrameCount="9" contentsFrameMode="single" contentsFramesPerRow="3" contentsRect="0 0 1 1" enabled="1" lifetime="2" name="Hail Large 1" rotationRange="0" scale="0.1800000071526" scaleRange="0.07999999821186" velocity="1500" velocityRange="800">
+	    <color opacity="0.4801" value="1 1 1" />
+	    <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+	<animations>
+	  <animation-4 beginTime="1e-100" duration="66.377278217988" enabled="1" fillMode="both" keyPath="emitterCells.med_bright.xAcceleration" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+	    <keyTimes>
+	      <integer value="0" />
+	      <real value="0.07532698137425" />
+	      <real value="0.1506539627485" />
+	      <real value="0.2259809441228" />
+	      <real value="0.301307925497" />
+	      <integer value="1" />
+	    </keyTimes>
+	    <values>
+	      <integer value="0" />
+	      <integer value="50" />
+	      <integer value="0" />
+	      <integer value="-50" />
+	      <integer value="0" />
+	      <integer value="0" />
+	    </values>
+	  </animation-4>
+	  <animation-1 beginTime="1e-100" duration="66.377278217988" enabled="1" fillMode="both" keyPath="emitterCells.med.xAcceleration" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+	    <keyTimes>
+	      <integer value="0" />
+	      <real value="0.07532698137425" />
+	      <real value="0.1506539627485" />
+	      <real value="0.2259809441228" />
+	      <real value="0.301307925497" />
+	      <integer value="1" />
+	    </keyTimes>
+	    <values>
+	      <integer value="0" />
+	      <integer value="50" />
+	      <integer value="0" />
+	      <integer value="-50" />
+	      <integer value="0" />
+	      <integer value="0" />
+	    </values>
+	  </animation-1>
+	</animations>
+      </CAEmitterLayer>
+      <CALayer bounds="0 0 640 977" name="Background-Glow-Night.png" position="320 647.5">
+	<contents src="assets/Background-Glow-Night.png" type="CGImage" />
+      </CALayer>
+      </sublayers></CALayer></sublayers><states>
+      <LKState name="Full">
+	<elements />
+      </LKState>
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="856" />
+	  </LKStateSetValue>
+	  <LKStateRemoveElement keyPath="sublayers" targetId="#1">
+	    <object allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 640 1136" hidden="0" id="#3" name="light" position="320 568" type="CALayer">
+	      <sublayers>
+		<CALayer bounds="0 0 640 977" id="#4" name="Background-Glow-Night.png" position="320 647.5" />
+	      </sublayers>
+	      <states>
+		<LKState initial="true" name="day">
+		  <elements>
+		    <LKStateAddElement final="false" keyPath="sublayers" targetId="#3">
+		      <object allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 640 864" hidden="0" name="Background-Glow-Day.png" position="320 704" type="CALayer">
+			<sublayers>
+			  <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 640 864" name="Background-Glow-Day.png" position="320 432">
+			    <contents src="assets/Background-Glow-Day.png" type="CGImage" />
+			  </CALayer>
+			</sublayers>
+		      </object>
+		    </LKStateAddElement>
+		  </elements>
+		</LKState>
+		<LKState name="night">
+		  <elements>
+		    <LKStateAddElement final="false" keyPath="sublayers" objectId="#4" targetId="#3" />
+		  </elements>
+		</LKState>
+	      </states>
+	      <stateTransitions />
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveAnimation key="animation-1" targetId="#2" />
+	  <LKStateRemoveAnimation key="animation-4" targetId="#2" />
+	  <LKStateRemoveElement keyPath="emitterCells" targetId="#2">
+	    <object alphaRange="0.1800000071526" alphaSpeed="0" birthRate="250" contentsScale="1" emissionLatitude="0" emissionLongitude="0" emissionRange="0.3839724361897" enabled="1" lifetime="6" mass="6" massRange="2" name="med" particleType="sprite" scale="0.6000000238419" scaleRange="0.5" scaleSpeed="0" type="CAEmitterCell" velocity="250" velocityRange="150" xAcceleration="-1.420709583908" yAcceleration="50">
+	      <color opacity="0.2" value="1 1 1" />
+	      <contents src="assets/Wintery-Mix-Flake-7x7.png" type="CGImage" />
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement keyPath="emitterCells" targetId="#2">
+	    <object alphaRange="0.3000000119209" birthRate="25" contentsFrameCount="9" contentsFrameMode="single" contentsFramesPerRow="3" contentsRect="0 0 1 1" enabled="1" lifetime="2" name="Hail Large 1" rotationRange="0" scale="0.1800000071526" scaleRange="0.07999999821186" type="CAEmitterCell" velocity="1500" velocityRange="800">
+	      <color opacity="0.3" value="1 1 1" />
+	      <contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateSetValue keyPath="emitterCells.med_bright.birthRate" targetId="#2">
+	    <value type="integer" value="35" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="emitterCells.Hail Small 1.birthRate" targetId="#2">
+	    <value type="integer" value="350" />
+	  </LKStateSetValue>
+	</elements>
+      </LKState>
+    </states><stateTransitions>
+      <LKStateTransition fromState="*" toState="Full">
+	<elements />
+      </LKStateTransition>
+      <LKStateTransition fromState="Full" toState="*">
+	<elements />
+      </LKStateTransition>
+    </stateTransitions></CALayer>
+</caml>

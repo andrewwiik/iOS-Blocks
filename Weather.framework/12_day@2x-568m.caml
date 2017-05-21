@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer bounds="0 0 640 1136" id="#1" name="Root Layer" position="320 568">
+    <sublayers>
+      <CALayer bounds="0 0 400 400" hidden="0" name="Rain Tile Medium" position="320 568">
+	<sublayers>
+	  <CALayer bounds="0 0 4000 4000" contentsScaling="repeat" name="Tile" opacity="0.03999999910593" position="200 200" transform="scale(0.75, 0.75, 1)">
+	    <contents src="assets/Raindrop-Tile-Heavy.png" type="CGImage" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="0.6000000238419" fillMode="both" keyPath="position.y" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <real value="187.5" />
+		  <real value="-187.5" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CAEmitterLayer allowsGroupBlending="0" allowsGroupOpacity="0" beginTime="-100" bounds="0 0 640 1136" cullRect="-8.988465674312e307 -10 1.797693134862e308 1200" emitterPosition="320 1166" emitterShape="line" emitterSize="660 0" geometryFlipped="0" id="#2" name="__Emitter_2D_0" position="320 568">
+	<emitterBehaviors>
+	  <CAEmitterBehavior additive="0" attractorType="radial" behavior="valueOverDistance" falloff="1136" falloffDistance="0" keyPath="color.alpha" name="valueOverDistance" orientationLatitude="-1.570796370506" orientationLongitude="0" position="0 1136" zPosition="0">
+	    <values>
+	      <real value="0.6499999761581" />
+	      <integer value="1" />
+	      <integer value="0" />
+	    </values>
+	    <stiffness type="integer" value="1" />
+	    <radius type="integer" value="0" />
+	  </CAEmitterBehavior>
+	</emitterBehaviors>
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.5" birthRate="250" emissionRange="0" enabled="1" lifetime="1.5" name="Rain Small" rotation="0" scale="0.3499999940395" scaleRange="0.4000000059605" velocity="1000" velocityRange="400">
+	    <color opacity="0.2184" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.5" birthRate="85" enabled="1" lifetime="1" lifetimeRange="0" name="Rain Med" rotation="0" scale="0.8999999761581" scaleRange="0.5" velocity="2000" velocityRange="1000">
+	    <color opacity="0.2997" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.5" birthRate="16" enabled="1" lifetime="1" name="Rain Large" rotation="0" scale="1.799999952316" scaleRange="0.3000000119209" velocity="2400" velocityRange="800">
+	    <color opacity="0.1463" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	  <LKStateRemoveElement keyPath="emitterCells" targetId="#2">
+	    <object alphaRange="0.5" birthRate="8" enabled="1" lifetime="1" name="Rain Large" rotation="0" scale="1.799999952316" scaleRange="0.3000000119209" type="CAEmitterCell" velocity="2400" velocityRange="800">
+	      <color opacity="0.02952" value="1 1 1" />
+	      <contents src="assets/Raindrop.png" type="CGImage" />
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement keyPath="emitterCells" targetId="#2">
+	    <object alphaRange="0.5" birthRate="8" enabled="1" lifetime="1" name="Rain Large" rotation="0" scale="1.799999952316" scaleRange="0.3000000119209" type="CAEmitterCell" velocity="2400" velocityRange="800">
+	      <color opacity="0.02952" value="1 1 1" />
+	      <contents src="assets/Raindrop.png" type="CGImage" />
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateSetValue keyPath="emitterCells.Rain Small.birthRate" targetId="#2">
+	    <value type="integer" value="500" />
+	  </LKStateSetValue>
+	  <LKStateSetValue keyPath="emitterCells.Rain Med.birthRate" targetId="#2">
+	    <value type="integer" value="80" />
+	  </LKStateSetValue>
+	</elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

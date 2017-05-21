@@ -65,6 +65,7 @@
 #import "SBWindowContextManagerDelegate-Protocol.h"
 #import "SpringBoard-Structs.h"
 #import <SpringBoard/SpringBoard.h>
+#import "SBMediaController.h"
 
 @interface SpringBoard (Private)
 -(dispatch_queue_t)bulletinBoardQueue;

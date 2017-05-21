@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 640 1136" clearsContext="1" edgeAntialiasingMask="0" id="#1" name="Root Layer" position="320 568" shouldRasterize="0">
+    <backgroundColor opacity="0" value="0 0 0" />
+    <sublayers>
+      <CAEmitterLayer allowsEdgeAntialiasing="0" beginTime="-600" birthRate="0.5600000023842" bounds="0 0 640 1136" cullRect="-8.988465674312e307 400 1.797693134862e308 1.797693134862e308" edgeAntialiasingMask="0" emitterPosition="320 1146" emitterShape="line" emitterSize="640 0" hidden="0" name="✨" position="320 568" scale="1.100000023842" speed="0.1000000014901">
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0" alphaSpeed="0" autoreverses="0" beginTime="0" birthRate="0.8000000119209" blueRange="0" blueSpeed="0" contentsFrameCount="8" contentsFrameMode="single" contentsFramesPerRow="2" contentsFramesPerSecond="0" contentsRect="0 0 0.5 0.25" emissionLatitude="0" emissionLongitude="3.141592741013" emissionRange="0" enabled="1" fillMode="both" greenRange="0" greenSpeed="0" lifetime="750" lifetimeRange="0" name="blue" redRange="0" redSpeed="0" repeatCount="Inf" repeatDuration="Inf" scale="1" scaleRange="0" scaleSpeed="0" speed="1" spin="0.5235987901688" spinRange="0" timeOffset="0" velocity="-10" yAcceleration="0">
+	    <color opacity="0.61" value="0.8005 0.901 1" />
+	    <contents src="assets/Star-Frames.png" type="CGImage" />
+	    <emitterBehaviors>
+	      <CAEmitterBehavior additive="0" attractorType="axial" behavior="valueOverDistance" falloff="836" falloffDistance="0" keyPath="scale" name="valueOverDistance" orientationLatitude="-1.570796370506" orientationLongitude="0" position="0 1136" zPosition="0">
+		<values>
+		  <real value="0.6000000238419" />
+		  <real value="0.3000000119209" />
+		</values>
+		<stiffness type="integer" value="1" />
+		<radius type="integer" value="0" />
+	      </CAEmitterBehavior>
+	      <CAEmitterBehavior additive="0" attractorType="axial" behavior="valueOverDistance" falloff="750" falloffDistance="0" keyPath="color.alpha" name="valueOverDistance 2" orientationLatitude="-1.570796370506" orientationLongitude="0" position="0 1136" zPosition="0">
+		<values>
+		  <integer value="1" />
+		  <integer value="0" />
+		</values>
+		<stiffness type="integer" value="1" />
+		<radius type="integer" value="0" />
+	      </CAEmitterBehavior>
+	    </emitterBehaviors>
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0" alphaSpeed="0" autoreverses="0" beginTime="0" birthRate="0.4000000059605" blueRange="0" blueSpeed="0" contentsFrameCount="8" contentsFrameMode="single" contentsFramesPerRow="2" contentsFramesPerSecond="0" contentsRect="0 0 0.5 0.25" emissionLatitude="0" emissionLongitude="3.141592741013" emissionRange="0" enabled="1" fillMode="both" greenRange="0" greenSpeed="0" lifetime="750" lifetimeRange="0" name="white" redRange="0" redSpeed="0" repeatCount="Inf" repeatDuration="Inf" scale="1" scaleRange="0" scaleSpeed="0" speed="1" spin="0.5235987901688" spinRange="0" timeOffset="0" velocity="-10" yAcceleration="0">
+	    <color opacity="0.7565" value="0.8784 0.9412 1" />
+	    <contents src="assets/Star-Frames.png" type="CGImage" />
+	    <emitterBehaviors>
+	      <CAEmitterBehavior additive="0" attractorType="axial" behavior="valueOverDistance" falloff="836" falloffDistance="0" keyPath="scale" name="valueOverDistance" orientationLatitude="-1.570796370506" orientationLongitude="0" position="0 1136" zPosition="0">
+		<values>
+		  <real value="0.6000000238419" />
+		  <real value="0.3000000119209" />
+		</values>
+		<stiffness type="integer" value="1" />
+		<radius type="integer" value="0" />
+	      </CAEmitterBehavior>
+	      <CAEmitterBehavior additive="0" attractorType="axial" behavior="valueOverDistance" falloff="750" falloffDistance="0" keyPath="color.alpha" name="valueOverDistance 2" orientationLatitude="-1.570796370506" orientationLongitude="0" position="0 1136" zPosition="0">
+		<values>
+		  <integer value="1" />
+		  <integer value="0" />
+		</values>
+		<stiffness type="integer" value="1" />
+		<radius type="integer" value="0" />
+	      </CAEmitterBehavior>
+	    </emitterBehaviors>
+	  </CAEmitterCell>
+	</emitterCells>
+	<backgroundColor opacity="0" value="0 0 0" />
+      </CAEmitterLayer>
+      <CALayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0.5 0.9900000095367" bounds="0 0 640 320" edgeAntialiasingMask="0" hidden="0" name="💭 Cirrus" opaque="0" position="320 1140" transform="matrix(1.000450911105 -4.509111046352e-4 0 1.409097201985e-6 0.00111107314376 1.000675838246 0 -0.002223882339327 0 0 1 0 0.4998349594886 0.07197668507825 0 0.2888085625201)">
+	<sublayers>
+	  <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="-0.03999999910593 3.275000095367" beginTime="-4000" bounds="0 0 720 360" contentsGravity="center" contentsOpaque="0" edgeAntialiasingMask="0" emitterMode="surface" emitterPosition="360 180" hidden="0" masksToBounds="0" name="💭 One" position="640 1136" swapsMaskAndLayer="0">
+	    <emitterCells>
+	      <CAEmitterCell beginTime="0" birthRate="0.002000000094995" contentsFrameCount="2" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 1" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="625" name="One" scale="1" scaleRange="0" timeOffset="0" velocity="0">
+		<color opacity="0.25" value="1 1 1" />
+		<contents src="assets/Cirrus-One-Overlap.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="position.x" name="valueOverLife">
+		    <values>
+		      <integer value="360" />
+		      <integer value="-1080" />
+		    </values>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	    <backgroundColor opacity="0" value="0.9857 0.1445 0" />
+	    <borderColor opacity="0" value="0 0 0" />
+	  </CAEmitterLayer>
+	  <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="-0.03999999910593 3.275000095367" beginTime="-4000" bounds="0 0 720 360" contentsGravity="center" contentsOpaque="0" edgeAntialiasingMask="0" emitterMode="surface" emitterPosition="360 180" hidden="0" masksToBounds="0" name="💭 Two" position="640 1136" swapsMaskAndLayer="0" timeOffset="250">
+	    <emitterCells>
+	      <CAEmitterCell beginTime="0" birthRate="0.002000000094995" contentsFrameCount="2" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 1" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="625" name="Two" scale="1" scaleRange="0" timeOffset="0" velocity="0">
+		<color opacity="0.25" value="1 1 1" />
+		<contents src="assets/Cirrus-Two-Overlap.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="position.x" name="valueOverLife">
+		    <values>
+		      <integer value="360" />
+		      <integer value="-1080" />
+		    </values>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	    <backgroundColor opacity="0" value="0.9857 0.1445 0" />
+	    <borderColor opacity="0" value="0 0 0" />
+	  </CAEmitterLayer>
+	</sublayers>
+      </CALayer>
+      <CALayer bounds="0 0 640 1136" hidden="0" name="⛅" position="320 568">
+	<filters>
+	  <CAFilter filter="multiplyColor" inputColor="0.34 0.36 0.4" name="multiplyColor" />
+	</filters>
+	<sublayers>
+	  <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 1" beginTime="-616" bounds="0 0 768 384" contentsGravity="center" contentsOpaque="0" contentsScaling="stretch" edgeAntialiasingMask="0" emitterMode="surface" emitterPosition="384 192" hidden="0" masksToBounds="0" name="💭 One" position="-294.505096435547 1100" swapsMaskAndLayer="0">
+	    <emitterCells>
+	      <CAEmitterCell birthRate="0.004999999888241" contentsFrameCount="4" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="200" name="One" scale="1" scaleRange="0" velocity="0">
+		<contents src="assets/Cumulus-One-Neutral.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell birthRate="0.3499999940395" color="1 1 1" contentsFrameCount="8" contentsFrameMode="random" contentsFramesPerRow="4" contentsRect="0 0 0.25 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="60" name="Fringe" rotationRange="4.71238899231" scale="1" scaleRange="0.25" spin="0" spinRange="0.1396263390779" velocity="0">
+		<contents src="assets/Fringe-Large-Neutral.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="position.x" name="valueOverLife">
+		    <values>
+		      <integer value="704" />
+		      <integer value="64" />
+		    </values>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		    <colors>
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.75" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.75" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		    </colors>
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="scale" name="valueOverLife 2">
+		    <values>
+		      <real value="0.75" />
+		      <integer value="1" />
+		      <integer value="1" />
+		      <real value="0.75" />
+		    </values>
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	    <backgroundColor opacity="0" value="0 0 0" />
+	    <borderColor opacity="0" value="0 0 0" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="200" enabled="1" fillMode="both" keyPath="position.x" removedOnCompletion="0" repeatCount="Inf" timingFunction="0.15 0 0.85 1" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="640" />
+		  <integer value="-768" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CAEmitterLayer>
+	  <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 1" beginTime="-716" bounds="0 0 768 384" contentsGravity="center" contentsOpaque="0" edgeAntialiasingMask="0" emitterMode="surface" emitterPosition="384 192" hidden="0" masksToBounds="0" name="💭 Two" position="0 1200" seed="191" swapsMaskAndLayer="0">
+	    <emitterCells>
+	      <CAEmitterCell birthRate="0.004999999888241" contentsFrameCount="4" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="200" name="Two" scale="1" scaleRange="0" velocity="0">
+		<contents src="assets/Cumulus-Two-Neutral.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell birthRate="0.25" color="1 1 1" contentsFrameCount="8" contentsFrameMode="random" contentsFramesPerRow="4" contentsRect="0 0 0.25 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="60" name="Fringe" rotationRange="4.71238899231" scale="1" scaleRange="0.25" spin="0" spinRange="0.1396263390779" velocity="0">
+		<contents src="assets/Fringe-Large-Neutral.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="position.x" name="valueOverLife">
+		    <values>
+		      <integer value="704" />
+		      <integer value="64" />
+		    </values>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		    <colors>
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.5" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.5" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		    </colors>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="scale" name="valueOverLife 2">
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		    <values>
+		      <real value="0.5" />
+		      <real value="0.75" />
+		      <real value="0.75" />
+		      <real value="0.5" />
+		    </values>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	    <backgroundColor opacity="0" value="0 0 0" />
+	    <borderColor opacity="0" value="0 0 0" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="200" enabled="1" fillMode="both" keyPath="position.x" removedOnCompletion="0" repeatCount="Inf" timingFunction="0.15 0 0.85 1" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="640" />
+		  <integer value="-768" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CAEmitterLayer>
+	  <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 1" beginTime="-575" bounds="0 0 1024 512" contentsGravity="center" edgeAntialiasingMask="0" emitterMode="surface" emitterPosition="512 256" hidden="0" masksToBounds="0" name="💭 Three" position="-315.426208496094 1280" seed="11" swapsMaskAndLayer="0">
+	    <emitterCells>
+	      <CAEmitterCell birthRate="0.00800000037998" contentsFrameCount="4" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 0.5" contentsScale="1" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="125" name="Three" scale="1" scaleRange="0" velocity="0">
+		<contents src="assets/Cumulus-Three-Neutral.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell birthRate="0.3499999940395" color="1 1 1" contentsFrameCount="8" contentsFrameMode="random" contentsFramesPerRow="4" contentsRect="0 0 0.25 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="60" name="Fringe" rotationRange="4.71238899231" scale="1" scaleRange="0.25" spin="0" spinRange="0.1396263390779" velocity="0">
+		<contents src="assets/Fringe-Large-Neutral.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="position.x" name="valueOverLife">
+		    <values>
+		      <integer value="976" />
+		      <integer value="48" />
+		    </values>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.2000000029802" />
+		      <real value="0.8000000119209" />
+		      <integer value="1" />
+		    </locations>
+		    <colors>
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.75" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.75" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		    </colors>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="scale" name="valueOverLife 2">
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		    <values>
+		      <real value="0.5" />
+		      <real value="1.5" />
+		      <real value="1.5" />
+		      <real value="0.5" />
+		    </values>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	    <backgroundColor opacity="0" value="0 0 0" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="125" enabled="1" fillMode="both" keyPath="position.x" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="640" />
+		  <integer value="-1024" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CAEmitterLayer>
+	</sublayers>
+      </CALayer>
+      </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  </elements>
+      </LKState>
+    </states>
+  </CALayer>
+</caml>

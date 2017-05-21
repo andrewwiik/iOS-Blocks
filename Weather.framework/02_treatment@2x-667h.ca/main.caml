@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 750 1334" clearsContext="1" edgeAntialiasingMask="0" name="Root Layer" position="375 667">
+    <sublayers>
+      <CALayer id="#1" anchorPoint="0 1" bounds="0 0 640 1136" name="Rotation" position="0 1334" transform="scale(1.175, 1.175, 1)">
+	<sublayers>
+	  <CALayer id="#2" bounds="0 0 640 1136" hidden="0" name="Shake-Fine" position="320.142680966475 568.131631090392">
+	    <backgroundColor opacity="0" value="0 0 0"/>
+	    <sublayers>
+	      <CALayer id="Text_Effect_Layer" bounds="0 0 640 1136" name="Text_Effect_Layer" position="320 568">
+		<backgroundColor opacity="0" value="0.5746 0.06557 0"/>
+		<animations>
+		  <animation-1 type="CAKeyframeAnimation" calculationMode="linear" additive="0" cumulative="0" keyPath="position.y" beginTime="1e-100" duration="1.332999944687" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		    <biasValues/>
+		    <continuityValues/>
+		    <keyTimes>
+		      <integer value="0"/>
+		      <real value="0.1000000014901"/>
+		      <real value="0.2000000029802"/>
+		      <real value="0.3000000119209"/>
+		      <real value="0.4000000059605"/>
+		      <real value="0.5"/>
+		      <real value="0.6000000238419"/>
+		      <real value="0.6999999880791"/>
+		      <real value="0.8000000119209"/>
+		      <real value="0.8999999761581"/>
+		      <integer value="1"/>
+		    </keyTimes>
+		    <tensionValues/>
+		    <timingFunctions/>
+		    <values>
+		      <integer value="568"/>
+		      <real value="565.760009765625"/>
+		      <integer value="568"/>
+		      <real value="567.159973144531"/>
+		      <real value="568.75"/>
+		      <integer value="568"/>
+		      <real value="568.650024414062"/>
+		      <integer value="568"/>
+		      <real value="568.700012207031"/>
+		      <real value="566.640014648437"/>
+		      <integer value="568"/>
+		    </values>
+		  </animation-1>
+		  <animation-2 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="1.222000002861" fillMode="both" removedOnCompletion="0" repeatCount="Inf" speed="1.332999944687" timeOffset="0">
+		    <keyTimes>
+		      <integer value="0"/>
+		      <real value="0.1"/>
+		      <real value="0.2"/>
+		      <real value="0.3"/>
+		      <real value="0.4"/>
+		      <real value="0.5"/>
+		      <real value="0.6"/>
+		      <real value="0.6999999880791"/>
+		      <real value="0.8"/>
+		      <real value="0.8999999761581"/>
+		      <integer value="1"/>
+		    </keyTimes>
+		    <timingFunctions/>
+		    <values>
+		      <integer value="320"/>
+		      <real value="318.959991455078"/>
+		      <integer value="320"/>
+		      <real value="319.480010986328"/>
+		      <real value="320.359985351563"/>
+		      <integer value="320"/>
+		      <real value="320.640014648438"/>
+		      <integer value="320"/>
+		      <real value="320.700012207031"/>
+		      <real value="318.570007324219"/>
+		      <integer value="320"/>
+		    </values>
+		  </animation-2>
+		</animations>
+	      </CALayer>
+	    </sublayers>
+	    <animations>
+	      <animation-1 type="CAKeyframeAnimation" calculationMode="linear" additive="0" cumulative="0" keyPath="position.y" beginTime="1e-100" duration="0.5550000071526" fillMode="both" removedOnCompletion="0" repeatCount="Inf">
+		<biasValues/>
+		<continuityValues/>
+		<keyTimes>
+		  <integer value="0"/>
+		  <real value="0.1000000014901"/>
+		  <real value="0.2000000029802"/>
+		  <real value="0.3000000119209"/>
+		  <real value="0.4000000059605"/>
+		  <real value="0.5"/>
+		  <real value="0.6000000238419"/>
+		  <real value="0.6999999880791"/>
+		  <real value="0.8000000119209"/>
+		  <real value="0.8999999761581"/>
+		  <integer value="1"/>
+		</keyTimes>
+		<tensionValues/>
+		<timingFunctions/>
+		<values>
+		  <integer value="568"/>
+		  <real value="565.760009765625"/>
+		  <integer value="568"/>
+		  <real value="567.159973144531"/>
+		  <real value="568.75"/>
+		  <integer value="568"/>
+		  <real value="568.650024414062"/>
+		  <integer value="568"/>
+		  <real value="568.700012207031"/>
+		  <real value="566.640014648437"/>
+		  <integer value="568"/>
+		</values>
+	      </animation-1>
+	      <animation-2 type="CAKeyframeAnimation" keyPath="position.x" beginTime="1e-100" duration="0.444000005722" fillMode="both" removedOnCompletion="0" repeatCount="Inf" speed="1.332999944687" timeOffset="0">
+		<keyTimes>
+		  <integer value="0"/>
+		  <real value="0.1"/>
+		  <real value="0.2"/>
+		  <real value="0.3"/>
+		  <real value="0.4"/>
+		  <real value="0.5"/>
+		  <real value="0.6"/>
+		  <real value="0.6999999880791"/>
+		  <real value="0.8"/>
+		  <real value="0.8999999761581"/>
+		  <integer value="1"/>
+		</keyTimes>
+		<timingFunctions/>
+		<values>
+		  <integer value="320"/>
+		  <real value="318.959991455078"/>
+		  <integer value="320"/>
+		  <real value="319.480010986328"/>
+		  <real value="320.359985351563"/>
+		  <integer value="320"/>
+		  <real value="320.640014648438"/>
+		  <integer value="320"/>
+		  <real value="320.700012207031"/>
+		  <real value="318.570007324219"/>
+		  <integer value="320"/>
+		</values>
+	      </animation-2>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+    </sublayers>
+    <states>
+      <LKState name="Full"/>
+      <LKState name="Mini">
+	<elements>
+	  <LKStateRemoveElement targetId="#1" keyPath="sublayers" objectId="#2"/>
+	  <LKStateRemoveElement final="false" targetId="#1" keyPath="sublayers">
+	    <object type="CAEmitterLayer" emitterPosition="0 200" emitterShape="cuboid" emitterSize="0 400" beginTime="-100" bounds="0 0 64 400" hidden="0" name="💨 Medium" position="-32 400.25" timeOffset="0.2339999973774" transform="rotate(180deg) rotate(180deg, 1, 0, 0)">
+	      <emitterCells>
+		<CAEmitterCell birthRate="20" enabled="1" lifetime="0.8000000119209" name="Spray" scaleRange="0.8999999761581" spinRange="0.1745329201221" velocity="1600" velocityRange="400">
+		  <color opacity="0.3776" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" enabled="0" force="999.960021972656 0 0" frequency="7.989999771118"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 5000 0" frequency="6.019999980927"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" force="0 -5000.0498046875 0" frequency="5.260000228882"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+		<CAEmitterCell alphaRange="-0.5" alphaSpeed="0" birthRate="2" enabled="1" lifetime="0.8000000119209" name="Leaves" orientationLatitude="0" scale="1" scaleRange="1" spinRange="12.56637096405" velocity="1600" velocityRange="1200" xAcceleration="0" yAcceleration="0">
+		  <color opacity="0.3467" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" force="999.969970703125 0 0" frequency="3.950000047684"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 3000.090087890625 0" frequency="2.047300100327"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" force="0 -2000.06005859375 0" frequency="1"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 4" enabled="0" force="0 1499.9599609375 0" frequency="2.897000074387"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 5" enabled="0" force="0 -8662.0400390625 0" frequency="2.826999902725"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+		<CAEmitterCell birthRate="300" enabled="1" lifetime="0.8000000119209" name="Water" scale="1" scaleRange="0.5" spinRange="0.1745329201221" velocity="1200" velocityRange="200" yAcceleration="-500">
+		  <color opacity="0.5748" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" enabled="0" force="1000 0 0" frequency="8"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 5000 0" frequency="6"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" enabled="0" force="0 -5000 0" frequency="5.199999809265"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+		<CAEmitterCell alphaRange="-0.25" alphaSpeed="0" birthRate="8" enabled="1" lifetime="0.8000000119209" name="Bark" orientationLatitude="0" scale="1" scaleRange="1" spinRange="25.132741928101" velocity="1600" velocityRange="1200" xAcceleration="0" yAcceleration="0">
+		  <color opacity="0.2587" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" force="1000 0 0" frequency="4"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 3000.070068359375 0" frequency="1.797299981117"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" enabled="0" force="0 -2000.530151367187 0" frequency="1"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 4" force="0 1500.25 0" frequency="3.177000045776"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 5" enabled="0" force="0 -8661.7998046875 0" frequency="2.867000102997"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+	      </emitterCells>
+	      <backgroundColor opacity="0" value="1 0.1491 0"/>
+	      <animations>
+		<animation-2 type="CAKeyframeAnimation" keyPath="position" autoreverses="1" beginTime="1e-100" duration="1.135154822859" fillMode="both" removedOnCompletion="0" repeatCount="Inf" timingFunction="easeInEaseOut">
+		  <keyTimes>
+		    <integer value="0"/>
+		    <integer value="1"/>
+		  </keyTimes>
+		  <values>
+		    <CGPoint value="680 150"/>
+		    <CGPoint value="680 250"/>
+		  </values>
+		</animation-2>
+	      </animations>
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement final="false" targetId="#1" keyPath="sublayers">
+	    <object type="CAEmitterLayer" emitterPosition="0 100" emitterShape="cuboid" emitterSize="0 200" beginTime="-100" bounds="0 0 64 200" hidden="0" name="💨 Short" position="-32 400.25" transform="rotate(180deg) rotate(180deg, 1, 0, 0)">
+	      <emitterCells>
+		<CAEmitterCell birthRate="20" enabled="1" lifetime="0.8000000119209" name="Spray" scaleRange="0.8999999761581" spinRange="0.1745329201221" velocity="1600" velocityRange="400">
+		  <color opacity="0.3776" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" force="999.960021972656 0 0" frequency="8.020000457764"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 4999.77978515625 0" frequency="6.119999885559"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" enabled="0" force="0 -4999.93994140625 0" frequency="6.329999923706"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+		<CAEmitterCell birthRate="300" enabled="1" lifetime="0.8000000119209" name="Water" scale="1" scaleRange="0.5" spinRange="0.1745329201221" velocity="1200" velocityRange="200" yAcceleration="-500">
+		  <color opacity="0.5748" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" enabled="0" force="1000 0 0" frequency="8"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 5000 0" frequency="6"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" enabled="0" force="0 -5000 0" frequency="5.199999809265"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+		<CAEmitterCell alphaRange="-0.25" alphaSpeed="0" birthRate="8" enabled="1" lifetime="0.8000000119209" name="Bark" orientationLatitude="0" scale="1" scaleRange="1" spinRange="25.132741928101" velocity="1600" velocityRange="1200" xAcceleration="0" yAcceleration="0">
+		  <color opacity="0.1942" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" force="1000 0 0" frequency="4.139999866486"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 3000.06005859375 0" frequency="2.127300024033"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" enabled="0" force="0 -1999.9599609375 0" frequency="1.02999997139"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 4" enabled="0" force="0 1500.0400390625 0" frequency="2.87700009346"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 5" force="0 -8661.9404296875 0" frequency="3.026999950409"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+	      </emitterCells>
+	      <backgroundColor opacity="0" value="1 0.1491 0"/>
+	      <animations>
+		<animation-2 type="CAKeyframeAnimation" keyPath="position" autoreverses="1" beginTime="1e-100" duration="0.4751999974251" fillMode="both" removedOnCompletion="0" repeatCount="Inf" timingFunction="easeInEaseOut">
+		  <keyTimes>
+		    <integer value="0"/>
+		    <integer value="1"/>
+		  </keyTimes>
+		  <values>
+		    <CGPoint value="680 50"/>
+		    <CGPoint value="680 100"/>
+		  </values>
+		</animation-2>
+	      </animations>
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement final="false" targetId="#1" keyPath="sublayers">
+	    <object type="CAEmitterLayer" emitterPosition="0 400" emitterShape="cuboid" emitterSize="0 800" beginTime="-100" bounds="0 0 64 800" hidden="0" name="💨 Long" position="-32 400.25" timeOffset="0.1230000033975" transform="rotate(180deg) rotate(180deg, 1, 0, 0)">
+	      <emitterCells>
+		<CAEmitterCell alphaRange="0.5" alphaSpeed="0" birthRate="2" blueRange="0.1000000014901" enabled="1" greenRange="0.1000000014901" lifetime="0.8000000119209" name="Leaves" orientationLatitude="0" redRange="0.1000000014901" scale="1" scaleRange="1" spinRange="12.56637096405" velocity="1600" velocityRange="1200" xAcceleration="0" yAcceleration="0">
+		  <color opacity="0.3324" value="1 1 1"/>
+		  <contents type="CGImage" src="assets/Debris-Leaves.png"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" force="1000 0 0" frequency="4"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 3000 0" frequency="2.017283661291"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" force="0 -2000 0" frequency="1"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 4" enabled="0" force="0 1500 0" frequency="2.917000055313"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 5" enabled="0" force="0 -8662 0" frequency="2.90700006485"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+		<CAEmitterCell birthRate="300" enabled="1" lifetime="0.8000000119209" name="Water" scale="1" scaleRange="0.5" spinRange="0.1745329201221" velocity="1200" velocityRange="200" yAcceleration="-500">
+		  <color opacity="0.5748" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" enabled="0" force="1000 0 0" frequency="8"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 5000 0" frequency="6"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" enabled="0" force="0 -5000 0" frequency="5.199999809265"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+		<CAEmitterCell alphaRange="-0.25" alphaSpeed="0" birthRate="8" enabled="1" lifetime="0.8000000119209" name="Bark" orientationLatitude="0" scale="1" scaleRange="1" spinRange="25.132741928101" velocity="1600" velocityRange="1200" xAcceleration="0" yAcceleration="0">
+		  <color opacity="0.2587" value="1 1 1"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="wave" name="wave" force="1000 0 0" frequency="4"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 2" enabled="0" force="0 3000 0" frequency="2.017283661291"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 3" force="0 -2000 0" frequency="1"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 4" enabled="0" force="0 1500 0" frequency="2.917000055313"/>
+		    <CAEmitterBehavior behavior="wave" name="wave 5" enabled="0" force="0 -8662 0" frequency="2.90700006485"/>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+	      </emitterCells>
+	      <backgroundColor opacity="0" value="1 0.1491 0"/>
+	      <animations>
+		<animation-2 type="CAKeyframeAnimation" keyPath="position" autoreverses="1" beginTime="1e-100" duration="0.7251999974251" fillMode="both" removedOnCompletion="0" repeatCount="Inf" timeOffset="0" timingFunction="easeInEaseOut">
+		  <keyTimes>
+		    <integer value="0"/>
+		    <integer value="1"/>
+		  </keyTimes>
+		  <values>
+		    <CGPoint value="680 450"/>
+		    <CGPoint value="680 350"/>
+		  </values>
+		</animation-2>
+	      </animations>
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement final="false" targetId="#1" keyPath="sublayers">
+	    <object type="CAEmitterLayer" cullRect="-Inf -8.988465674312e307 1.797693134862e308 1.797693134862e308" emitterMode="surface" emitterPosition="320 24" emitterShape="rectangle" emitterSize="786 64" anchorPoint="0 0.5" bounds="0 0 768 48" hidden="0" name="🚿 Rain Strands" position="768 864" timeOffset="30" transform="rotate(180deg) rotate(180deg, 1, 0, 0)">
+	      <emitterCells>
+		<CAEmitterCell alphaRange="1" alphaSpeed="0" birthRate="48" blueRange="1" blueSpeed="1" color="1 1 1" contentsFrameCount="4" contentsFrameMode="random" contentsRect="0 0 0.25 1" emissionLatitude="0" emissionLongitude="-0.7853981852531" enabled="1" greenRange="1" greenSpeed="1" lifetime="4" name="Strands" redRange="1" redSpeed="1" rotation="-0.3490658402443" rotationRange="0.2617993950844" scale="1" scaleRange="0.5" spinRange="0" timeOffset="0" velocity="20" velocityRange="10" yAcceleration="0">
+		  <contents type="CGImage" src="assets/Cloud-Hurricane-Strands.png"/>
+		  <emitterBehaviors>
+		    <CAEmitterBehavior behavior="valueOverDistance" name="valueOverDistance" enabled="0" additive="0" attractorType="radial" falloff="Inf" falloffDistance="0" orientationLatitude="1.570796370506" orientationLongitude="-1.570796370506" position="0 0" zPosition="0">
+		      <radius type="integer" value="0"/>
+		      <stiffness type="integer" value="1"/>
+		    </CAEmitterBehavior>
+		    <CAEmitterBehavior behavior="valueOverLife" name="valueOverLife" additive="0" keyPath="color.alpha">
+		      <values>
+			<integer value="0"/>
+			<real value="0.4000000059605"/>
+			<integer value="0"/>
+		      </values>
+		    </CAEmitterBehavior>
+		  </emitterBehaviors>
+		</CAEmitterCell>
+	      </emitterCells>
+	    </object>
+	  </LKStateRemoveElement>
+	</elements>
+      </LKState>
+    </states>
+  </CALayer>
+</caml>

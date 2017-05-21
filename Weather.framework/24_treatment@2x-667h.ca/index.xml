@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>documentHeight</key>
+	<real>1334</real>
+	<key>documentResizesToView</key>
+	<false/>
+	<key>documentWidth</key>
+	<real>750</real>
+	<key>dynamicGuidesEnabled</key>
+	<true/>
+	<key>geometryFlipped</key>
+	<false/>
+	<key>guidesEnabled</key>
+	<true/>
+	<key>loopEnd</key>
+	<real>+infinity</real>
+	<key>loopStart</key>
+	<real>0.0</real>
+	<key>loopingEnabled</key>
+	<true/>
+	<key>multitouchDisablesMouse</key>
+	<true/>
+	<key>multitouchEnabled</key>
+	<false/>
+	<key>publishedObjectNames</key>
+	<array>
+		<string>Text_Effect_Layer</string>
+	</array>
+	<key>rootDocument</key>
+	<string>main.caml</string>
+	<key>savesWindowFrame</key>
+	<false/>
+	<key>showsTouches</key>
+	<true/>
+	<key>snappingEnabled</key>
+	<true/>
+	<key>touchesColor</key>
+	<string>1 1 0 0.8</string>
+</dict>
+</plist>

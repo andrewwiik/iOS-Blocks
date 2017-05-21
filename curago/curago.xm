@@ -21,6 +21,8 @@
 #import "IBKWidgetViewController.h"
 #import "IBKPlaceholderIcon.h"
 
+#import <IBKKit/IBKWidgetDelegate-Protocol.h>
+
 
 
 // struct SBIconCoordinate SBIconCoordinateMake(long long row, long long col) {
@@ -1228,6 +1230,16 @@ CGSize defaultIconSizing;
 -(Class)iconViewClassForIcon:(id)icon location:(int)arg2 {
     if ([icon isKindOfClass:[NSClassFromString(@"IBKPlaceholderIcon") class]]) {
         return NSClassFromString(@"IBKPlaceholderIconView");
+    }
+    return %orig;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)sender {
+    if ([sender isKindOfClass:NSClassFromString(@"SBUIForceTouchGestureRecognizer")] && [sender.view respondsToSelector:@selector(icon)]) {
+        SBIconView *iconView = (SBIconView *)sender.view;
+        if ([[IBKResources widgetBundleIdentifiers] containsObject:[[iconView icon] applicationBundleID]]) {
+            return NO;
+        }
     }
     return %orig;
 }

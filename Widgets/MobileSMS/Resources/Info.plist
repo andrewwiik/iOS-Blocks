@@ -3,13 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>com.messages.iosblocks.block</string>
+	<string>com.iosblocks.mobilesms.block</string>
 	<key>CFBundleExecutable</key>
-	<string>Messages</string>
+	<string>MobileSMS</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.messages.iosblocks.block</string>
+	<string>com.iosblocks.mobilesms.block</string>
 	<key>icon</key>
 	<string>Icon</string>
+	<key>customColor</key>
+	<string>#FFFFFF</string>
 	<key>usesHTML</key>
 	<false/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -25,25 +27,18 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>MinimumOSVersion</key>
-	<string>7.0</string>
+	<string>5.0</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
 		<integer>2</integer>
 	</array>
-	<key>NSPrincipalClass</key>
-	<string>@@PROJECT</string>
 	<key>IBKSupportedApps</key>
 	<array>
 		<string>com.apple.mobilesms</string>
 	</array>
-	<key>IBKCustomBlockSize</key>
-	<dict>
-		<key>columns</key>
-		<string>4</string>
-		<key>rows</key>
-		<string>2</string>
-	</dict>
+	<key>NSPrincipalClass</key>
+	<string>MobileSMSWidgetViewController</string>
 	<key>CFBundleSupportedPlatforms</key>
 	<array>
 		<string>iPhoneOS</string>

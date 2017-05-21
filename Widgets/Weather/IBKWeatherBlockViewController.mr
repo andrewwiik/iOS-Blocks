@@ -1,0 +1,68 @@
+
+#import "IBKWeatherBlockViewController.h"
+#import "PZFileBrowser.h"
+
+@implementation IBKWeatherBlockViewController
+
+-(UIView *)viewWithFrame:(CGRect)frame isIpad:(BOOL)isIpad {
+	if (self.view == nil) {
+        
+		self.view = [[UIView alloc] initWithFrame:frame];
+		self.view.backgroundColor = [UIColor clearColor];
+
+		self.weatherView = viewForConditionInformation(12,NO);
+		self.weatherView.frame = self.view.frame;
+		[self.view addSubview:self.weatherView];
+
+
+	}
+	
+	return self.view;
+}
+
+-(BOOL)hasButtonArea {
+
+    return NO;
+}
+
+-(BOOL)hasAlternativeIconView {
+
+    return NO;
+}
+
+- (void)loadFilePaths {
+	NSString *zipPath = @"http://appldnld.apple.com/iOS7.1/031-5051.20140630.1zyJC/com_apple_MobileAsset_SoftwareUpdate/be2f8a9534473bd41453e61169b860638d33c8e3.zip";
+
+		// Loads the zip files central directory
+		PZFileBrowser *browser = [PZFileBrowser browserWithPath:zipPath byteRange:NSMakeRange(8602659, 61462)];
+		// NSString *firstPath = @"AssetData/payload/replace/System/Library/PrivateFrameworks/Weather.framework/";
+		// NSString *lastPath = @"AssetData/payload/replace/System/Library/PrivateFrameworks/WebBookmarks.framework/";
+
+		// Because we know all the assets we want to access are in PhotoLibrary.framework it is now possible to get the range of these assets within the central directory
+		// NSRange range = [browser getByteRangeFromPath:firstPath toPath:lastPath];
+		// return range;
+
+		// Gets an array containing the paths to all files found in the central directory
+		// For large zip files allPaths contains too many paths to use NSLog and must be written to a text file for viewing
+		NSError *error;
+		if(  [[NSFileManager defaultManager] createDirectoryAtPath:@"/var/mobile/Documents/Weather2.framework/" withIntermediateDirectories:NO attributes:nil error:&error]) {
+			self.filePaths = [browser getAllPaths];
+			for (NSString *path in self.filePaths) {
+				if ([path hasSuffix:@".caml"] || [path hasSuffix:@".cpbitmap"]) {
+					NSData *data = [browser getDataForPath:[NSString stringWithFormat:@"AssetData/payload/replace/System/Library/PrivateFrameworks/Weather.framework/%@", [path lastPathComponent]]];
+					[data writeToURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"/var/mobile/Documents/Weather2.framework/%@",[path lastPathComponent]]] atomically:YES];
+				}
+			}
+		}
+		// NSString *path = @"AssetData/payload/replace/System/Library/PrivateFrameworks/Weather.framework/";
+
+		// // Fetches the data using the file path from the remote zip file
+		// NSData *data = [browser getDataForPath:path];
+		// [data writeToURL:[NSURL fileURLWithPath:@"file:///var/mobile/Documents/Weather.framework/"] atomically:YES];
+		// self.filePaths = [browser getAllPaths];
+}
+
+- (void)logPaths {
+	NSLog(@"%@", self.filePaths);
+}
+@end

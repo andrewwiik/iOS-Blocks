@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 750 1334" clearsContext="1" edgeAntialiasingMask="0" name="Root Layer" position="375 667">
+    <sublayers>
+      <CALayer anchorPoint="0 1" bounds="0 0 640 1136" id="#1" name="Rotation" position="0 1334" transform="scale(1.175, 1.175, 1)">
+	<sublayers>
+	  <CALayer bounds="0 0 640 977" name="Background-Glow-Night.png" opacity="0.8500000238419" position="320 647.5">
+	    <contents src="assets/Background-Glow-Night.png" type="CGImage" />
+	  </CALayer>
+	  <CAEmitterLayer beginTime="-100" bounds="0 0 640 1136" cullRect="-10 -10 660 1350" emitterPosition="320 1146" emitterShape="line" emitterSize="660 0" geometryFlipped="0" hidden="0" id="#2" name="__Emitter_2D_0" position="320 568" scale="1.350000023842" shouldRasterize="0">
+	    <emitterBehaviors>
+	      <CAEmitterBehavior ambientIntensity="0.2000000029802" appliesAlpha="1" behavior="light" color="1 1 1" coneAngle="1.570796370506" coneEdgeSoftness="0.3490658402443" diffuseIntensity="1" directionLatitude="1.570796370506" directionLongitude="-1.570796370506" falloff="2000" falloffDistance="200" name="light" position="320 1146" spot="0" zPosition="0" />
+	    </emitterBehaviors>
+	    <emitterCells>
+	      <CAEmitterCell alphaRange="0.5" birthRate="600" enabled="1" lifetime="2" name="Rain Small" rotation="0" scale="0.3499999940395" scaleRange="0.3000000119209" velocity="800" velocityRange="0">
+		<color opacity="0.2" value="0.8867 0.8867 0.8867" />
+		<contents src="assets/Raindrop.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell alphaRange="0.5" birthRate="40" enabled="1" lifetime="2" name="Rain Med" rotation="0" scale="1" scaleRange="0.5" velocity="2000">
+		<color opacity="0.09473" value="1 1 1" />
+		<contents src="assets/Raindrop.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell alphaRange="0.25" birthRate="8" enabled="1" lifetime="2" name="Rain Large" rotation="0" scale="1.799999952316" scaleRange="0.3000000119209" velocity="2400">
+		<color opacity="0.03" value="1 1 1" />
+		<contents src="assets/Raindrop.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell alphaRange="0.5" birthRate="40" contentsFrameCount="9" contentsFrameMode="random" contentsFramesPerRow="3" contentsRect="0 0 1 1" enabled="1" lifetime="8" name="Hail Small 1" rotationRange="0" scale="0.07999999821186" scaleRange="0.01999999955297" velocity="900">
+		<color opacity="0.25" value="1 1 1" />
+		<contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell alphaRange="0.5" birthRate="50" contentsFrameCount="9" contentsFrameMode="single" contentsFramesPerRow="3" contentsRect="0 0 1 1" enabled="1" lifetime="8" name="Hail Med 1" rotationRange="0" scale="0.1199999973178" scaleRange="0.03999999910593" velocity="1600">
+		<color opacity="0.25" value="1 1 1" />
+		<contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell alphaRange="0.5" birthRate="8" contentsFrameCount="9" contentsFrameMode="single" contentsFramesPerRow="3" contentsRect="0 0 1 1" enabled="1" lifetime="8" name="Hail Large 1" rotationRange="0" scale="0.1599999964237" scaleRange="0.0599999986589" velocity="2400">
+		<color opacity="0.25" value="1 1 1" />
+		<contents src="assets/Flake-Motion-Blurred.png" type="CGImage" />
+	      </CAEmitterCell>
+	    </emitterCells>
+	  </CAEmitterLayer>
+	  </sublayers>
+      </CALayer>
+    </sublayers>
+    <states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateRemoveElement keyPath="sublayers" targetId="#1">
+	    <object bounds="0 0 0 0" emitterShape="line" emitterSize="640 0" hidden="0" name="Hail Keyline Emitter 1" position="320 583" shouldRasterize="0" type="CAEmitterLayer">
+	      <emitterCells>
+		<CAEmitterCell birthRate="1" emissionLatitude="3.141592741013" enabled="1" lifetime="0.5" name="Cell 1" scale="1" scaleRange="0.5" velocity="1">
+		  <emitterCells>
+		    <CAEmitterCell alphaRange="0" alphaSpeed="0" birthRate="100" contentsFrameCount="9" contentsFrameMode="random" contentsFramesPerRow="3" contentsFramesPerSecond="30" contentsRect="0 0 0.3330000042915 0.3330000042915" duration="0.05000000074506" emissionLatitude="0" emissionRange="0.5235987901688" lifetime="0.1500000059605" lifetimeRange="2" name="Cell 2" scale="0.2000000029802" scaleRange="0.03999999910593" scaleSpeed="0" velocity="700" yAcceleration="-3500">
+		      <color opacity="0.9" value="0.6978 0.6978 0.6978" />
+		      <contents src="assets/Hail-Frames.png" type="CGImage" />
+		      <emitterBehaviors>
+			<CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+			  <colors>
+			    <CGColor value="1 1 1" />
+			    <CGColor value="1 1 1" />
+			    <CGColor opacity="0" value="1 1 1" />
+			  </colors>
+			</CAEmitterBehavior>
+		      </emitterBehaviors>
+		    </CAEmitterCell>
+		  </emitterCells>
+		</CAEmitterCell>
+	      </emitterCells>
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateRemoveElement keyPath="sublayers" targetId="#1">
+	    <object bounds="0 0 0 0" emitterShape="line" emitterSize="640 0" hidden="0" name="Hail Keyline Emitter 2" position="320 392" seed="100" type="CAEmitterLayer">
+	      <emitterCells>
+		<CAEmitterCell birthRate="0.75" emissionLatitude="3.141592741013" enabled="1" lifetime="0.5" name="Cell 1" scale="1" scaleRange="0.5" velocity="1">
+		  <emitterCells>
+		    <CAEmitterCell alphaRange="0" alphaSpeed="0" birthRate="100" contentsFrameCount="9" contentsFrameMode="random" contentsFramesPerRow="3" contentsFramesPerSecond="30" contentsRect="0 0 0.3330000042915 0.3330000042915" duration="0.05000000074506" emissionLatitude="0" emissionRange="0.5235987901688" lifetime="0.1500000059605" lifetimeRange="2" name="Cell 2" scale="0.2000000029802" scaleRange="0.03999999910593" scaleSpeed="0" velocity="700" velocityRange="0" yAcceleration="-3500">
+		      <color opacity="0.9" value="0.6337 0.6337 0.6337" />
+		      <contents src="assets/Hail-Frames.png" type="CGImage" />
+		      <emitterBehaviors>
+			<CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+			  <colors>
+			    <CGColor value="1 1 1" />
+			    <CGColor value="1 1 1" />
+			    <CGColor opacity="0" value="1 1 1" />
+			  </colors>
+			</CAEmitterBehavior>
+		      </emitterBehaviors>
+		    </CAEmitterCell>
+		  </emitterCells>
+		</CAEmitterCell>
+	      </emitterCells>
+	    </object>
+	  </LKStateRemoveElement>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	</elements>
+      </LKState>
+    </states>
+    <stateTransitions />
+  </CALayer>
+</caml>

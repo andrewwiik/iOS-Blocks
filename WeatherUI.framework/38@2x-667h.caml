@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='utf-8'?>
+<caml xmlns="http://www.apple.com/CoreAnimation/1.0">
+  <CALayer allowsEdgeAntialiasing="0" bounds="0 0 750 1334" clearsContext="1" edgeAntialiasingMask="0" id="#1" name="Root Layer" position="375 667"><sublayers><CALayer anchorPoint="0 1" bounds="0 0 640 1136" id="#1" name="Rotation" position="0 1334" speed="1.5" transform="scale(1.175, 1.175, 1)"><sublayers>
+      <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 640 1136" hidden="0" id="#3" name="⛅" position="320 568" swapsMaskAndLayer="0">
+	<sublayers>
+	  <CAEmitterLayer allowsGroupBlending="0" allowsGroupOpacity="0" beginTime="-60" bounds="0 0 0 0" emitterPosition="-64 -384" emitterShape="line" emitterSize="420 0" hidden="0" id="#4" name="🔆 Rays" position="0 1136" swapsMaskAndLayer="0" transform="rotate(45deg)">
+	    <emitterBehaviors>
+	      <CAEmitterBehavior attractorType="radial" behavior="attractor" falloff="Inf" falloffDistance="0" name="attractor" orientationLatitude="1.570796370506" orientationLongitude="-1.570796370506" position="0 0" zPosition="0">
+		<stiffness type="real" value="-0.01999999955297" />
+		<radius type="integer" value="0" />
+	      </CAEmitterBehavior>
+	      <CAEmitterBehavior behavior="alignToMotion" name="alignToMotion" rotation="0" />
+	    </emitterBehaviors>
+	    <emitterCells>
+	      <CAEmitterCell birthRate="0.5" lifetime="8" mass="1" name="Rays" scale="1.75">
+		<color opacity="0.75" value="1 1 1" />
+		<contents src="assets/Ray-White.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		    <colors>
+		      <CGColor opacity="0" value="1 1 1" />
+		      <CGColor value="1 1 1" />
+		    </colors>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior additive="1" behavior="valueOverLife" keyPath="color.alpha" name="valueOverLife">
+		    <values>
+		      <integer value="0" />
+		      <integer value="-1" />
+		    </values>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	  </CAEmitterLayer>
+	  <CALayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 1" bounds="0 0 1792 384" contentsScaling="repeat" edgeAntialiasingMask="0" hidden="0" name="💭 Background" position="-57.82190322876 1140" speed="0.75" swapsMaskAndLayer="0">
+	    <backgroundColor opacity="0" value="0 0 0" />
+	    <contents src="assets/Thunderstorm-Day-Scattered-Background.png" type="CGImage" />
+	    <shadowColor opacity="0" value="0 0 0" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="240" fillMode="both" keyPath="position.x" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="0" />
+		  <integer value="-1152" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	  <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 1" beginTime="-120" bounds="0 0 640 0" edgeAntialiasingMask="0" emitterMode="surface" emitterPosition="320 -32" emitterShape="rectangle" emitterSize="640 64" hidden="0" name="💡 Flashes" position="0 1136" swapsMaskAndLayer="0">
+	    <emitterCells>
+	      <CAEmitterCell alphaRange="0" alphaSpeed="0" birthRate="0.25" color="1 1 1" emissionRange="0" enabled="1" lifetime="30" lifetimeRange="20" name="Flashes 1" scale="10" scaleRange="5" scaleSpeed="0">
+		<contents src="assets/Thunderstorm-Day-Scattered-Flash.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="color.alpha" name="valueOverLife">
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.9900000095367" />
+		      <real value="0.9900000095367" />
+		      <integer value="1" />
+		    </locations>
+		    <values>
+		      <integer value="0" />
+		      <integer value="0" />
+		      <integer value="1" />
+		      <integer value="0" />
+		    </values>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		    <locations>
+		      <real value="0.9900000095367" />
+		      <integer value="1" />
+		    </locations>
+		    <colors>
+		      <CGColor opacity="0.5" value="1 1 1" />
+		      <CGColor opacity="0" value="1 1 1" />
+		    </colors>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	      <CAEmitterCell alphaRange="0" alphaSpeed="0" birthRate="0.25" color="1 1 1" emissionRange="0" enabled="1" lifetime="30" lifetimeRange="20" name="Flashes 2" scale="10" scaleRange="5" scaleSpeed="0">
+		<contents src="assets/Thunderstorm-Day-Scattered-Flash.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="color.alpha" name="valueOverLife">
+		    <values>
+		      <integer value="0" />
+		      <integer value="0" />
+		      <real value="0.3000000119209" />
+		      <integer value="0" />
+		      <integer value="1" />
+		      <integer value="0" />
+		    </values>
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.9869999885559" />
+		      <real value="0.9869999885559" />
+		      <real value="0.9900000095367" />
+		      <real value="0.9900000095367" />
+		      <integer value="1" />
+		    </locations>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		    <colors>
+		      <CGColor opacity="0.5" value="1 1 1" />
+		      <CGColor opacity="0" value="1 1 1" />
+		    </colors>
+		    <locations>
+		      <real value="0.9900000095367" />
+		      <integer value="1" />
+		    </locations>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	  </CAEmitterLayer>
+	  <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 1" beginTime="-138.770004272461" bounds="0 0 512 256" contentsGravity="center" contentsOpaque="0" edgeAntialiasingMask="0" emitterMode="surface" emitterPosition="256 128" hidden="0" masksToBounds="0" name="💭 One" position="0 1236" seed="17" speed="0.75" swapsMaskAndLayer="0">
+	    <emitterCells>
+	      <CAEmitterCell birthRate="0.01250000018626" contentsFrameCount="4" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="80" name="One" scale="1" scaleRange="0" velocity="0">
+		<contents src="assets/Cumulus-One-storm.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell birthRate="0.25" color="1 1 1" contentsFrameCount="8" contentsFrameMode="random" contentsFramesPerRow="4" contentsRect="0 0 0.25 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="45" name="Fringe" rotationRange="6.283185482025" scale="1" scaleRange="0.25" spin="0" spinRange="0.1396263390779" velocity="0">
+		<contents src="assets/Fringe-Small-Storm.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="position.x" name="valueOverLife">
+		    <values>
+		      <integer value="480" />
+		      <integer value="64" />
+		    </values>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		    <colors>
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.75" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.75" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		    </colors>
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="scale" name="valueOverLife 2">
+		    <values>
+		      <real value="0.75" />
+		      <real value="1.25" />
+		      <real value="1.25" />
+		      <real value="0.75" />
+		    </values>
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	    <backgroundColor opacity="0" value="0.9857 0.1445 0" />
+	    <borderColor opacity="0" value="0 0 0" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="80" enabled="1" fillMode="both" keyPath="position.x" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="640" />
+		  <integer value="-512" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CAEmitterLayer>
+	  <CAEmitterLayer allowsEdgeAntialiasing="0" allowsGroupBlending="0" allowsGroupOpacity="0" anchorPoint="0 1" beginTime="-97.089996337891" bounds="0 0 512 256" contentsGravity="center" contentsOpaque="0" edgeAntialiasingMask="0" emitterMode="surface" emitterPosition="256 128" hidden="0" masksToBounds="0" name="💭 Two" position="0 1236" seed="17" speed="0.75" swapsMaskAndLayer="0">
+	    <emitterCells>
+	      <CAEmitterCell birthRate="0.01250000018626" contentsFrameCount="4" contentsFrameMode="random" contentsFramesPerRow="2" contentsRect="0 0 0.5 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="80" name="Two" scale="1" scaleRange="0" velocity="0">
+		<contents src="assets/Cumulus-Two-storm.png" type="CGImage" />
+	      </CAEmitterCell>
+	      <CAEmitterCell birthRate="0.1500000059605" color="1 1 1" contentsFrameCount="8" contentsFrameMode="random" contentsFramesPerRow="4" contentsRect="0 0 0.25 0.5" emissionLatitude="0" emissionLongitude="3.141592741013" enabled="1" lifetime="45" name="Fringe" rotationRange="6.283185482025" scale="1" scaleRange="0.25" spin="0" spinRange="0.1396263390779" velocity="0">
+		<contents src="assets/Fringe-Small-Storm.png" type="CGImage" />
+		<emitterBehaviors>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="position.x" name="valueOverLife">
+		    <values>
+		      <integer value="480" />
+		      <integer value="64" />
+		    </values>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior behavior="colorOverLife" name="colorOverLife">
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		    <colors>
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.5" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0.5" value="0.902 0.9255 0.949" />
+		      <CGColor opacity="0" value="0.902 0.9255 0.949" />
+		    </colors>
+		  </CAEmitterBehavior>
+		  <CAEmitterBehavior additive="0" behavior="valueOverLife" keyPath="scale" name="valueOverLife 2">
+		    <locations>
+		      <integer value="0" />
+		      <real value="0.25" />
+		      <real value="0.75" />
+		      <integer value="1" />
+		    </locations>
+		    <values>
+		      <real value="0.5" />
+		      <integer value="1" />
+		      <integer value="1" />
+		      <real value="0.5" />
+		    </values>
+		  </CAEmitterBehavior>
+		</emitterBehaviors>
+	      </CAEmitterCell>
+	    </emitterCells>
+	    <backgroundColor opacity="0" value="0.9857 0.1445 0" />
+	    <borderColor opacity="0" value="0 0 0" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="80" enabled="1" fillMode="both" keyPath="position.x" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <integer value="640" />
+		  <integer value="-512" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CAEmitterLayer>
+	</sublayers>
+      </CALayer>
+      <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 400 400" hidden="0" name="Rain Tile Medium" position="320 568" swapsMaskAndLayer="0">
+	<sublayers>
+	  <CALayer allowsGroupBlending="0" allowsGroupOpacity="0" bounds="0 0 1000 3000" contentsScaling="repeat" name="Tile" opacity="0.05000000074506" position="200 200" swapsMaskAndLayer="0" transform="scale(0.75, 0.75, 1)">
+	    <contents src="assets/Raindrop-Tile-Heavy.png" type="CGImage" />
+	    <animations>
+	      <animation-1 beginTime="1e-100" duration="0.6000000238419" fillMode="both" keyPath="position.y" removedOnCompletion="0" repeatCount="Inf" type="CAKeyframeAnimation">
+		<keyTimes>
+		  <integer value="0" />
+		  <integer value="1" />
+		</keyTimes>
+		<values>
+		  <real value="187.5" />
+		  <real value="-187.5" />
+		</values>
+	      </animation-1>
+	    </animations>
+	  </CALayer>
+	</sublayers>
+      </CALayer>
+      <CAEmitterLayer bounds="0 0 640 1136" cullRect="-8.988465674312e307 -10 1.797693134862e308 1.797693134862e308" emitterPosition="320 1146" emitterShape="line" emitterSize="650 0" hidden="0" id="#2" name="__Emitter_2D_0" position="320 568">
+	<emitterCells>
+	  <CAEmitterCell alphaRange="0.05000000074506" birthRate="45" contentsRect="0 0 0.3333300054073 0.3330000042915" emissionLatitude="0" emissionLongitude="0" emissionRange="0" enabled="1" lifetime="100" name="30 Cluster" scale="0.6999999880791" scaleRange="0.3000000119209" velocity="1700" velocityRange="400" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.15" value="1 1 1" />
+	    <contents src="assets/Raindrop-Cluster-Small.png" type="CGImage" />
+	  </CAEmitterCell>
+	  <CAEmitterCell alphaRange="0.0599999986589" birthRate="10" emissionLatitude="0" emissionLongitude="0" emissionRange="0.08726646006107" enabled="1" lifetime="100" name="Hero" scale="1.200000047684" scaleRange="0.3000000119209" velocity="2200" velocityRange="400" xAcceleration="0" yAcceleration="0">
+	    <color opacity="0.1" value="1 1 1" />
+	    <contents src="assets/Raindrop.png" type="CGImage" />
+	  </CAEmitterCell>
+	</emitterCells>
+      </CAEmitterLayer>
+      </sublayers></CALayer></sublayers><states>
+      <LKState name="Full" />
+      <LKState name="Mini">
+	<elements>
+	  <LKStateSetValue keyPath="cullRect.origin.y" targetId="#2">
+	    <value type="integer" value="846" />
+	  </LKStateSetValue>
+	  <LKStateRemoveElement keyPath="sublayers" objectId="#4" targetId="#3" />
+	</elements>
+      </LKState>
+    </states><stateTransitions /></CALayer>
+</caml>
