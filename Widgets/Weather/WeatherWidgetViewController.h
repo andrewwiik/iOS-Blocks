@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "IBKWidgetDelegate.h"
+#import <IBKKit/IBKWidgetDelegate-Protocol.h>
 #import "WeatherContentView.h"
 #import <Weather/Weather.h>
 

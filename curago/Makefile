@@ -17,7 +17,8 @@ export ADDITIONAL_CFLAGS = -I$(THEOS_PROJECT_DIR)/../headers
 TWEAK_NAME = Curago
 Curago_FILES = $(wildcard *.m) $(wildcard Progress/*.m) $(wildcard *.xm)
 Curago_FRAMEWORKS = UIKit CoreGraphics QuartzCore Foundation MobileCoreServices CoreImage AudioToolbox
-Curago_PRIVATE_FRAMEWORKS = BulletinBoard
+Curago_LDFLAGS += ./BulletinBoard.tbd
+# Curago_PRIVATE_FRAMEWORKS = BulletinBoard
 
 include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk

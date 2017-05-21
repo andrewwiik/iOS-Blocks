@@ -6,7 +6,6 @@ Stocks_BUNDLE_EXTENSION = block
 Stocks_CFLAGS =  -fobjc-arc
 Stocks_FILES = $(wildcard *.m) $(wildcard IBKTableView/*.m)
 Stocks_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
-Stocks_PRIVATE_FRAMEWORKS = Stocks
 Stocks_LDFLAGS = $(THEOS)/vendor/lib/libsubstrate.tbd ./Stocks.tbd
 Stocks_INSTALL_PATH = /var/mobile/Library/Curago/Widgets/
 
