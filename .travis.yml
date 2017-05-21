@@ -1,5 +1,5 @@
 os: osx
-osx_image: xcode8.2.1
+osx_image: xcode8.3
 language: objective-c
 sudo: false
 
