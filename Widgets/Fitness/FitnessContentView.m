@@ -80,7 +80,7 @@ float size = 8.0;
     return self;
 }
 
--(float)contentViewHeight
+-(CGFloat)contentViewHeight
 {
     return [NSClassFromString(@"IBKAPI") heightForContentViewWithIdentifier:@"com.apple.fitness"] - 5.0;
 }

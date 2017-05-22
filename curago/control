@@ -1,6 +1,6 @@
 Package: com.iosblocks.curago
 Name: iOS Blocks
-Version: 0.2.1-0
+Version: 0.2.2-0
 Description: An integrated widget system, built for perfomance, and the reaction from people when they see it and be like "that's awesome bro, ETA???!!!!". And we reply, "Ayyyy lmao, nope", and they say "Fuck man, y u so cruel? Can i beta test?". And we reply, "Nah bro", and they say "But I'll pay?!!". And we don't reply, because ain't nobody got time fo' that.
 Section: System
 Depends: firmware (>= 7.0), mobilesubstrate, com.chpwn.iconsupport, preferenceloader, applist

@@ -157,30 +157,32 @@
     
     self.content.text = bulletin.message;
     
-    if ([bulletin attachments]) {
-        // Deal with attachment image
-        // TODO: Finish attachment image handling
-        
-        NSLog(@"clientComposedImageInfos == %@", bulletin.attachments.clientSideComposedImageInfos);
-        NSLog(@"Additional attachments == %@", bulletin.attachments.additionalAttachments);
-        
-        NSLog(@"ComposedAttachmentImage == %@", bulletin.composedAttachmentImage);
-        
-        if (!self.attachment) {
-            self.attachment = [[UIImageView alloc] initWithImage:bulletin.composedAttachmentImage];
+    if ([bulletin respondsToSelector:@selector(attachments)]) {
+        if ([bulletin attachments]) {
+            // Deal with attachment image
+            // TODO: Finish attachment image handling
             
-            // Recalculate image size based on height to sit it in.
-            CGFloat percentage = 26/bulletin.composedAttachmentImageSize.height;
-            CGFloat newWidth = bulletin.composedAttachmentImageSize.width/percentage;
+            NSLog(@"clientComposedImageInfos == %@", bulletin.attachments.clientSideComposedImageInfos);
+            NSLog(@"Additional attachments == %@", bulletin.attachments.additionalAttachments);
             
-            NSLog(@"Newwidth == %f", newWidth);
+            NSLog(@"ComposedAttachmentImage == %@", bulletin.composedAttachmentImage);
             
-            self.attachment.frame = CGRectMake(4, (isIpadDevice ? 22 : 19), newWidth, (isIpadDevice ? 40 : 26));
-            
-            self.attachment.backgroundColor = [UIColor blueColor];
-            self.attachment.alpha = 0.5;
-            
-            [self addSubview:self.attachment];
+            if (!self.attachment) {
+                self.attachment = [[UIImageView alloc] initWithImage:bulletin.composedAttachmentImage];
+                
+                // Recalculate image size based on height to sit it in.
+                CGFloat percentage = 26/bulletin.composedAttachmentImageSize.height;
+                CGFloat newWidth = bulletin.composedAttachmentImageSize.width/percentage;
+                
+                NSLog(@"Newwidth == %f", newWidth);
+                
+                self.attachment.frame = CGRectMake(4, (isIpadDevice ? 22 : 19), newWidth, (isIpadDevice ? 40 : 26));
+                
+                self.attachment.backgroundColor = [UIColor blueColor];
+                self.attachment.alpha = 0.5;
+                
+                [self addSubview:self.attachment];
+            }
         }
     }
     
@@ -246,7 +248,7 @@
     
     self.title.text = @"";
     self.dateLabel.text = @"";
-    self.content.text = @"";
+    self.content.text = @""; 
     self.attachment.image = nil;
     [self.dateTimer invalidate];
 }

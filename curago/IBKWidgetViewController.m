@@ -539,9 +539,15 @@ extern dispatch_queue_t __BBServerQueue;
     // Fill the array with notifications
 
    // dispatch_queue_t backgroundQueue = [(SpringBoard *)[UIApplication sharedApplication] bulletinBoardQueue];
-    if (__BBServerQueue) {
-        dispatch_sync(__BBServerQueue, ^{
-            BBServer *server;
+    dispatch_queue_t correctQueue = nil;
+    if (NSClassFromString(@"CCUIControlCenterButton")) {
+        correctQueue = __BBServerQueue;
+    } else {
+        correctQueue = dispatch_get_main_queue();
+    }
+    if (correctQueue) {
+        dispatch_sync(correctQueue, ^{
+            BBServer *server = [NSClassFromString(@"BBServer") sharedIBKBBServer];
             for (BBBulletin *bulletin in [server _allBulletinsForSectionID:self.applicationIdentifer])
                 [self.notificationsDataSource addObject:bulletin];
             
@@ -622,7 +628,7 @@ extern dispatch_queue_t __BBServerQueue;
     colors = [[colors reverseObjectEnumerator] allObjects];
     
     grad.colors = colors;
-    grad.bounds = CGRectMake(0, 0, self.view.frame.size.width, self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
+    grad.bounds = CGRectMake(0, 0, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer], self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
     
     UIView *tableViewBase = [[UIView alloc] initWithFrame:topBase.frame];
     tableViewBase.backgroundColor = [UIColor clearColor];
@@ -1137,14 +1143,8 @@ float scale2 = 0.0;
     NSLog(@"NOTIF TO REMOVE: %@", arg2);
     
     self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
-    
-    dispatch_queue_t correctQueue = nil;
-    if (NSClassFromString(@"CCUIControlCenterButton")) {
-        correctQueue = __BBServerQueue;
-    } else {
-        correctQueue = dispatch_get_main_queue();
-    }
-    dispatch_sync(correctQueue, ^{
+
+    dispatch_async(dispatch_get_main_queue(), ^{
         
         if ([self.notificationsDataSource count]) {
             if (!self.notificationsTableView) {
@@ -1176,13 +1176,7 @@ float scale2 = 0.0;
 }
 
 -(void)observer:(id)observer noteInvalidatedBulletinIDs:(id)ids {
-    dispatch_queue_t correctQueue = nil;
-    if (NSClassFromString(@"CCUIControlCenterButton")) {
-        correctQueue = __BBServerQueue;
-    } else {
-        correctQueue = dispatch_get_main_queue();
-    }
-    dispatch_sync(correctQueue, ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         
         if (!([self.notificationsDataSource count] == 0)) {
             if (!self.notificationsTableView) {
