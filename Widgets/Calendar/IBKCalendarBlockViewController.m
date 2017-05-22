@@ -1,6 +1,8 @@
 
 #import "IBKCalendarBlockViewController.h"
 
+#define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
 @implementation IBKCalendarBlockViewController
 
 - (BOOL)wantsNoContentViewFadeWithButtons {
@@ -52,19 +54,27 @@
 	self.calendarModel.selectedCalendars = [NSSet setWithArray:(NSArray *)[self.calendarModel valueForKey:@"_visibleCalendars"]];
 	[self.calendarModel setMaxCachedDays:3];
 
+
+	NSDate *today = [NSDate date];
+	NSDateFormatter *weekdayFormatter = [[NSDateFormatter alloc] init];
+	[weekdayFormatter setDateFormat:@"EEEE"]; // day, like "Saturday"
+
+	NSDateFormatter *dayFormatter = [[NSDateFormatter alloc] init];
+	[dayFormatter setDateFormat:@"dd"]; // day, like "Saturday"
+
 	self.dayLabel = [[UILabel alloc] initWithFrame:CGRectMake(7,frame.size.height - [NSClassFromString(@"IBKAPI") heightForContentViewWithIdentifier:@"com.apple.mobilecal"], frame.size.width/3*2, frame.size.height - [NSClassFromString(@"IBKAPI") heightForContentViewWithIdentifier:@"com.apple.mobilecal"])];
-	self.dayLabel.text = @"Sunday";
+	self.dayLabel.text = [weekdayFormatter stringFromDate:today];
 	self.dayLabel.textColor = [UIColor colorWithRed:1 green:0.231 blue:0.188 alpha:1];
 	self.dayLabel.adjustsFontSizeToFitWidth = YES;
-	self.dayLabel.font = [self.dayLabel.font fontWithSize:12];
+	self.dayLabel.font = [self.dayLabel.font fontWithSize:isPad ? 17 : 12];
 	[self.dayLabel sizeToFit];
 	self.dayLabel.frame = CGRectMake(10,frame.size.height - 7.5 - self.dayLabel.frame.size.height, self.dayLabel.frame.size.width, self.dayLabel.frame.size.height);
 
 	self.numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(7,frame.size.height - [NSClassFromString(@"IBKAPI") heightForContentViewWithIdentifier:@"com.apple.mobilecal"], frame.size.width/3*1, frame.size.height - [NSClassFromString(@"IBKAPI") heightForContentViewWithIdentifier:@"com.apple.mobilecal"])];
-	self.numberLabel.text = @"18";
+	self.numberLabel.text = [dayFormatter stringFromDate:today];
 	self.numberLabel.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
 	self.numberLabel.adjustsFontSizeToFitWidth = YES;
-	self.numberLabel.font = [UIFont fontWithName:@".SFUIText-Light" size:35];
+	self.numberLabel.font = [UIFont fontWithName:@".SFUIText-Light" size:isPad ? 42 : 35];
 	[self.numberLabel sizeToFit];
 	self.reloadTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
 							    target:self.dayView
