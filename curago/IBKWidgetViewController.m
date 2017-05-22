@@ -48,6 +48,14 @@ extern dispatch_queue_t __BBServerQueue;
 
 @implementation IBKWidgetViewController
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        _usedOrientation = 20;
+    }
+    return self;
+}
+
 -(void)loadView {
     // Begin building our base widget view
     
@@ -160,7 +168,13 @@ extern dispatch_queue_t __BBServerQueue;
     }];
 }
 
+- (long long)usedOrientation {
+    return _usedOrientation;
+}
+
 -(void)loadWidgetInterface {
+    long long currentOrientation = [(SBIconController *)[NSClassFromString(@"SBIconController") sharedInstance] orientation];
+    _usedOrientation = currentOrientation;
     if (!self.view) {
         [self loadView];
     }
@@ -200,6 +214,7 @@ extern dispatch_queue_t __BBServerQueue;
     if ([app hasGameCenterData] && ![[infoPlist objectForKey:@"customGameWidget"] boolValue]) {
         [self loadForGameCenter:infoPlist];
     } else if (!infoPlist || [[infoPlist objectForKey:@"wantsNotificationsTable"] boolValue]) {
+        NSLog(@"Loading NOtificatiosn From PList");
         [self loadForNotificationsTable:infoPlist];
     } else {
         // Load up widget UI from NSBundle.
@@ -533,6 +548,7 @@ extern dispatch_queue_t __BBServerQueue;
     
     CGRect frame = self.view.frame;
     frame.origin = CGPointZero;
+    _infoPlist = infoPlist;
     
     self.notificationsDataSource = [NSMutableArray array];
     
@@ -540,112 +556,134 @@ extern dispatch_queue_t __BBServerQueue;
 
    // dispatch_queue_t backgroundQueue = [(SpringBoard *)[UIApplication sharedApplication] bulletinBoardQueue];
     dispatch_queue_t correctQueue = nil;
-    if (NSClassFromString(@"CCUIControlCenterButton")) {
-        correctQueue = __BBServerQueue;
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0) {
+        correctQueue = nil;
     } else {
-        correctQueue = dispatch_get_main_queue();
+        correctQueue = __BBServerQueue;
     }
     if (correctQueue) {
-        dispatch_sync(correctQueue, ^{
+        dispatch_async(correctQueue, ^{
             BBServer *server = [NSClassFromString(@"BBServer") sharedIBKBBServer];
             for (BBBulletin *bulletin in [server _allBulletinsForSectionID:self.applicationIdentifer])
                 [self.notificationsDataSource addObject:bulletin];
             
             self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([self.notificationsDataSource count] != 0) {
-                [self loadNotificationsTableView];
-                    
-                }
-                
-                // If no notifications, say so
-                self.noNotifsLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-40, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30))];
-                self.noNotifsLabel.text = [[NSBundle mainBundle] localizedStringForKey:@"NOTIFICATION_CENTER_CONTENT_UNAVAILABLE_ALL" value:nil table:@"SpringBoard"];
-                self.noNotifsLabel.textAlignment = NSTextAlignmentCenter;
-                self.noNotifsLabel.numberOfLines = 0;
-                self.noNotifsLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
-                
-                [self.noNotifsLabel setLabelSize:kIBKLabelSizingLarge];
-                self.noNotifsLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor];
-                
-                self.noNotifsLabel.backgroundColor = [UIColor clearColor];
-                if ([self.notificationsDataSource count] == 0)
-                    self.noNotifsLabel.alpha = 1.0;
-                else
-                    self.noNotifsLabel.alpha = 0.0;
-                
-                [topBase addSubview:self.noNotifsLabel];
-                
-                // Bring icon back up to top view
-                [topBase addSubview:self.iconImageView];
-                
-                [self setColorAndOrIcon:infoPlist];
-            });    
+            
         });
+    } else {
+        BBServer *server = [NSClassFromString(@"BBServer") sharedIBKBBServer];
+        for (BBBulletin *bulletin in [server _allBulletinsForSectionID:self.applicationIdentifer])
+            [self.notificationsDataSource addObject:bulletin];
+        
+        self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
     }
+}
+
+- (void)setNotificationsDataSource:(NSMutableArray *)dataSource {
+    _notificationsDataSource = dataSource;
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        if ([self.notificationsDataSource count] != 0) {
+            [self loadNotificationsTableView];
+        }
+
+        if (!self.noNotifsLabel) {
+            self.noNotifsLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-40, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30))];
+            self.noNotifsLabel.text = [[NSBundle mainBundle] localizedStringForKey:@"NOTIFICATION_CENTER_CONTENT_UNAVAILABLE_ALL" value:nil table:@"SpringBoard"];
+            self.noNotifsLabel.textAlignment = NSTextAlignmentCenter;
+            self.noNotifsLabel.numberOfLines = 0;
+            self.noNotifsLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
+            
+            [self.noNotifsLabel setLabelSize:kIBKLabelSizingLarge];
+            self.noNotifsLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor];
+            
+            self.noNotifsLabel.backgroundColor = [UIColor clearColor];
+        }
+
+        if ([self.notificationsDataSource count] == 0)
+            self.noNotifsLabel.alpha = 1.0;
+        else
+            self.noNotifsLabel.alpha = 0.0;
+
+        [topBase addSubview:self.noNotifsLabel];
+
+        [topBase addSubview:self.iconImageView];
+        
+        [self setColorAndOrIcon:_infoPlist];
+    });
+}
+
+
+- (NSMutableArray *)notificationsDataSource {
+    return _notificationsDataSource;
 }
 
 -(void)loadNotificationsTableView {
     
-    CGRect initialFrame = CGRectMake(10, 7, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-14, self.iconImageView.frame.origin.y-9);
-    
-    self.notificationsTableView = [[UITableView alloc] initWithFrame:initialFrame style:UITableViewStylePlain];
-    
-    self.notificationsTableView.delegate = self;
-    self.notificationsTableView.dataSource = self;
-    self.notificationsTableView.backgroundColor = [UIColor clearColor];
-    self.notificationsTableView.showsVerticalScrollIndicator = YES;
-    self.notificationsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.notificationsTableView.allowsSelection = NO;
-    self.notificationsTableView.layer.masksToBounds = NO;
-    
-    [self.notificationsTableView registerClass:[IBKNotificationsTableCell class] forCellReuseIdentifier:@"notificationTableCell"];
-    
-    CAGradientLayer *grad = [CAGradientLayer layer];
-    grad.anchorPoint = CGPointZero;
-    grad.startPoint = CGPointMake(0.5f, 1.0f);
-    grad.endPoint = CGPointMake(0.5f, 0.5f);
-    
-    UIColor *innerColour = [UIColor colorWithWhite:1.0 alpha:1.0];
-    
-    NSArray *colors = [NSArray arrayWithObjects:
-                       (id)[innerColour CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.975f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.95f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.9f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.8f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.7f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.6f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.5f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.4f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.3f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.2f] CGColor],
-                       (id)[[innerColour colorWithAlphaComponent:0.1f] CGColor],
-                       (id)[[UIColor clearColor] CGColor],
-                       nil];
-    
-    colors = [[colors reverseObjectEnumerator] allObjects];
-    
-    grad.colors = colors;
-    grad.bounds = CGRectMake(0, 0, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer], self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
-    
-    UIView *tableViewBase = [[UIView alloc] initWithFrame:topBase.frame];
-    tableViewBase.backgroundColor = [UIColor clearColor];
-    
-    tableViewBase.layer.mask = grad;
-    
-    [topBase addSubview:tableViewBase];
-    
-    [tableViewBase addSubview:self.notificationsTableView];
-    
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
-        NSMutableArray *indexPaths = [NSMutableArray array];
-        for (BBBulletin *bulletin in self.notificationsDataSource) {
-            [indexPaths addObject:[NSIndexPath indexPathForRow:[self.notificationsDataSource indexOfObject:bulletin] inSection:0]];
-        }
+    if (!self.notificationsTableView) {
+        CGRect initialFrame = CGRectMake(10, 7, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-14, self.iconImageView.frame.origin.y-9);
+        self.notificationsTableView = [[UITableView alloc] initWithFrame:initialFrame style:UITableViewStylePlain];
         
-        [self.notificationsTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        self.notificationsTableView.delegate = self;
+        self.notificationsTableView.dataSource = self;
+        self.notificationsTableView.backgroundColor = [UIColor clearColor];
+        self.notificationsTableView.showsVerticalScrollIndicator = YES;
+        self.notificationsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.notificationsTableView.allowsSelection = NO;
+        self.notificationsTableView.layer.masksToBounds = NO;
+
+        NSLog(@"Loading Notifications Table View");
+        
+        [self.notificationsTableView registerClass:[IBKNotificationsTableCell class] forCellReuseIdentifier:@"notificationTableCell"];
+        
+        CAGradientLayer *grad = [CAGradientLayer layer];
+        grad.anchorPoint = CGPointZero;
+        grad.startPoint = CGPointMake(0.5f, 1.0f);
+        grad.endPoint = CGPointMake(0.5f, 0.5f);
+        
+        UIColor *innerColour = [UIColor colorWithWhite:1.0 alpha:1.0];
+        
+        NSArray *colors = [NSArray arrayWithObjects:
+                           (id)[innerColour CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.975f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.95f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.9f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.8f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.7f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.6f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.5f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.4f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.3f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.2f] CGColor],
+                           (id)[[innerColour colorWithAlphaComponent:0.1f] CGColor],
+                           (id)[[UIColor clearColor] CGColor],
+                           nil];
+        
+        colors = [[colors reverseObjectEnumerator] allObjects];
+        
+        grad.colors = colors;
+        grad.bounds = CGRectMake(0, 0, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer], self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
+        
+        UIView *tableViewBase = [[UIView alloc] initWithFrame:topBase.frame];
+        tableViewBase.backgroundColor = [UIColor clearColor];
+        
+        tableViewBase.layer.mask = grad;
+        
+        [topBase addSubview:tableViewBase];
+        
+        [tableViewBase addSubview:self.notificationsTableView];
+        
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
+            NSMutableArray *indexPaths = [NSMutableArray array];
+            for (BBBulletin *bulletin in self.notificationsDataSource) {
+                [indexPaths addObject:[NSIndexPath indexPathForRow:[self.notificationsDataSource indexOfObject:bulletin] inSection:0]];
+            }
+            
+            [self.notificationsTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+        }
+    } else {
+        CGRect initialFrame = CGRectMake(10, 7, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-14, self.iconImageView.frame.origin.y-9);
+        self.notificationsTableView.frame = initialFrame;
     }
 
 }
@@ -1106,7 +1144,7 @@ float scale2 = 0.0;
     self.notificationsDataSource = [self orderedArrayForNotifications:self.notificationsDataSource];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        // make some UI changes
+        // make some UI changes 
         // ...
         // show actionSheet for example
         if (![self.notificationsDataSource count]) {
@@ -1176,6 +1214,7 @@ float scale2 = 0.0;
 }
 
 -(void)observer:(id)observer noteInvalidatedBulletinIDs:(id)ids {
+
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (!([self.notificationsDataSource count] == 0)) {
@@ -1219,6 +1258,7 @@ float scale2 = 0.0;
 -(void)unloadWidgetInterface {
     // Unload the widget UI.
     self.view.hidden = YES;
+    _usedOrientation = 20;
     
     // Well, shit. We need to tear all this UI down.
     

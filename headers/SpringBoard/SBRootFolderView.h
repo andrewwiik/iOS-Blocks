@@ -42,6 +42,7 @@
 - (void)setDockVerticalStretch:(float)arg1;
 - (void)setDockOffscreenFraction:(float)arg1;
 - (id)dockView;
+- (id)initWithFolder:(id)arg1 orientation:(long long)arg2 viewMap:(id)arg3 forSnapshot:(BOOL)arg4 ;
 - (void)_layoutSubviews;
 - (void)layoutViewsForSearch;
 - (void)setOrientation:(int)arg1;
@@ -49,6 +50,7 @@
 - (void)returnScalingView;
 - (id)initWithFolder:(id)arg1 orientation:(int)arg2 forSnapshot:(BOOL)arg3;
 - (id)initWithFolder:(id)arg1 orientation:(int)arg2;
+-(CGRect)_scrollViewFrameForDockEdge:(unsigned long long)arg1 ;
 
 // Remaining properties
 @property(retain, nonatomic) SBRootFolder *folder;

@@ -16,9 +16,13 @@
 
 #import "../headers/SpringBoard/SpringBoard.h"
 #import "../headers/BulletinBoard/BBObserver.h"
+// #import <SpringBoard/SBIconController.h>
 
 @interface IBKWidgetViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
     IBKWidgetTopBase *topBase;
+    NSMutableArray *_notificationsDataSource;
+    NSDictionary *_infoPlist;
+    long long _usedOrientation;
 }
 
 @property (nonatomic, strong) NSObject<IBKWidget> *widget;
@@ -65,6 +69,8 @@
 -(void)reloadWidgetForSettingsChange;
 
 -(UIView*)topBase;
+
+-(long long)usedOrientation;
 
 -(void)lockWidget;
 -(void)unlockWidget;

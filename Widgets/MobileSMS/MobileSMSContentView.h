@@ -39,6 +39,9 @@
 
 #define row_group_id 13
 
+#define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+
 @interface MobileSMSContentView : UIView
 
 @property (nonatomic, strong) chatsTableView *table;

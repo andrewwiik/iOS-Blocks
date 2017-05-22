@@ -112,6 +112,8 @@ void reloadAllWidgetsNow() {
             [iconView loadWidget];
         }
     }
+
+    NSLog(@"Reset All Widgets");
 }
 
 void reloadLayout() {
@@ -128,6 +130,17 @@ void reloadLayout() {
 }
 
 // Hooks
+
+%hook SBRootFolderController
+-(void)didRotateFromInterfaceOrientation:(NSInteger)arg1 {
+    %orig;
+    NSLog(@"GOT ROT EVENT #1");
+    //isRotating = NO;
+    // reloadLayout();
+    // reloadAllWidgetsNow();
+    //reloadAllWidgetsNow();
+}
+%end
 
 #pragma mark Icon co-ordinate placements
 
@@ -178,7 +191,9 @@ void reloadLayout() {
 //    list.needsProcessing = YES;
     // reloadAllWidgetsNow();
     isRotating = NO;
-    reloadAllWidgetsNow();
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, duration+0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        reloadAllWidgetsNow();
+    });
 }
 %end
 
@@ -940,6 +955,7 @@ BOOL launchingWidget;
     }
 }
 
+
 %new
 - (void)loadWidget {
     if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
@@ -990,6 +1006,12 @@ BOOL launchingWidget;
                     [widgetController layoutViewForPreExpandedWidget]; // No need to set center position
                 } else {
                     widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[icon applicationBundleID]];
+                    long long widgetOrientation = [widgetController usedOrientation];
+                    if (widgetOrientation != 20 && widgetOrientation != [(SBIconController *)[NSClassFromString(@"SBIconController") sharedInstance] orientation]) {
+                        //reloadAllWidgetsNow();
+                    }
+
+                   // [widgetController reloadWidgetForSettingsChange]; 
                 }
             
             // Add the small UI onto the icon - we can be sure this will not be a folder icon
@@ -1133,8 +1155,25 @@ BOOL launchingWidget;
     return img;
 }
 
-- (void)_setIcon:(id)arg1 animated:(BOOL)arg2 { // Deal with adding a widget view onto those icons that are already expanded
+// - (void)_setIcon:(id)arg1 animated:(BOOL)arg2 { // Deal with adding a widget view onto those icons that are already expanded
+//     %orig;
+//     [self loadWidget];
+// }
+
+- (void)setIcon:(id)arg1 {
     %orig;
+    [self loadWidget];
+}
+- (void)setLocation:(int)arg1 {
+    %orig;
+    if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
+        return;
+    }
+    if ([[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon]) {
+        if ([[[self icon] applicationBundleID] isEqual:[[[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon] applicationBundleID]]) {
+            return;
+        }
+    }
     [self loadWidget];
 }
 %end

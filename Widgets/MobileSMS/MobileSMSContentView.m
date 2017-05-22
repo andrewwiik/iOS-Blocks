@@ -16,7 +16,7 @@
     
     if (self)
     {
-        self.table = [[chatsTableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, [self contentViewHeight])];
+        self.table = [[chatsTableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height - 5.0 - (isPad ? 50.0 : 30.0)-7.0)];
         
         [self addSubview:self.table];
     }
@@ -24,9 +24,9 @@
     return self;
 }
 
--(float)contentViewHeight
+-(CGFloat)contentViewHeight
 {
-    return [objc_getClass("IBKAPI") heightForContentViewWithIdentifier:@"com.apple.MobileSMS"] - 5.0;
+    return self.frame.size.height - 5.0 - (isPad ? 50.0 : 30.0)-7.0;
 }
 
 -(void)layoutSubviews

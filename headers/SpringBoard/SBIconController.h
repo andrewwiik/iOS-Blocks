@@ -65,7 +65,7 @@
     NSIndexPath *_indexPathToResetTo;
 }
 
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 @property(retain, nonatomic) _UILegibilitySettings *legibilitySettings;
 @property(retain, nonatomic) SBIconContentView *view; // @synthesize legibilitySettings=_legibilitySettings;
 - (void)searchGesture:(id)arg1 changedPercentComplete:(float)arg2;

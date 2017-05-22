@@ -34,6 +34,7 @@
 
 
     CGFloat bbb = [IBKResources heightForWidgetWithIdentifier:identifier]-(isPad ? 50.0 : 30.0)-7.0;
+    NSLog(@"HEIGHT LOGGING:: IDENTIFIER: %@\nHEIGHT: %@", identifier, [NSNumber numberWithFloat:bbb]);
     return bbb;
 }
 
