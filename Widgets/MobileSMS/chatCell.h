@@ -17,3 +17,5 @@
 @property (nonatomic, strong) UILabel *message;
 
 @end
+
+#define isIpadDevice (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)

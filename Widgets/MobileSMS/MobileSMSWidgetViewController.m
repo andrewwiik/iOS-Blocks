@@ -33,7 +33,7 @@
 
 -(NSArray *)gradientBackgroundColors
 {
-    return [NSArray arrayWithObjects:@"26dd2b", @"5cf052", nil];
+    return [NSArray arrayWithObjects:@"38c33b", @"60c359", nil];
 }
 
 @end

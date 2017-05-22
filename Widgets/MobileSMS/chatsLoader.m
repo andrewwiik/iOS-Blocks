@@ -33,12 +33,12 @@ static int search_by_number = 17;
                     }
                     if ([obj isEqualToString:value] || [obj rangeOfString:value].location != NSNotFound) {
                         NSString *string = @"";
-                        NSString *first = ((char *)sqlite3_column_text(s, 1)) ? [NSString stringWithFormat:@"%s",(char *)sqlite3_column_text(s, 1)] :
+                        NSString *first = ((char *)sqlite3_column_text(s, 1)) ? [NSString stringWithUTF8String:(char *)sqlite3_column_text(s, 1)] :
                         nil;
                         if (first != nil) {
                             string = first;
                         }
-                        NSString *last = ((char *)sqlite3_column_text(s, 2)) ? [NSString stringWithFormat:@"%s",(char *)sqlite3_column_text(s, 2)] :
+                        NSString *last = ((char *)sqlite3_column_text(s, 2)) ? [NSString stringWithUTF8String:(char *)sqlite3_column_text(s, 2)] :
                         nil;
                         if (last != nil) {
                             if ([string length] != 0) {
@@ -103,7 +103,7 @@ static int search_by_number = 17;
                         }
                     }
                     NSMutableDictionary *subdict = [NSMutableDictionary dictionary];
-                    NSString *text = ((char *)sqlite3_column_text(statement, 2)) ? [NSString stringWithFormat:@"%s",(char *)sqlite3_column_text(statement, 2)] : nil;
+                    NSString *text = ((char *)sqlite3_column_text(statement, 2)) ? [NSString stringWithUTF8String:(char *)sqlite3_column_text(statement, 2)] : nil;
                     if (text == nil) {
                         text = @"";
                     }

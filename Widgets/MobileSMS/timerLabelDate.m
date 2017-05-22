@@ -24,7 +24,7 @@
         
         self.textColor = [UIColor colorWithWhite:1.0 alpha:0.80];
         
-        self.font = [UIFont fontWithName:@"HelveticaNeue" size:9];
+        self.font = [UIFont fontWithName:@"HelveticaNeue" size:12];
         
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateTextDate:) userInfo:nil repeats:YES];//[NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateTextDate:) userInfo:nil repeats:YES];
         
