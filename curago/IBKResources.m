@@ -151,68 +151,113 @@ SBIconController *iconController;
 
 + (CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier {
 
-    int widgetWidth = [IBKResources horiztonalWidgetSizeForBundleID:identifier];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0) {
+        int widgetWidth = [IBKResources horiztonalWidgetSizeForBundleID:identifier];
 
-    SBRootIconListView *listView;
-    listView = [[NSClassFromString(@"SBIconController") sharedInstance] rootIconListAtIndex:0];
-    if (!listView || listView) {
-        CGFloat screenWidth = SCREEN_WIDTH;
-        CGFloat screenHeight = SCREEN_HEIGHT;
-        SBRootFolderView *folderView = [[NSClassFromString(@"SBRootFolderView") alloc] initWithFolder:nil orientation:[[UIApplication sharedApplication] statusBarOrientation] viewMap:nil forSnapshot:YES];
-        folderView.frame = CGRectMake(0,0,screenWidth, screenHeight);
-        // CGFloat dockHeight = [NSClassFromString(@"SBDockIconListView") defaultHeight];
-        // if (statusBarWidth != screenWidth && statusBarWidth != screenHeight) {
-        //     dockHeight = 0;
-        // }
-        // screenHeight = statusBarWidth <= (screenWidth + 10) ? screenHeight : screenWidth;
-        // CGFloat listViewHeight = screenHeight - dockHeight - statusBarHeight - 16;
-        // SB
-        listView = [[NSClassFromString(@"SBRootIconListView") alloc] initWithFrame:[folderView _scrollViewFrameForDockEdge:0]];
-        listView.orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        SBRootIconListView *listView;
+        listView = [[NSClassFromString(@"SBIconController") sharedInstance] rootIconListAtIndex:0];
+        if (!listView) {
+            CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+            CGFloat statusBarWidth = statusBarSize.width > statusBarSize.height ? statusBarSize.width : statusBarSize.height;
+            listView = [[NSClassFromString(@"SBRootIconListView") alloc] initWithFrame:CGRectMake(0,0,statusBarWidth,0)];
+            listView.orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        }
+        if ([NSClassFromString(@"IBKResources") isRTL]) {
+          //  NSLog(@"called is RTL");
+           // NSUInteger maxCols = [listView iconColumnsForCurrentOrientation];
+            // NSLog(@"first coord: %@", NSStringFromCGPoint([listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth -1))]));
+            // NSLog(@"second coord: %@", NSStringFromCGPoint([listView originForIconAtCoordinate:SBIconCoordinateMake(1,maxCols - (widgetWidth - 1))]));
+            return [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].x - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth - 1))].x + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
+        }
+        return [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth -1))].x - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].x + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
+    } else {
+        int widgetWidth = [IBKResources horiztonalWidgetSizeForBundleID:identifier];
 
+        SBRootIconListView *listView;
+        listView = [[NSClassFromString(@"SBIconController") sharedInstance] rootIconListAtIndex:0];
+        if (!listView || listView) {
+            CGFloat screenWidth = SCREEN_WIDTH;
+            CGFloat screenHeight = SCREEN_HEIGHT;
+            SBRootFolderView *folderView = [[NSClassFromString(@"SBRootFolderView") alloc] initWithFolder:nil orientation:[[UIApplication sharedApplication] statusBarOrientation] viewMap:nil forSnapshot:YES];
+            folderView.frame = CGRectMake(0,0,screenWidth, screenHeight);
+            // CGFloat dockHeight = [NSClassFromString(@"SBDockIconListView") defaultHeight];
+            // if (statusBarWidth != screenWidth && statusBarWidth != screenHeight) {
+            //     dockHeight = 0;
+            // }
+            // screenHeight = statusBarWidth <= (screenWidth + 10) ? screenHeight : screenWidth;
+            // CGFloat listViewHeight = screenHeight - dockHeight - statusBarHeight - 16;
+            // SB
+            listView = [[NSClassFromString(@"SBRootIconListView") alloc] initWithFrame:[folderView _scrollViewFrameForDockEdge:0]];
+            listView.orientation = [[UIApplication sharedApplication] statusBarOrientation];
+
+        }
+        if ([NSClassFromString(@"IBKResources") isRTL]) {
+          //  NSLog(@"called is RTL");
+           // NSUInteger maxCols = [listView iconColumnsForCurrentOrientation];
+            // NSLog(@"first coord: %@", NSStringFromCGPoint([listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth -1))]));
+            // NSLog(@"second coord: %@", NSStringFromCGPoint([listView originForIconAtCoordinate:SBIconCoordinateMake(1,maxCols - (widgetWidth - 1))]));
+            return [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].x - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth - 1))].x + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
+        }
+        return [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth -1))].x - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].x + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
     }
-    if ([NSClassFromString(@"IBKResources") isRTL]) {
-      //  NSLog(@"called is RTL");
-       // NSUInteger maxCols = [listView iconColumnsForCurrentOrientation];
-        // NSLog(@"first coord: %@", NSStringFromCGPoint([listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth -1))]));
-        // NSLog(@"second coord: %@", NSStringFromCGPoint([listView originForIconAtCoordinate:SBIconCoordinateMake(1,maxCols - (widgetWidth - 1))]));
-        return [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].x - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth - 1))].x + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
-    }
-    return [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1 + (widgetWidth -1))].x - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].x + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
 }
 
 + (CGFloat)heightForWidgetWithIdentifier:(NSString *)identifier {
-
-    int widgetHeight = [IBKResources verticalWidgetSizeForBundleID:identifier];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0) {
+        int widgetHeight = [IBKResources verticalWidgetSizeForBundleID:identifier];
     
-    SBRootIconListView *listView;
-    listView = [[NSClassFromString(@"SBIconController") sharedInstance] rootIconListAtIndex:0];
-    if (!listView || listView) {
+        SBRootIconListView *listView;
+        listView = [[NSClassFromString(@"SBIconController") sharedInstance] rootIconListAtIndex:0];
+        if (!listView) {
 
-        // CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
-        // CGFloat statusBarWidth = statusBarSize.width > statusBarSize.height ? statusBarSize.width : statusBarSize.height;
-        // CGFloat statusBarHeight = statusBarSize.width < statusBarSize.height ? statusBarSize.width : statusBarSize.height;
-        CGFloat screenWidth = SCREEN_WIDTH;
-        CGFloat screenHeight = SCREEN_HEIGHT;
-        SBRootFolderView *folderView = [[NSClassFromString(@"SBRootFolderView") alloc] initWithFolder:nil orientation:[[UIApplication sharedApplication] statusBarOrientation] viewMap:nil forSnapshot:YES];
-        folderView.frame = CGRectMake(0,0,screenWidth, screenHeight);
-        // CGFloat dockHeight = [NSClassFromString(@"SBDockIconListView") defaultHeight];
-        // if (statusBarWidth != screenWidth && statusBarWidth != screenHeight) {
-        //     dockHeight = 0;
-        // }
-        // screenHeight = statusBarWidth <= (screenWidth + 10) ? screenHeight : screenWidth;
-        // CGFloat listViewHeight = screenHeight - dockHeight - statusBarHeight - 16;
-        // SB
-        listView = [[NSClassFromString(@"SBRootIconListView") alloc] initWithFrame:[folderView _scrollViewFrameForDockEdge:0]];
-        listView.orientation = [[UIApplication sharedApplication] statusBarOrientation];
+            CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+            CGFloat statusBarWidth = statusBarSize.width > statusBarSize.height ? statusBarSize.width : statusBarSize.height;
+            CGFloat statusBarHeight = statusBarSize.width < statusBarSize.height ? statusBarSize.width : statusBarSize.height;
+            CGFloat screenWidth = SCREEN_WIDTH;
+            CGFloat screenHeight = SCREEN_HEIGHT;
+            CGFloat dockHeight = [NSClassFromString(@"SBDockIconListView") defaultHeight];
+            if (statusBarWidth != screenWidth && statusBarWidth != screenHeight) {
+                dockHeight = 0;
+            }
+            screenHeight = statusBarWidth <= (screenWidth + 10) ? screenHeight : screenWidth;
+            CGFloat listViewHeight = screenHeight - dockHeight - statusBarHeight - 16;
 
-       // NSLog(@"1: %f\n2.: %f\n3: %f\n4: %f\n5: %f\n6: %f\n7: %f", listViewHeight, statusBarWidth, statusBarHeight, screenWidth, screenHeight, dockHeight, screenHeight);
+            listView = [[NSClassFromString(@"SBRootIconListView") alloc] initWithFrame:CGRectMake(0,0,statusBarWidth,listViewHeight)];
+            listView.orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        }
+        return [listView originForIconAtCoordinate:SBIconCoordinateMake(1 + (widgetHeight -1),1)].y - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].y + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].height;
+    } else {
+        int widgetHeight = [IBKResources verticalWidgetSizeForBundleID:identifier];
+        
+        SBRootIconListView *listView;
+        listView = [[NSClassFromString(@"SBIconController") sharedInstance] rootIconListAtIndex:0];
+        if (!listView || listView) {
+
+            // CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+            // CGFloat statusBarWidth = statusBarSize.width > statusBarSize.height ? statusBarSize.width : statusBarSize.height;
+            // CGFloat statusBarHeight = statusBarSize.width < statusBarSize.height ? statusBarSize.width : statusBarSize.height;
+            CGFloat screenWidth = SCREEN_WIDTH;
+            CGFloat screenHeight = SCREEN_HEIGHT;
+            SBRootFolderView *folderView = [[NSClassFromString(@"SBRootFolderView") alloc] initWithFolder:nil orientation:[[UIApplication sharedApplication] statusBarOrientation] viewMap:nil forSnapshot:YES];
+            folderView.frame = CGRectMake(0,0,screenWidth, screenHeight);
+            // CGFloat dockHeight = [NSClassFromString(@"SBDockIconListView") defaultHeight];
+            // if (statusBarWidth != screenWidth && statusBarWidth != screenHeight) {
+            //     dockHeight = 0;
+            // }
+            // screenHeight = statusBarWidth <= (screenWidth + 10) ? screenHeight : screenWidth;
+            // CGFloat listViewHeight = screenHeight - dockHeight - statusBarHeight - 16;
+            // SB
+            listView = [[NSClassFromString(@"SBRootIconListView") alloc] initWithFrame:[folderView _scrollViewFrameForDockEdge:0]];
+            listView.orientation = [[UIApplication sharedApplication] statusBarOrientation];
+
+           // NSLog(@"1: %f\n2.: %f\n3: %f\n4: %f\n5: %f\n6: %f\n7: %f", listViewHeight, statusBarWidth, statusBarHeight, screenWidth, screenHeight, dockHeight, screenHeight);
+        }
+
+        NSLog(@"listView: %@", listView);
+        CGFloat value = [listView originForIconAtCoordinate:SBIconCoordinateMake(1 + (widgetHeight -1),1)].y - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].y + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].height;
+        NSLog(@"HEIGHT:::: %f", value);
+        return value;
     }
-
-    NSLog(@"listView: %@", listView);
-    CGFloat value = [listView originForIconAtCoordinate:SBIconCoordinateMake(1 + (widgetHeight -1),1)].y - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].y + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].height;
-    NSLog(@"HEIGHT:::: %f", value);
-    return value;
 
     //return [listView originForIconAtCoordinate:SBIconCoordinateMake(1 + (widgetHeight -1),1)].y - [listView originForIconAtCoordinate:SBIconCoordinateMake(1,1)].y + [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].height;
 }
