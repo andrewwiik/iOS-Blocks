@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
-#define search_by_email 17
-#define search_by_number 16
+// #define search_by_email 17
+// #define search_by_number 16
 
 @interface chatsLoader : NSObject
 

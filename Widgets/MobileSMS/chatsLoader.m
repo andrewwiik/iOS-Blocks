@@ -10,11 +10,11 @@
 
 @implementation chatsLoader
 
-/*Get contact info by looking in the addressbook database
- #define search_by_email 17
- #define search_by_number 16
- (int)key -> 17 search by email/ 16 by number
- */
+//Get contact info by looking in the addressbook database
+static int search_by_email = 18;
+static int search_by_number = 17;
+// (int)key -> 17 search by email/ 16 by number
+ 
 +(NSString *)getPersonInfoByKey:(int)key value:(NSString *)value {
     NSString *path = @"/var/mobile/Library/AddressBook/AddressBook.sqlitedb"; //Databse path
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
@@ -70,6 +70,10 @@
 
 /*Grab all messages data from SMS database*/
 +(NSDictionary *)getChatsDictionary {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 10.0) {
+        search_by_email = 17;
+        search_by_number = 16;
+    }
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     NSString *path = @"/var/mobile/Library/SMS/sms.db"; //SMS database path
     NSMutableArray *array = [[NSMutableArray alloc] init];
