@@ -1929,16 +1929,21 @@ NSInteger page = 0;
 
 #pragma mark Icon badge handling
 
+@interface SBIconBadgeView (Curago)
+@property (nonatomic, retain) SBIcon *icon;
+@end
+
 %hook SBIconBadgeView
+%property (nonatomic, retain) SBIcon *icon;
 
 static SBIcon *temp;
 
 - (void)configureForIcon:(SBIcon*)arg1 location:(int)arg2 highlighted:(BOOL)arg3 {
-    temp = arg1;
+    self.icon = arg1;
 
     %orig;
 
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[arg1 applicationBundleID]] && !inSwitcher) {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
         // Calculate x for center
         [[self superview] addSubview:self]; // Bring to front.
     }
@@ -1946,9 +1951,9 @@ static SBIcon *temp;
 }
 
 - (struct CGPoint)accessoryOriginForIconBounds:(CGRect)arg1 {
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[temp applicationBundleID]] && !inSwitcher) {
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
         // Calculate x for center
-        IBKWidgetViewController *contr = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[temp applicationBundleID]];
+        IBKWidgetViewController *contr = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
         arg1 = contr.view.bounds;
 
         // TODO: Fix for hover mode
