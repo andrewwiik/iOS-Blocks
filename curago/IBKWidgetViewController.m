@@ -68,7 +68,7 @@ extern dispatch_queue_t __BBServerQueue;
     // topBase.layer.masksToBounds = YES;
     topBase.userInteractionEnabled = YES;
     
-    [topBase addTarget:self action:@selector(didTapTopBase:) forControlEvents:UIControlEventTouchUpInside];
+    //[topBase addTarget:self action:@selector(didTapTopBase:) forControlEvents:UIControlEventAllTouchEvents];
     
     UIView *baseView = [[UIView alloc] initWithFrame:initialFrame];
     baseView.alpha = 1.0;

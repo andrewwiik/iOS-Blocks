@@ -915,6 +915,22 @@ BOOL launchingWidget;
 
     return orig;
 }
+
+-(CGRect)bounds {
+
+    if (inSwitcher || sup || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
+        CGRect frame = %orig;
+        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+        frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+
+        return frame;
+    }
+
+    return %orig;
+}
+
  - (CGSize)iconImageVisibleSize {
     if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
         return %orig;
@@ -1162,11 +1178,12 @@ BOOL launchingWidget;
 
 - (void)setIcon:(id)arg1 {
     %orig;
-    [self loadWidget];
+    if (![[NSClassFromString(@"SBIconController") sharedInstance] isEditing])
+        [self loadWidget];
 }
 - (void)setLocation:(int)arg1 {
     %orig;
-    if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
+    if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")] || [[NSClassFromString(@"SBIconController") sharedInstance] isEditing]) {
         return;
     }
     if ([[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon]) {
@@ -1236,6 +1253,7 @@ CGSize defaultIconSizing;
 
     return frame;
 }
+
 
 //- (CGFloat)alpha {
 //    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {

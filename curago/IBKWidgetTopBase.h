@@ -21,3 +21,7 @@
 @interface IBKWidgetTopBase : UIButton
 
 @end
+
+@interface UIButton (PrivateStuff)
+- (UIView *)superviewOfClass:(Class)thing;
+@end 
