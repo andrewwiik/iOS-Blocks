@@ -581,36 +581,38 @@ extern dispatch_queue_t __BBServerQueue;
 
 - (void)setNotificationsDataSource:(NSMutableArray *)dataSource {
     _notificationsDataSource = dataSource;
-    dispatch_async(dispatch_get_main_queue(), ^{
+    if (!self.widget) {
+        dispatch_async(dispatch_get_main_queue(), ^{
 
-        if ([self.notificationsDataSource count] != 0) {
-            [self loadNotificationsTableView];
-        }
+            if ([self.notificationsDataSource count] != 0) {
+                [self loadNotificationsTableView];
+            }
 
-        if (!self.noNotifsLabel) {
-            self.noNotifsLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-40, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30))];
-            self.noNotifsLabel.text = [[NSBundle mainBundle] localizedStringForKey:@"NOTIFICATION_CENTER_CONTENT_UNAVAILABLE_ALL" value:nil table:@"SpringBoard"];
-            self.noNotifsLabel.textAlignment = NSTextAlignmentCenter;
-            self.noNotifsLabel.numberOfLines = 0;
-            self.noNotifsLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
+            if (!self.noNotifsLabel) {
+                self.noNotifsLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(20, 10, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-40, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30))];
+                self.noNotifsLabel.text = [[NSBundle mainBundle] localizedStringForKey:@"NOTIFICATION_CENTER_CONTENT_UNAVAILABLE_ALL" value:nil table:@"SpringBoard"];
+                self.noNotifsLabel.textAlignment = NSTextAlignmentCenter;
+                self.noNotifsLabel.numberOfLines = 0;
+                self.noNotifsLabel.textColor = ([IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor] ? [UIColor darkTextColor] : [UIColor whiteColor]);
+                
+                [self.noNotifsLabel setLabelSize:kIBKLabelSizingLarge];
+                self.noNotifsLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor];
+                
+                self.noNotifsLabel.backgroundColor = [UIColor clearColor];
+            }
+
+            if ([self.notificationsDataSource count] == 0)
+                self.noNotifsLabel.alpha = 1.0;
+            else
+                self.noNotifsLabel.alpha = 0.0;
+
+            [topBase addSubview:self.noNotifsLabel];
+
+            [topBase addSubview:self.iconImageView];
             
-            [self.noNotifsLabel setLabelSize:kIBKLabelSizingLarge];
-            self.noNotifsLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.view.backgroundColor];
-            
-            self.noNotifsLabel.backgroundColor = [UIColor clearColor];
-        }
-
-        if ([self.notificationsDataSource count] == 0)
-            self.noNotifsLabel.alpha = 1.0;
-        else
-            self.noNotifsLabel.alpha = 0.0;
-
-        [topBase addSubview:self.noNotifsLabel];
-
-        [topBase addSubview:self.iconImageView];
-        
-        [self setColorAndOrIcon:_infoPlist];
-    });
+            [self setColorAndOrIcon:_infoPlist];
+        });
+    }
 }
 
 
@@ -620,7 +622,7 @@ extern dispatch_queue_t __BBServerQueue;
 
 -(void)loadNotificationsTableView {
     
-    if (!self.notificationsTableView) {
+    if (!self.notificationsTableView && !self.viw) {
         CGRect initialFrame = CGRectMake(10, 7, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-14, self.iconImageView.frame.origin.y-9);
         self.notificationsTableView = [[UITableView alloc] initWithFrame:initialFrame style:UITableViewStylePlain];
         

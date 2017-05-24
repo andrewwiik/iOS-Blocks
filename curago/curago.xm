@@ -159,6 +159,17 @@ void reloadLayout() {
 }
 %end
 
+%hook SBWorkspaceTransaction
+-(void)_transactionComplete {
+    %orig;
+    displayAllWidgets();
+}
+-(void)_didComplete {
+    %orig;
+    displayAllWidgets();
+}
+%end
+
 
 // Hooks
 
