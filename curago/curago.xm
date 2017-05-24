@@ -116,6 +116,28 @@ void reloadAllWidgetsNow() {
     NSLog(@"Reset All Widgets");
 }
 
+void displayAllWidgets() {
+    
+   // SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+    //SBRootFolderController *rootFolder = [iconController valueForKeyPath:@"_rootFolderController"];
+    
+    // for (SBIconListView *listView in (NSArray *)[rootFolder valueForKey:@"iconListViews"]) {
+        
+    //     if ([listView isKindOfClass:NSClassFromString(@"SBRootIconListView")]) {
+    //         SBIconIndexMutableList *list = [[listView model] valueForKey:@"_icons"];
+    //         list.needsProcessing = YES;
+    //     }
+    // }
+    for (NSString *key in [[NSClassFromString(@"IBKResources") widgetViewControllers] allKeys]) {
+        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:key];
+        widgetController.view.alpha = 1.0;
+        widgetController.view.hidden = NO;
+    }
+
+
+    NSLog(@"Showed All Widgets");
+}
+
 void reloadLayout() {
     SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
     SBRootFolderController *rootFolder = [iconController valueForKeyPath:@"_rootFolderController"];
@@ -128,6 +150,15 @@ void reloadLayout() {
         }
     }
 }
+
+
+%hook SBMainWorkspace
+- (void)transactionDidComplete:(id)arg1 {
+    %orig;
+    displayAllWidgets();
+}
+%end
+
 
 // Hooks
 
@@ -221,6 +252,10 @@ void reloadLayout() {
     %orig;
 }
 
+- (void)transactionDidComplete:(id)arg1 {
+    %orig;
+    displayAllWidgets();
+}
 %end
 
 // iOS 8
@@ -257,6 +292,14 @@ BOOL launchingWidget;
     isLaunching = NO;
 }
 
+%end
+
+%hook SBAppExitedWorkspaceTransaction
+- (void)_didComplete {
+    %orig;
+    displayAllWidgets();
+
+}
 %end
 
 %hook SBApplication
