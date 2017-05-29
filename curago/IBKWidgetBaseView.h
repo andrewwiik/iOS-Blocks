@@ -1,0 +1,2 @@
+@interface IBKWidgetBaseView : UIView
+@end

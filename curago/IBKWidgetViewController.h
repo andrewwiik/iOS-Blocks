@@ -13,6 +13,7 @@
 #import "IBKWidgetTopBase.h"
 #import "IBKWidgetLockView.h"
 #import "IBKLabel.h"
+#import "IBKWidgetBaseView.h"
 
 #import "../headers/SpringBoard/SpringBoard.h"
 #import "../headers/BulletinBoard/BBObserver.h"
@@ -25,6 +26,7 @@
     long long _usedOrientation;
 }
 
+@property (nonatomic,strong) IBKWidgetBaseView *view;
 @property (nonatomic, strong) NSObject<IBKWidget> *widget;
 @property (nonatomic, retain) NSBundle *bundle;
 @property (nonatomic, strong) UIView *viw;
@@ -52,6 +54,9 @@
 @property (readwrite) BOOL isLocked;
 
 @property (nonatomic, strong) IBKWidgetLockView *lockView;
+
+- (IBKWidgetBaseView *)view;
+- (void)setView:(IBKWidgetBaseView *)view;
 
 -(void)setScaleForView:(CGFloat)scale withDuration:(CGFloat)duration;
 -(void)layoutViewForPreExpandedWidget;

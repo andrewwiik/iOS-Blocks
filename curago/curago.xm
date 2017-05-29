@@ -33,7 +33,7 @@
 // }
 
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-#define RTL_CHECK [NSClassFromString(@"IBKResources") isRTL]
+#define IS_RTL [NSClassFromString(@"IBKResources") isRTL]
 #ifndef HBLogError
     #define HBLogError NSLog
 #endif
@@ -956,12 +956,17 @@ BOOL launchingWidget;
             UIView *view = [[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]] view];
 
             // Normalise point.
-            arg1.x = arg1.x + ((view.frame.size.width - self.frame.size.width)/2);
-            arg1.y = arg1.y + ((view.frame.size.width - self.frame.size.width)/2);
+            arg1.x += ((view.frame.size.width - self.frame.size.width)/2);
+            arg1.y += ((view.frame.size.width - self.frame.size.width)/2);
             //arg1 = [[[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]] view] convertPoint:arg1 fromView:self];
         }
 
-//        NSLog(@"Checking if point %@ is inside.", NSStringFromCGPoint(arg1));
+        if (IS_RTL) {
+            //UIView *view = [[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]] view];
+            arg1.x += fabs([self bounds].origin.x); 
+        }
+
+        NSLog(@"Checking if point %@ is inside.", NSStringFromCGPoint(arg1));
 
         return [[[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]] view] pointInside:arg1 withEvent:arg2];
     }
@@ -984,7 +989,11 @@ BOOL launchingWidget;
         IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
         frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
 
-        // if (RTL_CHECK) {
+        if (IS_RTL) {
+            frame.origin.x = 0 - (frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
+        }
+
+        // if (IS_RTL) {
         //     frame.origin.x = -frame.size.width + self.frame.size.width;
         // }
         return frame;
@@ -1135,6 +1144,10 @@ BOOL launchingWidget;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
     point = CGPointMake(widgetController.view.frame.size.width/2, widgetController.view.frame.size.height/2);
 
+    if (IS_RTL) {
+        point.x = point.x - (widgetController.view.frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
+    }
+
     return point;
 }
 
@@ -1145,18 +1158,21 @@ BOOL launchingWidget;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
     frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
 
+    // if (IS_RTL) {
+    //     frame.origin.x = frame.origin.x - (widgetController.view.frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
+    // }
     return frame;
 }
 
-- (struct CGRect)_frameForLabel {
+- (CGRect)_frameForLabel {
 
-    if (inSwitcher || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+    if (inSwitcher || sup || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
     CGRect orig = %orig;
     
+    IBKWidgetViewController *widgetController = (IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];   
+    CGRect widgetFrame = widgetController.view.frame;
         
-    CGRect widgetFrame = ((IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]]).view.frame;
-        
-    CGFloat widgetScale = ((IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]]).currentScale;
+    CGFloat widgetScale = widgetController.currentScale;
         
         
     CGFloat percentComplete = (widgetScale - 0.375)/0.625;
@@ -1165,10 +1181,20 @@ BOOL launchingWidget;
             
     else if (percentComplete < 0)
         percentComplete = 0;
+
+    CGFloat finalPosition = IS_RTL ? self.frame.size.width  - orig.size.width - 8 : 8;
+    if (IS_RTL) {
+        CGPoint labelFramePoint = CGPointMake(widgetController.view.bounds.size.width - orig.size.width-8 ,0);
+        CGPoint labelPoint = [widgetController.view convertPoint:labelFramePoint toView:self];
+        finalPosition = labelPoint.x;
+
+
+    }
             
-    CGFloat extraPadding = (8 * percentComplete) + (orig.origin.x * (1 - percentComplete));
+    CGFloat extraPadding = (finalPosition * percentComplete) + (orig.origin.x * (1 - percentComplete));
     if ([NSClassFromString(@"IBKResources") isRTL]) {
-        orig.origin = CGPointMake(0 - extraPadding, widgetFrame.origin.y + widgetFrame.size.height);
+       // CGFloat startingPosition = [widgetController.view convertPoint:CGPointMake(0,0) toView:self].x;
+        orig.origin = CGPointMake(extraPadding, widgetFrame.origin.y + widgetFrame.size.height);
     }
     else {
         orig.origin = CGPointMake(widgetFrame.origin.x + extraPadding, widgetFrame.origin.y + widgetFrame.size.height);
@@ -1182,8 +1208,12 @@ BOOL launchingWidget;
     
     CGRect orig = %orig;
     CGRect widgetFrame = ((IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]]).view.frame;
-        
-    orig.origin = CGPointMake(widgetFrame.origin.x + widgetFrame.size.width - orig.size.width + 10, widgetFrame.origin.y - (orig.size.height/2));
+    CGFloat xValue = widgetFrame.origin.x + (IS_RTL ? 0 : widgetFrame.size.width) - (IS_RTL ? 0 : orig.size.width) + (IS_RTL ? -10 : 10);
+
+    // if (IS_RTL) {
+    //     xValue = 
+    // }
+    orig.origin = CGPointMake(xValue, widgetFrame.origin.y - (orig.size.height/2));
     return orig;
 }
     
@@ -1270,6 +1300,10 @@ CGSize defaultIconSizing;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
     frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
 
+
+    if (IS_RTL) {
+        frame.origin.x = 0 - (widgetController.view.frame.size.width - [NSClassFromString(@"SBIconView") defaultIconImageSize].width) - 1;
+    }
     return frame;
 }
 
@@ -1542,7 +1576,8 @@ CGSize defaultIconSizing;
             draggedIconView = [[%c(SBIconViewMap) homescreenMap] mappedIconViewForIcon:(SBIcon*)[self valueForKey:@"grabbedIcon"]];
         }
 //         NSLog(@"DRAGGED ICON VIEW: %@", draggedIconView);
-        CGPoint properPausePoint = CGPointMake(draggedIconView.frame.origin.x + [%c(SBIconView) defaultIconSize].width/2, draggedIconView.frame.origin.y + [%c(SBIconView) defaultIconSize].height/2);
+        CGFloat xMidpointValue = ([%c(SBIconView) defaultIconSize].width/2) * (IS_RTL ? 2 : 1);
+        CGPoint properPausePoint = CGPointMake(draggedIconView.frame.origin.x + xMidpointValue, draggedIconView.frame.origin.y + [%c(SBIconView) defaultIconSize].height/2);
         point = properPausePoint;
     }
     %orig;
@@ -1833,7 +1868,7 @@ NSInteger page = 0;
 
         widget.view.center = CGPointMake(([(UIView*)[view _iconImageView] frame].size.width/2)-1, ([(UIView*)[view _iconImageView] frame].size.height/2)-1);
 
-        CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
+        CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
 
        // NSLog(@"BEGINNING SCALE IS %f", iconScale);
 
@@ -1931,7 +1966,7 @@ NSInteger page = 0;
                 // Icon's label?
             }];
         } else {
-            CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
+            CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
 
             CGFloat red, green, blue;
             [widget.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
@@ -1952,7 +1987,7 @@ NSInteger page = 0;
     } else if (pinch.state == UIGestureRecognizerStateCancelled) {
        // NSLog(@"PINCHING WAS CANCELLED");
 
-        CGFloat scale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
+        CGFloat scale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
 
         widget.currentScale = scale;
         [UIView animateWithDuration:0.3 animations:^{

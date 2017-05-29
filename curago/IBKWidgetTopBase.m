@@ -24,7 +24,7 @@
 	//return YES;
 	// return YES;
     if ([[NSClassFromString(@"SBIconController") sharedInstance] isEditing]) return NO;
-    CGRect rect = CGRectMake(0 - (RTL_CHECK ? self.frame.size.width - (isPad ? 50 : 30) : 0), self.frame.size.height-(isPad ? 50 : 30), (isPad ? 50 : 30), (isPad ? 50 : 30));
+    CGRect rect = CGRectMake(0 + (RTL_CHECK ? self.frame.size.width - (isPad ? 50 : 30) : 0), self.frame.size.height-(isPad ? 50 : 30), (isPad ? 50 : 30), (isPad ? 50 : 30));
     CGRect intersect = CGRectMake(point.x, point.y, 1, 1);
     NSLog(@"GETTING TOUCH EVENT");
     return !CGRectIntersectsRect(rect, intersect);

@@ -56,6 +56,14 @@ extern dispatch_queue_t __BBServerQueue;
     return self;
 }
 
+- (IBKWidgetBaseView *)view{
+    return (IBKWidgetBaseView*)[super view];
+}
+
+- (void)setView:(IBKWidgetBaseView *)view{
+    [super setView:view];
+}
+
 -(void)loadView {
     // Begin building our base widget view
     
@@ -70,7 +78,7 @@ extern dispatch_queue_t __BBServerQueue;
     
     //[topBase addTarget:self action:@selector(didTapTopBase:) forControlEvents:UIControlEventAllTouchEvents];
     
-    UIView *baseView = [[UIView alloc] initWithFrame:initialFrame];
+    IBKWidgetBaseView *baseView = [[IBKWidgetBaseView alloc] initWithFrame:initialFrame];
     baseView.alpha = 1.0;
     baseView.userInteractionEnabled = YES;
     baseView.layer.cornerRadius = 12;
@@ -827,11 +835,11 @@ extern dispatch_queue_t __BBServerQueue;
     scale -= 1.0;
     
     // Modify scaling to be based off icon sizing.
-    
+    // [NSClassFromString(@"SBIconView") defaultIconImageSize].height
     // ShimIcon needs to be looking at scale 1.0
     // (widgetWidth - self.shimIcxon.bounds.size.width) = gap between widget and icon (may be negative)
     
-    CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
+    CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
     
     if (!self.scalingDown)
         scale = iconScale + scale;
@@ -892,7 +900,7 @@ extern dispatch_queue_t __BBServerQueue;
 }
 
 -(void)unloadFromPinchGesture {
-    CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
+    CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
     
     self.currentScale = iconScale;
     [UIView animateWithDuration:0.3 animations:^{
@@ -937,7 +945,7 @@ float scale2 = 0.0;
 //            [[self.correspondingIconView _iconImageView] setAlpha:0.0];
 //            [[self.correspondingIconView _iconImageView] setHidden:YES];
             // Animate shim icon to top corner.
-            CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
+            CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
             
             const CGFloat *components = CGColorGetComponents(self.view.layer.borderColor);
             
@@ -1312,7 +1320,7 @@ float scale2 = 0.0;
 - (void)closeWidgetAnimated {
     [[self.correspondingIconView _iconImageView] setHidden:YES];
     // Animate shim icon to top corner.
-    CGFloat iconScale = (isPad ? 72 : 60) / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
+    CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
     
     const CGFloat *components = CGColorGetComponents(self.view.layer.borderColor);
     

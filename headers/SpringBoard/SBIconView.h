@@ -62,7 +62,7 @@
 + (struct CGRect)_rectForLayoutMetric:(int)arg1;
 + (struct CGSize)defaultVisibleIconImageSize;
 + (struct CGPoint)defaultIconImageCenter;
-+ (struct CGSize)defaultIconImageSize;
++ (CGSize)defaultIconImageSize;
 + (float)_labelHeight;
 + (struct CGSize)defaultIconSize;
 + (float)updatedMarkRightMargin;
