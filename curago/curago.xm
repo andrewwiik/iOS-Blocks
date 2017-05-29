@@ -33,6 +33,7 @@
 // }
 
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define RTL_CHECK [NSClassFromString(@"IBKResources") isRTL]
 #ifndef HBLogError
     #define HBLogError NSLog
 #endif
@@ -130,11 +131,15 @@ void displayAllWidgets() {
     // }
     for (NSString *key in [[NSClassFromString(@"IBKResources") widgetViewControllers] allKeys]) {
         IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:key];
-        widgetController.view.alpha = 1.0;
-        widgetController.view.hidden = NO;
+        if ([widgetController.view superview]) {
+            if ([[widgetController.view superview] isKindOfClass:NSClassFromString(@"SBIconView")]){
+                if ([key isEqualToString:[((SBIconView *)[widgetController.view superview]).icon applicationBundleID]]) {
+                    widgetController.view.alpha = 1.0;
+                    widgetController.view.hidden = NO;
+                }
+            }
+        }
     }
-
-
     NSLog(@"Showed All Widgets");
 }
 
@@ -152,12 +157,12 @@ void reloadLayout() {
 }
 
 
-%hook SBMainWorkspace
-- (void)transactionDidComplete:(id)arg1 {
-    %orig;
-    displayAllWidgets();
-}
-%end
+// %hook SBMainWorkspace
+// - (void)transactionDidComplete:(id)arg1 {
+//     %orig;
+//     displayAllWidgets();
+// }
+// %end
 
 %hook SBWorkspaceTransaction
 -(void)_transactionComplete {
@@ -979,6 +984,9 @@ BOOL launchingWidget;
         IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
         frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
 
+        // if (RTL_CHECK) {
+        //     frame.origin.x = -frame.size.width + self.frame.size.width;
+        // }
         return frame;
     }
 
