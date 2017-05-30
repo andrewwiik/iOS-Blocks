@@ -30,6 +30,7 @@
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define is_IOS7_0 ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.10)
 #define orient [[UIApplication sharedApplication] statusBarOrientation]
+#define IS_RTL [NSClassFromString(@"IBKResources") isRTL]
 
 #import <Foundation/Foundation.h>
 #include <dlfcn.h>
@@ -631,7 +632,8 @@ extern dispatch_queue_t __BBServerQueue;
 -(void)loadNotificationsTableView {
     
     if (!self.notificationsTableView && !self.viw) {
-        CGRect initialFrame = CGRectMake(10, 7, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-14, self.iconImageView.frame.origin.y-9);
+        CGFloat blockWidth = [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer];
+        CGRect initialFrame = CGRectMake((IS_RTL ? 8 : 10), 7, blockWidth-18, self.iconImageView.frame.origin.y-9);
         self.notificationsTableView = [[UITableView alloc] initWithFrame:initialFrame style:UITableViewStylePlain];
         
         self.notificationsTableView.delegate = self;
@@ -641,6 +643,8 @@ extern dispatch_queue_t __BBServerQueue;
         self.notificationsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.notificationsTableView.allowsSelection = NO;
         self.notificationsTableView.layer.masksToBounds = NO;
+
+        self.notificationsTableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, -8);
 
         NSLog(@"Loading Notifications Table View");
         
@@ -672,7 +676,7 @@ extern dispatch_queue_t __BBServerQueue;
         colors = [[colors reverseObjectEnumerator] allObjects];
         
         grad.colors = colors;
-        grad.bounds = CGRectMake(0, 0, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer], self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
+        grad.bounds = CGRectMake(0, 0, blockWidth, self.iconImageView.frame.origin.y + (self.iconImageView.frame.size.height/4));
         
         UIView *tableViewBase = [[UIView alloc] initWithFrame:topBase.frame];
         tableViewBase.backgroundColor = [UIColor clearColor];
@@ -692,7 +696,8 @@ extern dispatch_queue_t __BBServerQueue;
             [self.notificationsTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         }
     } else {
-        CGRect initialFrame = CGRectMake(10, 7, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer]-14, self.iconImageView.frame.origin.y-9);
+        CGFloat blockWidth = [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer];
+        CGRect initialFrame = CGRectMake((IS_RTL ? 8 : 10), 7, blockWidth-18, self.iconImageView.frame.origin.y-9);
         self.notificationsTableView.frame = initialFrame;
     }
 

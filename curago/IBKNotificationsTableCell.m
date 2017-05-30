@@ -9,8 +9,11 @@
 #import "IBKNotificationsTableCell.h"
 
 #import <objc/runtime.h>
+#import "IBKResources.h"
 
 #define is_IOS8_3 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.2) && ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0)
+#define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define IS_RTL [NSClassFromString(@"IBKResources") isRTL]
 
 @implementation IBKNotificationsTableCell
 
@@ -79,7 +82,7 @@
     }
     
     if (!self.title) {
-        self.title = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 3, width-8, (isIpadDevice ? 16 : 14))];
+        self.title = [[IBKLabel alloc] initWithFrame:CGRectMake((IS_RTL ? width : 0), 3, width-8, (isIpadDevice ? 16 : 14))];
         self.title.numberOfLines = 1;
         self.title.backgroundColor = [UIColor clearColor];
 
@@ -108,9 +111,15 @@
     
     [self.title sizeToFit];
     
+    if (IS_RTL) {
+        CGRect flippedTitleFrame = self.title.frame;
+        flippedTitleFrame.origin.x = width - flippedTitleFrame.size.width;
+        self.title.frame = flippedTitleFrame;
+    }
     CGRect titleFrameCleanUp = self.title.frame;
     if (titleFrameCleanUp.size.width > width-46) {
         titleFrameCleanUp.size = CGSizeMake(width-46, titleFrameCleanUp.size.height);
+
         self.title.frame = titleFrameCleanUp;
     }
     
@@ -118,7 +127,7 @@
         self.dateLabel = [[IBKLabel alloc] initWithFrame:CGRectMake(0, 5, width-2, (isIpadDevice ? 13 : 12))];
         self.dateLabel.numberOfLines = 1;
         self.dateLabel.backgroundColor = [UIColor clearColor];
-        self.dateLabel.textAlignment = NSTextAlignmentRight;
+       // self.dateLabel.textAlignment = (IS_RTL ? NSTextAlignmentLeft : NSTextAlignmentRight);
         
         [self.dateLabel setLabelSize:kIBKLabelSizingTiny];
         self.dateLabel.shadowingEnabled = ![IBKNotificationsTableCell isSuperviewColourationBright:self.superviewColouration];
@@ -132,6 +141,17 @@
         
         [self addSubview:self.dateLabel];
     }
+
+    [self.dateLabel sizeToFit];
+
+    CGRect dateLabelFrame = self.dateLabel.frame;
+    if (IS_RTL) {
+        dateLabelFrame.origin.x = 0;
+    } else {
+        dateLabelFrame.origin.x = width - dateLabelFrame.size.width;
+    }
+
+    self.dateLabel.frame = dateLabelFrame;
     
     self.dateTimer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(updateDate:) userInfo:nil repeats:YES];
     [self updateDate:nil];
@@ -187,7 +207,7 @@
     }
     
     if (!self.separatorLine) {
-        self.separatorLine = [[UIView alloc] initWithFrame:CGRectMake(6, (isIpadDevice ? 65 : 50), width-16, 1)];
+        self.separatorLine = [[UIView alloc] initWithFrame:CGRectMake((IS_RTL ? width-(width - 4) : 0), (isIpadDevice ? 65 : 50), width-4, 1)];
         self.separatorLine.backgroundColor = [UIColor whiteColor];
         self.separatorLine.alpha = 0.25;
         
@@ -226,6 +246,16 @@
         }
         
         self.dateLabel.text = string;
+        [self.dateLabel sizeToFit];
+
+        CGRect dateLabelFrame = self.dateLabel.frame;
+        if (IS_RTL) {
+            dateLabelFrame.origin.x = 0;
+        } else {
+            dateLabelFrame.origin.x = self.frame.size.width - dateLabelFrame.size.width;
+        }
+
+        self.dateLabel.frame = dateLabelFrame;
     }
     @catch (NSException *exception) {
         NSLog(@"Bugger, I broke it again");
