@@ -22,7 +22,7 @@
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.matchstic.curago</string>
+			<string>com.iosblocks.curago</string>
 			<key>key</key>
 			<string>shouldHideBadge</string>
 			<key>label</key>
@@ -36,7 +36,7 @@
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.matchstic.curago</string>
+			<string>com.iosblocks.curago</string>
 			<key>key</key>
 			<string>returnIcons</string>
 			<key>label</key>
@@ -56,7 +56,7 @@
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.matchstic.curago</string>
+			<string>com.iosblocks.curago</string>
 			<key>key</key>
 			<string>transparentWidgets</string>
 			<key>label</key>
@@ -72,7 +72,7 @@
 			<key>default</key>
 			<true/>
 			<key>defaults</key>
-			<string>com.matchstic.curago</string>
+			<string>com.iosblocks.curago</string>
 			<key>key</key>
 			<string>borderedWidgets</string>
 			<key>label</key>
@@ -110,13 +110,13 @@
 		</dict>
 		<dict>
 			<key>PostNotification</key>
-			<string>com.matchstic.curago/settingschanged</string>
+			<string>com.iosblocks.curago/settingschanged</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.matchstic.curago</string>
+			<string>com.iosblocks.curago</string>
 			<key>key</key>
 			<string>debug</string>
 			<key>label</key>

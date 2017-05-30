@@ -63,6 +63,7 @@
 #import "SBUIPasscodeLockViewFactory.h"
 #import "SBWindowContextHostManagerDelegate-Protocol.h"
 #import "SBWindowContextManagerDelegate-Protocol.h"
+#import "_SBUIBiometricKitInterface.h"
 #import "SpringBoard-Structs.h"
 #import <SpringBoard/SpringBoard.h>
 #import "SBMediaController.h"

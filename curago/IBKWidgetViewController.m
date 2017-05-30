@@ -485,7 +485,7 @@ extern dispatch_queue_t __BBServerQueue;
          */
         
         @try {
-            CGFloat originx = self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width + 4;
+            CGFloat originx = (IS_RTL ? [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer] - (self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width + 4): self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width + 4);
             self.buttons = [self.widget buttonAreaViewWithFrame:CGRectMake(originx, self.iconImageView.frame.origin.y, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer] - originx - 8, self.iconImageView.frame.size.height)];
             self.buttons.backgroundColor = [UIColor clearColor];
             [topBase addSubview:self.buttons];

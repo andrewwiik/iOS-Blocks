@@ -152,7 +152,7 @@ static NSBundle *strings;
 }
 
 -(id)getForKey:(NSString*)key {
-    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     if (!settings) {
         settings = [NSDictionary dictionary];
     }
@@ -184,7 +184,7 @@ static NSBundle *strings;
 
 -(void)setForKey:(NSString*)key {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-	[dict addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"]];
+	[dict addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"]];
     
     NSMutableDictionary *changed = [dict[@"redirectedIdentifiers"] mutableCopy];
     if (!changed) {
@@ -195,7 +195,7 @@ static NSBundle *strings;
     
     [dict setObject:changed forKey:@"redirectedIdentifiers"];
 	[dict setObject:self.bundleIdentifier forKey:@"changedBundleIdFromSettings"];
-	[dict writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
+	[dict writeToFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist" atomically:YES];
     
 	CFStringRef toPost = (__bridge CFStringRef)@"com.matchstic.ibk/settingschangeforwidget";
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);

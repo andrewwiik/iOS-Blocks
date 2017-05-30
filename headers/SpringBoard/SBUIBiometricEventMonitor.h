@@ -7,4 +7,5 @@
 - (void)_startMatching;
 - (void)_setMatchingEnabled:(BOOL)arg1;
 - (BOOL)isMatchingEnabled;
+- (BOOL)hasEnrolledIdentities;
 @end

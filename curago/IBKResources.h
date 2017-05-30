@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "../headers/SpringBoard/SpringBoard.h"
+#import <LocalAuthentication/LAContext.h>
 
 #import "IBKFunctions.h"
-#import "IBKWidgetViewController.h"
 
-
+@class IBKWidgetViewController;
 @interface IBKResources : NSObject
 
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -66,4 +66,9 @@
 + (NSIndexPath *)indexPathForIcon:(SBIcon *)icon orBundleID:(NSString *)bundleID;
 + (SBIcon *)iconForBundleID:(NSString *)bundleID;
 + (SBIconView *)iconViewForBundleID:(NSString *)bundleID;
+
+#pragma mark TouchID
+
++ (BOOL)isTouchIDEnabled;
+
 @end

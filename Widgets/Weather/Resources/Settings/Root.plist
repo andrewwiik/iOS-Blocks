@@ -44,13 +44,13 @@
 		</dict>
 		<dict>
 			<key>PostNotification</key>
-			<string>com.matchstic.curago/settingschanged</string>
+			<string>com.iosblocks.curago/settingschanged</string>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<false/>
 			<key>defaults</key>
-			<string>com.matchstic.curago</string>
+			<string>com.iosblocks.curago</string>
 			<key>key</key>
 			<string>debug</string>
 			<key>label</key>

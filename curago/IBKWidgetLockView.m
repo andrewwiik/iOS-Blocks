@@ -255,6 +255,85 @@ BOOL previousMatchingSetting;
     [self performSelector:@selector(checkPasscode:) withObject:entered afterDelay:0.2];
 }
 
+- (void)biometricKitInterface:(id)interface handleEvent:(unsigned long long)event {
+    //[[objc_getClass("SBScreenFlash") mainScreenFlasher] flashWhiteWithCompletion:nil];
+
+   switch(event) {
+        case TouchIDFingerDown:
+            break;
+        case TouchIDFingerUp:
+            break;
+        case TouchIDFingerHeld:
+            
+            break;
+        case TouchIDNotMatched:
+            [self.passcodeView resetForFailedPasscode];
+            //AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            break;
+        case TouchIDNotMatched2:
+            [self.passcodeView resetForFailedPasscode];
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            break;
+        case TouchIDMaybeMatched:
+        case TouchIDMatched: {
+            [(IBKWidgetViewController*)self.delegate unlockWidget];
+            
+            [self.passcodeView autofillForSuccessfulMesaAttemptWithCompletion:nil];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                self.backdropView.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                [self.passcodeView removeFromSuperview];
+                self.passcodeView = nil;
+                
+                [self.backdropView removeFromSuperview];
+                self.backdropView = nil;
+                
+                if (isPad) {
+                    for (UIView *subview in self.ipadWindow.subviews) {
+                        [subview removeFromSuperview];
+                    }
+                    
+                    self.ipadWindow.hidden = YES;
+                    self.ipadWindow = nil;
+                }
+            }];
+            
+            [self stopMonitoring];
+            break;
+        } default:
+            break;
+    }
+}
+
+- (void)matchResult:(id)result withDetails:(id)details {
+    if (result) {
+        [(IBKWidgetViewController*)self.delegate unlockWidget];
+        [self.passcodeView autofillForSuccessfulMesaAttemptWithCompletion:nil];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            self.backdropView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.passcodeView removeFromSuperview];
+            self.passcodeView = nil;
+            
+            [self.backdropView removeFromSuperview];
+            self.backdropView = nil;
+            
+            if (isPad) {
+                for (UIView *subview in self.ipadWindow.subviews) {
+                    [subview removeFromSuperview];
+                }
+                
+                self.ipadWindow.hidden = YES;
+                self.ipadWindow = nil;
+            }
+        }];
+        
+        [self stopMonitoring];
+    }
+}
+
 -(void)biometricEventMonitor:(id)monitor handleBiometricEvent:(unsigned)event {
 	switch(event) {
 		case TouchIDFingerDown:
@@ -306,37 +385,62 @@ BOOL previousMatchingSetting;
 
 -(void)startMonitoring {
 	// If already monitoring, don't start again
-	if (isMonitoring) {
+	if (self.isMonitoring || ![NSClassFromString(@"IBKResources") isTouchIDEnabled]) {
 		return;
 	}
 	
-    isMonitoring = YES;
     
+    if (NSClassFromString(@"SBUIBiometricEventMonitor")) {
 	// Get current monitor instance so observer can be added
-	SBUIBiometricEventMonitor* monitor = [[objc_getClass("BiometricKit") manager] delegate];
-	// Save current device matching state
-	previousMatchingSetting = [monitor isMatchingEnabled];
-    
-	// Begin listening
-	[monitor addObserver:self];
-	[monitor _setMatchingEnabled:YES];
-	[monitor _startMatching];
+    	SBUIBiometricEventMonitor* monitor = [[objc_getClass("BiometricKit") manager] delegate];
+    	// Save current device matching state
+    	previousMatchingSetting = [monitor isMatchingEnabled];
+        
+    	// Begin listening
+    	[monitor addObserver:self];
+    	[monitor _setMatchingEnabled:YES];
+    	[monitor _startMatching];
+
+        self.isMonitoring = YES;
+    } else {
+         _SBUIBiometricKitInterface *interface = [[objc_getClass("BiometricKit") manager] delegate];
+        _oldDelegate = interface.delegate;
+
+        [interface setDelegate:self];
+        [interface matchWithMode:0 andCredentialSet:nil];
+        self.isMonitoring = YES;
+    }
 }
 
 -(void)stopMonitoring {
+
 	// If already stopped, don't stop again
-	if (!isMonitoring) {
+	if (!self.isMonitoring || ![NSClassFromString(@"IBKResources") isTouchIDEnabled]) {
 		return;
 	}
     
-	isMonitoring = NO;
+	//self.isMonitoring = NO;
+
+    if (NSClassFromString(@"SBUIBiometricEventMonitor")) {
     
 	// Get current monitor instance so observer can be removed
-	SBUIBiometricEventMonitor* monitor = [[objc_getClass("BiometricKit") manager] delegate];
-	
-	// Stop listening
-	[monitor removeObserver:self];
-	[monitor _setMatchingEnabled:previousMatchingSetting];
+    	SBUIBiometricEventMonitor* monitor = [[objc_getClass("BiometricKit") manager] delegate];
+    	
+    	// Stop listening
+    	[monitor removeObserver:self];
+    	[monitor _setMatchingEnabled:previousMatchingSetting];
+
+        self.isMonitoring = NO;
+    } else {
+        _SBUIBiometricKitInterface *interface = [[objc_getClass("BiometricKit") manager] delegate];
+        [interface cancel];
+        [interface setDelegate:_oldDelegate];
+        [interface detectFingerWithOptions:nil];
+
+        _oldDelegate = nil;
+
+        self.isMonitoring = NO;
+    }
 }
 
 -(void)checkPasscode:(SBUIPasscodeLockViewBase*)passcode {

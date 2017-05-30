@@ -69,7 +69,7 @@ NSBundle *strings;
     
     // Also check if we can lock this widget.
     
-    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     if ([[currentSettings objectForKey:@"passcodeHash"] isEqualToString:@""] || ![currentSettings objectForKey:@"passcodeHash"]) {
         // Don't do anything.
     } else {
@@ -85,13 +85,13 @@ NSBundle *strings;
 }
 
 -(id)getCurrentWidgetLocked {
-    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     NSArray *lockedBundleIdentifiers = settings[@"lockedBundleIdentifiers"];
     return [NSNumber numberWithBool:[lockedBundleIdentifiers containsObject:self.bundleIdentifier]];
 }
 
 -(void)setCurrentWidgetLocked:(id)value specifier:(id)specifier {
-    NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     if (!settings) {
         settings = [NSMutableDictionary dictionary];
     }
@@ -113,7 +113,7 @@ NSBundle *strings;
     
     [settings setObject:array forKey:@"lockedBundleIdentifiers"];
     [settings setObject:self.bundleIdentifier forKey:@"changedBundleIdFromSettings"];
-    [settings writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
+    [settings writeToFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist" atomically:YES];
     
     CFStringRef toPost = (__bridge CFStringRef)@"com.matchstic.ibk/settingschangeforwidget";
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);
@@ -207,7 +207,7 @@ NSBundle *strings;
 }
 
 -(NSString*)getRedirectedIdentifierIfNeeded:(NSString*)identifier {
-    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     
     NSDictionary *dict = settings[@"redirectedIdentifiers"];
     
@@ -237,9 +237,9 @@ NSBundle *strings;
 	[defaults writeToFile:fileString atomically:YES];
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-	[dict addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"]];
+	[dict addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"]];
 	[dict setObject:self.bundleIdentifier forKey:@"changedBundleIdFromSettings"];
-	[dict writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
+	[dict writeToFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist" atomically:YES];
     
 	CFStringRef toPost = (__bridge CFStringRef)@"com.matchstic.ibk/settingschangeforwidget";
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);

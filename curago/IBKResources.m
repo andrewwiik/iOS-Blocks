@@ -7,6 +7,7 @@
 //
 
 #import "IBKResources.h"
+#import "IBKWidgetViewController.h"
 
 #import <objc/runtime.h>
 
@@ -15,13 +16,14 @@
 - (CGFloat)duration;
 @end
 
-#define plist @"/var/mobile/Library/Preferences/com.matchstic.curago.plist"
+#define plist @"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"
 
 static NSMutableSet *widgetIdentifiers;
 static NSDictionary *settings;
 static NSMutableDictionary *iconIndexes;
 static NSMutableDictionary *widgetViewControllers;
 static int isRTL = -1;
+static int _touchIDEnabled = -1;
 SBIconController *iconController;
 
 @implementation IBKResources
@@ -508,7 +510,7 @@ SBIconController *iconController;
 
 + (void)reloadSettings {
 
-    settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
 }
 
 + (id)iconIndexes {
@@ -672,5 +674,31 @@ SBIconController *iconController;
 
 //   return path;
 // }
+
+#pragma mark TouchID
+
++ (BOOL)isTouchIDEnabled {
+    if (_touchIDEnabled == -1) {
+        if (NSClassFromString(@"SBUIBiometricEventMonitor")) {
+            if ([[NSClassFromString(@"SBUIBiometricEventMonitor") sharedInstance] hasEnrolledIdentities]) {
+                _touchIDEnabled = 1;
+            } else {
+                _touchIDEnabled = 0;
+            }
+        } else if (NSClassFromString(@"LAContext")) {
+            LAContext *context = [NSClassFromString(@"LAContext") new];
+            NSError *error = nil;
+            if ([context canEvaluatePolicy:1 error:&error]) {
+                _touchIDEnabled = 1;
+            } else {
+                _touchIDEnabled = 0;
+            }
+        } else {
+            _touchIDEnabled = 0;
+        }
+    }
+
+    return (BOOL)_touchIDEnabled;
+}
 
 @end

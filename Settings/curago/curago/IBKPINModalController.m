@@ -37,7 +37,7 @@
 - (BOOL)attemptValidationWithPIN:(NSString*)pin {
     // Get hash of string, and compare against stored.
     
-    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     
     if ([[currentSettings objectForKey:@"passcodeHash"] isEqualToString:[pin sha1]]) {
         if (self.customMode == IBKOpenPasscodePane)
@@ -70,7 +70,7 @@
 }
 
 -(BOOL)validatePIN:(NSString*)arg1 {
-    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     
     if ([[currentSettings objectForKey:@"passcodeHash"] isEqualToString:@""] || ![currentSettings objectForKey:@"passcodeHash"]) {
         return NO;
@@ -94,13 +94,13 @@
 }
 
 - (void)setPIN:(NSString*)arg1 completion:(id)arg2 {
-    NSMutableDictionary *currentSettings = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSMutableDictionary *currentSettings = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     if (!currentSettings) {
         currentSettings = [NSMutableDictionary dictionary];
     }
     
     [currentSettings setObject:(arg1 ? [arg1 sha1] : @"") forKey:@"passcodeHash"];
-    [currentSettings writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
+    [currentSettings writeToFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist" atomically:YES];
 
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.matchstic.ibk/changedlockall"), NULL, NULL, YES);
     

@@ -2216,7 +2216,7 @@ static SBIcon *temp;
 static void settingsChangedForWidget(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
     [IBKResources reloadSettings];
 
-    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
 
     // Reload widget for this bundle identifier.
     IBKWidgetViewController *controller = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[dict objectForKey:@"changedBundleIdFromSettings"]];
@@ -2262,7 +2262,7 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
 
     // dlopen("/Library/MobileSubstrate/DynamicLibraries/IconSupport.dylib", RTLD_NOW);
     // dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
-    // [[objc_getClass("ISIconSupport") sharedInstance] addExtension:@"com.matchstic.curago"];
+    // [[objc_getClass("ISIconSupport") sharedInstance] addExtension:@"com.iosblocks.curago"];
 
     // Load custom stuff for certain versions of iOS.
 

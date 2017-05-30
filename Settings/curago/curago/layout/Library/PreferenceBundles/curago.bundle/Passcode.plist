@@ -68,7 +68,7 @@
 			<key>default</key>
 			<integer>0</integer>
 			<key>defaults</key>
-			<string>com.matchstic.curago</string>
+			<string>com.iosblocks.curago</string>
 			<key>detail</key>
 			<string>PSListItemsController</string>
 			<key>isController</key>
@@ -102,7 +102,7 @@
 			<key>set</key>
 			<string>setAllWidgetsLocked:specifier:</string>
 			<key>defaults</key>
-			<string>com.matchstic.curago</string>
+			<string>com.iosblocks.curago</string>
 			<key>key</key>
 			<string>allWidgetsLocked</string>
 			<key>label</key>

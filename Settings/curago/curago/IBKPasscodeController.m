@@ -61,7 +61,7 @@
 }
 
 -(NSArray*)modifySpecifiersAsNeeded:(NSMutableArray*)input {
-    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     
     if ([[currentSettings objectForKey:@"passcodeHash"] isEqualToString:@""] || ![currentSettings objectForKey:@"passcodeHash"]) {
         // No passcode is currently set.
@@ -90,7 +90,7 @@
         // We should show an alert saying that all widgets will be locked after
         // locking the device.
         
-        NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+        NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
         
         if ([[currentSettings objectForKey:@"passcodeHash"] isEqualToString:@""] || ![currentSettings objectForKey:@"passcodeHash"]) {
             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Settings" message:@"You must set a passcode before widgets will be locked." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -100,7 +100,7 @@
 }
 
 -(id)readPreferenceValue:(PSSpecifier*)specifier {
-	NSDictionary *exampleTweakSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+	NSDictionary *exampleTweakSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
 	if (!exampleTweakSettings[specifier.properties[@"key"]]) {
 		return specifier.properties[@"default"];
 	}
@@ -109,9 +109,9 @@
 
 -(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
 	NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
-	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"]];
+	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"]];
 	[defaults setObject:value forKey:specifier.properties[@"key"]];
-	[defaults writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
+	[defaults writeToFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist" atomically:YES];
 	CFStringRef toPost = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
 	if(toPost) CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);
 }
@@ -127,7 +127,7 @@
     [(DevicePINPane*)[self.pinController pane] activateKeypadView];
     [(DevicePINPane*)[self.pinController pane] becomeFirstResponder];
     
-    if (isPad) {
+    if (!isPad) {
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.pinController];
         if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
             self.ipadPopover = [[UIPopoverController alloc] initWithContentViewController:navController];

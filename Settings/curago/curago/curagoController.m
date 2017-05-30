@@ -15,8 +15,17 @@
 #include <sys/stat.h>
 #import <objc/runtime.h>
 #import "../../../headers/Preferences/Preferences.h"
-#import "../../../headers/AppList/AppList.h"
 
+#if __cplusplus
+extern "C" {
+#endif
+
+    CFSetRef SBSCopyDisplayIdentifiers();
+    NSString * SBSCopyLocalizedApplicationNameForDisplayIdentifier(NSString *identifier);
+
+#if __cplusplus
+}
+#endif
 
 
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -40,7 +49,6 @@ static int currentIndex = 0;
 static NSIndexPath *indexPathForPasscodeIdentifier;
 NSBundle *strings;
 
-static OrderedDictionary *dataSourceSystem;
 static OrderedDictionary *dataSourceUser;
 
 @implementation curagoController
@@ -108,7 +116,7 @@ static OrderedDictionary *dataSourceUser;
                     // This is the right one.
                     
                     // Check settings whether this setting should be enabled or not.
-                    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+                    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
                     BOOL isEnabled = (settings[@"transparentWidgets"] ? [settings[@"transparentWidgets"] boolValue] : NO);
                     [specifier setProperty:[NSNumber numberWithBool:isEnabled] forKey:@"enabled"];
                 }
@@ -133,25 +141,23 @@ static OrderedDictionary *dataSourceUser;
 - (UITableViewCell*)tableView:(UITableView*)arg1 cellForRowAtIndexPath:(NSIndexPath*)arg2 {
     UITableViewCell *cell = [super tableView:arg1 cellForRowAtIndexPath:arg2];
     
-    if (arg2.section > 1 || currentIndex != 0) {
-        return cell;
-    }
+    // if (arg2.section > 0 || currentIndex != 0) {
+    //     return cell;
+    // }
     
-    NSString *bundleIdentifier;
+    // NSString *bundleIdentifier;
     
-    if (arg2.section == 0) {
-        bundleIdentifier = dataSourceSystem.allKeys[arg2.row];
-    } else if (arg2.section == 1) {
-        bundleIdentifier = dataSourceUser.allKeys[arg2.row];
-    }
+    // if (arg2.section == 0) {
+    //     bundleIdentifier = dataSourceUser.allKeys[arg2.row];
+    // }
     
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        UIImage *img = [[ALApplicationList sharedApplicationList] iconOfSize:ALApplicationIconSizeSmall forDisplayIdentifier:bundleIdentifier];
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            cell.imageView.image = img;
-            [cell setNeedsLayout];
-        });
-    });
+    // dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+    //     UIImage *img = [[ALApplicationList sharedApplicationList] iconOfSize:ALApplicationIconSizeSmall forDisplayIdentifier:bundleIdentifier];
+    //     dispatch_async(dispatch_get_main_queue(), ^(void){
+    //         cell.imageView.image = img;
+    //         [cell setNeedsLayout];
+    //     });
+    // });
     return cell;
 }
 
@@ -228,39 +234,36 @@ static OrderedDictionary *dataSourceUser;
     NSMutableArray *specifiers = [NSMutableArray array];
     
     if (!strings)
-        strings = [[NSBundle alloc] initWithPath:@"/Library/PreferenceBundles/Convergance-Prefs.bundle"];
+        strings = [[NSBundle alloc] initWithPath:@"/Library/PreferenceBundles/curago.bundle"];
     
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"isSystemApplication = TRUE"];
-    dataSourceSystem = (OrderedDictionary*)[[ALApplicationList sharedApplicationList] applicationsFilteredUsingPredicate:pred];
-    dataSourceSystem = (OrderedDictionary*)[self trimDataSource:dataSourceSystem];
-    dataSourceSystem = [self sortedDictionary:dataSourceSystem];
+    // NSPredicate *pred = [NSPredicate predicateWithFormat:@"isSystemApplication = TRUE"];
+    // dataSourceSystem = (OrderedDictionary*)[[ALApplicationList sharedApplicationList] applicationsFilteredUsingPredicate:pred];
+    // dataSourceSystem = (OrderedDictionary*)[self trimDataSource:dataSourceSystem];
+    // dataSourceSystem = [self sortedDictionary:dataSourceSystem];
     
-    NSPredicate *predi = [NSPredicate predicateWithFormat:@"isSystemApplication = FALSE"];
-    dataSourceUser = (OrderedDictionary*)[[ALApplicationList sharedApplicationList] applicationsFilteredUsingPredicate:predi];
+    // NSPredicate *predi = [NSPredicate predicateWithFormat:@"isSystemApplication = FALSE"];
+    // dataSourceUser = (OrderedDictionary*)[[ALApplicationList sharedApplicationList] applicationsFilteredUsingPredicate:predi];
+    // dataSourceUser = (OrderedDictionary*)[self trimDataSource:dataSourceUser];
+    // dataSourceUser = [self sortedDictionary:dataSourceUser];
+
+
+    NSArray *displayIdentifiers = [(__bridge NSSet *)SBSCopyDisplayIdentifiers() allObjects];
+
+    NSMutableDictionary *apps = [NSMutableDictionary new];
+    for (NSString *appIdentifier in displayIdentifiers) {
+        NSString *appName = SBSCopyLocalizedApplicationNameForDisplayIdentifier(appIdentifier);
+        if (appName) {
+            [apps setObject:appName forKey:appIdentifier];
+        }
+    }
+
+    dataSourceUser = (OrderedDictionary*)[apps copy];
     dataSourceUser = (OrderedDictionary*)[self trimDataSource:dataSourceUser];
     dataSourceUser = [self sortedDictionary:dataSourceUser];
-    
     // Begin generating specifiers.
     
-    PSSpecifier* groupSpecifier = [PSSpecifier groupSpecifierWithName:[strings localizedStringForKey:@"System Applications:" value:@"System Applications:" table:@"Root"]];
+    PSSpecifier* groupSpecifier = [PSSpecifier groupSpecifierWithName:[strings localizedStringForKey:@"Applications:" value:@"Applications:" table:@"Root"]];
     [specifiers addObject:groupSpecifier];
-    
-    for (NSString *bundleIdentifier in dataSourceSystem.allKeys) {
-        NSString *displayName = dataSourceSystem[bundleIdentifier];
-        
-        PSSpecifier *spe = [PSSpecifier preferenceSpecifierNamed:displayName target:self set:nil get:@selector(getIsWidgetSetForSpecifier:) detail:[IBKWidgetSettingsController class] cell:PSLinkListCell edit:nil];
-        [spe setProperty:@"IBKWidgetSettingsController" forKey:@"detail"];
-        [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"isController"];
-        [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"enabled"];
-        [spe setProperty:bundleIdentifier forKey:@"bundleIdentifier"];
-        //[spe setProperty:@"Advanced.png" forKey:@"icon"];
-        //[spe setupIconImageWithBundle:strings];
-        
-        [specifiers addObject:spe];
-    }
-    
-    PSSpecifier* groupSpecifier2 = [PSSpecifier groupSpecifierWithName:[strings localizedStringForKey:@"User Applications:" value:@"User Applications:" table:@"Root"]];
-    [specifiers addObject:groupSpecifier2];
     
     for (NSString *bundleIdentifier in dataSourceUser.allKeys) {
         NSString *displayName = dataSourceUser[bundleIdentifier];
@@ -270,11 +273,30 @@ static OrderedDictionary *dataSourceUser;
         [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"isController"];
         [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"enabled"];
         [spe setProperty:bundleIdentifier forKey:@"bundleIdentifier"];
+        [spe setProperty:bundleIdentifier forKey:@"appIDForLazyIcon"];
+        [spe setProperty:@YES forKey:@"useLazyIcons"];
         //[spe setProperty:@"Advanced.png" forKey:@"icon"];
         //[spe setupIconImageWithBundle:strings];
         
         [specifiers addObject:spe];
     }
+    
+    // PSSpecifier* groupSpecifier2 = [PSSpecifier groupSpecifierWithName:[strings localizedStringForKey:@"User Applications:" value:@"User Applications:" table:@"Root"]];
+    // [specifiers addObject:groupSpecifier2];
+    
+    // for (NSString *bundleIdentifier in dataSourceUser.allKeys) {
+    //     NSString *displayName = dataSourceUser[bundleIdentifier];
+        
+    //     PSSpecifier *spe = [PSSpecifier preferenceSpecifierNamed:displayName target:self set:nil get:@selector(getIsWidgetSetForSpecifier:) detail:[IBKWidgetSettingsController class] cell:PSLinkListCell edit:nil];
+    //     [spe setProperty:@"IBKWidgetSettingsController" forKey:@"detail"];
+    //     [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"isController"];
+    //     [spe setProperty:[NSNumber numberWithBool:YES] forKey:@"enabled"];
+    //     [spe setProperty:bundleIdentifier forKey:@"bundleIdentifier"];
+    //     //[spe setProperty:@"Advanced.png" forKey:@"icon"];
+    //     //[spe setupIconImageWithBundle:strings];
+        
+    //     [specifiers addObject:spe];
+    // }
     
     return specifiers;
 }
@@ -292,7 +314,7 @@ static OrderedDictionary *dataSourceUser;
 }
 
 -(NSString*)getRedirectedIdentifierIfNeeded:(NSString*)identifier {
-    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     
     NSDictionary *dict = settings[@"redirectedIdentifiers"];
     
@@ -400,7 +422,7 @@ static OrderedDictionary *dataSourceUser;
     NSString *emailTitle = @"iOS Blocks Feedback";
     
     NSString *messageBody = [NSString stringWithFormat:@"%@ %@ : %@", machineName, [[UIDevice currentDevice] systemVersion], (NSString*)CFBridgingRelease(MGCopyAnswer(kMGUniqueDeviceID))];
-    NSArray *toRecipents = [NSArray arrayWithObject:@"matt@incendo.ws"];
+    NSArray *toRecipents = [NSArray arrayWithObject:@"iosblockscydia@gmail.com"];
     
     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
     mc.mailComposeDelegate = self;
@@ -408,7 +430,7 @@ static OrderedDictionary *dataSourceUser;
     [mc setMessageBody:messageBody isHTML:NO];
     [mc setToRecipients:toRecipents];
     
-    [mc addAttachmentData:[NSData dataWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"] mimeType:@"application/xml" fileName:@"Preferences.plist"];
+    [mc addAttachmentData:[NSData dataWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"] mimeType:@"application/xml" fileName:@"Preferences.plist"];
     
     // We also want the dpkg log
     system("/usr/bin/dpkg -l >/tmp/dpkgl.log");
@@ -437,7 +459,7 @@ static OrderedDictionary *dataSourceUser;
 // Passcode handling
 
 -(id)passcodeLockEnabled:(id)sender {
-    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+    NSDictionary *currentSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
     if ([[currentSettings objectForKey:@"passcodeHash"] isEqualToString:@""] || ![currentSettings objectForKey:@"passcodeHash"]) {
         return [NSNumber numberWithBool:NO];
     } else {
@@ -482,7 +504,7 @@ static OrderedDictionary *dataSourceUser;
 }
 
 -(id)readPreferenceValue:(PSSpecifier*)specifier {
-	NSDictionary *exampleTweakSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"];
+	NSDictionary *exampleTweakSettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"];
 	if (!exampleTweakSettings[specifier.properties[@"key"]]) {
 		return specifier.properties[@"default"];
 	}
@@ -491,9 +513,9 @@ static OrderedDictionary *dataSourceUser;
 
 -(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
 	NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
-	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist"]];
+	[defaults addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"]];
 	[defaults setObject:value forKey:specifier.properties[@"key"]];
-	[defaults writeToFile:@"/var/mobile/Library/Preferences/com.matchstic.curago.plist" atomically:YES];
+	[defaults writeToFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist" atomically:YES];
 	CFStringRef toPost = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
 	if(toPost) CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), toPost, NULL, NULL, YES);
 }
