@@ -15,6 +15,9 @@
 typedef void (^MRMediaRemoteGetNowPlayingInfoCompletion)(CFDictionaryRef information);
 void MRMediaRemoteGetNowPlayingInfo(dispatch_queue_t queue, MRMediaRemoteGetNowPlayingInfoCompletion completion);
 
+
+static BOOL IS_RTL = NO;
+
 @interface SBMediaController (iOS8)
 -(NSString*)ibkNowPlayingArtist;
 -(NSString*)ibkNowPlayingAlbum;
@@ -227,11 +230,13 @@ static UIImage *cachedMosaic;
 }
 
 -(UIView*)buttonAreaViewWithFrame:(CGRect)frame {
+
+    IS_RTL = [UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft;
     UIView *buttons = [[UIView alloc] initWithFrame:frame];
     buttons.backgroundColor = [UIColor clearColor];
     
     self.forward = [IBKMusicButton buttonWithType:UIButtonTypeCustom];
-    self.forward.frame = CGRectMake(frame.size.width-25, (frame.size.height/2)-10, 20, 20);
+    self.forward.frame = CGRectMake((IS_RTL ? 55 : frame.size.width-25), (frame.size.height/2)-10, 20, 20);
     self.forward.backgroundColor = [UIColor clearColor];
     self.forward.display.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Forward%@", path, [self suffix]]];
     [self.forward addTarget:self action:@selector(forward:) forControlEvents:UIControlEventTouchUpInside];
@@ -239,7 +244,7 @@ static UIImage *cachedMosaic;
     [buttons addSubview:self.forward];
     
     self.play = [IBKMusicButton buttonWithType:UIButtonTypeCustom];
-    self.play.frame = CGRectMake(frame.size.width-50, (frame.size.height/2)-10, 20, 20);
+    self.play.frame = CGRectMake((IS_RTL ? 30 : frame.size.width-50), (frame.size.height/2)-10, 20, 20);
     self.play.backgroundColor = [UIColor clearColor];
     self.play.display.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Play%@", path, [self suffix]]];
     [self.play addTarget:self action:@selector(playPause:) forControlEvents:UIControlEventTouchUpInside];
@@ -247,7 +252,7 @@ static UIImage *cachedMosaic;
     [buttons addSubview:self.play];
     
     self.rewind = [IBKMusicButton buttonWithType:UIButtonTypeCustom];
-    self.rewind.frame = CGRectMake(frame.size.width-75, (frame.size.height/2)-10, 20, 20);
+    self.rewind.frame = CGRectMake((IS_RTL ? 5 : frame.size.width-75), (frame.size.height/2)-10, 20, 20);
     self.rewind.backgroundColor = [UIColor clearColor];
     self.rewind.display.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Rewind%@", path, [self suffix]]];
     [self.rewind addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];

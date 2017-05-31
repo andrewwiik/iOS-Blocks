@@ -485,8 +485,8 @@ extern dispatch_queue_t __BBServerQueue;
          */
         
         @try {
-            CGFloat originx = (IS_RTL ? [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer] - (self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width + 4): self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width + 4);
-            self.buttons = [self.widget buttonAreaViewWithFrame:CGRectMake(originx, self.iconImageView.frame.origin.y, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer] - originx - 8, self.iconImageView.frame.size.height)];
+            CGFloat originx = (IS_RTL ? [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer] - (self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width - 4) : self.iconImageView.frame.origin.x + self.iconImageView.frame.size.width + 4);
+            self.buttons = [self.widget buttonAreaViewWithFrame:CGRectMake(originx, self.iconImageView.frame.origin.y, [IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer] - (IS_RTL ? (originx + self.iconImageView.frame.size.width) : originx) - 8, self.iconImageView.frame.size.height)];
             self.buttons.backgroundColor = [UIColor clearColor];
             [topBase addSubview:self.buttons];
         } @catch (NSException *e) {
@@ -894,6 +894,10 @@ extern dispatch_queue_t __BBServerQueue;
             if (self.notificationsTableView)
             self.notificationsTableView.alpha = 1.0-iconAlpha;
             self.gcTableView.alpha = 1.0-iconAlpha;
+        }
+
+        if (self.buttons) {
+            self.buttons.alpha = 1.0-iconAlpha;
         }
     
         // Depending on how far we've scaled, adjust the icon image view at a much faster rate.
