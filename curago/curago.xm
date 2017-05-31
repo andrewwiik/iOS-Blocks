@@ -157,6 +157,188 @@ void reloadLayout() {
 }
 
 
+void openWidget(NSString *bundleID) {
+
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:bundleID]) {
+        if ([[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:bundleID]) {
+            isPinching = YES;
+
+            IBKWidgetViewController *widget = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:bundleID];
+            //widget.scalingDown = TRUE;
+            CGFloat scale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
+
+            widget.currentScale = scale;
+           // widget.shimIcon.alpha = 1.0f;
+          //  widget.shimIcon.hidden = NO;
+           //((UIView *)[widget.correspondingIconView _iconImageView]).alpha = 1.0;
+            widget.scalingDown = YES;
+            widget.shimIcon.hidden = NO;
+            
+            // Add widget view onto icon.
+            [widget.correspondingIconView.superview addSubview:widget.correspondingIconView];
+
+            if (widget.applicationIdentifer) {
+                [IBKResources removeIdentifier:widget.applicationIdentifer];
+                [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:widget.applicationIdentifer];
+            }
+
+           // [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:widget.applicationIdentifer];
+
+            SBIconListView *lst = [NSClassFromString(@"IBKResources") listViewForBundleID:widget.applicationIdentifer];
+
+            [UIView animateWithDuration:0.3 animations:^{
+                //widget.view.alpha = 0.0;
+                widget.shimIcon.alpha = 1.0;
+                widget.iconImageView.alpha = 0.0;
+                [widget setScaleForView:1.0 withDuration:0.3];
+               // widget.view.transform = CGAffineTransformMakeScale(scale, scale);
+                widget.view.center = CGPointMake(([(UIView*)[widget.correspondingIconView _iconImageView] frame].size.width/2)-1, ([(UIView*)[widget.correspondingIconView _iconImageView] frame].size.height/2)-1);
+                if ([widget.correspondingIconView valueForKey:@"_accessoryView"]) {
+                    ((UIView *)[widget.correspondingIconView valueForKey:@"_accessoryView"]).frame = [widget.correspondingIconView _frameForAccessoryView];
+                }
+                
+                if ([widget.correspondingIconView valueForKey:@"_labelView"]) {
+                    ((UIView *)[widget.correspondingIconView valueForKey:@"labelView"]).frame = [widget.correspondingIconView _frameForLabel];
+                }
+                //widget.shimIcon.alpha = 1.0;
+
+               // widget.iconImageView.alpha = 0.0;
+              //  [[widget.correspondingIconView _iconImageView] setAlpha:1.0];
+               // widget.view.alpha = 0.0;
+
+                if (![IBKResources hoverOnly]) {
+                    
+//                    [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] removeAllCachedIcons];
+                    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+                        //[(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+                    
+                        [lst setIconsNeedLayout];
+                        [lst layoutIconsIfNeeded:0.3 domino:NO];
+                    } else
+                        [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+//                    [[objc_getClass("SBIconController") sharedInstance] removeIdentifierFromWidgets:self.applicationIdentifer];
+                }
+            } completion:^(BOOL finished) {
+                [[widget.correspondingIconView _iconImageView] setAlpha:1.0];
+                widget.view.hidden = YES;
+                [widget unloadFromPinchGesture];
+
+                isPinching = NO;
+                if (![IBKResources hoverOnly]) {
+                    [lst setIconsNeedLayout];
+                    [lst layoutIconsIfNeeded:0.0 domino:NO];
+                }
+
+
+                //[IBKResources removeIdentifier:widget.applicationIdentifer];
+
+               // if (widget && widget.applicationIdentifer) [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:widget.applicationIdentifer];
+            }];
+        }
+    } else {
+
+        isPinching = YES;
+        SBIcon *widgetIcon = [NSClassFromString(@"IBKResources") iconForBundleID:bundleID];
+
+        IBKWidgetViewController *widget = [[IBKWidgetViewController alloc] init];
+        widget.applicationIdentifer = [widgetIcon applicationBundleID];
+        [IBKResources addNewIdentifier:widget.applicationIdentifer];
+
+        if ([widgetIcon applicationBundleID])
+            [[NSClassFromString(@"IBKResources") widgetViewControllers] setObject:widget forKey:[widgetIcon applicationBundleID]];
+
+
+        // Add widget view onto icon.
+        SBIconView *view;
+        if ([[%c(SBIconController) sharedInstance] respondsToSelector:@selector(homescreenIconViewMap)]) {
+            view = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] mappedIconViewForIcon:widgetIcon];
+        }
+        else {
+            view = [[%c(SBIconViewMap) homescreenMap] mappedIconViewForIcon:widgetIcon];
+        }
+
+        [view addSubview:widget.view];
+        [view sendSubviewToBack: widget.view];
+        [view sendSubviewToBack: (UIView *)[view valueForKey:@"_iconImageView"]];
+        [(SBIconView *)view setWidgetView:widget.view];
+        [view.superview addSubview:view]; // Move the view to be the top most subview
+
+        widget.correspondingIconView = view;
+
+        [[(SBIconView*)view _iconImageView] setAlpha:0.0];
+
+        widget.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        widget.currentScale = 1;
+
+        [widget loadWidgetInterface];
+
+        widget.view.center = CGPointMake(([(UIView*)[view _iconImageView] frame].size.width/2)-1, ([(UIView*)[view _iconImageView] frame].size.height/2)-1);
+
+        CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
+
+        // NSLog(@"BEGINNING SCALE IS %f", iconScale);
+
+        widget.view.transform = CGAffineTransformMakeScale(iconScale, iconScale);widget.currentScale = iconScale;
+      //  [widget setScaleForView:8.0 withDuration:0.3];
+
+        //            if ([view respondsToSelector:@selector(shortcutMenuPeekGesture)]) {
+        //                [[view shortcutMenuPeekGesture] setEnabled:NO];
+        //            }
+        [IBKResources addNewIdentifier:[widgetIcon applicationBundleID]];
+        SBIconListView *listView = [NSClassFromString(@"IBKResources") listViewForBundleID:widget.applicationIdentifer];
+        unsigned long long index2 = [(SBIconListModel*)[listView model] indexForLeafIconWithIdentifier:[widgetIcon applicationBundleID]];
+        [IBKResources setIndex:index2 forBundleID:[widgetIcon applicationBundleID] forOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+
+        if ([IBKResources hoverOnly]) {
+            return;
+        }
+
+        // Relayout icons.
+
+        // Move icons to next page if needed.
+
+        // TODO: This needs to be redone slightly so that if the next page is also full, it moves icons on again, etc
+
+
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+            //[(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+            [listView setIconsNeedLayout];
+            [listView layoutIconsIfNeeded:0.3 domino:NO];
+        } else
+            [(SBIconController*)[objc_getClass("SBIconController") sharedInstance] layoutIconLists:0.3 domino:NO forceRelayout:YES];
+
+        // Move frame of widget into new position.
+        reloadLayout();
+        CGRect widgetViewFrame = widget.correspondingIconView.frame;
+        widgetViewFrame.size = CGSizeMake([IBKResources widthForWidgetWithIdentifier:widget.applicationIdentifer], [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer]);
+        [UIView animateWithDuration:0.3 animations:^{
+            [widget setScaleForView:8.0 withDuration:0.3];
+            if ([NSClassFromString(@"IBKResources") isRTL]) {
+                 widget.view.frame = CGRectMake(0 - ([IBKResources widthForWidgetWithIdentifier:widget.applicationIdentifer] - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width), 0, [IBKResources widthForWidgetWithIdentifier:widget.applicationIdentifer], [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer]);
+            }
+            else {
+                widget.view.frame = CGRectMake(0, 0, [IBKResources widthForWidgetWithIdentifier:widget.applicationIdentifer], [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer]);
+            }
+            widget.view.layer.shadowOpacity = 0.0;
+
+            [(SBIconImageView*)[widget.correspondingIconView _iconImageView] setFrame:widgetViewFrame];
+
+            // Icon's label?
+
+             if ([widget.correspondingIconView valueForKey:@"_accessoryView"]) {
+                ((UIView *)[widget.correspondingIconView valueForKey:@"_accessoryView"]).frame = [widget.correspondingIconView _frameForAccessoryView];
+            }
+            
+            if ([widget.correspondingIconView valueForKey:@"_labelView"]) {
+                ((UIView *)[widget.correspondingIconView valueForKey:@"labelView"]).frame = [widget.correspondingIconView _frameForLabel];
+            }
+        }completion:^(BOOL finished) {
+            isPinching = NO;
+        }];
+    }
+}
+
+
 // %hook SBMainWorkspace
 // - (void)transactionDidComplete:(id)arg1 {
 //     %orig;
@@ -912,10 +1094,11 @@ BOOL launchingWidget;
 
 @interface SBIconView (T)
 @property (nonatomic, retain) UIView *widgetView;
+@property (nonatomic, retain) UISwipeGestureRecognizer *swipeDown;
 @end
 
 %hook SBIconView
-
+%property (nonatomic, retain) UISwipeGestureRecognizer *swipeDown;
 %property (nonatomic, retain) UIView *widgetView;
 
 - (BOOL)isUserInteractionEnabled {
@@ -1019,6 +1202,13 @@ BOOL launchingWidget;
 
 - (void)layoutSubviews {
     %orig;
+
+    if (!self.swipeDown) {
+        self.swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+        self.swipeDown.direction = UISwipeGestureRecognizerDirectionUp;
+        [self addGestureRecognizer:self.swipeDown];
+    }
+
     if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
         return;
     }
@@ -1040,6 +1230,11 @@ BOOL launchingWidget;
             }
         }
     }
+}
+
+%new
+- (void)didSwipe:(id)sender {
+    openWidget([(SBIcon *)self.icon applicationBundleID]);
 }
 
 
@@ -1613,6 +1808,10 @@ NSObject *panGesture;
     pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
     [(UIView*)orig addGestureRecognizer:pinch];
 
+    // UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:orig action:@selector(handleTapGesture:)];
+    // tapGesture.numberOfTapsRequired = 2;
+    // [(UIView *)orig addGestureRecognizer:tapGesture];
+
     for (UIGestureRecognizer *arg in [self gestureRecognizers]) {
         if ([[arg class] isEqual:[objc_getClass("UIScrollViewPanGestureRecognizer") class]]) {
             arg.delegate = self;
@@ -1623,6 +1822,11 @@ NSObject *panGesture;
     }
 
     return orig;
+}
+
+%new
+- (void)handleTapGesture:(id)sender {
+    openWidget([NSString stringWithFormat:@"com.apple.Music"]);
 }
 
 - (void)_updatePagingGesture {
