@@ -62,54 +62,45 @@
         
         return;
     }
+
+    if (!self.translations) {
+        self.translations = [NSBundle bundleWithPath:@"/System/Library/CoreServices/SpringBoard.app"];
+    }
     
     NSDate *now = [NSDate date];
     
-    NSTimeInterval interval = [now timeIntervalSinceDate:data];
+    int seconds = (int)fabs([now timeIntervalSinceDate:data]);
+
+    NSString *string;
+    seconds = floorf(seconds);
+    int minutes = seconds / 60.0f;
+    int hours = minutes / 60.0f;
+    int days = hours / 24.0f;
     
-    if (interval < 60.0)
-    {
-        //Seconds
-        
-        self.text = [NSString stringWithFormat:@"%ds ago", [[NSNumber numberWithFloat:interval] intValue]];
-        
+    if (seconds < 10) {
+        // Display "now"
         state = 0;
-        
-    }else if (interval / 60.0 < 60.0)
-    {
-        //Mitunes
-        
-        self.text = [NSString stringWithFormat:@"%dm ago", [[NSNumber numberWithFloat:interval / 60.0] intValue]];
-        
+        string = [self.translations localizedStringForKey:@"RELATIVE_DATE_NOW" value:@"now" table:@"SpringBoard"];
+    } else if (seconds < 60) {
+        // Display "%@s ago"
+        state = 0;
+        string = [NSString stringWithFormat:[self.translations localizedStringForKey:@"RELATIVE_DATE_PAST_SEC" value:@"%@s ago" table:@"SpringBoard"], [NSString stringWithFormat:@"%d", seconds]];
+    } else if (minutes < 60) {
+        // Display "%@m ago"
         state = 1;
-        
-    }else if (interval / 3600.0 < 24.0)
-    {
-        //Hour
-        
-        self.text = [NSString stringWithFormat:@"%dh ago", [[NSNumber numberWithFloat:interval / 3600.0] intValue]];
-        
+        string = [NSString stringWithFormat:[self.translations localizedStringForKey:@"RELATIVE_DATE_PAST_MIN" value:@"%@m ago" table:@"SpringBoard"], [NSString stringWithFormat:@"%d", minutes]];
+    } else if (hours < 24) {
+        // Display "%@h ago"
         state = 2;
-        
-    }else if (interval / 3600.0 < 48.0)
-    {
-        //Yesterday
-        
-        self.text = @"Yesterday";
-        
+        string = [NSString stringWithFormat:[self.translations localizedStringForKey:@"RELATIVE_DATE_PAST_HOUR" value:@"%@h ago" table:@"SpringBoard"], [NSString stringWithFormat:@"%d", hours]];
+    } else {
+        // Display "%@d ago"
         state = 3;
-    }else
-    {
-        //Else
-        
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        
-        [df setDateFormat:@"dd/MM/yyyy"];
-        
-        self.text = [df stringFromDate:data];
-        
-        state = 4;
+        string = [NSString stringWithFormat:[self.translations localizedStringForKey:@"RELATIVE_DATE_PAST_DAY" value:@"%@d ago" table:@"SpringBoard"], [NSString stringWithFormat:@"%d", days]];
     }
+    
+    self.text = string;
+    
     
     //self.frame = CGRectMake(15.0, 5.0, self.superview.frame.size.width - 30.0, self.superview.frame.size.height / 2.0 - 5.0);
 }

@@ -17,5 +17,6 @@
 
 -(id)initWithFrame:(CGRect)frame withDate:(NSDate *)date;
 -(void)setDate:(NSDate *)date;
+@property (nonatomic, retain) NSBundle *translations;
 
 @end
