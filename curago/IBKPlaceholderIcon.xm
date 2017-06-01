@@ -17,6 +17,37 @@ UIImage *imageFromView(UIView *view)
     return capturedImage;
 }
 
+
+@interface IBKPlaceholderIconViewLayer : CALayer
+- (float)opacity;
+@end
+
+@implementation IBKPlaceholderIconViewLayer
+- (id)init {
+    self = [super init];
+    if (self) {
+		[self setOpacity:0];
+		[self setNeedsDisplay];
+    }
+    return self;
+}
+
+- (id)initWithLayer:(id)layer {
+	if (self = [super initWithLayer:layer]) {
+		[self setOpacity:0];
+	}
+	return self;
+}
+
+- (float)opacity {
+	return 0;
+}
+
+- (void)setOpacity:(float)arg1 {
+	[super setOpacity:0];
+}
+@end
+
 // |IBKPlaceholderIcon| is used to fill in the spaces that a "block" would consume. 
 // |IBKPlaceholderIcon| cannot be interacted with and has no image or label. This makes 
 // it so the end user assumes no icon is present there. 
@@ -161,6 +192,10 @@ UIImage *imageFromView(UIView *view)
 	return @" ";
 }
 
+- (BOOL)isHidden {
+	return YES;
+}
+
 // To prevent interaction with |IBKPlaceholderIconView| (userInteractionEnabled) can simply be
 // overriden to return NO always.
 
@@ -178,6 +213,10 @@ UIImage *imageFromView(UIView *view)
 
 -(CGFloat)iconLabelAlpha {
 	return 0;
+}
+
++ (Class)layerClass {
+	return NSClassFromString(@"IBKPlaceholderIconViewLayer");
 }
 %end
 
@@ -204,11 +243,11 @@ UIImage *imageFromView(UIView *view)
 	%orig(0);
 }
 
-- (BOOL)hidden {
+- (BOOL)isHidden {
 	return YES;
 }
 
-- (void)setHidhen:(BOOL)arg1 {
+- (void)setHidden:(BOOL)arg1 {
 	%orig(YES);
 }
 
