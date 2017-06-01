@@ -31,3 +31,6 @@ curago/log.txt
 obj/
 _/
 curago/.theos/last_package
+curago/.theos/fakeroot
+curago/.theos/last_package
+curago/.theos/last_package

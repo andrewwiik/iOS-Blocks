@@ -384,28 +384,34 @@ void openWidget(NSString *bundleID) {
 %hook SBWorkspaceTransaction
 -(void)_transactionComplete {
     %orig;
-    displayAllWidgets();
+   // displayAllWidgets();
 }
 -(void)_didComplete {
     %orig;
-    displayAllWidgets();
+   // displayAllWidgets();
 }
 %end
 
 %hook SBUIAnimationController
 -(void)_startAnimation {
-    isLaunching = YES;
-    sup = YES;
+    if (!isRotating) {
+        isLaunching = YES;
+        sup = YES;
+    }
     %orig;
 }
 -(void)startInteractiveTransition:(id)arg1 {
-    isLaunching = YES;
-    sup = YES;
+    if (!isRotating) {
+        isLaunching = YES;
+        sup = YES;
+    }
     %orig;
 }
 -(void)__startAnimation {
-    isLaunching = YES;
-    sup = YES;
+    if (!isRotating) {
+        isLaunching = YES;
+        sup = YES;
+    }
     %orig;
 }
 // -(void)_cleanupAnimation {
@@ -419,9 +425,10 @@ void openWidget(NSString *bundleID) {
 //     sup = NO;
 // }
 -(void)_noteAnimationDidFinish {
-     %orig;
+    %orig;
     isLaunching = NO;
     sup = NO;
+    displayAllWidgets();
 }
 // -(void)__reportAnimationCompletion {
 //      %orig;
@@ -475,6 +482,8 @@ void openWidget(NSString *bundleID) {
 
 -(void)prepareToRotateToInterfaceOrientation:(int)interfaceOrientation {
     isRotating = YES;
+    isLaunching = NO;
+    sup = NO;
     %orig;
 }
 
@@ -524,7 +533,7 @@ void openWidget(NSString *bundleID) {
 
 - (void)transactionDidComplete:(id)arg1 {
     %orig;
-    displayAllWidgets();
+    //displayAllWidgets();
 }
 %end
 
@@ -564,7 +573,7 @@ NSString *lastOpenedWidgetId;
 %hook SBAppExitedWorkspaceTransaction
 - (void)_didComplete {
     %orig;
-    displayAllWidgets();
+    //displayAllWidgets();
 
 }
 %end
@@ -574,7 +583,7 @@ NSString *lastOpenedWidgetId;
 - (void)willAnimateDeactivation:(_Bool)arg1 {
    // isLaunching = YES;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
-    widgetController.view.alpha = 0.0;
+    //widgetController.view.alpha = 0.0;
 
     [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
         widgetController.view.alpha = 1.0;
@@ -620,19 +629,19 @@ NSString *lastOpenedWidgetId;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
     widgetController.view.alpha = 1.0;
     
-    sup = NO;
-    isLaunching = NO;
+   // sup = NO;
+   // isLaunching = NO;
 }
 
 - (void)willActivateWithTransactionID:(unsigned long long)arg1 {
-    isLaunching = YES;
+    //isLaunching = YES;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
 
     [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
         widgetController.view.alpha = 0.0;
     }];
 
-    sup = YES;
+  //  sup = YES;
 
     %orig;
 }
@@ -642,21 +651,22 @@ NSString *lastOpenedWidgetId;
 
     %orig;
 
-    sup = NO;
+    // sup = NO;
+    // isLaunching = NO;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
     [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
         widgetController.view.alpha = 0.0;
     }];
-
-    isLaunching = NO;
+    // sup = NO;
+    // isLaunching = NO;
 }
 
 // iOS 7
 
 - (void)didAnimateActivation {
     %orig;
-    isLaunching = NO;
-    sup = NO;
+    //isLaunching = NO;
+    //sup = NO;
 //    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
 //    widgetController.view.alpha = 1.0;
 }
@@ -668,7 +678,7 @@ NSString *lastOpenedWidgetId;
         widgetController.view.alpha = 0.0;
     }];
 
-    sup = YES;
+ //  sup = YES;
 
     %orig;
 }
@@ -1322,11 +1332,11 @@ NSString *lastOpenedWidgetId;
     %orig;
     [self checkRootListViewPlacement];
 
-    if (!self.swipeDown) {
-        self.swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
-        self.swipeDown.direction = UISwipeGestureRecognizerDirectionUp;
-        [self addGestureRecognizer:self.swipeDown];
-    }
+    // if (!self.swipeDown) {
+    //     self.swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
+    //     self.swipeDown.direction = UISwipeGestureRecognizerDirectionUp;
+    //     [self addGestureRecognizer:self.swipeDown];
+    // }
 
     if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
        
@@ -1481,7 +1491,7 @@ NSString *lastOpenedWidgetId;
 
 - (CGRect)_frameForLabel {
 
-    if (!self.isInRootListView || inSwitcher || sup || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+    if ((!self.isInRootListView && !rearrangingIcons && !isLaunching) || inSwitcher || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
     CGRect orig = %orig;
     
     IBKWidgetViewController *widgetController = (IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];   
@@ -1519,7 +1529,7 @@ NSString *lastOpenedWidgetId;
 
 -(CGRect)_frameForAccessoryView {
     
-    if (!self.isInRootListView || inSwitcher || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+    if ((!self.isInRootListView && !rearrangingIcons && !isLaunching) || inSwitcher || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
     
     CGRect orig = %orig;
     CGRect widgetFrame = ((IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]]).view.frame;
@@ -1717,6 +1727,16 @@ CGSize defaultIconSizing;
 //    }
 //    return %orig;
 //}
+
+// - (void)setAlpha:(CGFloat)alpha {
+//     if ((!self.isInRootListView && isLaunching) || inSwitcher || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+//     %orig(0);
+// }
+
+// - (CGFloat)alpha {
+//      if ((!self.isInRootListView && !isLaunching) || inSwitcher  || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+//     return 0;;
+// }
 
 %end
 
