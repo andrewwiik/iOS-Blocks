@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>com.iosblocks.mobilesms.block</string>
+	<string>MobileSMS</string>
 	<key>CFBundleExecutable</key>
 	<string>MobileSMS</string>
 	<key>CFBundleIdentifier</key>

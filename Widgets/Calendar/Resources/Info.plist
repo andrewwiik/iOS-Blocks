@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>com.iosblocks.mobilecal.block</string>
+	<string>Calendar</string>
 	<key>CFBundleExecutable</key>
 	<string>Calendar</string>
 	<key>CFBundleIdentifier</key>

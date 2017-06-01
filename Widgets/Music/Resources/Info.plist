@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>com.iosblocks.music.block</string>
+	<string>Music</string>
 	<key>CFBundleExecutable</key>
 	<string>Music</string>
 	<key>CFBundleIdentifier</key>

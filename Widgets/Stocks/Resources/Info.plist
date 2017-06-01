@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>com.iosblocks.stocks.block</string>
+	<string>Stocks Blockss</string>
 	<key>CFBundleExecutable</key>
-	<string>stocks</string>
+	<string>Stocks</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.iosblocks.stocks.block</string>
 	<key>icon</key>
@@ -27,7 +27,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>MinimumOSVersion</key>
-	<string>5.0</string>
+	<string>7.0</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
