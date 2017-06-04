@@ -23,7 +23,12 @@
 #import <Apex/STKGroupView.h>
 
 #import <IBKKit/IBKWidgetDelegate-Protocol.h>
+#import "SBIconView+IBK.h"
 
+
+@interface CALayer (IBK)
+- (void)invalidateContents;
+@end
 
 
 // struct SBIconCoordinate SBIconCoordinateMake(long long row, long long col) {
@@ -148,16 +153,16 @@ void reloadAllWidgetsNow() {
 
 void displayAllWidgets() {
     
-   // SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
-    //SBRootFolderController *rootFolder = [iconController valueForKeyPath:@"_rootFolderController"];
+   SBIconController *iconController = [NSClassFromString(@"SBIconController") sharedInstance];
+    SBRootFolderController *rootFolder = [iconController valueForKeyPath:@"_rootFolderController"];
     
-    // for (SBIconListView *listView in (NSArray *)[rootFolder valueForKey:@"iconListViews"]) {
+    for (SBIconListView *listView in (NSArray *)[rootFolder valueForKey:@"iconListViews"]) {
         
-    //     if ([listView isKindOfClass:NSClassFromString(@"SBRootIconListView")]) {
-    //         SBIconIndexMutableList *list = [[listView model] valueForKey:@"_icons"];
-    //         list.needsProcessing = YES;
-    //     }
-    // }
+        if ([listView isKindOfClass:NSClassFromString(@"SBRootIconListView")]) {
+            SBIconIndexMutableList *list = [[listView model] valueForKey:@"_icons"];
+            list.needsProcessing = YES;
+        }
+    }
     for (NSString *key in [[NSClassFromString(@"IBKResources") widgetViewControllers] allKeys]) {
         IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:key];
         if ([widgetController.view superview]) {
@@ -505,7 +510,25 @@ void openWidget(NSString *bundleID) {
         reloadAllWidgetsNow();
     });
 }
+
 %end
+
+
+// %hook SBRootIconListView
+// - (CGPoint)centerForIcon:(SBIcon *)icon {
+
+//     if ([icon respondsToSelector:@selector(applicationBundleID)]) {
+//         NSString *bundleID = [icon applicationBundleID];
+//         if (![[IBKResources widgetBundleIdentifiers] containsObject:bundleID]) return %orig;
+//         CGPoint point = %orig;
+//         point.x = point.x - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width/2 + [IBKResources widthForWidgetWithIdentifier:bundleID]/2;
+//         point.y = point.y - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].height/2 + [IBKResources heightForWidgetWithIdentifier:bundleID]/2;
+//         return point;
+//     }
+//     return %orig;
+// }
+// %end
+
 
 #pragma mark App switcher detection
 
@@ -556,7 +579,7 @@ NSString *lastOpenedWidgetId;
 
 %hook SBUIAnimationZoomUpApp
 - (void)_prepareAnimation {
-    //isLaunching = YES;
+    isLaunching = YES;
     %orig;
 }
 - (void)_noteZoomDidFinish {
@@ -581,13 +604,13 @@ NSString *lastOpenedWidgetId;
 %hook SBApplication
 
 - (void)willAnimateDeactivation:(_Bool)arg1 {
-   // isLaunching = YES;
-    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    isLaunching = YES;
+    //IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
     //widgetController.view.alpha = 0.0;
 
-    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
-        widgetController.view.alpha = 1.0;
-    }];
+    // [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
+    //     widgetController.view.alpha = 1.0;
+    // }];
 
     // sup = YES;
 //    widgetController.view.alpha = 1.0;
@@ -596,8 +619,8 @@ NSString *lastOpenedWidgetId;
 
 -(void)didAnimateDeactivationOnStarkScreenController:(id)arg1 {
     %orig;
-     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
-    widgetController.view.alpha = 1.0;
+    // IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    // widgetController.view.alpha = 1.0;
     
     // sup = NO;
     // isLaunching = NO;
@@ -605,8 +628,8 @@ NSString *lastOpenedWidgetId;
 
 - (void)deactivate {
      %orig;
-     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
-    widgetController.view.alpha = 1.0;
+   //  IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    // widgetController.view.alpha = 1.0;
     
     // sup = NO;
     // isLaunching = NO;
@@ -614,8 +637,8 @@ NSString *lastOpenedWidgetId;
 
 -(void)didDeactivateForEventsOnly:(BOOL)arg1 {
      %orig;
-     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
-    widgetController.view.alpha = 1.0;
+    // IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    // widgetController.view.alpha = 1.0;
     
     // sup = NO;
     // isLaunching = NO;
@@ -626,20 +649,20 @@ NSString *lastOpenedWidgetId;
 
 //    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
 //    [(UIImageView*)[widgetController.correspondingIconView _iconImageView] setAlpha:0.0];
-    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
-    widgetController.view.alpha = 1.0;
+  //  IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    // widgetController.view.alpha = 1.0;
     
    // sup = NO;
    // isLaunching = NO;
 }
 
 - (void)willActivateWithTransactionID:(unsigned long long)arg1 {
-    //isLaunching = YES;
-    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    isLaunching = YES;
+  //  IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
 
-    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
-        widgetController.view.alpha = 0.0;
-    }];
+    // [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
+    //     widgetController.view.alpha = 0.0;
+    // }];
 
   //  sup = YES;
 
@@ -653,10 +676,10 @@ NSString *lastOpenedWidgetId;
 
     // sup = NO;
     // isLaunching = NO;
-    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
-    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
-        widgetController.view.alpha = 0.0;
-    }];
+   // IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+    // [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.25] animations:^{
+    //     widgetController.view.alpha = 0.0;
+    // }];
     // sup = NO;
     // isLaunching = NO;
 }
@@ -672,11 +695,11 @@ NSString *lastOpenedWidgetId;
 }
 
 - (void)willAnimateActivation {
-    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
+   // IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self bundleIdentifier]];
 
-    [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
-        widgetController.view.alpha = 0.0;
-    }];
+    // [UIView animateWithDuration:[IBKResources adjustedAnimationSpeed:0.3] animations:^{
+    //     widgetController.view.alpha = 0.0;
+    // }];
 
  //  sup = YES;
 
@@ -1171,100 +1194,199 @@ NSString *lastOpenedWidgetId;
 
 #pragma mark Injection into icon views
 
-@interface SBIconView (T)
-@property (nonatomic, retain) UIView *widgetView;
-@property (nonatomic, retain) UISwipeGestureRecognizer *swipeDown;
-@property (nonatomic, assign) BOOL isInRootListView;
-- (void)checkRootListViewPlacement;
-@end
+%hook KazeQuickSwitcherIconView
+%new
+- (BOOL)shouldHaveBlock {
+    return NO;
+}
+
+%new
+- (NSInteger)ibk_allowBlockState {
+    return 1;
+}
+%end
 
 %hook SBIconView
 %property (nonatomic, retain) UISwipeGestureRecognizer *swipeDown;
-%property (nonatomic, retain) UIView *widgetView;
-%property (nonatomic, assign) BOOL isInRootListView;
+%property (nonatomic, retain) UIView *widgetViewHolder;
+%property (nonatomic, assign) NSInteger ibk_allowBlockState;
+%property (nonatomic, assign) BOOL isKazeIconView;
 
 %new
 - (void)checkRootListViewPlacement {
-    self.isInRootListView = NO;
-    UIView *rootView = [self ibk_superviewOfClass:NSClassFromString(@"SBIconListView") maxDepth:10];
-    if (rootView) {
-        if ([rootView isMemberOfClass:NSClassFromString(@"SBRootIconListView")]) {
-            self.isInRootListView = YES;
-        }
-    }
-
-    if (self.icon && NSClassFromString(@"STKGroupView")) {
-        rootView = [self ibk_superviewOfClass:NSClassFromString(@"STKGroupView") maxDepth:5];
-        if (rootView) {
-            self.isInRootListView = NO;
-            if (self.widgetView) {
-                 if ([self.widgetView superview]) {
-                    openWidget([(SBIcon *)self.icon applicationBundleID]);
-                 }
+    if (self.ibk_allowBlockState == 0) {
+        self.ibk_allowBlockState = 1;
+        if (self.icon) {
+            if (![[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon *)self.icon applicationBundleID]] && !isPinching) {
+                return;
             }
-        } else {
-            for (UIView *subview in [self subviews]) {
-                if ([subview isMemberOfClass:NSClassFromString(@"STKGroupView")]) {
-                    STKGroupView *stackView = (STKGroupView *)subview;
-                    if (stackView.isOpen || stackView.isAnimating || !stackView.group.empty) {
-                        self.isInRootListView = NO;
-                        if (self.widgetView) {
-                            if ([self.widgetView superview]) {
-                                openWidget([(SBIcon *)self.icon applicationBundleID]);
-                            }
-                        }
+
+            if (![[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon *)self.icon applicationBundleID]] && isPinching) {
+                self.ibk_allowBlockState = 2;
+            }
+
+            if (![self isMemberOfClass:NSClassFromString(@"SBIconView")]) {
+                return;
+            }
+
+            if (rearrangingIcons) {
+                if ([[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon]) {
+                    if ([[[self icon] applicationBundleID] isEqual:[[[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon] applicationBundleID]]) {
+                        self.ibk_allowBlockState = 1;
+                        return;
                     }
-                    break;
                 }
             }
+            UIView *rootView = [self ibk_superviewOfClass:NSClassFromString(@"SBIconListView") maxDepth:10];
+            if (rootView && !rearrangingIcons) {
+                if ([rootView isMemberOfClass:NSClassFromString(@"SBRootIconListView")]) {
+                    self.ibk_allowBlockState = 2;
+                }
+            }
+
+            rootView = [self ibk_superviewOfClass:NSClassFromString(@"KazeQuickSwitcherIconView") maxDepth:10];
+            if (rootView) {
+                self.ibk_allowBlockState = 1;
+                self.isKazeIconView = YES;
+                return;
+            }
+
+            BOOL hasApexInstalled = NSClassFromString(@"STKGroupView") ? YES : NO;
+
+            if (hasApexInstalled) {
+                rootView = [self ibk_superviewOfClass:NSClassFromString(@"STKGroupView") maxDepth:5];
+                if (rootView) {
+                    self.ibk_allowBlockState = 1;
+                    [self ibk_removeWidgetView];
+                    return;
+                }
+            }
+
+            for (UIView *subview in [self subviews]) {
+                if (hasApexInstalled) {
+                    if ([subview isMemberOfClass:NSClassFromString(@"STKGroupView")]) {
+                        STKGroupView *stackView = (STKGroupView *)subview;
+                        if (stackView.isOpen || stackView.isAnimating || !stackView.group.empty) {
+                            self.ibk_allowBlockState = 1;
+                            [self ibk_removeWidgetView];
+                        }
+                        break;
+                    }
+                }
+
+                if ([subview isKindOfClass:NSClassFromString(@"IBKWidgetBaseView")]) {
+                    self.ibk_allowBlockState = 2;
+                }
+
+                // if ([subview isKindOfClass:NSClassFromString(@"SBIconImageCrossfadeView")]) {
+                //     self.ibk_allowBlockState = 2;
+                //     break;
+                // }
+            }
         }
     }
 }
 
-- (BOOL)isUserInteractionEnabled {
-    if ([self.icon isKindOfClass:[%c(IBKPlaceholderIcon) class]]) return NO;
-    else return %orig;
+%new
+- (BOOL)shouldHaveBlock {
+    if (self.ibk_allowBlockState == 0) {
+        [self checkRootListViewPlacement];
+    }
+    return (BOOL)(self.ibk_allowBlockState-1);
 }
 
-- (CGFloat)alpha {
-    if ([self.icon isKindOfClass:[%c(IBKPlaceholderIcon) class]]) return 0;
-    else return %orig;
+%new
+- (void)setShouldHaveBlock:(BOOL)shouldHaveBlock {
+    if (shouldHaveBlock) {
+        self.ibk_allowBlockState = 2;
+    } else {
+        self.ibk_allowBlockState = 1;
+    }
+}
+
+%new
+- (UIView *)widgetView {
+    if (!self.widgetViewHolder && self.shouldHaveBlock) {
+        SBIcon *icon = self.icon;
+        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[icon applicationBundleID]];
+        if (widgetController) {
+            self.widgetViewHolder = widgetController.view;
+        }
+    }
+
+    return self.widgetViewHolder;
+}
+
+%new
+- (void)setWidgetView:(UIView *)widgetView {
+    self.widgetViewHolder = widgetView;
+}
+
+%new
+- (void)ibk_loadWidgetView {
+    [self checkRootListViewPlacement];
+    if (self.shouldHaveBlock && !isPinching && !isRotating && ![self isGrabbed]) {
+        SBIcon *icon = self.icon;
+        SBIconImageView *iconImageView = (SBIconImageView *)[self _iconImageView];
+
+        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[icon applicationBundleID]];
+        if (!widgetController) {
+            IBKWidgetViewController *widgetController = [[IBKWidgetViewController alloc] init];
+            widgetController.applicationIdentifer = [icon applicationBundleID];
+            [widgetController layoutViewForPreExpandedWidget];
+            [[NSClassFromString(@"IBKResources") widgetViewControllers] setObject:widgetController forKey:[icon applicationBundleID]];
+        } else {
+            [widgetController.view removeFromSuperview];
+        }
+
+        [self addSubview:widgetController.view];
+        [self sendSubviewToBack:widgetController.view];
+        [self sendSubviewToBack:iconImageView];
+        self.widgetViewHolder = widgetController.view;
+
+        [iconImageView setAlpha:0.0];
+        widgetController.correspondingIconView = self;
+
+        widgetController.view.layer.shadowOpacity = 0.0;
+        widgetController.shimIcon.alpha = 0.0f;
+        widgetController.shimIcon.hidden = YES;
+
+        if ([IBKResources hoverOnly]) {
+            widgetController.view.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
+            widgetController.view.layer.shadowOpacity = 0.3;
+        }
+    }
+}
+
+%new
+- (void)ibk_removeWidgetView {
+    if (!self.shouldHaveBlock && self.widgetView) {
+        [self.widgetView removeFromSuperview];
+        self.widgetView = nil;
+    }
 }
 
 - (void)didMoveToSuperview {
     %orig;
+    self.ibk_allowBlockState = 0;
     [self checkRootListViewPlacement];
-    //[self loadWidget];
 }
 
-
-//- (void)setAlpha:(CGFloat)alpha {
-//    if ([self.icon isKindOfClass:[%c(IBKPlaceholderIcon) class]]) %orig(0);
-//    else %orig;
-//}
-//
-//- (BOOL)hidden {
-//    if ([self.icon isKindOfClass:[%c(IBKPlaceholderIcon) class]]) return YES;
-//    return %orig;
-//}
-//
-//- (void)setHidden:(BOOL)arg1 {
-//    if ([self.icon isKindOfClass:[%c(IBKPlaceholderIcon) class]]) %orig(YES);
-//        else %orig;
-//}
-
 - (BOOL)pointInside:(struct CGPoint)arg1 withEvent:(UIEvent*)arg2 {
-    if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
-        return %orig;
-    }
-//    return NO;
 
-    
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && self.isInRootListView) {
+    // if ([[arg2 allTouches] count] > 1) return %orig;
+    BOOL shouldPoint = NO;
+    for (UIView *view in [self subviews]) {
+        if ([view isKindOfClass:NSClassFromString(@"IBKWidgetBaseView")]) {
+            shouldPoint = YES;
+            break;
+        }
+    }
+    if ((shouldPoint && self.widgetView) || (self.shouldHaveBlock && self.widgetView)) {
         // Check if point will be inside our thing.
 
         if ([IBKResources hoverOnly]) {
-            UIView *view = [[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]] view];
+            UIView *view = self.widgetView;
 
             // Normalise point.
             arg1.x += ((view.frame.size.width - self.frame.size.width)/2);
@@ -1279,81 +1401,70 @@ NSString *lastOpenedWidgetId;
 
         NSLog(@"Checking if point %@ is inside.", NSStringFromCGPoint(arg1));
 
-        return [[[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]] view] pointInside:arg1 withEvent:arg2];
+        return [self.widgetView pointInside:arg1 withEvent:arg2];
     }
 
     BOOL orig = %orig;
     if ([[arg2 allTouches] count] > 1) return NO;
-
     // We need to check that if there are two or more touches, and only one is on the icon, then we MUST return NO.
     // Else, pinching will fail.
 
     return orig;
 }
 
+// - (CGRect)frame {
+//     if (isPinching || (!self.shouldHaveBlock && !rearrangingIcons) || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) return %orig;
+
+//     CGRect frame = %orig;
+//     frame.size = self.bounds.size;
+//     return frame;
+// }
+
 -(CGRect)bounds {
 
-    if (inSwitcher || sup || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")] || !self.isInRootListView) return %orig;
+    if (self.isKazeIconView) return %orig;
+    UIView *widgetView = self.widgetView;
+    if (!isPinching && ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) {
+        if (!self.shouldHaveBlock && !widgetView) return %orig;
+    }
 
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher) {
-        CGRect frame = %orig;
-        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-        frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+    CGRect frame = %orig;
+    //IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+    frame.size = widgetView.frame.size;
 
-        if (IS_RTL) {
+    if (IS_RTL) {
+        if (!isLaunching) {
             frame.origin.x = 0 - (frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
         }
-
-        // if (IS_RTL) {
-        //     frame.origin.x = -frame.size.width + self.frame.size.width;
-        // }
-        return frame;
     }
 
-    return %orig;
+    // if (IS_RTL) {
+    //     frame.origin.x = -frame.size.width + self.frame.size.width;
+    // }
+    return frame;
 }
-
- - (CGSize)iconImageVisibleSize {
-    if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
-        return %orig;
-    }
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {
-//         CGRect frame = nil;
-         IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-//         frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
-         
-         return CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
-     }
-     
-     return %orig;
- }
 
 - (void)layoutSubviews {
     %orig;
-    [self checkRootListViewPlacement];
-
+    if (self.isKazeIconView)
+        return;
     // if (!self.swipeDown) {
     //     self.swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipe:)];
     //     self.swipeDown.direction = UISwipeGestureRecognizerDirectionUp;
     //     [self addGestureRecognizer:self.swipeDown];
     // }
 
-    if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
-       
-    } else if ([[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon]) {
-        if ([[[self icon] applicationBundleID] isEqual:[[[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon] applicationBundleID]]) {
-            
-        }
-    } else if ([[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon *)self.icon applicationBundleID]] && self.isInRootListView) {
-        [(UIImageView*)[self _iconImageView] setAlpha:0.0];
-        if (self.widgetView) {
-            if (![self.widgetView superview]) {
-                if ([(IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[(SBIcon *)self.icon applicationBundleID]] view] == self.widgetView) {
-                    [self addSubview:self.widgetView];
-                    [self sendSubviewToBack:self.widgetView];
-                    [self sendSubviewToBack: (UIView *)[self valueForKey:@"_iconImageView"]];
-                    [(UIImageView*)[self _iconImageView] setAlpha:0.0];
-                }
+    if (self.shouldHaveBlock) {
+        UIImageView *iconImageView = [self _iconImageView];
+        [iconImageView setAlpha:0.0];
+
+        UIView *widgetView = self.widgetView;
+        if (widgetView) {
+            if (![widgetView superview]) {
+                [self addSubview:widgetView];
+                [self sendSubviewToBack:widgetView];
+                [self sendSubviewToBack:iconImageView];
+                //[iconImageView setAlpha:0.0];
             }
         }
     }
@@ -1361,137 +1472,181 @@ NSString *lastOpenedWidgetId;
 
 %new
 - (void)didSwipe:(id)sender {
-    if (self.isInRootListView)
+    if (self.shouldHaveBlock)
         openWidget([(SBIcon *)self.icon applicationBundleID]);
 }
 
 
 %new
 - (void)loadWidget {
-    if ([self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) {
-        return;
-    }
-//    NSLog(@"Layed out SubView for Icon");
-    if (isRotating) return;
-    if ([[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon]) {
-        if ([[[self icon] applicationBundleID] isEqual:[[[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon] applicationBundleID]]) {
-            return;
-        }
-    }
+    if (isRotating || isPinching) return;
 
-    [self checkRootListViewPlacement];
-    if (isPinching == NO) {
-        if ([[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon *)self.icon applicationBundleID]]) {
-            if ([(IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[(SBIcon *)self.icon applicationBundleID]] view] == self.widgetView) {
-                if (self.widgetView) {
-                    if (![self.widgetView superview]) {
-                        [self addSubview:self.widgetView];
-                        [self sendSubviewToBack:self.widgetView];
-                        [self sendSubviewToBack: (UIView *)[self valueForKey:@"_iconImageView"]];
-                        [(UIImageView*)[self _iconImageView] setAlpha:0.0];
-                    }
-                }
-            }
-        }
-        
-        if (self.widgetView) {
-        
-            [self.widgetView removeFromSuperview];
-        }
-        
-        SBApplicationIcon *icon = nil;
-    
-        if (!icon) {
-            icon = (SBApplicationIcon*)self.icon;
-        }
-    
-        if (!inSwitcher) {
-            if ([[IBKResources widgetBundleIdentifiers] containsObject:[icon applicationBundleID]] && self.isInRootListView) {
-            
-            // Widget view controllers will be deallocated when the icon is recycled.
-                IBKWidgetViewController *widgetController;
-                widgetController.view.alpha = 1.0;
-                
-                if (![[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[icon applicationBundleID]]) {
-                    widgetController = [[IBKWidgetViewController alloc] init];
-                    widgetController.applicationIdentifer = [icon applicationBundleID];
-                    [widgetController layoutViewForPreExpandedWidget]; // No need to set center position
-                } else {
-                    widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[icon applicationBundleID]];
-                    long long widgetOrientation = [widgetController usedOrientation];
-                    if (widgetOrientation != 20 && widgetOrientation != [(SBIconController *)[NSClassFromString(@"SBIconController") sharedInstance] orientation]) {
-                        //reloadAllWidgetsNow();
-                    }
-
-                   // [widgetController reloadWidgetForSettingsChange]; 
-                }
-            
-            // Add the small UI onto the icon - we can be sure this will not be a folder icon
-//            if ([self respondsToSelector:@selector(shortcutMenuPeekGesture)]) {
-//                [self.shortcutMenuPeekGesture setEnabled:NO];
-//            }
-                [self addSubview:widgetController.view];
-                [self sendSubviewToBack:widgetController.view];
-                [self sendSubviewToBack: (UIView *)[self valueForKey:@"_iconImageView"]];
-                self.widgetView = widgetController.view;
-            
-                if ([icon applicationBundleID] && ![[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[icon applicationBundleID]])
-                    [[NSClassFromString(@"IBKResources") widgetViewControllers] setObject:widgetController forKey:[icon applicationBundleID]]; // Ensure that a pointer remains to that widget controller.
-            
-            // Hide original icon
-                [(UIImageView*)[self _iconImageView] setAlpha:0.0];
-                widgetController.correspondingIconView = self;
-            
-                widgetController.view.layer.shadowOpacity = 0.0;
-                widgetController.shimIcon.alpha = 0.0f;
-                widgetController.shimIcon.hidden = YES;
-            
-                if ([IBKResources hoverOnly]) {
-                    widgetController.view.center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
-                    widgetController.view.layer.shadowOpacity = 0.3;
-                }
-            } else {
-                [self.widgetView removeFromSuperview];
-                self.widgetView = nil;
-            }
-        
-        // Testing
-        //NSLog(@"Resultant count == %lu", (unsigned long)[[NSClassFromString(@"IBKResources") widgetViewControllers] count]);
-        }
+    if (self.shouldHaveBlock) {
+        [self ibk_loadWidgetView];
+    } else {
+        [self ibk_removeWidgetView];
     }
 }
 
-- (CGPoint)iconImageCenter {
-    if ([IBKResources hoverOnly] || inSwitcher || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
-    
-    CGPoint point = %orig;
+#pragma mark Icon Opening and Closing Animations
 
+// // Used for App Opening/Closing Animation -[SBCrossfadeIconZoomAnimator _zoomedIconCenter]
+ - (CGSize)iconImageVisibleSize {
+    if (self.isKazeIconView) return %orig;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-    point = CGPointMake(widgetController.view.frame.size.width/2, widgetController.view.frame.size.height/2);
+    if (widgetController)
+        return CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+    else return %orig;
+ }
+
+// Used for the Icon Open/Closing Animation -[SBScaleIconZoomAnimator _prepareAnimation]
+
+- (CGPoint)iconImageCenter {
+    if ((!self.shouldHaveBlock && !isLaunching) || [IBKResources hoverOnly]) return %orig;
+
+    UIView *widgetView = ((IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]]).view;
+    if (!widgetView) return %orig;
+
+    CGPoint point = %orig;
+    point = CGPointMake(widgetView.frame.size.width/2, widgetView.frame.size.height/2);
 
     if (IS_RTL) {
-        point.x = point.x - (widgetController.view.frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
+        point.x = point.x - (widgetView.frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
     }
 
     return point;
 }
 
-- (CGRect)iconImageFrame {
-    if (inSwitcher || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+// - (CGRect)iconImageFrame {
+//     if (inSwitcher || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) return %orig;
     
-    CGRect frame = %orig;
-    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-    frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+//     CGRect frame = %orig;
+//     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+//     frame.size = widgetController.view.frame.size;
 
-    // if (IS_RTL) {
-    //     frame.origin.x = frame.origin.x - (widgetController.view.frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
-    // }
-    return frame;
+//     if (IS_RTL) {
+//         frame.origin.x = frame.origin.x - (widgetController.view.frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
+//     }
+//     return frame;
+// }
+
+- (id)iconImageSnapshot {
+    if (!self.shouldHaveBlock && !isLaunching) return %orig;
+    if (self.isKazeIconView) return %orig;
+        
+    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+    UIView *view = widgetController.view;
+
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+
+    UIGraphicsEndImageContext();
+    return img;
 }
 
-- (CGRect)_frameForLabel {
+-(void)prepareToCrossfadeImageWithView:(id)arg1 maskCorners:(BOOL)arg2 trueCrossfade:(BOOL)arg3 {
+    if (self.isKazeIconView) return %orig;
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) {
+        UIView *iconImageView = (UIView *)[self valueForKey:@"_iconImageView"];
+        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+        UIView *view = widgetController.view;
 
-    if ((!self.isInRootListView && !rearrangingIcons && !isLaunching) || inSwitcher || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+        if (view) {
+            [[iconImageView layer] invalidateContents];
+            [[iconImageView layer] addSublayer:[view layer]];
+            // CGRect frame = view.frame;
+            // frame.origin.x =1;
+            // frame.origin.y =1;
+            // view.frame = frame;
+            // [iconImageView addSubview:view];
+        }
+    }
+    // if (self.widgetView) {
+    //     UIView *iconImageView = (UIView *)[self valueForKey:@"_iconImageView"];
+    //     if (iconImageView) {
+    //         [iconImageView addSubview:self.widgetView];
+    //     }
+    // }
+    %orig; 
+}
+-(void)prepareToCrossfadeImageWithView:(id)arg1 maskCorners:(BOOL)arg2 trueCrossfade:(BOOL)arg3 anchorPoint:(CGPoint)arg4 {
+   // if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) {
+   //      UIView *iconImageView = (UIView *)[self valueForKey:@"_iconImageView"];
+   //      if (iconImageView) {
+   //          UIImage *widgetSnapshot = [self iconImageSnapshot];
+   //          UIImageView *widgetProxyView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.bounds.size.width,self.bounds.size.height)];
+   //          widgetProxyView.image = widgetSnapshot;
+   //          [iconImageView addSubview:widgetProxyView];
+   //      }
+   //  }
+    if ([self isKindOfClass:NSClassFromString(@"KazeQuickSwitcherIconView")]) return %orig;
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) {
+        UIView *iconImageView = (UIView *)[self valueForKey:@"_iconImageView"];
+        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+        UIView *view = widgetController.view;
+
+        if (view) {
+            [[iconImageView layer] invalidateContents];
+            [[iconImageView layer] addSublayer:[view layer]];
+            // CGRect frame = view.frame;
+            // frame.origin.x =1;
+            // frame.origin.y =1;
+            // view.frame = frame;
+            // [iconImageView addSubview:view];
+        }
+    }
+    %orig;
+}
+-(void)prepareToCrossfadeImageWithView:(id)arg1 crossfadeType:(unsigned long long)arg2 maskCorners:(BOOL)arg3 trueCrossfade:(BOOL)arg4 anchorPoint:(CGPoint)arg5 {
+    if ([self isKindOfClass:NSClassFromString(@"KazeQuickSwitcherIconView")]) return %orig;
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) {
+        UIView *iconImageView = (UIView *)[self valueForKey:@"_iconImageView"];
+        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+        UIView *view = widgetController.view;
+
+        if (view) {
+             [[iconImageView layer] invalidateContents];
+             [[iconImageView layer] addSublayer:[view layer]];
+            // CGRect frame = view.frame;
+            // frame.origin.x =1;
+            // frame.origin.y =1;
+            // view.frame = frame;
+            // [iconImageView addSubview:view];
+        }
+    }
+
+    %orig;
+}
+-(void)prepareToCrossfadeImageWithView:(id)arg1 crossfadeType:(unsigned long long)arg2 maskCorners:(BOOL)arg3 trueCrossfade:(BOOL)arg4 {
+    if ([self isKindOfClass:NSClassFromString(@"KazeQuickSwitcherIconView")]) return %orig;
+    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) {
+        UIView *iconImageView = (UIView *)[self valueForKey:@"_iconImageView"];
+        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+        UIView *view = widgetController.view;
+
+        if (view) {
+            [[iconImageView layer] invalidateContents];
+            [[iconImageView layer] addSublayer:[view layer]];
+            // CGRect frame = view.frame;
+            // frame.origin.x =1;
+            // frame.origin.y =1;
+            // view.frame = frame;
+            // [iconImageView addSubview:view];
+        }
+    }
+    %orig;
+}
+
+#pragma mark Icon View Label Position
+
+- (CGRect)_frameForLabel {
+    if (isPinching && !self.shouldHaveBlock) return %orig;
+    if (!isPinching && ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) {
+        if (!self.shouldHaveBlock && ![self isGrabbed]) return %orig;
+        if ([self isGrabbed] && ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) return %orig;
+    }
     CGRect orig = %orig;
     
     IBKWidgetViewController *widgetController = (IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];   
@@ -1524,12 +1679,16 @@ NSString *lastOpenedWidgetId;
     else {
         orig.origin = CGPointMake(widgetFrame.origin.x + extraPadding, widgetFrame.origin.y + widgetFrame.size.height);
     }
+
+    if (orig.origin.y == 0 && widgetFrame.size.height == 0) return %orig;
     return orig;
 }
 
+#pragma mark Icon View Badge Position for Icon Views
+
 -(CGRect)_frameForAccessoryView {
     
-    if ((!self.isInRootListView && !rearrangingIcons && !isLaunching) || inSwitcher || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+    if ((!self.shouldHaveBlock && !rearrangingIcons && !isLaunching) || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
     
     CGRect orig = %orig;
     CGRect widgetFrame = ((IBKWidgetViewController *)[[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]]).view.frame;
@@ -1542,56 +1701,40 @@ NSString *lastOpenedWidgetId;
     return orig;
 }
     
--(void)prepareForRecycling {
-    %orig;
+// -(void)prepareForRecycling {
+//     %orig;
     
-    IBKWidgetViewController *widgetController = [NSClassFromString(@"IBKResources") getWidgetViewControllerForIcon:self.icon orBundleID:nil];
-    if (widgetController) {
-        [widgetController unloadWidgetInterface];
-        [widgetController.view removeFromSuperview];
+//     IBKWidgetViewController *widgetController = [NSClassFromString(@"IBKResources") getWidgetViewControllerForIcon:self.icon orBundleID:nil];
+//     if (widgetController) {
+//         [widgetController unloadWidgetInterface];
+//         [widgetController.view removeFromSuperview];
         
-        if ([self.icon applicationBundleID]) {
+//         if ([self.icon applicationBundleID]) {
 
-            [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:[self.icon applicationBundleID]];
-            [self checkRootListViewPlacement];
-        }
-    }
-}
+//             [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:[self.icon applicationBundleID]];
+//             [self checkRootListViewPlacement];
+//         }
+//     }
+// }
 
--(void)prepareForReuse {
-    %orig;
+// -(void)prepareForReuse {
+//     %orig;
     
-    IBKWidgetViewController *widgetController = [NSClassFromString(@"IBKResources") getWidgetViewControllerForIcon:self.icon orBundleID:nil];
-    if (widgetController) {
-        [widgetController unloadWidgetInterface];
-        [widgetController.view removeFromSuperview];
+//     IBKWidgetViewController *widgetController = [NSClassFromString(@"IBKResources") getWidgetViewControllerForIcon:self.icon orBundleID:nil];
+//     if (widgetController) {
+//         [widgetController unloadWidgetInterface];
+//         [widgetController.view removeFromSuperview];
         
-        if ([self.icon applicationBundleID]) {
+//         if ([self.icon applicationBundleID]) {
 
-            [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:[self.icon applicationBundleID]];
-        }
-    }
-}
+//             [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:[self.icon applicationBundleID]];
+//         }
+//     }
+// }
     
-- (void)prepareToCrossfadeImageWithView:(id)arg1 maskCorners:(_Bool)arg2 trueCrossfade:(_Bool)arg3 anchorPoint:(struct CGPoint)arg4 {
-    %orig;
-}
-
-- (id)iconImageSnapshot {
-    if (inSwitcher || [IBKResources hoverOnly] || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
-        
-    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-    UIView *view = widgetController.view;
-
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-
-    UIGraphicsEndImageContext();
-
-    return img;
-}
+// - (void)prepareToCrossfadeImageWithView:(id)arg1 maskCorners:(_Bool)arg2 trueCrossfade:(_Bool)arg3 anchorPoint:(struct CGPoint)arg4 {
+//     %orig;
+// }
 
 // - (void)_setIcon:(id)arg1 animated:(BOOL)arg2 { // Deal with adding a widget view onto those icons that are already expanded
 //     %orig;
@@ -1600,18 +1743,14 @@ NSString *lastOpenedWidgetId;
 
 - (void)setIcon:(id)arg1 {
     %orig;
+    self.ibk_allowBlockState = 0;
     if (![[NSClassFromString(@"SBIconController") sharedInstance] isEditing])
         [self loadWidget];
 }
 - (void)setLocation:(int)arg1 {
     %orig;
-    if (!self.isInRootListView || [self isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")] || [[NSClassFromString(@"SBIconController") sharedInstance] isEditing]) {
-        
-    } else if ([[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon]) {
-        if ([[[self icon] applicationBundleID] isEqual:[[[NSClassFromString(@"SBIconController") sharedInstance] grabbedIcon] applicationBundleID]]) {
-            
-        }
-    } else {
+    self.ibk_allowBlockState = 0;
+    if (self.shouldHaveBlock && !rearrangingIcons) {
         [self loadWidget];
     }
 }
@@ -1622,52 +1761,53 @@ CGSize defaultIconSizing;
 #import "../headers/SpringBoard/SBIconImageCrossfadeView.h"
 
 @interface SBIconImageView (IBK)
-@property (nonatomic, assign) BOOL isInRootListView;
+@property (nonatomic, assign) BOOL shouldHaveBlock;
 - (void)checkRootListViewPlacement;
 @end
 
 %hook SBIconImageView
-%property (nonatomic, assign) BOOL isInRootListView;
 
 %new
 - (void)checkRootListViewPlacement {
-    self.isInRootListView = NO;
-
-    UIView *rootView = [self ibk_superviewOfClass:NSClassFromString(@"SBIconListView") maxDepth:10];
-    if (rootView) {
-        if ([rootView isMemberOfClass:NSClassFromString(@"SBRootIconListView")]) {
-            self.isInRootListView = YES;
-        }
-    }
-
-    if (self.icon && NSClassFromString(@"STKGroupView")) {
-        rootView = [self ibk_superviewOfClass:NSClassFromString(@"STKGroupView") maxDepth:5];
-        if (rootView) {
-            self.isInRootListView = NO;
-        } else {
-            for (UIView *subview in [[self superview] subviews]) {
-                if ([subview isMemberOfClass:NSClassFromString(@"STKGroupView")]) {
-                    STKGroupView *stackView = (STKGroupView *)subview;
-                    if (stackView.isOpen || stackView.isAnimating || !stackView.group.empty) {
-                        self.isInRootListView = NO;
-                    }
-                    break;
-                }
-            }
-        }
+    SBIconView *iconView = (SBIconView *)[self ibk_superviewOfClass:NSClassFromString(@"SBIconView") maxDepth:10];
+    if (iconView) {
+       [iconView checkRootListViewPlacement];
     }
 }
 
+%new
+- (BOOL)shouldHaveBlock {
+    SBIconView *iconView = (SBIconView *)[self ibk_superviewOfClass:NSClassFromString(@"SBIconView") maxDepth:10];
+    if (iconView) {
+        return iconView.shouldHaveBlock;
+    } else return NO;
+}
+
+%new
+- (void)setShouldHaveBlock:(BOOL)shouldHaveBlock {
+    return;
+}
+
 - (CGRect)visibleBounds {
-    if (inSwitcher || !sup || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+    if (!isPinching) {
+        if (!self.shouldHaveBlock && (!isLaunching || !rearrangingIcons) && (self.icon && ![[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon *)self.icon applicationBundleID]])) return %orig;
+    }
+    // if ([[self superview] isKindOfClass:NSClassFromString(@"SBIconView")]) {
+    //     return [self superview].bounds;
+    // }
 
     CGRect frame = %orig;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-    frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+    if (widgetController) {
+        frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
 
 
-    if (IS_RTL) {
-        frame.origin.x = 0 - (widgetController.view.frame.size.width - [NSClassFromString(@"SBIconView") defaultIconImageSize].width) - 1;
+        if (IS_RTL) {
+            frame.origin.x = 0 - (widgetController.view.frame.size.width - [NSClassFromString(@"SBIconView") defaultIconImageSize].width) - 1;
+        } else {
+            // frame.origin.x += 1;
+            // frame.origin.y += 1;
+        }
     }
     return frame;
 }
@@ -1690,30 +1830,30 @@ CGSize defaultIconSizing;
 //    %orig(alpha);
 //}
 
--(CGRect)frame {
+// -(CGRect)frame {
 
-    if (!self.isInRootListView || inSwitcher || !sup || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+//     if ((!self.shouldHaveBlock && !rearrangingIcons) || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
 
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {
-        CGRect frame = %orig;
-        IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-        frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+//     if ([[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] && !inSwitcher && sup) {
+//         CGRect frame = %orig;
+//         IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+//         frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
 
-        return frame;
-    }
+//         return frame;
+//     }
 
-    return %orig;
-}
+//     return %orig;
+// }
 
--(CGRect)bounds {
-    if (!self.isInRootListView || inSwitcher || !sup || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+// -(CGRect)bounds {
+//     if ((!self.shouldHaveBlock && !rearrangingIcons) || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
     
-    CGRect frame = %orig;
-    IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-    frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
+//     CGRect frame = %orig;
+//     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+//     frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
 
-    return frame;
-}
+//     return frame;
+// }
 
 
 //- (CGFloat)alpha {
@@ -1729,12 +1869,12 @@ CGSize defaultIconSizing;
 //}
 
 // - (void)setAlpha:(CGFloat)alpha {
-//     if ((!self.isInRootListView && isLaunching) || inSwitcher || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+//     if ((!self.shouldHaveBlock && isLaunching) || inSwitcher || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
 //     %orig(0);
 // }
 
 // - (CGFloat)alpha {
-//      if ((!self.isInRootListView && !isLaunching) || inSwitcher  || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
+//      if ((!self.shouldHaveBlock && !isLaunching) || inSwitcher  || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]] || [[self superview] isKindOfClass:NSClassFromString(@"SBAppSwitcherIconView")]) return %orig;
 //     return 0;;
 // }
 
@@ -2158,6 +2298,7 @@ NSInteger page = 0;
     if ([[objc_getClass("SBIconController") sharedInstance] hasOpenFolder]) return;
 
     if (pinch.state == UIGestureRecognizerStateBegan) {
+        isPinching = YES;
          //NSLog(@"Pinching began");
         // Handle setting up the view.
 
@@ -2181,6 +2322,7 @@ NSInteger page = 0;
 
         if ([[widgetIcon class] isEqual:[objc_getClass("SBFolderIcon") class]]) {
             widget = nil;
+            isPinching = NO;
             return;
         }
 
@@ -2192,17 +2334,14 @@ NSInteger page = 0;
             view = [[%c(SBIconViewMap) homescreenMap] mappedIconViewForIcon:widgetIcon];
         }
 
-        if (!view.isInRootListView) {
-            widget = nil;
-            return;
-        }
+        view.ibk_allowBlockState = 0;
 
-        
         if ([widgetIcon isKindOfClass:[%c(IBKPlaceholderIcon) class]]) {
             
             NSArray* stringArray = [[widgetIcon applicationBundleID] componentsSeparatedByString: @"/"];
             if ([stringArray count] < 2) {
                 widget = nil;
+                isPinching = NO;
                 return;
             }
             NSString *newWidgetBundleIdentifier = [stringArray objectAtIndex:[stringArray count]-1];
@@ -2218,14 +2357,21 @@ NSInteger page = 0;
 //            widget = nil;
 //            return;
             
+        } else {
+            if (!view.shouldHaveBlock) {
+                widget = nil;
+                isPinching = NO;
+                return;
+            }
         }
 
         // Ah shit. If this widget is already open, don't do anything!
         if ([[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[widgetIcon applicationBundleID]]) {
             widget = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[widgetIcon applicationBundleID]];
-            [widget handlePinchGesture:pinch];
+            widget.correspondingIconView.ibk_allowBlockState = 2;
             isClosing = YES;
             isPinching = YES;
+            [widget handlePinchGesture:pinch];
             return;
         }
 
@@ -2266,8 +2412,10 @@ NSInteger page = 0;
         
     } else if (pinch.state == UIGestureRecognizerStateChanged && widget) {
         if (isClosing) {
-        [widget handlePinchGesture:pinch];
-        return;
+            isPinching = YES;
+            widget.correspondingIconView.ibk_allowBlockState = 2;
+            [widget handlePinchGesture:pinch];
+            return;
         }
         // NSLog(@"Pinching changed");
         if ([[widgetIcon class] isEqual:[objc_getClass("SBFolderIcon") class]]) return;
@@ -2289,6 +2437,7 @@ NSInteger page = 0;
         [widget setScaleForView:pinch.scale withDuration:0.1];
     } else if (pinch.state == UIGestureRecognizerStateEnded && widget) {
         if (isClosing) {
+            widget.correspondingIconView.ibk_allowBlockState = 1;
             [widget handlePinchGesture:pinch];
             isClosing = NO;
             isPinching = NO;
@@ -2349,6 +2498,14 @@ NSInteger page = 0;
                 else {
                     widget.view.frame = CGRectMake(0, 0, [IBKResources widthForWidgetWithIdentifier:widget.applicationIdentifer], [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer]);
                 }
+
+                if ([widget.correspondingIconView valueForKey:@"_accessoryView"]) {
+                    ((UIView *)[widget.correspondingIconView valueForKey:@"_accessoryView"]).frame = [widget.correspondingIconView _frameForAccessoryView];
+                }
+                
+                if ([widget.correspondingIconView valueForKey:@"_labelView"]) {
+                    ((UIView *)[widget.correspondingIconView valueForKey:@"labelView"]).frame = [widget.correspondingIconView _frameForLabel];
+                }
                 widget.view.layer.shadowOpacity = 0.0;
 
                 [(SBIconImageView*)[widget.correspondingIconView _iconImageView] setFrame:widgetViewFrame];
@@ -2356,36 +2513,39 @@ NSInteger page = 0;
                 // Icon's label?
             }];
         } else {
+            widget.correspondingIconView.ibk_allowBlockState = 1;
             CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
 
             CGFloat red, green, blue;
             [widget.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
             widget.currentScale = iconScale;
             [UIView animateWithDuration:0.25 animations:^{
-                widget.view.transform = CGAffineTransformMakeScale(iconScale, iconScale);
-                widget.shimIcon.alpha = 1.0;
-                widget.viw.alpha = 0.0;
+                // widget.view.transform = CGAffineTransformMakeScale(iconScale, iconScale);
+                // widget.shimIcon.alpha = 1.0;
+                // widget.viw.alpha = 0.0;
                 widget.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
+                [widget setScaleForView:1.0 withDuration:0.25];
             } completion:^(BOOL finished) {
+                [[(SBIconView*)widget.correspondingIconView _iconImageView] setAlpha:1.0];
                 [widget unloadFromPinchGesture];
                 [IBKResources removeIdentifier:widget.applicationIdentifer];
                 if (widget && widget.applicationIdentifer) [[NSClassFromString(@"IBKResources") widgetViewControllers] removeObjectForKey:widget.applicationIdentifer];
-                [[(SBIconView*)widget.correspondingIconView _iconImageView] setAlpha:1.0];
+                //[[(SBIconView*)widget.correspondingIconView _iconImageView] setAlpha:1.0];
             }];
         }
         isPinching = NO;
     } else if (pinch.state == UIGestureRecognizerStateCancelled) {
        // NSLog(@"PINCHING WAS CANCELLED");
-
+        widget.correspondingIconView.ibk_allowBlockState = 1;
         CGFloat scale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:widget.applicationIdentifer];
+
+        CGFloat red, green, blue;
+        [widget.view.backgroundColor getRed:&red green:&green blue:&blue alpha:nil];
 
         widget.currentScale = scale;
         [UIView animateWithDuration:0.3 animations:^{
-            widget.view.transform = CGAffineTransformMakeScale(scale, scale);
-            widget.view.center = CGPointMake(([(UIView*)[widget.correspondingIconView _iconImageView] frame].size.width/2)-1, ([(UIView*)[widget.correspondingIconView _iconImageView] frame].size.height/2)-1);
-            widget.shimIcon.alpha = 1.0;
-
-            widget.iconImageView.alpha = 0.0;
+            widget.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
+            [widget setScaleForView:1.0 withDuration:0.3];
         } completion:^(BOOL finished) {
             [[widget.correspondingIconView _iconImageView] setAlpha:1.0];
             widget.view.hidden = YES;
@@ -2396,7 +2556,7 @@ NSInteger page = 0;
         }];
         isPinching = NO;
     }
-}
+} 
 
 %end
 
@@ -2650,8 +2810,9 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
     // We're done. Load!
     %init;
 
-    // dlopen("/Library/MobileSubstrate/DynamicLibraries/IconSupport.dylib", RTLD_NOW);
-    // dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
+   // dlopen("/Library/MobileSubstrate/DynamicLibraries/IconSupport.dylib", RTLD_NOW);
+   // dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
+    dlopen("/Library/MobileSubstrate/DynamicLibraries/Kaze.dylib", RTLD_NOW);
     // [[objc_getClass("ISIconSupport") sharedInstance] addExtension:@"com.iosblocks.curago"];
 
     // Load custom stuff for certain versions of iOS.

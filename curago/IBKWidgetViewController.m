@@ -77,7 +77,7 @@ extern dispatch_queue_t __BBServerQueue;
     // topBase.layer.masksToBounds = YES;
     topBase.userInteractionEnabled = YES;
     
-    //[topBase addTarget:self action:@selector(didTapTopBase:) forControlEvents:UIControlEventAllTouchEvents];
+    [topBase addTarget:self action:@selector(didTapTopBase:) forControlEvents:UIControlEventAllTouchEvents];
     
     IBKWidgetBaseView *baseView = [[IBKWidgetBaseView alloc] initWithFrame:initialFrame];
     baseView.alpha = 1.0;
@@ -889,20 +889,32 @@ extern dispatch_queue_t __BBServerQueue;
     [UIView animateWithDuration:duration animations:^{
         self.view.transform = CGAffineTransformMakeScale((fin ? 1.0 : scale), (fin ? 1.0 : scale));
         self.shimIcon.alpha = iconAlpha;
-        if (!self.isLocked) {
-            self.viw.alpha = 1.0-iconAlpha;
-            if (self.notificationsTableView)
-            self.notificationsTableView.alpha = 1.0-iconAlpha;
-            self.gcTableView.alpha = 1.0-iconAlpha;
+        // if (!self.isLocked) {
+        //     self.viw.alpha = 1.0-iconAlpha;
+        //     if (self.notificationsTableView)
+        //     self.notificationsTableView.alpha = 1.0-iconAlpha;
+        //     self.gcTableView.alpha = 1.0-iconAlpha;
+        // }
+
+        // if (self.buttons) {
+        //     self.buttons.alpha = 1.0-iconAlpha;
+        // }
+    
+        // // Depending on how far we've scaled, adjust the icon image view at a much faster rate.
+        // if (self.iconImageView)
+        //     self.iconImageView.alpha = 1.0-iconAlpha;
+        // if (self.alternateIcon)
+        //     self.alternateIcon.alpha = 1.0-iconAlpha;
+        // if (self.otherIcon)
+        //     self.otherIcon.alpha = 1.0-iconAlpha;
+        for (UIView *subview in self.view.subviews) {
+            if (![subview isEqual:self.shimIcon] && subview != self.shimIcon) {
+                subview.alpha = 1.0-iconAlpha;
+            }
         }
 
-        if (self.buttons) {
-            self.buttons.alpha = 1.0-iconAlpha;
-        }
-    
-        // Depending on how far we've scaled, adjust the icon image view at a much faster rate.
-        self.iconImageView.alpha = 1.0-iconAlpha;
-        
+        if (self.iconImageView)
+            self.iconImageView.alpha = 1.0-iconAlpha;
 //        if (self.scalingDown)
 //            [[self.correspondingIconView _iconImageView] setAlpha:0.0];
     }];
@@ -936,6 +948,7 @@ float scale2 = 0.0;
        // NSLog(@"XXX: Pinching changed");
         
         // Set scale of our widget view, using scale/velocity as our time duration for animation
+        self.correspondingIconView.ibk_allowBlockState = 2;
         CGFloat duration = (pinch.scale/pinch.velocity);
         if (duration < 0)
             duration = -duration;
@@ -954,6 +967,8 @@ float scale2 = 0.0;
 //            [[self.correspondingIconView _iconImageView] setAlpha:0.0];
 //            [[self.correspondingIconView _iconImageView] setHidden:YES];
             // Animate shim icon to top corner.
+
+            self.correspondingIconView.ibk_allowBlockState = 1;
             CGFloat iconScale = [NSClassFromString(@"SBIconView") defaultIconImageSize].height / [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer];
             
             const CGFloat *components = CGColorGetComponents(self.view.layer.borderColor);
@@ -981,10 +996,10 @@ float scale2 = 0.0;
                 if (![IBKResources hoverOnly])
                     self.view.center = CGPointMake(([(UIView*)[self.correspondingIconView _iconImageView] frame].size.width/2)-1, ([(UIView*)[self.correspondingIconView _iconImageView] frame].size.height/2)-1);
 //                self.shimIcon.alpha = 1.0;
-                /*for (UIView *subview in self.view.subviews) {
+                for (UIView *subview in self.view.subviews) {
                     if (![subview isEqual:self.shimIcon] && subview != self.shimIcon)
                         subview.alpha = 0.0;
-                }*/
+                }
                 
 //                self.iconImageView.alpha = 0.0;
 //                [[self.correspondingIconView _iconImageView] setHidden:YES];

@@ -14,6 +14,7 @@
 #import "IBKWidgetLockView.h"
 #import "IBKLabel.h"
 #import "IBKWidgetBaseView.h"
+#import "SBIconView+IBK.h"
 
 #import "../headers/SpringBoard/SpringBoard.h"
 #import "../headers/BulletinBoard/BBObserver.h"
