@@ -1037,6 +1037,7 @@ float scale2 = 0.0;
 //                [[self.correspondingIconView _iconImageView] setAlpha:1.0];
                 [[self.correspondingIconView _iconImageView] setHidden:NO];
                 [[self.correspondingIconView _iconImageView] setAlpha:1.0];
+                self.correspondingIconView.widgetView = nil;
                 self.view.hidden = YES;
 //                [[self.correspondingIconView _iconImageView] setHidden:NO];
                 [self unloadFromPinchGesture];

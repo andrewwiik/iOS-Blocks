@@ -42,7 +42,7 @@
 @property(nonatomic) int orientation; // @synthesize orientation=_orientation;
 @property(retain, nonatomic) SBFolder *folder; // @synthesize folder=_folder;
 @property(nonatomic) id <SBFolderViewDelegate> delegate; // @synthesize delegate=_delegate;
-@property(nonatomic) float statusBarHeight; // @synthesize statusBarHeight=_statusBarHeight;
+@property(nonatomic) CGFloat statusBarHeight; // @synthesize statusBarHeight=_statusBarHeight;
 @property(readonly, nonatomic) int currentPageIndex; // @synthesize currentPageIndex=_currentPageIndex;
 @property(readonly, nonatomic, getter=isEditing) BOOL editing; // @synthesize editing=_isEditing;
 - (void)textFieldDidEndEditing:(id)arg1;

@@ -6,6 +6,7 @@
 @property (nonatomic, retain) UIView *widgetViewHolder;
 @property (nonatomic, assign) NSInteger ibk_allowBlockState;
 @property (nonatomic, assign) BOOL isKazeIconView;
+@property (nonatomic, assign) BOOL forceOriginalLabelFrame;
 - (void)checkRootListViewPlacement;
 - (void)ibk_removeWidgetView;
 - (void)ibk_loadWidgetView;

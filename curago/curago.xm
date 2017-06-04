@@ -1211,6 +1211,7 @@ NSString *lastOpenedWidgetId;
 %property (nonatomic, retain) UIView *widgetViewHolder;
 %property (nonatomic, assign) NSInteger ibk_allowBlockState;
 %property (nonatomic, assign) BOOL isKazeIconView;
+%property (nonatomic, assign) BOOL forceOriginalLabelFrame;
 
 %new
 - (void)checkRootListViewPlacement {
@@ -1438,6 +1439,11 @@ NSString *lastOpenedWidgetId;
         }
     }
 
+    if (isLaunching) {
+        frame.origin.x += 1;
+        frame.origin.y += 1;
+    }
+
     // if (IS_RTL) {
     //     frame.origin.x = -frame.size.width + self.frame.size.width;
     // }
@@ -1642,6 +1648,7 @@ NSString *lastOpenedWidgetId;
 #pragma mark Icon View Label Position
 
 - (CGRect)_frameForLabel {
+    if (self.forceOriginalLabelFrame) return %orig;
     if (isPinching && !self.shouldHaveBlock) return %orig;
     if (!isPinching && ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) {
         if (!self.shouldHaveBlock && ![self isGrabbed]) return %orig;
@@ -1795,10 +1802,9 @@ CGSize defaultIconSizing;
     // if ([[self superview] isKindOfClass:NSClassFromString(@"SBIconView")]) {
     //     return [self superview].bounds;
     // }
-
     CGRect frame = %orig;
     IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-    if (widgetController) {
+    if (widgetController && ((isPinching && self.shouldHaveBlock) || (!isPinching && (self.shouldHaveBlock || !self.shouldHaveBlock)))) {
         frame.size = CGSizeMake(widgetController.view.frame.size.width, widgetController.view.frame.size.height);
 
 
@@ -1808,6 +1814,11 @@ CGSize defaultIconSizing;
             // frame.origin.x += 1;
             // frame.origin.y += 1;
         }
+    }
+
+    if (isLaunching) {
+        frame.origin.x -= 1;
+        frame.origin.y -= 1;
     }
     return frame;
 }
@@ -2547,6 +2558,7 @@ NSInteger page = 0;
             widget.view.backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:0.0];
             [widget setScaleForView:1.0 withDuration:0.3];
         } completion:^(BOOL finished) {
+            widget.correspondingIconView.widgetView = nil;
             [[widget.correspondingIconView _iconImageView] setAlpha:1.0];
             widget.view.hidden = YES;
             [widget unloadFromPinchGesture];

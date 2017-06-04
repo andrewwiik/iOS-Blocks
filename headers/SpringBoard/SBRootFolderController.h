@@ -33,6 +33,6 @@
 // Remaining properties
 @property(readonly, nonatomic) SBRootFolderView *contentView;
 @property(retain, nonatomic) SBRootFolder *folder;
-
+@property (assign,nonatomic) NSUInteger dockEdge; 
 @end
 
