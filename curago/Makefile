@@ -9,7 +9,7 @@ ifeq ($(SIMULATOR),1)
 	export ARCHS = x86_64
 else
 	export TARGET = iphone:latest:7.0
-	export ARCHS = armv7 arm64
+	export ARCHS =  arm64
 endif
 
 export ADDITIONAL_CFLAGS = -I$(THEOS_PROJECT_DIR)/../headers
@@ -38,14 +38,14 @@ after-install::
 
 ifeq ($(SIMULATOR),0)
 SUBPROJECTS += ../Settings/curago/curago
-SUBPROJECTS += ../Widgets/Weather
-SUBPROJECTS += ../Widgets/Stocks
+# SUBPROJECTS += ../Widgets/Weather
+# SUBPROJECTS += ../Widgets/Stocks
 SUBPROJECTS += ../Widgets/Music
-SUBPROJECTS += ../Widgets/MobileTimer
-SUBPROJECTS += ../Widgets/Calendar
-SUBPROJECTS += ../Widgets/MobileSMS
-SUBPROJECTS += ../Widgets/Fitness
-SUBPROJECTS += ../Widgets/Cydia
-SUBPROJECTS += ../Widgets/Camera
+# SUBPROJECTS += ../Widgets/MobileTimer
+# SUBPROJECTS += ../Widgets/Calendar
+# SUBPROJECTS += ../Widgets/MobileSMS
+# SUBPROJECTS += ../Widgets/Fitness
+# SUBPROJECTS += ../Widgets/Cydia
+# SUBPROJECTS += ../Widgets/Camera
 include $(THEOS_MAKE_PATH)/aggregate.mk
 endif

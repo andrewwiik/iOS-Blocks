@@ -269,11 +269,11 @@ extern dispatch_queue_t __BBServerQueue;
     self.shimIcon = [[objc_getClass("SBIconImageView") alloc] initWithFrame:CGRectMake(0, 0, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer], [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer])];
     
     if ([[self iconImageView] respondsToSelector:@selector(setIcon:animated:)])
-        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] animated:NO];
+        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] location:1 animated:NO];
     else if ([(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] respondsToSelector:@selector(applicationIconForDisplayIdentifier:)])
-        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] location:2 animated:NO];
+        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] location:1 animated:NO];
     else // iOS 8
-        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:self.applicationIdentifer] location:2 animated:NO];
+        [(SBIconImageView*)[self shimIcon] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:self.applicationIdentifer] location:1 animated:NO];
     
     [self.view addSubview:self.shimIcon];
     
@@ -436,13 +436,13 @@ extern dispatch_queue_t __BBServerQueue;
 
 -(void)setupIconImageView {
     self.iconImageView = [[objc_getClass("SBIconImageView") alloc] initWithFrame:CGRectMake(10, [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 60 : 40), (isPad ? 60 : 40), (isPad ? 60 : 40))];
-    
+   // [(SBIconImageView *)self.iconImageView setLocation:1];
     if ([[self iconImageView] respondsToSelector:@selector(setIcon:animated:)])
-        [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] animated:NO];
+        [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] location:1 animated:NO];
     else if ([(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] respondsToSelector:@selector(applicationIconForDisplayIdentifier:)])
-        [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] location:2 animated:NO];
+        [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForDisplayIdentifier:self.applicationIdentifer] location:1 animated:NO];
     else // iOS 8
-        [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:self.applicationIdentifer] location:2 animated:NO];
+        [(SBIconImageView*)[self iconImageView] setIcon:[(SBIconModel*)[[objc_getClass("SBIconController") sharedInstance] model] applicationIconForBundleIdentifier:self.applicationIdentifer] location:1 animated:NO];
     
     if ([NSClassFromString(@"IBKResources") isRTL]) {
         self.iconImageView.frame = CGRectMake([IBKResources widthForWidgetWithIdentifier:self.applicationIdentifer] - (7 + (isPad ? 50 : 30)), [IBKResources heightForWidgetWithIdentifier:self.applicationIdentifer]-(isPad ? 50 : 30)-7, (isPad ? 50 : 30), (isPad ? 50 : 30));

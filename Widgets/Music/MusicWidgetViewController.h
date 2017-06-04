@@ -14,7 +14,10 @@
 #import "IBKMusicButton.h"
 
 
-@interface MusicWidgetViewController : NSObject <IBKWidgetDelegate>
+@interface MusicWidgetViewController : NSObject <IBKWidgetDelegate> {
+	UIImage *_playImage;
+	UIImage *_pauseImage;
+}
 
 @property (nonatomic, strong) UIView *view;
 @property (nonatomic, readwrite) BOOL isPad;

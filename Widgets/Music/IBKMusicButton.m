@@ -8,44 +8,44 @@
 
 #import "IBKMusicButton.h"
 
-static UIImage* applyMask(UIImage* image) {
-    const CGSize  size = image.size;
-    const CGRect  bnds = CGRectMake(0.0, 0.0, size.width, size.height);
-    UIColor*      colr = nil;
-    UIImage*      copy = nil;
-    CGContextRef  ctxt = NULL;
+// static UIImage* applyMask(UIImage* image) {
+//     const CGSize  size = image.size;
+//     const CGRect  bnds = CGRectMake(0.0, 0.0, size.width, size.height);
+//     UIColor*      colr = nil;
+//     UIImage*      copy = nil;
+//     CGContextRef  ctxt = NULL;
     
-    // this is the mask color
-    colr = [[UIColor alloc] initWithWhite:0 alpha:0.46];
+//     // this is the mask color
+//     colr = [[UIColor alloc] initWithWhite:0 alpha:0.46];
     
-    // begin image context
-    if (&UIGraphicsBeginImageContextWithOptions == NULL) {
-        UIGraphicsBeginImageContext(bnds.size);
-    }
-    else
-    {
-        UIGraphicsBeginImageContextWithOptions(bnds.size, FALSE, 0.0);
-    }
-    ctxt = UIGraphicsGetCurrentContext();
+//     // begin image context
+//     if (&UIGraphicsBeginImageContextWithOptions == NULL) {
+//         UIGraphicsBeginImageContext(bnds.size);
+//     }
+//     else
+//     {
+//         UIGraphicsBeginImageContextWithOptions(bnds.size, FALSE, 0.0);
+//     }
+//     ctxt = UIGraphicsGetCurrentContext();
     
-    // transform CG* coords to UI* coords
-    CGContextTranslateCTM(ctxt, 0.0, bnds.size.height);
-    CGContextScaleCTM(ctxt, 1.0, -1.0);
+//     // transform CG* coords to UI* coords
+//     CGContextTranslateCTM(ctxt, 0.0, bnds.size.height);
+//     CGContextScaleCTM(ctxt, 1.0, -1.0);
     
-    // draw original image
-    CGContextDrawImage(ctxt, bnds, image.CGImage);
+//     // draw original image
+//     CGContextDrawImage(ctxt, bnds, image.CGImage);
     
-    // draw highlight overlay
-    CGContextClipToMask(ctxt, bnds, image.CGImage);
-    CGContextSetFillColorWithColor(ctxt, colr.CGColor);
-    CGContextFillRect(ctxt, bnds);
+//     // draw highlight overlay
+//     CGContextClipToMask(ctxt, bnds, image.CGImage);
+//     CGContextSetFillColorWithColor(ctxt, colr.CGColor);
+//     CGContextFillRect(ctxt, bnds);
     
-    // finish image context
-    copy = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+//     // finish image context
+//     copy = UIGraphicsGetImageFromCurrentImageContext();
+//     UIGraphicsEndImageContext();
     
-    return copy;
-}
+//     return copy;
+// }
 
 @implementation IBKMusicButton
 
@@ -72,17 +72,17 @@ static UIImage* applyMask(UIImage* image) {
     if (highlighted) {
         for (UIImageView *view in self.subviews) {
             if ([[view class] isEqual:[UIImageView class]] && !self.prevImage) {
-                self.prevImage = [view.image copy];
+               // self.prevImage = [view.image copy];
                 
-                view.image = applyMask(view.image);
+                ((UIImageView *)view).tintColor = [UIColor colorWithWhite:1.0 alpha:0.8];
             }
         }
     } else {
         for (UIImageView *view in self.subviews) {
             if ([[view class] isEqual:[UIImageView class]]) {
-                view.image = self.prevImage;
-                
-                self.prevImage = nil;
+                // view.image = self.prevImage;
+                ((UIImageView *)view).tintColor = [UIColor colorWithWhite:1.0 alpha:1];
+               // self.prevImage = nil;
             }
         }
     }

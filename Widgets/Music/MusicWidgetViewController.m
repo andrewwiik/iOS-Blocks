@@ -206,10 +206,18 @@ static UIImage *cachedMosaic;
 }
 
 -(void)setPlayButtonState:(BOOL)state {
+
+    if (!_playImage) {
+        _playImage = [[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Play%@", path, [self suffix]]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+    if (!_pauseImage) {
+        _pauseImage = [[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Pause%@", path, [self suffix]]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+
     if (state) {
-        self.play.display.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Pause%@", path, [self suffix]]];
+        self.play.display.image = _pauseImage;
     } else {
-        self.play.display.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Play%@", path, [self suffix]]];
+        self.play.display.image = _playImage;
     }
 }
 
@@ -238,7 +246,8 @@ static UIImage *cachedMosaic;
     self.forward = [IBKMusicButton buttonWithType:UIButtonTypeCustom];
     self.forward.frame = CGRectMake((IS_RTL ? 55 : frame.size.width-25), (frame.size.height/2)-10, 20, 20);
     self.forward.backgroundColor = [UIColor clearColor];
-    self.forward.display.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Forward%@", path, [self suffix]]];
+    self.forward.display.image = [[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Forward%@", path, [self suffix]]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.forward.display.tintColor = [UIColor whiteColor];
     [self.forward addTarget:self action:@selector(forward:) forControlEvents:UIControlEventTouchUpInside];
     
     [buttons addSubview:self.forward];
@@ -246,7 +255,9 @@ static UIImage *cachedMosaic;
     self.play = [IBKMusicButton buttonWithType:UIButtonTypeCustom];
     self.play.frame = CGRectMake((IS_RTL ? 30 : frame.size.width-50), (frame.size.height/2)-10, 20, 20);
     self.play.backgroundColor = [UIColor clearColor];
-    self.play.display.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Play%@", path, [self suffix]]];
+    _playImage = [[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Play%@", path, [self suffix]]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.play.display.image = _playImage;
+    self.play.display.tintColor = [UIColor whiteColor];
     [self.play addTarget:self action:@selector(playPause:) forControlEvents:UIControlEventTouchUpInside];
     
     [buttons addSubview:self.play];
@@ -254,7 +265,8 @@ static UIImage *cachedMosaic;
     self.rewind = [IBKMusicButton buttonWithType:UIButtonTypeCustom];
     self.rewind.frame = CGRectMake((IS_RTL ? 5 : frame.size.width-75), (frame.size.height/2)-10, 20, 20);
     self.rewind.backgroundColor = [UIColor clearColor];
-    self.rewind.display.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Rewind%@", path, [self suffix]]];
+    self.rewind.display.image = [[UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@Rewind%@", path, [self suffix]]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.rewind.display.tintColor = [UIColor whiteColor];
     [self.rewind addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
     
     [buttons addSubview:self.rewind];
