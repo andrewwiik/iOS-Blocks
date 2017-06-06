@@ -29,7 +29,6 @@ after-all::
 	@cp $(THEOS_OBJ_DIR)/Curago.dylib /opt/simject
 	@cp Curago.plist /opt/simject
 	@ldid -S /opt/simject/Curago.dylib
-	@/usr/sbin/respring_simulator
 endif
 
 

@@ -154,6 +154,7 @@ static SBIconListView *thingy26;
 }
 
 + (CGFloat)widthForWidgetWithIdentifier:(NSString *)identifier {
+   // return 147; iOS 11 Hack
 
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0) {
         int widgetWidth = [IBKResources horiztonalWidgetSizeForBundleID:identifier];
@@ -215,6 +216,7 @@ static SBIconListView *thingy26;
 // 306 Final - 79 Height
 
 + (CGFloat)heightForWidgetWithIdentifier:(NSString *)identifier {
+   // return 148; iOS 11 Hack
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 9.0) {
         int widgetHeight = [IBKResources verticalWidgetSizeForBundleID:identifier];
     

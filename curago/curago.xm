@@ -38,6 +38,8 @@
 //     return coordinate;
 // }
 
+static int countyThingy = 0;
+
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_RTL [NSClassFromString(@"IBKResources") isRTL]
 #ifndef HBLogError
@@ -435,11 +437,10 @@ void openWidget(NSString *bundleID) {
     sup = NO;
     displayAllWidgets();
 }
-// -(void)__reportAnimationCompletion {
-//      %orig;
-//     isLaunching = NO;
-//     sup = NO;
-// }
+-(void)__reportAnimationCompletion {
+    %orig;
+    isLaunching = NO;
+}
 %end
 
 // Hooks
@@ -584,11 +585,11 @@ NSString *lastOpenedWidgetId;
 }
 - (void)_noteZoomDidFinish {
     %orig;
-   // isLaunching = NO;
+    isLaunching = NO;
 }
 - (void)_noteContextHostCrossfadeDidFinish {
     %orig;
-    //isLaunching = NO;
+    isLaunching = NO;
 }
 
 %end
@@ -1043,7 +1044,7 @@ NSString *lastOpenedWidgetId;
                                         
                                         grid[coord.row - 1][coord.col - 1] = icon;
                                     } else {
-                                        
+                                        countyThingy++;
                                         IBKPlaceholderIcon *placeHolder = [[NSClassFromString(@"IBKPlaceholderIcon") alloc] initWithIdentifier:[NSString stringWithFormat:@"WIDUXPlaceHolder_%ld/%@", (long)row+col, iconIdentifier]];
                                         grid[coord.row + row - 1][coord.col + col - 1] = placeHolder;
                                     }
@@ -1093,6 +1094,7 @@ NSString *lastOpenedWidgetId;
                         count++;
                     } else {
                         if (hasWidgets) {
+                            countyThingy++;
                             grid[row][col] = [[NSClassFromString(@"IBKPlaceholderIcon") alloc] initWithIdentifier:[NSString stringWithFormat:@"WIDUXPlaceHolder_%ld", (long)count]];
                             count++;
                         }
@@ -1450,6 +1452,16 @@ NSString *lastOpenedWidgetId;
     return frame;
 }
 
+-(void)cleanupAfterImageCrossfade {
+    isLaunching = NO;
+    %orig;
+}
+
+-(void)cleanupAfterCrossfade {
+    isLaunching = NO;
+    %orig;
+}
+
 - (void)layoutSubviews {
     %orig;
     if (self.isKazeIconView)
@@ -1517,13 +1529,24 @@ NSString *lastOpenedWidgetId;
     point = CGPointMake(widgetView.frame.size.width/2, widgetView.frame.size.height/2);
 
     if (IS_RTL) {
-        point.x = point.x - (widgetView.frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width);
+        point.x = point.x - (widgetView.frame.size.width - [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width) ;
+    }
+
+    if (isLaunching) {
+        point.y += 1;
+        point.x += 1;
     }
 
     return point;
 }
 
 // - (CGRect)iconImageFrame {
+//     if (isLaunching && self.icon) {
+//         CGRect frame = %orig;
+//         IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
+//         frame.size = widgetController.view.frame.size;
+//         return frame;
+//     }
 //     if (inSwitcher || ![[IBKResources widgetBundleIdentifiers] containsObject:[self.icon applicationBundleID]]) return %orig;
     
 //     CGRect frame = %orig;
@@ -2667,7 +2690,6 @@ static SBIcon *temp;
 
     [IBKResources removeIdentifier:bundleId];
 }
-
 %end
 
 #pragma mark Handle re-locking widgets when locking
@@ -2817,14 +2839,42 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
 @end
 
 
+%group iOSThing
+
+@interface SBIconListModel (iOSEleven)
+- (SBIcon *)directlyContainedIconWithIdentifier:(NSString *)identifier;
+@end
+%hook SBIconListModel
+%new
+-(NSUInteger)indexForLeafIconWithIdentifier:(NSString *)identifier {
+    return [self indexForIcon:[self directlyContainedIconWithIdentifier:identifier]];
+}
+%end
+
+%hook SBIconController
+%new
+- (id)grabbedIcon {
+    return nil;
+}
+%end
+
+%hook SBApplication
+%new
+- (BOOL)hasGameCenterData {
+    return NO;
+}
+%end
+%end
+
 %ctor {
 
     // We're done. Load!
     %init;
+    %init(iOSThing); // For iOS 11
 
    // dlopen("/Library/MobileSubstrate/DynamicLibraries/IconSupport.dylib", RTLD_NOW);
    // dlopen("/Library/MobileSubstrate/DynamicLibraries/iWidgets.dylib", RTLD_NOW);
-    dlopen("/Library/MobileSubstrate/DynamicLibraries/Kaze.dylib", RTLD_NOW);
+    //dlopen("/Library/MobileSubstrate/DynamicLibraries/Kaze.dylib", RTLD_NOW);
     // [[objc_getClass("ISIconSupport") sharedInstance] addExtension:@"com.iosblocks.curago"];
 
     // Load custom stuff for certain versions of iOS.
