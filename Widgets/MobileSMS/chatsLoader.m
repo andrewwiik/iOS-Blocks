@@ -129,7 +129,7 @@ static int search_by_number = 17;
                                     }else if ([[file lowercaseString] hasSuffix:@"amr"]) {
                                         //text = @"Audo / Video";
                                         text = @"";
-                                        [subdict setObject:@"/var/mobile/Library/Curago/Widgets/filliponi.com.apple.MobileSMS/audio.png" forKey:@"file"];
+                                        [subdict setObject:@"/Library/Curago/Widgets/filliponi.com.apple.MobileSMS/audio.png" forKey:@"file"];
                                         
                                     }else {
                                         //Other file type

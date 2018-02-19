@@ -1061,7 +1061,7 @@ float scale2 = 0.0;
 }
 
 -(NSString*)getPathForMainBundle {
-    NSString *thing = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/%@", [IBKResources getRedirectedIdentifierIfNeeded:self.applicationIdentifer]];
+    NSString *thing = [NSString stringWithFormat:@"/bootstrap/Library/Curago/Widgets/%@", [IBKResources getRedirectedIdentifierIfNeeded:self.applicationIdentifer]];
     
     // Wait! If we don't have a default widget, or the redirected is uninstalled, what happens then? We fallback!
     // Fallback to default first.

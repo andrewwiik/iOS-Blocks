@@ -7,6 +7,6 @@ Stocks_CFLAGS =  -fobjc-arc
 Stocks_FILES = $(wildcard *.m) $(wildcard IBKTableView/*.m)
 Stocks_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 Stocks_LDFLAGS = $(THEOS)/vendor/lib/libsubstrate.tbd ./Stocks.tbd
-Stocks_INSTALL_PATH = /var/mobile/Library/Curago/Widgets/
+Stocks_INSTALL_PATH = /Library/Curago/Widgets/
 
 include $(THEOS_MAKE_PATH)/bundle.mk

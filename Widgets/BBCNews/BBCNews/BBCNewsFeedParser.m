@@ -33,7 +33,7 @@
         if (jsonData) {
             parsedData = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&error];
             
-            [parsedData writeToFile:@"/var/mobile/Library/Curago/Widgets/uk.co.bbc.newsuk/Cache/cached.plist" atomically:YES];
+            [parsedData writeToFile:@"/bootstrap/Library/Curago/Widgets/uk.co.bbc.newsuk/Cache/cached.plist" atomically:YES];
         }
     
         if (error || !jsonData) {
@@ -42,7 +42,7 @@
             });
             
             // Attempt to reload data from plist
-            parsedData = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Curago/Widgets/uk.co.bbc.newsuk/Cache/cached.plist"];
+            parsedData = [NSDictionary dictionaryWithContentsOfFile:@"/bootstrap/Library/Curago/Widgets/uk.co.bbc.newsuk/Cache/cached.plist"];
         }
         
         NSArray *information = [parsedData objectForKey:@"relations"];

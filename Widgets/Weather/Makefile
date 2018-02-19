@@ -10,6 +10,6 @@ Weather_FILES = $(wildcard *.m)
 Weather_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 Weather_LIBRARIES = z
 Weather_LDFLAGS = $(THEOS)/vendor/lib/libsubstrate.tbd ./Weather.tbd
-Weather_INSTALL_PATH = /var/mobile/Library/Curago/Widgets/
+Weather_INSTALL_PATH = /Library/Curago/Widgets/
 
 include $(THEOS_MAKE_PATH)/bundle.mk

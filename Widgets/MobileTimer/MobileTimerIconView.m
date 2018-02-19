@@ -25,7 +25,7 @@
         
         [self addSubview:base];
         
-        NSString *clockHandsPath = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/com.apple.mobiletimer/ClockHands%@", [objc_getClass("IBKResources") suffix]];
+        NSString *clockHandsPath = [NSString stringWithFormat:@"/Library/Curago/Widgets/com.apple.mobiletimer/ClockHands%@", [objc_getClass("IBKResources") suffix]];
         
         self.innerClockHands = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:clockHandsPath]];
         self.innerClockHands.backgroundColor = [UIColor clearColor];
@@ -82,7 +82,7 @@
         
         [self.circleBase.layer insertSublayer:self.circle atIndex:0];
         
-        NSString *alarmPath = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/com.apple.mobiletimer/OuterAlarm%@", [objc_getClass("IBKResources") suffix]];
+        NSString *alarmPath = [NSString stringWithFormat:@"/Library/Curago/Widgets/com.apple.mobiletimer/OuterAlarm%@", [objc_getClass("IBKResources") suffix]];
         
         self.outerAlarmsArea = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:alarmPath]];
         self.outerAlarmsArea.backgroundColor = [UIColor clearColor];

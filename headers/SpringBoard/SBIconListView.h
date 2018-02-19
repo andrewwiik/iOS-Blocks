@@ -119,6 +119,7 @@
 - (id)init;
 - (Class)modelClass;
 
+- (void)layoutIconsIfNeeded:(CGFloat)duration animationType:(NSInteger)animationType; // iOS 11
 // iOS Blocks
 
 @property (nonatomic, retain) NSMutableDictionary *rotationHelper;

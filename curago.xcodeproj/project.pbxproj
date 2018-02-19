@@ -151,7 +151,7 @@
 		465569671D60F7FD00785C56 /* Bundle Widgets */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "$(PROJECT_DIR)/$(TARGET_NAME)/Package/var/mobile/Library/Curago/Widgets";
+			dstPath = "$(PROJECT_DIR)/$(TARGET_NAME)/Package/Library/Curago/Widgets";
 			dstSubfolderSpec = 0;
 			files = (
 				46FEF7C91D61685200863F06 /* com.pigigaldi.stocks in Bundle Widgets */,
@@ -188,10 +188,10 @@
 		464995801D68D4CB00DC5869 /* MWFeedParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWFeedParser.h; path = "../../MWFeedParser/Classes/New Folder With Items/MWFeedParser.h"; sourceTree = "<group>"; };
 		464995811D68D4CB00DC5869 /* MWFeedParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWFeedParser.m; path = "../../MWFeedParser/Classes/New Folder With Items/MWFeedParser.m"; sourceTree = "<group>"; };
 		4655695F1D60F5C600785C56 /* Music.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Music.xcodeproj; path = Widgets/Music/Music.xcodeproj; sourceTree = "<group>"; };
-		465569681D60F8FD00785C56 /* com.matchstic.Music */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com.matchstic.Music; path = Widgets/Music/Music/Package/var/mobile/Library/Curago/Widgets/com.matchstic.Music; sourceTree = "<group>"; };
+		465569681D60F8FD00785C56 /* com.matchstic.Music */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com.matchstic.Music; path = Widgets/Music/Music/Package/Library/Curago/Widgets/com.matchstic.Music; sourceTree = "<group>"; };
 		4655698A1D60FE6800785C56 /* BBCNews.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BBCNews.xcodeproj; path = Widgets/BBCNews/BBCNews.xcodeproj; sourceTree = "<group>"; };
 		4655699D1D6103E700785C56 /* curago.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = curago.xcodeproj; path = "Preference Bundle/curago/curago.xcodeproj"; sourceTree = "<group>"; };
-		465569A31D610F4800785C56 /* com.matchstic.BBCNews */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com.matchstic.BBCNews; path = Widgets/BBCNews/BBCNews/Package/var/mobile/Library/Curago/Widgets/com.matchstic.BBCNews; sourceTree = "<group>"; };
+		465569A31D610F4800785C56 /* com.matchstic.BBCNews */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com.matchstic.BBCNews; path = Widgets/BBCNews/BBCNews/Package/Library/Curago/Widgets/com.matchstic.BBCNews; sourceTree = "<group>"; };
 		465569A81D6110CF00785C56 /* PreferenceBundles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PreferenceBundles; path = "Preference Bundle/curago/curago/Package/Library/PreferenceBundles"; sourceTree = "<group>"; };
 		465569AA1D6110D600785C56 /* PreferenceLoader */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PreferenceLoader; path = "Preference Bundle/curago/curago/Package/Library/PreferenceLoader"; sourceTree = "<group>"; };
 		465AABFC1D5E8A3F009E3B45 /* var */ = {isa = PBXFileReference; lastKnownFileType = folder; name = var; path = Package/var; sourceTree = "<group>"; };
@@ -247,8 +247,8 @@
 		46D88E741CFA8AEE00E2C8D9 /* curago.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = curago.mm; sourceTree = "<group>"; };
 		46FEF7A31D615EFE00863F06 /* camera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = camera.xcodeproj; path = Widgets/camera/camera.xcodeproj; sourceTree = "<group>"; };
 		46FEF7A91D615FB500863F06 /* stocks.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = stocks.xcodeproj; path = Widgets/stocks/stocks.xcodeproj; sourceTree = "<group>"; };
-		46FEF7C61D61674C00863F06 /* com.pigigaldi.camera */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com.pigigaldi.camera; path = Widgets/camera/camera/Package/var/mobile/Library/Curago/Widgets/com.pigigaldi.camera; sourceTree = "<group>"; };
-		46FEF7C81D61685200863F06 /* com.pigigaldi.stocks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com.pigigaldi.stocks; path = Widgets/stocks/stocks/Package/var/mobile/Library/Curago/Widgets/com.pigigaldi.stocks; sourceTree = "<group>"; };
+		46FEF7C61D61674C00863F06 /* com.pigigaldi.camera */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com.pigigaldi.camera; path = Widgets/camera/camera/Package/Library/Curago/Widgets/com.pigigaldi.camera; sourceTree = "<group>"; };
+		46FEF7C81D61685200863F06 /* com.pigigaldi.stocks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com.pigigaldi.stocks; path = Widgets/stocks/stocks/Package/Library/Curago/Widgets/com.pigigaldi.stocks; sourceTree = "<group>"; };
 		C907C532193250650084825A /* curago.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = curago.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C907C535193250650084825A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C907C53B193250650084825A /* control */ = {isa = PBXFileReference; lastKnownFileType = text; name = control; path = Package/DEBIAN/control; sourceTree = "<group>"; };

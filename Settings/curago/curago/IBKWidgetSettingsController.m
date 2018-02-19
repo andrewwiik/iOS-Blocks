@@ -122,7 +122,7 @@ NSBundle *strings;
 -(NSArray*)widgetSpecificSpecifiers {
     NSMutableArray *array = [NSMutableArray array];
     
-    NSString *path = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/%@/Settings", [self getRedirectedIdentifierIfNeeded:self.bundleIdentifier]];
+    NSString *path = [NSString stringWithFormat:@"/bootstrap/Library/Curago/Widgets/%@/Settings", [self getRedirectedIdentifierIfNeeded:self.bundleIdentifier]];
     
     NSBundle *widgetBundle = [NSBundle bundleWithPath:path];
     
@@ -138,7 +138,7 @@ NSBundle *strings;
         // If this is a notification widget, we should provide the notification widget settings.
         // Else, we say no settings associated with this widget.
         
-        NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/%@/Info.plist", [self getRedirectedIdentifierIfNeeded:self.bundleIdentifier]]];
+        NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/bootstrap/Library/Curago/Widgets/%@/Info.plist", [self getRedirectedIdentifierIfNeeded:self.bundleIdentifier]]];
         if (!dict || [[dict objectForKey:@"wantsNotificationsTable"] boolValue]) {
             return [self notificationWidgetSettings];
         } else {

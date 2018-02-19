@@ -7,6 +7,6 @@ MobileTimer_CFLAGS =  -fobjc-arc
 MobileTimer_FILES = $(wildcard *.m)
 MobileTimer_FRAMEWORKS = Foundation UIKit CoreGraphics QuartzCore
 MobileTimer_LDFLAGS = $(THEOS)/vendor/lib/libsubstrate.tbd
-MobileTimer_INSTALL_PATH = /var/mobile/Library/Curago/Widgets/
+MobileTimer_INSTALL_PATH = /Library/Curago/Widgets/
 
 include $(THEOS_MAKE_PATH)/bundle.mk

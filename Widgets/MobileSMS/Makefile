@@ -7,6 +7,6 @@ MobileSMS_CFLAGS =  -fobjc-arc
 MobileSMS_FILES = $(wildcard *.m)
 MobileSMS_FRAMEWORKS = Foundation UIKit
 MobileSMS_LDFLAGS = -lsqlite3
-MobileSMS_INSTALL_PATH = /var/mobile/Library/Curago/Widgets/
+MobileSMS_INSTALL_PATH = /Library/Curago/Widgets/
 
 include $(THEOS_MAKE_PATH)/bundle.mk

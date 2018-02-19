@@ -304,7 +304,7 @@ static OrderedDictionary *dataSourceUser;
 -(NSString*)getIsWidgetSetForSpecifier:(PSSpecifier*)spec {
     //NSString *bundleIdentifier = [spec propertyForKey:@"bundleIdentifier"];
     
-    // NSString *path = [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/%@", [self getRedirectedIdentifierIfNeeded:bundleIdentifier]];
+    // NSString *path = [NSString stringWithFormat:@"/bootstrap/Library/Curago/Widgets/%@", [self getRedirectedIdentifierIfNeeded:bundleIdentifier]];
     
     //if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         return @"";
@@ -433,8 +433,8 @@ static OrderedDictionary *dataSourceUser;
     [mc addAttachmentData:[NSData dataWithContentsOfFile:@"/var/mobile/Library/Preferences/com.iosblocks.curago.plist"] mimeType:@"application/xml" fileName:@"Preferences.plist"];
     
     // We also want the dpkg log
-    system("/usr/bin/dpkg -l >/tmp/dpkgl.log");
-    [mc addAttachmentData:[NSData dataWithContentsOfFile:@"/tmp/dpkgl.log"] mimeType:@"text/plain" fileName:@"dpkgl.txt"];
+    // system("/usr/bin/dpkg -l >/tmp/dpkgl.log");
+    // [mc addAttachmentData:[NSData dataWithContentsOfFile:@"/tmp/dpkgl.log"] mimeType:@"text/plain" fileName:@"dpkgl.txt"];
     
     // Present mail view controller on screen
     [self.parentController presentModalViewController:mc animated:YES];

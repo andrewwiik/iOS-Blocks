@@ -76,6 +76,8 @@ NSString *grabbedBundleID;
 BOOL sup;
 BOOL launchingWidget;
 
+static BOOL isIOS11 = NO;
+
 static BOOL isDropping = NO;
 // static BOOL isRegular = NO;
 // static BOOL isPausing = NO;
@@ -1218,9 +1220,12 @@ NSString *lastOpenedWidgetId;
 %new
 - (void)checkRootListViewPlacement {
     if (self.ibk_allowBlockState == 0) {
+        HBLogInfo(@"Calling Checks for Root List View Placement: %@", [(SBIcon *)self.icon applicationBundleID]);
+        HBLogInfo(@"Bundle Identifiers Contains Identifer: %@", [[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon *)self.icon applicationBundleID]] ? @"YES" : @"NO");
         self.ibk_allowBlockState = 1;
         if (self.icon) {
             if (![[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon *)self.icon applicationBundleID]] && !isPinching) {
+
                 return;
             }
 
@@ -1229,6 +1234,7 @@ NSString *lastOpenedWidgetId;
             }
 
             if (![self isMemberOfClass:NSClassFromString(@"SBIconView")]) {
+                HBLogInfo(@"WASN'T MEMBER OF CLASS");
                 return;
             }
 
@@ -1240,7 +1246,29 @@ NSString *lastOpenedWidgetId;
                     }
                 }
             }
+
+            if ([self respondsToSelector:@selector(isDragging)]) {
+                if ([self isGrabbed]) {
+                    UIView *rootView = [self ibk_superviewOfClass:NSClassFromString(@"SBIconListView") maxDepth:10];
+                    if (rootView) {
+                        self.ibk_allowBlockState = 2;
+                        return;
+                    }
+                }
+            }
+
+            if (NSClassFromString(@"SBMedusaPlatterDragPreview")) {
+                UIView *rootView = [self ibk_superviewOfClass:NSClassFromString(@"SBMedusaPlatterDragPreview") maxDepth:3];
+                if (rootView) {
+                    self.ibk_allowBlockState = 2;
+                    return;
+
+                }
+            }
+
+
             UIView *rootView = [self ibk_superviewOfClass:NSClassFromString(@"SBIconListView") maxDepth:10];
+            HBLogInfo(@"ROOT VIEW: %@", rootView);
             if (rootView && !rearrangingIcons) {
                 if ([rootView isMemberOfClass:NSClassFromString(@"SBRootIconListView")]) {
                     self.ibk_allowBlockState = 2;
@@ -1292,6 +1320,7 @@ NSString *lastOpenedWidgetId;
 
 %new
 - (BOOL)shouldHaveBlock {
+    // HBLogInfo(@"ALLOW BLOCK STATE: %d", (int)self.ibk_allowBlockState);
     if (self.ibk_allowBlockState == 0) {
         [self checkRootListViewPlacement];
     }
@@ -1328,7 +1357,7 @@ NSString *lastOpenedWidgetId;
 %new
 - (void)ibk_loadWidgetView {
     [self checkRootListViewPlacement];
-    if (self.shouldHaveBlock && !isPinching && !isRotating && ![self isGrabbed]) {
+    if (self.shouldHaveBlock && !isPinching && !isRotating && (isIOS11 ? YES : (![self isGrabbed]))) {
         SBIcon *icon = self.icon;
         SBIconImageView *iconImageView = (SBIconImageView *)[self _iconImageView];
 
@@ -1372,7 +1401,12 @@ NSString *lastOpenedWidgetId;
 - (void)didMoveToSuperview {
     %orig;
     self.ibk_allowBlockState = 0;
-    [self checkRootListViewPlacement];
+    // [self checkRootListViewPlacement];
+    if (!self.widgetView) {
+        if (self.shouldHaveBlock && !rearrangingIcons && ![[NSClassFromString(@"SBIconController") sharedInstance] isEditing]) {
+            [self loadWidget];
+        }
+    }
 }
 
 - (BOOL)pointInside:(struct CGPoint)arg1 withEvent:(UIEvent*)arg2 {
@@ -1433,7 +1467,7 @@ NSString *lastOpenedWidgetId;
 
     CGRect frame = %orig;
     //IBKWidgetViewController *widgetController = [[NSClassFromString(@"IBKResources") widgetViewControllers] objectForKey:[self.icon applicationBundleID]];
-    frame.size = widgetView.frame.size;
+    frame.size = widgetView.bounds.size;
 
     if (IS_RTL) {
         if (!isLaunching) {
@@ -1480,7 +1514,7 @@ NSString *lastOpenedWidgetId;
         if (widgetView) {
             if (![widgetView superview]) {
                 [self addSubview:widgetView];
-                [self sendSubviewToBack:widgetView];
+                [self bringSubviewToFront:widgetView];
                 [self sendSubviewToBack:iconImageView];
                 //[iconImageView setAlpha:0.0];
             }
@@ -1497,7 +1531,10 @@ NSString *lastOpenedWidgetId;
 
 %new
 - (void)loadWidget {
+    HBLogInfo(@"Called Load Widget");
     if (isRotating || isPinching) return;
+
+     HBLogInfo(@"Load Widget - Should Have Block: %@", self.shouldHaveBlock ? @"YES" : @"NO");
 
     if (self.shouldHaveBlock) {
         [self ibk_loadWidgetView];
@@ -1771,16 +1808,20 @@ NSString *lastOpenedWidgetId;
 //     [self loadWidget];
 // }
 
-- (void)setIcon:(id)arg1 {
+- (void)setIcon:(SBIcon *)icon {
     %orig;
     self.ibk_allowBlockState = 0;
-    if (![[NSClassFromString(@"SBIconController") sharedInstance] isEditing])
-        [self loadWidget];
+    if (icon) {
+        if (![[NSClassFromString(@"SBIconController") sharedInstance] isEditing])
+            [self loadWidget];
+    }
 }
-- (void)setLocation:(int)arg1 {
+- (void)setLocation:(int)location {
     %orig;
     self.ibk_allowBlockState = 0;
-    if (self.shouldHaveBlock && !rearrangingIcons) {
+    // BOOL shouldHaveBlock = self.shouldHaveBlock;
+    // HBLogInfo(@"Set Location - Should Have Block: %@", shouldHaveBlock ? @"YES" : @"NO");
+    if (!rearrangingIcons) {
         [self loadWidget];
     }
 }
@@ -1791,7 +1832,7 @@ CGSize defaultIconSizing;
 #import "../headers/SpringBoard/SBIconImageCrossfadeView.h"
 
 @interface SBIconImageView (IBK)
-@property (nonatomic, assign) BOOL shouldHaveBlock;
+@property (nonatomic, assign, readonly) BOOL shouldHaveBlock;
 - (void)checkRootListViewPlacement;
 @end
 
@@ -1809,13 +1850,9 @@ CGSize defaultIconSizing;
 - (BOOL)shouldHaveBlock {
     SBIconView *iconView = (SBIconView *)[self ibk_superviewOfClass:NSClassFromString(@"SBIconView") maxDepth:10];
     if (iconView) {
+        HBLogInfo(@"Have Block - IconView: %@", iconView);
         return iconView.shouldHaveBlock;
     } else return NO;
-}
-
-%new
-- (void)setShouldHaveBlock:(BOOL)shouldHaveBlock {
-    return;
 }
 
 - (CGRect)visibleBounds {
@@ -1952,11 +1989,20 @@ CGSize defaultIconSizing;
 }
 
 -(BOOL)icon:(id)iconView canReceiveGrabbedIcon:(id)grabbedIconView {
-    if ([[IBKResources widgetBundleIdentifiers] containsObject:[[(SBIconView*)grabbedIconView icon] applicationBundleID]] || [[IBKResources widgetBundleIdentifiers] containsObject:[[(SBIconView*)iconView icon] applicationBundleID]]) {
-        return NO;
-    }
-    if ([[(SBIconView*)grabbedIconView icon] isKindOfClass:[NSClassFromString(@"IBKPlaceholderIcon") class]] || [[(SBIconView*)iconView icon] isKindOfClass:[NSClassFromString(@"IBKPlaceholderIcon") class]]) {
-        return NO;
+    if ([grabbedIconView isKindOfClass:NSClassFromString(@"SBIconView")]) {
+        if ([[IBKResources widgetBundleIdentifiers] containsObject:[[(SBIconView*)grabbedIconView icon] applicationBundleID]] || [[IBKResources widgetBundleIdentifiers] containsObject:[[(SBIconView*)iconView icon] applicationBundleID]]) {
+            return NO;
+        }
+        if ([[(SBIconView*)grabbedIconView icon] isKindOfClass:[NSClassFromString(@"IBKPlaceholderIcon") class]] || [[(SBIconView*)iconView icon] isKindOfClass:[NSClassFromString(@"IBKPlaceholderIcon") class]]) {
+            return NO;
+        }
+    } else if ([grabbedIconView isKindOfClass:NSClassFromString(@"SBIcon")]) {
+         if ([[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon*)grabbedIconView applicationBundleID]] || [[IBKResources widgetBundleIdentifiers] containsObject:[(SBIcon*)grabbedIconView applicationBundleID]]) {
+            return NO;
+        }
+        if ([grabbedIconView isKindOfClass:[NSClassFromString(@"IBKPlaceholderIcon") class]] || [grabbedIconView isKindOfClass:[NSClassFromString(@"IBKPlaceholderIcon") class]]) {
+            return NO;
+        }
     }
     return %orig;
 }
@@ -2866,6 +2912,231 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
 %end
 %end
 
+%hook SBDockIconListView
+- (id)initWithModel:(id)model orientation:(NSInteger)orientation viewMap:(id)map {
+    if (!map) {
+        NSLog(@"I DIDN'T HAVE A VIEW MAP");
+    }
+    return %orig;
+}
+%end
+
+
+@interface SBMedusaPlatterDragPreview : UIView
+@property (nonatomic,readonly) SBIconView * iconView;
+-(NSUInteger)platterViewState; 
++ (CGFloat)iconLiftAlpha; 
+@end
+
+@interface UITargetedDragPreviewSpecial : NSObject
+@property (nonatomic, retain) NSValue *forcedSize;
+@end
+
+@interface UITargetedDragPreview (NSObject)
+@property (nonatomic, retain) NSValue *forcedSize;
+@end
+
+%group iOS11
+
+static CGSize temporarySize = CGSizeZero;
+static BOOL useTempSize = NO;
+
+
+%hook SBMedusaPlatterDragPreview
+-(void)setPlatterViewState:(NSUInteger)state andSize:(CGSize)size {
+    BOOL shouldRelocateWidgetView = NO;
+    if (self.iconView && self.iconView.shouldHaveBlock && self.iconView.widgetView) {
+        if (state > 1) {
+            shouldRelocateWidgetView = TRUE;
+            // useTempSize = YES;
+            // temporarySize = self.iconView.widgetView.bounds.size;
+        }
+
+        if (state < 2) {
+            useTempSize = YES;
+            // temporarySize = self.iconView.widgetView.bounds.size;
+            //  CGPoint center = self.center;
+            // CGRect widgetFrame = self.iconView.widgetView.bounds;
+            // frame.size = widgetFrame.size;
+            // self.frame = frame;
+            // center.x += [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
+            // center.y += [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].height*2;
+           // self.center = center;
+        }
+        // useTempSize = YES;
+        // temporarySize = self.iconView.widgetView.bounds.size;
+    }
+    %orig(state,size);
+    UIView *widgetView = self.iconView.widgetView;
+    if (shouldRelocateWidgetView && [widgetView superview] != self.iconView) {
+        if ([widgetView superview]) {
+            [widgetView removeFromSuperview];
+        }
+
+        [self.iconView addSubview:widgetView];
+    }
+    useTempSize = NO;
+
+}
+
+- (void)setIcon:(SBIcon *)icon {
+    %orig;
+    if (self.iconView && self.iconView.widgetView) {
+        // CGRect frame = self.frame;
+        // CGPoint center = self.center;
+        // CGRect widgetFrame = self.iconView.widgetView.bounds;
+        // frame.size = widgetFrame.size;
+        // self.frame = frame;
+        useTempSize = YES;
+       //  center.x += [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].width;
+       //  center.y += [NSClassFromString(@"SBIconView") defaultVisibleIconImageSize].height*2;
+       //  useTempSize = NO;
+       // self.center = center;
+    }
+    useTempSize = NO;
+}
+%end
+%hook SBIconListView
+%new
+-(void)layoutIconsIfNeeded:(CGFloat)duration domino:(BOOL)domino {
+    [self layoutIconsIfNeeded:duration animationType:domino ? 1 : 0];
+}
+%end
+
+%hook SBIconDragManager
+- (BOOL)shouldUseGhostIconForIconView:(SBIconView *)iconView {
+    return NO;
+}
+%end
+
+%hook _DUIPreview
+-(BOOL)hidesSourceView {
+    return NO;
+}
+- (void)setHidesSourceView:(BOOL)hides {
+    %orig(NO);
+}
+%end
+
+%hook SBIconImageView
+- (CGRect)bounds {
+    if (useTempSize) return CGRectMake(0,0,temporarySize.width*0.5, temporarySize.height*0.5);
+    else return %orig;
+}
+%end
+
+%hook SBIconView
+
++ (CGSize)defaultVisibleIconImageSize {
+    if (useTempSize) return CGSizeMake(temporarySize.width, temporarySize.height);
+    else return %orig;
+}
+
+- (CGRect)frame {
+    CGRect frame = %orig;
+    if (self.widgetView && useTempSize) frame.size = self.bounds.size;
+    return frame;
+}
+
+- (UITargetedDragPreviewSpecial *)dragPreviewForItem:(id)item session:(id)session {
+    if (self.widgetView) {
+        temporarySize = self.widgetView.bounds.size;
+        useTempSize = YES;
+    }
+    UITargetedDragPreviewSpecial *orig = %orig;
+    if (self.widgetView) {
+        orig.forcedSize = [NSValue valueWithCGSize:self.widgetView.bounds.size];
+    }
+    useTempSize = NO;
+
+    // CGPoint center = orig.center;
+    // center.x += temporarySize.width;
+    // center.y += temporarySize.height;
+    // orig.center = center;
+    return orig;
+}
+
+-(void)setDragging:(BOOL)dragging {
+    if (!dragging && [self isDragging]) {
+        UIView *widgetView = self.widgetView;
+        if (widgetView) {
+            [widgetView removeFromSuperview];
+        }
+
+        [self addSubview:self.widgetView];
+    }
+    %orig;
+}
+
+-(void)_applyIconContentScale:(CGFloat)scale {
+    UIView *scalingContainer = [self valueForKey:@"_scalingContainer"];
+    if (scalingContainer && self.widgetView) {
+        UIView *widgetView = self.widgetView;
+        BOOL shouldRelocate = YES;
+        SBMedusaPlatterDragPreview *rootView = (SBMedusaPlatterDragPreview  *)[widgetView ibk_superviewOfClass:NSClassFromString(@"SBMedusaPlatterDragPreview") maxDepth:3];
+        if (rootView) {
+            if ([rootView platterViewState] > 1.0) shouldRelocate = NO;
+
+        }
+        if (widgetView && shouldRelocate) {
+            if (![widgetView superview]) {
+                [widgetView removeFromSuperview];
+            }
+            scalingContainer.alpha = [NSClassFromString(@"SBMedusaPlatterDragPreview") iconLiftAlpha];
+            [scalingContainer addSubview:widgetView];
+        } else {
+            //scalingContainer.alpha = 1.0;
+        }
+    }
+    %orig;
+}
+
+- (void)setIconContentScalingEnabled:(BOOL)enabled {
+    if (enabled) {
+        if (self.widgetView) {
+            ((UIImageView *)[self _iconImageView]).hidden = YES;
+        }
+        UIView *scalingContainer = [self valueForKey:@"_scalingContainer"];
+        if (scalingContainer) {
+            scalingContainer.alpha = [NSClassFromString(@"SBMedusaPlatterDragPreview") iconLiftAlpha];
+        }
+    } else {
+        if (self.widgetView) {
+            ((UIImageView *)[self _iconImageView]).hidden = NO;
+        }
+
+        UIView *scalingContainer = [self valueForKey:@"_scalingContainer"];
+        if (scalingContainer) {
+            scalingContainer.alpha = 1.0;
+        }
+    }
+    %orig;
+}
+%end
+
+// %hook SBSAppDragLocalContext
+// -(void)setPortaledPreview:(UIView *)view {
+//     view.backgroundColor = [UIColor redColor];
+//     %orig(view);
+// }
+// %end
+
+%hook UITargetedDragPreviewSpecial
+%property (nonatomic, retain) NSValue *forcedSize;
+
+- (CGSize)size {
+    return %orig;
+    UITargetedDragPreviewSpecial *orig = (UITargetedDragPreviewSpecial *)self;
+    if (orig.forcedSize) return [orig.forcedSize CGSizeValue];
+    else return %orig;
+}
+%end
+
+// %hook SBMedusaPlatterDragPreview
+// %end
+
+%end
+
 %ctor {
 
     // We're done. Load!
@@ -2881,6 +3152,11 @@ static void reloadSettings(CFNotificationCenterRef center, void *observer, CFStr
 
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
         %init(iOS8);
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 11.0) {
+        //%init(iOS11);
+        %init(iOS11, UITargetedDragPreviewSpecial=NSClassFromString(@"UITargetedDragPreview"));
+        isIOS11 = YES;
+    }
 
     %init(iWidgets);
 

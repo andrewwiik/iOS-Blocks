@@ -57,6 +57,7 @@
 - (id)iconModel;
 - (void)dealloc;
 - (id)initWithIconModel:(id)arg1 delegate:(id)arg2;
+- (id)initWithIconModel:(id)arg1 screen:(id)arg2 delegate:(id)arg3 viewDelegate:(id)arg4 ; // iOS 9+
 
 @end
 

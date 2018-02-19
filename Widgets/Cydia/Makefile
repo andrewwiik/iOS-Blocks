@@ -7,6 +7,6 @@ Cydia_CFLAGS =  -fobjc-arc -I./Progress
 Cydia_FILES = $(wildcard Progress/*.m) $(wildcard *.m)
 Cydia_FRAMEWORKS = Foundation UIKit CoreGraphics CoreImage QuartzCore
 Cydia_LDFLAGS = $(THEOS)/vendor/lib/libsubstrate.tbd
-Cydia_INSTALL_PATH = /var/mobile/Library/Curago/Widgets/
+Cydia_INSTALL_PATH = /Library/Curago/Widgets/
 
 include $(THEOS_MAKE_PATH)/bundle.mk

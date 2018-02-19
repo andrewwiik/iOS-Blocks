@@ -35,7 +35,7 @@ static NSBundle *strings;
     NSMutableArray *keysForWidget = [NSMutableArray array];
     NSMutableArray *custom = [NSMutableArray array];
     
-    NSString *blocksPath = @"/var/mobile/Library/Curago/Widgets/";
+    NSString *blocksPath = @"/bootstrap/Library/Curago/Widgets/";
     NSArray *folders = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:blocksPath error:NULL];
     
     [folders enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {

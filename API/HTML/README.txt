@@ -13,4 +13,4 @@ Also, make sure to change the CFBundleName and CFBundleIdentifier options too, i
 
 An example widget for the Weather application is provided - the folder naming must be exactly the same as the icon’s bundle identifier.
 
-All widgets are stored in /var/mobile/Library/Curago/Widgets
+All widgets are stored in /Library/Curago/Widgets

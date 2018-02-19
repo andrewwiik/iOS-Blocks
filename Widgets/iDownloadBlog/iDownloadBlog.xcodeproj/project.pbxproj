@@ -50,10 +50,10 @@
 		C98D8BB21AB21FF500E533E9 /* iDownloadBlogContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iDownloadBlogContentView.m; sourceTree = "<group>"; };
 		C98D8BB41AB21FF500E533E9 /* iDownloadBlogWidgetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iDownloadBlogWidgetViewController.h; sourceTree = "<group>"; };
 		C98D8BB51AB21FF500E533E9 /* iDownloadBlogWidgetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iDownloadBlogWidgetViewController.m; sourceTree = "<group>"; };
-		C98D8BBD1AB21FF500E533E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Package/var/mobile/Library/Curago/Widgets/com.matchstic.iDownloadBlog/Info.plist; sourceTree = "<group>"; };
-		C98D8BBE1AB21FF500E533E9 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = Package/var/mobile/Library/Curago/Widgets/com.matchstic.iDownloadBlog/InfoPlist.strings; sourceTree = "<group>"; };
-		C98D8BBF1AB21FF500E533E9 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Package/var/mobile/Library/Curago/Widgets/com.matchstic.iDownloadBlog/Icon.png; sourceTree = "<group>"; };
-		C98D8BC01AB21FF500E533E9 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Package/var/mobile/Library/Curago/Widgets/com.matchstic.iDownloadBlog/Icon@2x.png"; sourceTree = "<group>"; };
+		C98D8BBD1AB21FF500E533E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Package/Library/Curago/Widgets/com.matchstic.iDownloadBlog/Info.plist; sourceTree = "<group>"; };
+		C98D8BBE1AB21FF500E533E9 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = Package/Library/Curago/Widgets/com.matchstic.iDownloadBlog/InfoPlist.strings; sourceTree = "<group>"; };
+		C98D8BBF1AB21FF500E533E9 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Package/Library/Curago/Widgets/com.matchstic.iDownloadBlog/Icon.png; sourceTree = "<group>"; };
+		C98D8BC01AB21FF500E533E9 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Package/Library/Curago/Widgets/com.matchstic.iDownloadBlog/Icon@2x.png"; sourceTree = "<group>"; };
 		C98D8BC11AB21FF500E533E9 /* IBKWidgetDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IBKWidgetDelegate.h; sourceTree = "<group>"; };
 		C98D8BC71AB2202100E533E9 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		C98D8BC81AB2202100E533E9 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
@@ -416,7 +416,7 @@
 				EXECUTABLE_NAME = iDownloadBlog;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iDownloadBlog/iDownloadBlog-Prefix.pch";
-				INSTALL_PATH = /var/mobile/Library/Curago/Widgets/com.matchstic.iDownloadBlog;
+				INSTALL_PATH = /Library/Curago/Widgets/com.matchstic.iDownloadBlog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos9.2;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;
@@ -441,7 +441,7 @@
 				EXECUTABLE_NAME = iDownloadBlog;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iDownloadBlog/iDownloadBlog-Prefix.pch";
-				INSTALL_PATH = /var/mobile/Library/Curago/Widgets/com.matchstic.iDownloadBlog;
+				INSTALL_PATH = /Library/Curago/Widgets/com.matchstic.iDownloadBlog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos9.2;
 				iOSOpenDevBuildPackageOnAnyBuild = NO;

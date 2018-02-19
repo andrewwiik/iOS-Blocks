@@ -18,7 +18,7 @@
         banner = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, frame.size.width, frame.size.height)];
         banner.layer.masksToBounds = YES;
         banner.backgroundColor = [UIColor clearColor];
-        banner.image = [UIImage imageWithContentsOfFile:@"/var/mobile/Library/Curago/Widgets/com.saurik.Cydia/Sections/new.png"];
+        banner.image = [UIImage imageWithContentsOfFile:@"/Library/Curago/Widgets/com.saurik.Cydia/Sections/new.png"];
         [self addSubview:banner];
     }
     return self;

@@ -165,6 +165,8 @@
 - (void)dealloc;
 - (id)initWithDefaultSize;
 
+- (BOOL)isDragging; // iOS 11
+
 // iOS Blocks
 
 @property (nonatomic, retain) UIView *widgetView;

@@ -14,7 +14,7 @@
     self = [super init];
     if (self) {
         dictionary = [[NSMutableDictionary alloc] init];
-        NSString *path = @"/var/mobile/Library/Curago/Widgets/com.iosblocks.cydia.block/Sections";
+        NSString *path = @"/Library/Curago/Widgets/com.iosblocks.cydia.block/Sections";
         NSError *error = nil;
         sections = [[NSArray alloc] initWithArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error]];
     }
@@ -101,7 +101,7 @@
             NSString *icon = [file lowercaseString];
             icon = [icon stringByReplacingOccurrencesOfString:@"@2x.png" withString:@""];
             if ([str.lowercaseString rangeOfString:icon].location != NSNotFound) {
-                return [NSString stringWithFormat:@"/var/mobile/Library/Curago/Widgets/com.iosblocks.cydia.block/Sections/%@", file];
+                return [NSString stringWithFormat:@"/Library/Curago/Widgets/com.iosblocks.cydia.block/Sections/%@", file];
             }
         }
     }

@@ -16,7 +16,7 @@
 @synthesize _spinner = spinner;
 @synthesize _savingVideoLabel = savingVideoLabel;
 
-#define kPath @"/var/mobile/Library/Curago/Widgets/com.iosblocks.camera.block"
+#define kPath @"/bootstrap/Library/Curago/Widgets/com.iosblocks.camera.block"
 #define kImageBig [self isIpad] ? @"PhotoBig.png" : @"Photo.png"
 
 - (id)initWithFrame:(CGRect)frame {

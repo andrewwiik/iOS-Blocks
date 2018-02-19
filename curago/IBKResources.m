@@ -183,7 +183,16 @@ static SBIconListView *thingy26;
         if (!listView || listView) {
             CGFloat screenWidth = SCREEN_WIDTH;
             CGFloat screenHeight = SCREEN_HEIGHT;
-            SBRootFolderView *folderView = [[NSClassFromString(@"SBRootFolderView") alloc] initWithFolder:nil orientation:[[UIApplication sharedApplication] statusBarOrientation] viewMap:nil forSnapshot:YES];
+            SBIconViewMap *map = nil;
+            if ([[NSClassFromString(@"SBIconController") sharedInstance] respondsToSelector:@selector(homescreenIconViewMap)]) {
+                map = [[NSClassFromString(@"SBIconController") sharedInstance] homescreenIconViewMap];
+            } else if ([NSClassFromString(@"SBIconViewMap") respondsToSelector:@selector(homescreenMap)]) {
+                map = [NSClassFromString(@"SBIconViewMap") homescreenMap];
+            } else {
+                map = [[NSClassFromString(@"SBIconViewMap") alloc] initWithIconModel:nil screen:nil delegate:nil viewDelegate:nil];
+            }
+            NSLog(@"THE MAP: %@", map);
+            SBRootFolderView *folderView = [[NSClassFromString(@"SBRootFolderView") alloc] initWithFolder:nil orientation:[[UIApplication sharedApplication] statusBarOrientation] viewMap:map forSnapshot:YES];
             folderView.frame = CGRectMake(0,0,screenWidth, screenHeight);
             // CGFloat dockHeight = [NSClassFromString(@"SBDockIconListView") defaultHeight];
             // if (statusBarWidth != screenWidth && statusBarWidth != screenHeight) {
@@ -251,7 +260,16 @@ static SBIconListView *thingy26;
             CGFloat statusBarHeight = statusBarSize.width < statusBarSize.height ? statusBarSize.width : statusBarSize.height;
             CGFloat screenWidth = SCREEN_WIDTH;
             CGFloat screenHeight = SCREEN_HEIGHT;
-            SBRootFolderView *folderView = [[NSClassFromString(@"SBRootFolderView") alloc] initWithFolder:nil orientation:[[UIApplication sharedApplication] statusBarOrientation] viewMap:nil forSnapshot:YES];
+            SBIconViewMap *map = nil;
+            if ([[NSClassFromString(@"SBIconController") sharedInstance] respondsToSelector:@selector(homescreenIconViewMap)]) {
+                map = [[NSClassFromString(@"SBIconController") sharedInstance] homescreenIconViewMap];
+            } else if ([NSClassFromString(@"SBIconViewMap") respondsToSelector:@selector(homescreenMap)]) {
+                map = [NSClassFromString(@"SBIconViewMap") homescreenMap];
+            } else {
+                map = [[NSClassFromString(@"SBIconViewMap") alloc] initWithIconModel:nil screen:nil delegate:nil viewDelegate:nil];
+            }
+            NSLog(@"THE MAP: %@", map);
+            SBRootFolderView *folderView = [[NSClassFromString(@"SBRootFolderView") alloc] initWithFolder:nil orientation:[[UIApplication sharedApplication] statusBarOrientation] viewMap:map forSnapshot:YES];
             folderView.frame = CGRectMake(0,0,screenWidth, screenHeight);
             folderView.statusBarHeight = statusBarHeight;
             // CGFloat dockHeight = [NSClassFromString(@"SBDockIconListView") defaultHeight];
@@ -610,6 +628,7 @@ static SBIconListView *thingy26;
 }
 
 + (SBIconListView *)listViewForBundleID:(NSString *)bundleID {
+    NSLog(@"I'm gonna crash here");
         if (!iconController) {
             if ([NSClassFromString(@"SBIconController") respondsToSelector:@selector(sharedInstance)]) {
                 iconController = [NSClassFromString(@"SBIconController") sharedInstance];
@@ -631,6 +650,7 @@ static SBIconListView *thingy26;
 }
 
 + (SBIconView *)iconViewForBundleID:(NSString *)bundleID {
+    NSLog(@"Maybe I can crash here");
     if (bundleID) {
         SBIconView *iconView = nil;
         if ([[NSClassFromString(@"SBIconController") sharedInstance] respondsToSelector:@selector(homescreenIconViewMap)]) {

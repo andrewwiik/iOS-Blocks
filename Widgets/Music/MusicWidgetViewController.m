@@ -11,6 +11,7 @@
 
 #import <objc/runtime.h>
 #import <SpringBoard/SBMediaController-IBK.h>
+#import "MediaRemote.h"
 
 typedef void (^MRMediaRemoteGetNowPlayingInfoCompletion)(CFDictionaryRef information);
 void MRMediaRemoteGetNowPlayingInfo(dispatch_queue_t queue, MRMediaRemoteGetNowPlayingInfoCompletion completion);
@@ -36,7 +37,7 @@ static BOOL IS_RTL = NO;
 static UIImage *cachedMosaic;
 
 #define IOS8_or_higher ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
-#define path @"/var/mobile/Library/Curago/Widgets/com.iosblocks.music.block/"
+#define path @"/Library/Curago/Widgets/com.iosblocks.music.block/"
 
 @implementation MusicWidgetViewController
 
@@ -131,9 +132,32 @@ static UIImage *cachedMosaic;
         }
         
         // Notifications.
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(nowPlayingAppDidChange)
+            name:(__bridge NSString *)kMRMediaRemoteNowPlayingApplicationDidChangeNotification
+            object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(nowPlayingAppDidChange)
+            name:(__bridge NSString *)kMRMediaRemoteNowPlayingApplicationDisplayNameDidChangeNotification
+            object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(nowPlayingAppDidChange)
+            name:(__bridge NSString *)kMRMediaRemoteAnyApplicationIsPlayingDidChangeNotification
+            object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(nowPlayingAppDidChange)
+            name:@"MPAVControllerPlaybackStateChangedNotification"
+            object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveUpdateToMusicData:) name:@"IBK-UpdateMusic" object:nil];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+        selector:@selector(nowPlayingAppDidChange)
+        name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification
+        object:nil];
         // And if playing, update!
         
         if ([(SBMediaController*)[objc_getClass("SBMediaController") sharedInstance] isPlaying]) {
@@ -145,6 +169,10 @@ static UIImage *cachedMosaic;
 	}
 
 	return self.view;
+}
+
+- (void)nowPlayingAppDidChange {
+    [self didReceiveUpdateToMusicData:nil];
 }
 
 -(void)didReceiveUpdateToMusicData:(id)sender {

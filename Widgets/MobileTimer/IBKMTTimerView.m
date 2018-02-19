@@ -65,7 +65,7 @@
         
         // Button images
         
-        NSString *mainPath = @"/var/mobile/Library/Curago/com.apple.mobiletimer/";
+        NSString *mainPath = @"/Library/Curago/com.apple.mobiletimer/";
         NSString *stopPath = [NSString stringWithFormat:@"%@Stop%@", mainPath, [objc_getClass("IBKResources") suffix]];
         NSString *startPath = [NSString stringWithFormat:@"%@Start%@", mainPath, [objc_getClass("IBKResources") suffix]];
         NSString *pausePath= [NSString stringWithFormat:@"%@Pause%@", mainPath, [objc_getClass("IBKResources") suffix]];
